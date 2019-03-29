@@ -2,6 +2,8 @@ package xvy;
 
 public class Card {
 	private int hp;
+	private final int num;
+	private static int numCount;
 	private static enum Faction{
 		ROYALE, REBEL;
 	}
@@ -46,6 +48,8 @@ public class Card {
 	public Card(Unit unit) {
 		this.unit = unit;
 		this.hp = unit.initHp;
+		numCount += 1;
+		num = numCount;
 	}
 
 	public int getHp() {
