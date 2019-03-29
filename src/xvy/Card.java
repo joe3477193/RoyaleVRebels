@@ -9,7 +9,7 @@ public class Card {
 		TROOP(true, true), ARTILLERY(true, false), TRAP(false, false);
 		final boolean attackable;
 		final boolean moveable;
-		
+
 		private Type(boolean attackable, boolean moveable) {
 			this.attackable = attackable;
 			this.moveable = moveable;
@@ -29,7 +29,7 @@ public class Card {
 		final int attack;
 		final int mov;
 		final int range;
-		
+
 		private Unit(Faction faction, String code, Type type, int cp, int initHp, int attack, int mov, int range) {
 			this.faction = faction;
 			this.code = code;
@@ -42,7 +42,7 @@ public class Card {
 		}
 	}
 	private Unit unit;
-	
+
 	public Card(Unit unit) {
 		this.unit = unit;
 		this.hp = unit.initHp;
@@ -51,7 +51,7 @@ public class Card {
 	public int getHp() {
 		return hp;
 	}
-	
+
 	public int getInitHp() {
 		return unit.initHp;
 	}
@@ -59,53 +59,65 @@ public class Card {
 	public void setHp(int hp) {
 		this.hp = hp;
 	}
-	
+
 	public boolean isAttackable() {
 		return unit.type.attackable;
 	}
-	
+
 	public boolean isMoveable() {
 		return unit.type.moveable;
 	}
-	
+
 	public String getFaction() {
 		return unit.faction.toString();
 	}
-	
+
 	public String getName() {
 		return unit.toString();
 	}
-	
+
 	public String getCode() {
 		return unit.code;
 	}
-	
+
 	public String getType() {
 		return unit.type.toString();
 	}
-	
+
 	public int getCp() {
 		return unit.cp;
 	}
-	
+
 	public int getAttack() {
 		return unit.attack;
 	}
-	
+
 	public int getMov() {
 		return unit.mov;
 	}
-	
+
 	public int getRange() {
 		return unit.range;
 	}
-	
+
 	public String[] getInfo() {
 		return new String[] {unit.faction.toString(), unit.toString(), unit.type.toString()};
 	}
-	
+
 	public int[] getStatus() {
 		return new int[] {unit.initHp, unit.attack, unit.mov, unit.range};
+	}
+
+	public boolean isDead() {
+		if (hp<= 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean attackDead(int attack) {
+		hp-=attack;
+		return isDead();
 	}
 
 }
