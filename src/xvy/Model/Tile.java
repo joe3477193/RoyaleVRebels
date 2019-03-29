@@ -1,17 +1,37 @@
 package xvy.Model;
 
+import xvy.Card;
+
 public class Tile {
 	
-    private String royal;
-    private String rebel;
+
+    private Card card;
 
 
     public Tile() {
-        this.royal = "royal";
-        this.rebel = "rebel";
     }
     
+    public void setCard(Card card) {
+    	this.card = card;
+    }
     
+    public Card getCard() {
+    	return card;
+    }
     
+    public boolean hasCard() {
+    	if (card!=null){
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public boolean removeCard() {
+    	if (hasCard()) {
+    		card = null;
+    		return true;
+    	}
+    	return false;
+    }
 
 }
