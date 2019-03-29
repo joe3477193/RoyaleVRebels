@@ -1,16 +1,15 @@
-package xvy;
+package xvy.Model;
 
 public class Player {
 	private String name;
 	private int id;
-	private int cp;
 	private int start_cp=30;		//temp for start
 	private int start_hp = 100;		//temp for start
 	private int remaining_cp;
 	private int remaining_hp;
 	
 	
-	Player(int id, String name){
+	public Player(int id, String name){
 		this.id = id;
 		this.name = name;
 	}
@@ -41,7 +40,11 @@ public class Player {
 	}
 	
 	public void setCP(int cp) {
-		this.cp = cp;
+		this.remaining_cp = cp;
+	}
+	
+	public void setHP(int hp) {
+		this.remaining_hp = hp;
 	}
 	
 }

@@ -1,4 +1,4 @@
-package xvy;
+package xvy.View;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -13,6 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import xvy.Controller.*;
+ 
+import xvy.Model.*;
+
 public class View extends JFrame {
 	
 	private JFrame frame;
@@ -24,11 +28,11 @@ public class View extends JFrame {
     private static JButton[][] btn;
     private JButton item1,item2,item3,item4,item5,item6;
  
-    protected static final String GRASS_IMAGE      = "images/grass.png";
-    protected static final String WALL_IMAGE      = "images/wall.jpg";
+    protected static final String GRASS_IMAGE      = "../images/grass.png";
+    protected static final String WALL_IMAGE      = "../images/wall.jpg";
    
     
-	View(){
+	public View(){
 		
         frame = new JFrame("Royals vs Rebels");
         frame.setResizable(false);
@@ -129,15 +133,7 @@ public class View extends JFrame {
         }
     }
     
-    public void linkModelView(ArrayList<BoardRows> gr) {
-
-        for (int i = 0; i < Board.BOARD_ROWS; i++) {
-            ArrayList<Tile> ge = gr.get(i).getRow();
-            for (int j = 0; j < Board.BOARD_COLS; j++) {
-               
-            }
-        }
-    }
+    
     
     public void updateHP(Player player) {
     	healthLabel.setText(Integer.toString(player.getHP()));

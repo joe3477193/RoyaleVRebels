@@ -1,14 +1,21 @@
-package xvy;
+package xvy.Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
+
+
+import xvy.View.*;
+import xvy.Model.*;
 
 public class Controller implements ActionListener {
 
 	private View view;
 	private Board board;
-
+	List<Player> players;
+	private int playercount =0;
 	
     public Controller(View v) {
         this(v,null);
@@ -16,17 +23,28 @@ public class Controller implements ActionListener {
     }
     
     public Controller(View v, Board b) {
+    	players = new ArrayList<>();
         this.view = v;
         this.board = b;
         
-       // v.assembleBoard(playerOne);
-
     }
-
-
  
     public void updateBoard() {
         
+    }
+    
+    public void initView() {
+    	view.assembleBoard(players.get(0));
+    }
+    
+    public void addPlayer(String p) {
+    	playercount++;
+    	players.add(new Player(playercount++, p));
+    }
+    
+    public void removePlayer(String p) {
+    	playercount--;
+    	//TODO
     }
     
 	@Override

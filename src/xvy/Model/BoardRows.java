@@ -1,6 +1,9 @@
-package xvy;
+package xvy.Model;
 
 import java.util.ArrayList;
+import xvy.Controller.*;
+import xvy.View.*;
+import xvy.Model.*;
 
 public class BoardRows {
 	
