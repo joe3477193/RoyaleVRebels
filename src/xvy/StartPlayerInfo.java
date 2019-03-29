@@ -32,8 +32,10 @@ public class StartPlayerInfo implements ActionListener {
             if(!spiv.player_one_name.getText().equals("") && !spiv.player_two_name.getText().equals("")) {
             	strings.add(spiv.player_one_name.getText());
             	strings.add(spiv.player_two_name.getText());
+            	for(String s : strings) {
+            		spiv.initPlayers(s);
+            	}
             	
-            	spiv.initPlayers(strings);
             	
             } else {
                 spiv.warnNameNotSet();

@@ -13,14 +13,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import xvy.Controller.Controller;
+import xvy.Model.Player;
+
 public class StartPlayerInfoView {
 	private JFrame frame;
 	public JTextField player_one_name;
 	public JTextField player_two_name;
-	Game g;
+	Controller c;
 	
-	StartPlayerInfoView(Game g){
-		this.g = g;
+	StartPlayerInfoView(Controller c){
+		this.c = c;
 		frame = new JFrame();
 		frame.setSize(new Dimension(200,200));
 		frame.setLocationRelativeTo(null);
@@ -51,12 +54,10 @@ public class StartPlayerInfoView {
 		
 	}
 	
-	public void initPlayers(List<String> players) {
+	public void initPlayers(String player) {
 		
-		for(String player : players) {
-			g.addPlayer(player);
-		}
-        g.showBoard();
+		c.addPlayer(player);
+        c.initView();
         this.frame.dispose();
 	}
 	
