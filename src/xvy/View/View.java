@@ -16,57 +16,53 @@ import javax.swing.JPanel;
 public class View extends JFrame {
 	
 	private JFrame frame;
-	private List<Player> players;
-    public static final int BOARD_ROWS = 8;
-    public static final int BOARD_COLS = 12;
     private JPanel gridPanel;
     private JPanel selectPanel;
     private JLabel healthLabel;
     private JLabel combatPlabel;
+    private JLabel playername;
     private static JButton[][] btn;
-    private JButton item1;
-    private JButton item2;
-    private JButton item3;
-    private JButton item4;
+    private JButton item1,item2,item3,item4,item5,item6;
  
     protected static final String GRASS_IMAGE      = "images/grass.png";
-    
+    protected static final String WALL_IMAGE      = "images/wall.jpg";
    
     
-	View(List<Player> players){
-		this.players = players;
+	View(){
+		
         frame = new JFrame("Royals vs Rebels");
-
-        assembleBoard();
-
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);      //show gui in the middle of screen
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        
 	}
 	
-	private void assembleBoard(){
+	public void assembleBoard(Player playerOne){
 		
 		
         JPanel statsPanel = new JPanel(new GridLayout(1,6,0,0));
         selectPanel = new JPanel(new GridLayout(1,5,0,0));
-        gridPanel = new JPanel(new GridLayout(BOARD_ROWS,BOARD_COLS,0,1));
+        gridPanel = new JPanel(new GridLayout(Board.BOARD_ROWS,Board.BOARD_COLS,0,1));
         
-        healthLabel = new JLabel("0");
-        combatPlabel = new JLabel("0");
+        healthLabel = new JLabel(Integer.toString(playerOne.getStartHP()));
+        combatPlabel = new JLabel(Integer.toString(playerOne.getStartCP()));
+        playername = new JLabel(playerOne.getName());
+        
         statsPanel.add(new JLabel("Player Name: "));
-        statsPanel.add(new JLabel(players.get(0).getName()));
+  
+        statsPanel.add(playername);
         statsPanel.add(new JLabel("HP: "));
         statsPanel.add(healthLabel);
         statsPanel.add(new JLabel("CP: "));
         statsPanel.add(combatPlabel);
         
-        btn = new JButton[BOARD_ROWS][BOARD_COLS];
-        
+        btn = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
+       
         selectPanel.setMaximumSize(new Dimension(100,100));
 
         frame.setSize(925, 600);
-        paintGrid();
+        paintGridforRoyal();
 
         JPanel main = new JPanel(new  BorderLayout());
         main.add(statsPanel, BorderLayout.NORTH);
@@ -79,37 +75,51 @@ public class View extends JFrame {
         frame.add(gridPanel, BorderLayout.CENTER);
 	}
 
-	private void paintGrid() {
+	private void paintGridforRoyal() {
         item1 = new JButton();
-        item1.setName("item1");
+        item1.setName("spawn_General");
         item1.addActionListener(new Controller(this));
         selectPanel.add(item1);
-
+         
         item2 = new JButton();
-        item2.setName("item2");
+        item2.setName("spawn_Lieutenant");
         item2.addActionListener(new Controller(this));
         selectPanel.add(item2);
 
         item3 = new JButton();
-        item3.setName("item3");
+        item3.setName("spawn_Spearman");
         item3.addActionListener(new Controller(this));
         selectPanel.add(item3);
 
         item4 = new JButton();
-        item4.setName("item4");
+        item4.setName("spawn_Footman");
         item4.addActionListener(new Controller(this));
         selectPanel.add(item4);
         
-        generateBoard();
+        item5 = new JButton();
+        item5.setName("spawn_Archer");
+        item5.addActionListener(new Controller(this));
+        selectPanel.add(item5);
+
+        item6 = new JButton();
+        item6.setName("spawn_Cannon");
+        item6.addActionListener(new Controller(this));
+        selectPanel.add(item6);
+        
+        genGrid();
 		
 	}
 	
-    public void generateBoard() {
-        for (int i = 0; i < BOARD_ROWS; i++) {
-            for (int j = 0; j < BOARD_COLS; j++) {
-
+    public void genGrid() {
+        for (int i = 0; i < Board.BOARD_ROWS; i++) {
+            for (int j = 0; j < Board.BOARD_COLS; j++) {
                 btn[i][j] = new JButton();
-                btn[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+                
+                if((i%5 <=2) && j%4==3) 
+                	btn[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE))); 
+                else
+                	btn[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+                
                 btn[i][j].putClientProperty("row", i);             
                 btn[i][j].putClientProperty("column", j);          
                 btn[i][j].addActionListener(new Controller(this));
@@ -119,14 +129,23 @@ public class View extends JFrame {
         }
     }
     
-    public void linkModelView(ArrayList<GridRows> gr) {
+    public void linkModelView(ArrayList<BoardRows> gr) {
 
-        for (int i = 0; i < BOARD_ROWS; i++) {
-            ArrayList<GridElement> ge = gr.get(i).getRow();
-            for (int j = 0; j < BOARD_COLS; j++) {
+        for (int i = 0; i < Board.BOARD_ROWS; i++) {
+            ArrayList<Tile> ge = gr.get(i).getRow();
+            for (int j = 0; j < Board.BOARD_COLS; j++) {
                
             }
         }
     }
+    
+    public void updateHP(Player player) {
+    	healthLabel.setText(Integer.toString(player.getHP()));
+    }
+    
+    public void updateCP(Player player) {
+    	healthLabel.setText(Integer.toString(player.getCP()));
+    }
+	
 	
 }

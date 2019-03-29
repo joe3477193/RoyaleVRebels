@@ -7,7 +7,7 @@ import java.util.Stack;
 public class Controller implements ActionListener {
 
 	private View view;
-	private Grid grid;
+	private Board board;
 
 	
     public Controller(View v) {
@@ -15,16 +15,14 @@ public class Controller implements ActionListener {
 
     }
     
-    public Controller(View v, Grid g) {
+    public Controller(View v, Board b) {
         this.view = v;
-        this.grid = g;
-
-    }
-
- 
-    public void generateBoard() {
+        this.board = b;
         
+       // v.assembleBoard(playerOne);
+
     }
+
 
  
     public void updateBoard() {
@@ -36,5 +34,7 @@ public class Controller implements ActionListener {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
 
 }

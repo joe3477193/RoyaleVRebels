@@ -4,7 +4,8 @@ public class Player {
 	private String name;
 	private int id;
 	private int cp;
-	private int start_cp;
+	private int start_cp=30;		//temp for start
+	private int start_hp = 100;		//temp for start
 	private int remaining_cp;
 	private int remaining_hp;
 	
@@ -25,6 +26,10 @@ public class Player {
 	
 	public int getStartCP() {
 		return start_cp;
+	}
+	
+	public int getStartHP() {
+		return start_hp;
 	}
 	
 	public int getCP() {

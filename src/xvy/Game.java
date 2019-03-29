@@ -14,7 +14,7 @@ public class Game extends JFrame{
 	private int playercount=0;
 	private View v;
 	private Controller c;
-	private Grid g;
+	private Board b;
 	
 	Game() {
 		players = new ArrayList<Player>();
@@ -27,10 +27,17 @@ public class Game extends JFrame{
 	}
 	
 	void showBoard() {
-		this.g = new Grid(players);
-        this.v = new View(players);
-        this.c = new Controller(v, g);
-        c.generateBoard();
+		
+		b = new Board(players);
+		v = new View();
+		
+		c = new Controller(v, b);
+        
+       
+        
+        //c.linkmodelview
+        
+        //runGame
 	}
 	
 	public static void main(String args[]) {
