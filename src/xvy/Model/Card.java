@@ -1,4 +1,4 @@
-package xvy;
+package xvy.Model;
 
 public class Card {
 	private int hp;
@@ -112,16 +112,16 @@ public class Card {
 		return new int[] {unit.initHp, unit.attack, unit.mov, unit.range};
 	}
 
-	public boolean isDead() {
-		if (hp<= 0) {
+	public boolean isAlive() {
+		if (hp> 0) {
 			return true;
 		}
 		return false;
 	}
 
-	public boolean attackDead(int attack) {
+	public boolean attackBy(int attack) {
 		hp-=attack;
-		return isDead();
+		return isAlive();
 	}
 
 }

@@ -27,7 +27,23 @@ public class Board {
     }
 	
     public void moveGridP() {
+    	
     		//method to update movements
+    }
+    
+    public boolean checkInit(int row, int tile) {
+    	return gridrows.get(row).getTile(tile).hasCard();
+    }
+    
+    public boolean checkTarget(int row, int tile) {
+    	return !gridrows.get(row).getTile(tile).hasCard();
+    }
+    
+    public void move(int inRow, int inTile, int tgRow, int tgTile) {
+    	Tile inSpace = gridrows.get(inRow).getTile(inTile);
+    	Tile tgSpace = gridrows.get(tgRow).getTile(tgTile);
+    	tgSpace.setCard(inSpace.getCard());
+    	inSpace.removeCard();
     }
     
     
