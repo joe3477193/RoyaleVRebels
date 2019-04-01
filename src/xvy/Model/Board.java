@@ -31,12 +31,28 @@ public class Board {
     		//method to update movements
     }
     
-    public boolean checkInit(int row, int tile) {
+    private boolean checkInit(int row, int tile) {
     	return gridrows.get(row).getTile(tile).hasCard();
     }
     
-    public boolean checkTarget(int row, int tile) {
+    public boolean checkMoveInit(int row, int tile) {
+    	return checkInit(row, tile) && gridrows.get(row).getTile(tile).getCard().isMoveable();
+    }
+    
+    public boolean checkAttackInit(int row, int tile) {
+    	return checkInit(row, tile) && gridrows.get(row).getTile(tile).getCard().isAttackable();
+    }
+    
+    public boolean checkMoveTarget(int row, int tile) {
     	return !gridrows.get(row).getTile(tile).hasCard();
+    }
+    
+    public boolean checkAttackTarget(Card card, int row, int tile) {
+    	Tile space = gridrows.get(row).getTile(tile);
+    	if (space.hasCard() && card.getFaction() != space.getCard().getFaction()) {
+    		return true;
+    	}
+    	return false;
     }
     
     public void move(int inRow, int inTile, int tgRow, int tgTile) {
@@ -46,6 +62,14 @@ public class Board {
     	inSpace.removeCard();
     }
     
+    public void attack(Card card, int row, int tile) {
+    	Tile space = gridrows.get(row).getTile(tile);
+    	Card tgCard = space.getCard();
+    	tgCard.attackBy(card.getAttack());
+    	if (tgCard.isDead()) {
+    		space.removeCard();
+    	}
+    }
     
 	
 }

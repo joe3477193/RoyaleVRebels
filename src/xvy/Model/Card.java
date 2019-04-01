@@ -112,16 +112,15 @@ public class Card {
 		return new int[] {unit.initHp, unit.attack, unit.mov, unit.range};
 	}
 
-	public boolean isAlive() {
-		if (hp> 0) {
+	public boolean isDead() {
+		if (hp<= 0) {
 			return true;
 		}
 		return false;
 	}
 
-	public boolean attackBy(int attack) {
+	public void attackBy(int attack) {
 		hp-=attack;
-		return isAlive();
 	}
 
 }
