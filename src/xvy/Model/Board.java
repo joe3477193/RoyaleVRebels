@@ -27,9 +27,49 @@ public class Board {
     }
 	
     public void moveGridP() {
+    	
     		//method to update movements
     }
     
+    private boolean checkInit(int row, int tile) {
+    	return gridrows.get(row).getTile(tile).hasCard();
+    }
+    
+    public boolean checkMoveInit(int row, int tile) {
+    	return checkInit(row, tile) && gridrows.get(row).getTile(tile).getCard().isMoveable();
+    }
+    
+    public boolean checkAttackInit(int row, int tile) {
+    	return checkInit(row, tile) && gridrows.get(row).getTile(tile).getCard().isAttackable();
+    }
+    
+    public boolean checkMoveTarget(int row, int tile) {
+    	return !gridrows.get(row).getTile(tile).hasCard();
+    }
+    
+    public boolean checkAttackTarget(Card card, int row, int tile) {
+    	Tile space = gridrows.get(row).getTile(tile);
+    	if (space.hasCard() && card.getFaction() != space.getCard().getFaction()) {
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public void move(int inRow, int inTile, int tgRow, int tgTile) {
+    	Tile inSpace = gridrows.get(inRow).getTile(inTile);
+    	Tile tgSpace = gridrows.get(tgRow).getTile(tgTile);
+    	tgSpace.setCard(inSpace.getCard());
+    	inSpace.removeCard();
+    }
+    
+    public void attack(Card card, int row, int tile) {
+    	Tile space = gridrows.get(row).getTile(tile);
+    	Card tgCard = space.getCard();
+    	tgCard.attackBy(card.getAttack());
+    	if (tgCard.isDead()) {
+    		space.removeCard();
+    	}
+    }
     
 	
 }
