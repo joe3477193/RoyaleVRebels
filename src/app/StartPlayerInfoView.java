@@ -1,10 +1,9 @@
-package xvy;
+package app;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.WindowEvent;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,8 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import xvy.Controller.Controller;
-import xvy.Model.Player;
+import controller.Controller;
 
 public class StartPlayerInfoView {
 	private JFrame frame;
@@ -49,7 +47,7 @@ public class StartPlayerInfoView {
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);      
-        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
 	}

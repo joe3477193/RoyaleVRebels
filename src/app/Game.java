@@ -1,24 +1,23 @@
-package xvy;
-
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.LayoutManager;
-import java.util.ArrayList;
-import java.util.List;
+package app;
 
 import javax.swing.JFrame;
-import xvy.Controller.*;
-import xvy.View.*;
-import xvy.Model.*;
+
+import controller.*;
+import model.*;
+import view.*;
 
 public class Game extends JFrame{
 	
 	
-	private View v;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private View v;
 	private Controller c;
 	private Board b;
 	
-	Game() {
+	public Game() {
 		
 		b = new Board();
 		v = new View();

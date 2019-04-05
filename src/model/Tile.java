@@ -1,4 +1,4 @@
-package xvy.Model;
+package model;
 
 public class Tile {
 

@@ -1,14 +1,12 @@
-package xvy.Controller;
+package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
-
-import xvy.View.*;
-import xvy.Model.*;
+import model.*;
+import view.*;
 
 public class Controller implements ActionListener {
 

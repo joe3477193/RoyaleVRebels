@@ -1,25 +1,25 @@
-package xvy.View;
+package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-import xvy.Controller.*;
- 
-import xvy.Model.*;
+import controller.*;
+import model.*;
 
 public class View extends JFrame {
 	
-	private JFrame frame;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private JFrame frame;
     private JPanel gridPanel;
     private JPanel selectPanel;
     private JLabel healthLabel;
@@ -37,7 +37,7 @@ public class View extends JFrame {
         frame = new JFrame("Royals vs Rebels");
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);      //show gui in the middle of screen
-        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         
 	}
