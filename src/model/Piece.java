@@ -1,15 +1,15 @@
 package model;
 
-public class Card {
+public class Piece {
 	private int hp;
-	// total num of cards on board
+	// total num of pieces on board
 	private final int num;
 	private static int numCount;
 	static enum Faction{
 		ROYALE, REBEL;
 	}
 	static enum Type{
-		TROOP(true, true), ARTILLERY(true, false), TRAP(false, false);
+        TROOP(true, true), ARTILLERY(true, false), TRAP(false, false);
 		final boolean attackable;
 		final boolean moveable;
 
@@ -46,7 +46,7 @@ public class Card {
 	}
 	private Unit unit;
 
-	public Card(Unit unit) {
+	public Piece(Unit unit) {
 		this.unit = unit;
 		this.hp = unit.initHp;
 		numCount += 1;

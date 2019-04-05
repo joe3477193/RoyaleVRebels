@@ -5,21 +5,21 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Card.Faction;
-import model.Card.Type;
-import model.Card.Unit;
+import model.Piece.Faction;
+import model.Piece.Type;
+import model.Piece.Unit;
 
-public class CardTest {
+public class PieceTest {
 
     Unit u1 = Unit.GENERAL;
-    Card c1 = new Card(u1);
-    
+    Piece c1 = new Piece(u1);
+
     @Before
     public void setUp() throws Exception {
 
     }
-    
- // test if the card has been initialized as expected
+
+    // test if the piece has been initialized as expected
     @Test
     public void testMove1() {
         assertEquals(c1.getAttack(), u1.attack);

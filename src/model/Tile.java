@@ -2,30 +2,28 @@ package model;
 
 public class Tile {
 
+    private Piece piece;
 
-	private Card card;
+    public Tile() {
+    }
 
+    public void setPiece(Piece piece) {
+        this.piece = piece;
+    }
 
-	public Tile() {
-	}
+    public Piece getPiece() {
+        return piece;
+    }
 
-	public void setCard(Card card) {
-		this.card = card;
-	}
+    public boolean hasPiece() {
+        if (piece != null) {
+            return true;
+        }
+        return false;
+    }
 
-	public Card getCard() {
-		return card;
-	}
-
-	public boolean hasCard() {
-		if (card!=null){
-			return true;
-		}
-		return false;
-	}
-
-	public void removeCard() {
-		card = null;
-	}
+    public void removePiece() {
+        piece = null;
+    }
 
 }
