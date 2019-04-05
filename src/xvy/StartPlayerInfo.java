@@ -20,7 +20,7 @@ public class StartPlayerInfo implements ActionListener {
 	
     public StartPlayerInfo(StartPlayerInfoView spiv) {
         this.spiv = spiv;
-        strings = new ArrayList<>();
+        strings = new ArrayList<String>();
     }
 
     @Override
