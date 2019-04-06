@@ -9,6 +9,7 @@ public class Game {
 	ArrayList<Player> players = new ArrayList<>();
 	Royal royal;
 	Rebel rebel;
+	Player currPlayer;
 	boolean isRunning = false;
 	GameFrameView view;
 	
@@ -25,8 +26,8 @@ public class Game {
 			royal = new Royal(playerName.get(t));
 			rebel =  new Rebel(playerName.get(t-1));
 		}
-		players.add(royal);
 		players.add(rebel);
+		players.add(royal);
 		
 		startGame();
         
@@ -43,7 +44,8 @@ public class Game {
 	
 	public void startGame() {
 		Board b = new Board();
-		view.assembleBoard(royal, b);
+		view.assembleBoard(rebel, b);
+		currPlayer = rebel;
 		isRunning = true;
 	}
 }

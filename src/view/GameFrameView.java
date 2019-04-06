@@ -61,10 +61,11 @@ public class GameFrameView extends JFrame {
         playertype = new JLabel(playerOne.getType());
         statsPanel.add(new JLabel("Player Type: "));
         statsPanel.add(playertype);
-
-    	healthLabel = new JLabel(Integer.toString(playerOne.start_hp()));
+        
+        // We should show the hp of castle during the whole game, and it can be a large red bar on the top side
+    	/*healthLabel = new JLabel(Integer.toString(((Royal) playerOne).getHp()));
     	statsPanel.add(new JLabel("HP: "));
-        statsPanel.add(healthLabel);
+        statsPanel.add(healthLabel);*/
         
         btn = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
 
