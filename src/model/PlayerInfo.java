@@ -14,11 +14,7 @@ public class PlayerInfo {
         players.add(p1);
         players.add(p2);
     }
-
-    public void initGameFrame(GameFrame gf) {
-        gf.assembleBoard(players.get(0));
-    }
-
+    
     public ArrayList<Player> getAllPlayers() {
         return players;
     }

@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -39,6 +40,11 @@ public class GameFrame extends JFrame {
         frame.setVisible(true);
 
     }
+    
+    public void initGameFrame(Player player) {
+        assembleBoard(player);
+    }
+
 
     public void assembleBoard(Player playerOne) {
 
