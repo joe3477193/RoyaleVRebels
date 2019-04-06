@@ -2,10 +2,12 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import model.*;
 import view.*;
@@ -24,21 +26,20 @@ public class AddPlayerActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        String n1 = name1.getText();
-        String n2 = name2.getText();
 
-        if (n1.length() > 0 && n2.length() > 0) {
-
-            PlayerInfo pi = new PlayerInfo(n1, n2);
-
-            // Game game = new Game();
-            GameFrame gameFrame = new GameFrame();
-            gameFrame.initGameFrame(pi.getAllPlayers().get(0));
-            // pi.initGameFrame(gameFrame);
-
-            // I don't know how to get the text from the field to add players
-            new Board(pi.getAllPlayers());
-
+        if (name1.getText().length() > 0 && name2.getText().length() > 0) {
+        	
+        	ArrayList<String> players = new ArrayList<String>();
+        	players.add(name1.getText());
+        	players.add(name2.getText());
+        	
+        	GameFrameView gameFrame = new GameFrameView();
+    		SwingUtilities.invokeLater(new Runnable(){			
+    			public void run() {			
+    				new Game(gameFrame, players);
+    							}
+    		});
+	       
             frame.dispose();
         } else {
             JOptionPane.showMessageDialog(frame, "Please make sure both names are entered.", "Input error",

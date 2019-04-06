@@ -5,7 +5,7 @@ public class Piece {
 	// total num of pieces on board
 	private final int num;
 	private static int numCount;
-	static enum Faction{
+	public static enum Faction{
 		ROYALE, REBEL;
 	}
 	static enum Type{

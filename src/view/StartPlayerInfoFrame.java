@@ -46,7 +46,7 @@ public class StartPlayerInfoFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        // I don't know how to validate players' names
+       
         start.addActionListener(new AddPlayerActionListener(frame, player_one_name, player_two_name));
     }
 }

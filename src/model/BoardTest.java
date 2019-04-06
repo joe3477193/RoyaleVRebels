@@ -15,10 +15,10 @@ public class BoardTest {
     Piece c1 = new Piece(u1);
     Unit u2 = Unit.CATAPULT;
     Piece c2 = new Piece(u2);
-    Player p1 = new Player(1, "Andy");
-    Player p2 = new Player(2, "Betty");
+    Player p1 = new Royal("Andy");
+    Player p2 = new Rebel("Betty");
     ArrayList<Player> players = new ArrayList<Player>();
-    Board b = new Board(players);
+    Board b = new Board();
     Tile t1 = Board.gridrows.get(0).getTile(0);
     Tile t2 = Board.gridrows.get(1).getTile(0);
     

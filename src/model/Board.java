@@ -4,29 +4,29 @@ import java.util.ArrayList;
 
 public class Board {
 
-    ArrayList<Player> playersOnBoard;
+
 
     protected static ArrayList<BoardRows> gridrows;
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
 
-    public Board(ArrayList<Player> players) {
+    public Board() {
 
         Board.gridrows = new ArrayList<>(BOARD_ROWS);
-
-        this.playersOnBoard = players;
 
         for (int i = 0; i < BOARD_ROWS; i++) {
             gridrows.add(new BoardRows());
         }
     }
 
-    // ??? what is this method ???
-    public void moveGridP() {
-
-        // method to update movements
+    public int getRows() {
+    	return BOARD_ROWS;
     }
-
+    
+    public int getCols() {
+    	return BOARD_COLS;
+    }
+    
     // Check if piece has been initialized successfully in current tile
     public boolean checkInit(int row, int tile) {
         return gridrows.get(row).getTile(tile).hasPiece();
