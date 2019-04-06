@@ -16,7 +16,7 @@ public class Game {
 		
 		this.view = view;
 		Random r = new Random();
-		int t = r.nextInt(1);
+		int t = r.nextInt(2);
 		if(t==0) {
 			royal = new Royal(playerName.get(t));
 			rebel =  new Rebel(playerName.get(t+1));
