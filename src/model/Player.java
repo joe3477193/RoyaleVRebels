@@ -2,27 +2,36 @@ package model;
 
 public abstract class Player {
 
-    int start_cp = 30; // temp for start
-    public int start_hp = 100; // temp for start
+    private int cp;
+    private int start_cp;
+    private String name;
+    private final String type;
 
-    public abstract String getName();
+    public Player(String name, int cp, int start_cp, String type){
+        this.name= name;
+        this.cp= cp;
+        this.start_cp= start_cp;
+        this.type= type;
+    }
 
+    public String getName(){
+        return name;
+    }
 
-    public abstract int getStartCP();
+    public int getStartCP(){
+        return start_cp;
+    }
 
+    public int getCP(){
+        return cp;
+    }
 
-    public abstract int getCP();
-    
-
-    public abstract void setCP(int cp);
-    
-    public abstract String getType();
-
-	public int start_hp() {
-		// TODO Auto-generated method stub
-		return start_hp;
-	}
-
+    public void setCP(int cp){
+        this.cp= cp;
+    }
+    public String getType(){
+        return type;
+    }
 
 
 }
