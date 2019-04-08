@@ -5,9 +5,6 @@ public class Piece {
 	// total num of pieces on board
 	private final int num;
 	private static int numCount;
-	public static enum Faction{
-		ROYALE, REBEL;
-	}
 	static enum Type{
         TROOP(true, true), ARTILLERY(true, false), TRAP(false, false);
 		final boolean attackable;
@@ -19,12 +16,20 @@ public class Piece {
 		}
 	}
 	static enum Unit{
-		GENERAL(Faction.REBEL, "GA", Type.TROOP, 5, 50, 30, 1, 1), TANK(Faction.REBEL, "TA", Type.TROOP, 3, 100, 10, 1, 1),
-		INFANTRY(Faction.REBEL, "IF", Type.TROOP, 1, 20, 20, 3, 1), ASSASSIN(Faction.REBEL, "AS", Type.TROOP, 3, 20, 50, 4, 3),
-		ARCHER(Faction.REBEL, "AC", Type.TROOP, 3, 40, 30, 1, 6), CANNON(Faction.ROYALE, "CN", Type.ARTILLERY, 3, 50, 30, 1, 1), 
-		CATAPULT(Faction.ROYALE, "CT", Type.ARTILLERY, 5, 50, 30, 1, 1), GUNNER(Faction.ROYALE, "GU", Type.TROOP, 5, 50, 30, 1, 1),
-		BOULDER(Faction.ROYALE, "BD", Type.TRAP, 4, 200, 0, 0, 0);
-		final Faction faction;
+		LEADER("Rebel", "LD", Type.TROOP, 5, 50, 30, 1, 1),
+		SCOUNDREL("Rebel", "SC", Type.TROOP, 3, 100, 10, 1, 1),
+		MOBSTER("Rebel", "MB", Type.TROOP, 1, 20, 20, 3, 1),
+		ANGRYMAN("Rebel", "AG", Type.TROOP, 3, 20, 50, 4, 3),
+		SPEARER("Rebel", "SP", Type.TROOP, 3, 40, 30, 1, 6),
+		CATAPULT("Rebel", "CA", Type.ARTILLERY, 5, 50, 20, 1, 8),
+		GENERAL("Royale", "GN", Type.TROOP, 5, 50, 50, 1, 1),
+		LIUTENANT("Royale", "LT", Type.TROOP, 3, 30, 30, 2, 1),
+		INFANTRY("Royale", "IF", Type.TROOP, 5, 20, 20, 3, 1),
+		BALISTA("Royale", "BA", Type.ARTILLERY, 8, 40, 30, 1, 8),
+		CANNON("Royale", "CA", Type.ARTILLERY, 10, 50, 50, 1, 10),
+		ARCHER("Royale", "AC", Type.TROOP, 5, 50, 30, 2, 6);
+
+		final String faction;
 		final String code;
 		final Type type;
 		final int cp;
@@ -33,7 +38,7 @@ public class Piece {
 		final int mov;
 		final int range;
 
-		private Unit(Faction faction, String code, Type type, int cp, int initHp, int attack, int mov, int range) {
+		private Unit(String faction, String code, Type type, int cp, int initHp, int attack, int mov, int range) {
 			this.faction = faction;
 			this.code = code;
 			this.type = type;
@@ -74,7 +79,7 @@ public class Piece {
 	}
 
 	public String getFaction() {
-		return unit.faction.toString();
+		return unit.faction;
 	}
 
 	public String getName() {
@@ -120,7 +125,7 @@ public class Piece {
 		return false;
 	}
 
-	public void attackBy(int attack) {
+	public void attackedBy(int attack) {
 		hp-=attack;
 	}
 

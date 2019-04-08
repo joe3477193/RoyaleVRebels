@@ -4,26 +4,26 @@ import java.util.ArrayList;
 
 public class BoardRows {
 
-    private ArrayList<Tile> elements;
+    private ArrayList<Tile> tiles;
 
     public BoardRows() {
-        elements = new ArrayList<>(Board.BOARD_COLS);
+        tiles = new ArrayList<>(Board.BOARD_COLS);
 
         for (int i = 0; i < Board.BOARD_COLS; i++) {
-            elements.add(new Tile());
+            tiles.add(new Tile());
         }
     }
 
     public ArrayList<Tile> getRow() {
-        if (elements != null) {
-            return elements;
+        if (tiles != null) {
+            return tiles;
         } else {
             return null;
         }
     }
 
     public Tile getTile(int i) {
-        return elements.get(i);
+        return tiles.get(i);
     }
 
 }

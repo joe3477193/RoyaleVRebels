@@ -15,7 +15,7 @@ public class BoardTest {
     Piece c1 = new Piece(u1);
     Unit u2 = Unit.CATAPULT;
     Piece c2 = new Piece(u2);
-    Player p1 = new Royal("Andy");
+    Player p1 = new Royale("Andy");
     Player p2 = new Rebel("Betty");
     ArrayList<Player> players = new ArrayList<Player>();
     Board b = new Board();
@@ -97,7 +97,7 @@ public class BoardTest {
     @Test
     public void testAttack() {
         t2.setPiece(c2);
-        assertTrue(b.attack(c1, 1, 0));
+        assertTrue(b.attack(0,0, 1, 0));
         assertEquals(Board.gridrows.get(1).getTile(0).getPiece().getHp(), 20);
     }
 
