@@ -44,68 +44,41 @@ public class PlacePieceActionListener implements ActionListener{
 		                    createCustomCursor(new ImageIcon(this.getClass().getResource(frame.ONE_IMAGE)).getImage(),
 		                            new Point(0, 0), "General"));
 		        	System.out.println(source.getName());
-		            return;
+		        	break;
 			        
 		        
 			case "spawn_Lieutenant":
-		        if (frame.getFrame().getCursor().getType() != 0) {
-		        	frame.getFrame().setCursor(DEFAULT_CURSOR);
-		            break;
-			        } 
-		        else {
 		        	frame.getFrame().setCursor(Toolkit.getDefaultToolkit().
 		                    createCustomCursor(new ImageIcon(this.getClass().getResource(frame.TWO_IMAGE)).getImage(),
 		                            new Point(0, 0), "Lieutenant"));
 		            break;
-			        }
+			        
 		        
 			case "spawn_Footman":
-		        if (frame.getFrame().getCursor().getType() != 0) {
-		        	frame.getFrame().setCursor(DEFAULT_CURSOR);
-		            break;
-			        } 
-		        else {
 		        	frame.getFrame().setCursor(Toolkit.getDefaultToolkit().
-		                    createCustomCursor(new ImageIcon(this.getClass().getResource(frame.THREE_IMAGE)).getImage(),
+		                    createCustomCursor(new ImageIcon(this.getClass().getResource(frame.FOUR_IMAGE)).getImage(),
 		                            new Point(0, 0), "Footman"));
 		            break;
-			        }
+			        
 		        
 			case "spawn_Cannon":
-		        if (frame.getFrame().getCursor().getType() != 0) {
-		        	frame.getFrame().setCursor(DEFAULT_CURSOR);
-		            break;
-			        } 
-		        else {
 		        	frame.getFrame().setCursor(Toolkit.getDefaultToolkit().
 		                    createCustomCursor(new ImageIcon(this.getClass().getResource(frame.FOUR_IMAGE)).getImage(),
 		                            new Point(0, 0), "Cannon"));
 		            break;
-			        }
+
 		        
 			case "spawn_Archer":
-		        if (frame.getFrame().getCursor().getType() != 0) {
-		        	frame.getFrame().setCursor(DEFAULT_CURSOR);
-		            break;
-			        } 
-		        else {
 		        	frame.getFrame().setCursor(Toolkit.getDefaultToolkit().
 		                    createCustomCursor(new ImageIcon(this.getClass().getResource(frame.FIVE_IMAGE)).getImage(),
 		                            new Point(0, 0), "Archer"));
 		            break;
-			        }
-		        
+
 			case "spawn_Spearman":
-		        if (frame.getFrame().getCursor().getType() != 0) {
-		        	frame.getFrame().setCursor(DEFAULT_CURSOR);
-		            break;
-			        } 
-		        else {
 		        	frame.getFrame().setCursor(Toolkit.getDefaultToolkit().
-		                    createCustomCursor(new ImageIcon(this.getClass().getResource(frame.SIX_IMAGE)).getImage(),
+		                    createCustomCursor(new ImageIcon(this.getClass().getResource(frame.THREE_IMAGE)).getImage(),
 		                            new Point(0, 0), "Spearman"));
 		            break;
-			        }
 			
 			}
 
