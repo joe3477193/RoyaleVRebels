@@ -28,15 +28,17 @@ public class GameFrameView extends JFrame {
     private JLabel combatPlabel;
     private JLabel playername, playertype;
     private static JButton[][] btn;
-    private JButton item1, item2, item3, item4, item5, item6;
+    public JButton spawn_General, spawn_Lieutenant, spawn_Spearman, spawn_Footman, spawn_Archer, spawn_Cannon;
 
-    protected static final String GRASS_IMAGE      = "../images/grass.png";
-    protected static final String WALL_IMAGE      = "../images/wall.jpg";
+    public static final String GRASS_IMAGE      = "../images/grass.png";
+    public static final String WALL_IMAGE      = "../images/wall.jpg";
     public static final String ONE_IMAGE      = "../images/man.png";
-    protected static final String TWO_IMAGE      = "../images/megastrong.png";
-    protected static final String THREE_IMAGE      = "../images/strong.png";
+    public static final String TWO_IMAGE      = "../images/megastrong.png";
+    public static final String THREE_IMAGE      = "../images/strong.png";
     public static final String FOUR_IMAGE      = "../images/watchout.png";
-
+    public static final String FIVE_IMAGE      = "../images/watchout.png";
+    public static final String SIX_IMAGE      = "../images/watchout.png";
+    
     public GameFrameView() {
 
         frame = new JFrame("Royals vs Rebels");
@@ -85,35 +87,35 @@ public class GameFrameView extends JFrame {
     }
 
     private void paintGridforRoyal() {
-        item1 = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
-        item1.setName("spawn_General");
-        item1.addActionListener(new PlacePieceActionListener(this.frame));
-        selectPanel.add(item1);
+    	spawn_General = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
+    	spawn_General.setName("spawn_General");
+    	spawn_General.addActionListener(new PlacePieceActionListener(this));
+        selectPanel.add(spawn_General);
          
-        item2 = new JButton(new ImageIcon(this.getClass().getResource(TWO_IMAGE)));
-        item2.setName("spawn_Lieutenant");
-        item2.addActionListener(new PlacePieceActionListener(this.frame));
-        selectPanel.add(item2);
+        spawn_Lieutenant = new JButton(new ImageIcon(this.getClass().getResource(TWO_IMAGE)));
+        spawn_Lieutenant.setName("spawn_Lieutenant");
+        spawn_Lieutenant.addActionListener(new PlacePieceActionListener(this));
+        selectPanel.add(spawn_Lieutenant);
 
-        item3 = new JButton(new ImageIcon(this.getClass().getResource(THREE_IMAGE)));
-        item3.setName("spawn_Spearman");
-        item3.addActionListener(new PlacePieceActionListener(this.frame));
-        selectPanel.add(item3);
+        spawn_Spearman = new JButton(new ImageIcon(this.getClass().getResource(THREE_IMAGE)));
+        spawn_Spearman.setName("spawn_Spearman");
+        spawn_Spearman.addActionListener(new PlacePieceActionListener(this));
+        selectPanel.add(spawn_Spearman);
 
-        item4 = new JButton(new ImageIcon(this.getClass().getResource(FOUR_IMAGE)));
-        item4.setName("spawn_Footman");
-        item4.addActionListener(new PlacePieceActionListener(this.frame));
-        selectPanel.add(item4);
+        spawn_Footman = new JButton(new ImageIcon(this.getClass().getResource(FOUR_IMAGE)));
+        spawn_Footman.setName("spawn_Footman");
+        spawn_Footman.addActionListener(new PlacePieceActionListener(this));
+        selectPanel.add(spawn_Footman);
         
-        item5 = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
-        item5.setName("spawn_Archer");
-        item5.addActionListener(new PlacePieceActionListener(this.frame));
-        selectPanel.add(item5);
+        spawn_Archer = new JButton(new ImageIcon(this.getClass().getResource(FIVE_IMAGE)));
+        spawn_Archer.setName("spawn_Archer");
+        spawn_Archer.addActionListener(new PlacePieceActionListener(this));
+        selectPanel.add(spawn_Archer);
 
-        item6 = new JButton(new ImageIcon(this.getClass().getResource(TWO_IMAGE)));
-        item6.setName("spawn_Cannon");
-        item6.addActionListener(new PlacePieceActionListener(this.frame));
-        selectPanel.add(item6);
+        spawn_Cannon = new JButton(new ImageIcon(this.getClass().getResource(SIX_IMAGE)));
+        spawn_Cannon.setName("spawn_Cannon");
+        spawn_Cannon.addActionListener(new PlacePieceActionListener(this));
+        selectPanel.add(spawn_Cannon);
 
         genGrid();
 
@@ -136,6 +138,10 @@ public class GameFrameView extends JFrame {
                 gridPanel.add(btn[i][j]);
             }
         }
+    }
+    
+    public JFrame getFrame() {
+    	return frame;
     }
 
 
