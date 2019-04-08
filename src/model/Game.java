@@ -43,7 +43,7 @@ public class Game {
 	
 	public void startGame() {
 		Board b = new Board();
-		view.assembleBoard(royal, b);
+		view.assembleBoard(rebel, b);
 		isRunning = true;
 	}
 }

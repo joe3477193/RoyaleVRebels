@@ -17,7 +17,7 @@ public class Rebel extends Player {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class Rebel extends Player {
 	@Override
 	public void setCP(int cp) {
 		// TODO Auto-generated method stub
-		
+		this.CP = cp;
 	}
 
 
