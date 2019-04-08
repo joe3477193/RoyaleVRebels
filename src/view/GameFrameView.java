@@ -22,6 +22,7 @@ public class GameFrameView extends JFrame {
      */
     private static final long serialVersionUID = 1L;
     private JFrame frame;
+    private JPanel bottomPanel;
     private JPanel gridPanel;
     private JPanel statsPanel;
     private JPanel selectPanel;
@@ -63,6 +64,7 @@ public class GameFrameView extends JFrame {
         statsPanel = new JPanel(new GridLayout(1, 6, 0, 0));
         selectPanel = new JPanel(new GridLayout(1, 5, 0, 0));
         gridPanel = new JPanel(new GridLayout(b.getRows(), b.getCols(), 0, 1));
+        bottomPanel = new JPanel(new GridLayout(1, 2));
         
         playername = new JLabel(playerOne.getName());
         statsPanel.add(new JLabel("Player Name: "));
@@ -82,16 +84,18 @@ public class GameFrameView extends JFrame {
 
         frame.setSize(925, 600);
         paintRoyaleDeck();
+        drawActionBtns();
 
-        JPanel main = new JPanel(new BorderLayout());
-        main.add(statsPanel, BorderLayout.NORTH);
-        main.add(selectPanel, BorderLayout.CENTER);
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(statsPanel, BorderLayout.NORTH);
+        topPanel.add(selectPanel, BorderLayout.CENTER);
 
         frame.revalidate();
         frame.repaint();
 
-        frame.add(main, BorderLayout.NORTH);
+        frame.add(topPanel, BorderLayout.NORTH);
         frame.add(gridPanel, BorderLayout.CENTER);
+        frame.add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private void paintRoyaleDeck() {
@@ -131,7 +135,9 @@ public class GameFrameView extends JFrame {
     
     public void drawActionBtns() {
     	JButton moveBtn = new JButton("Move");
+    	bottomPanel.add(moveBtn);
     	JButton attackBtn = new JButton("Attack");
+    	bottomPanel.add(attackBtn);
     }
 
     public void genGrid() {
