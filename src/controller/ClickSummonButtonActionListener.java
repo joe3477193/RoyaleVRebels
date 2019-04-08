@@ -31,6 +31,7 @@ public class ClickSummonButtonActionListener implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		JButton source = (JButton) e.getSource();
+		frame.getBoard().doneMoving();
 
 		if(frame.getBoard().getTurn()==0) {
 			button= frame.getRebelButton();
@@ -49,13 +50,13 @@ public class ClickSummonButtonActionListener implements ActionListener{
 				Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
 				if(frame.getFrame().getCursor().getName().equals(name[i])) {
 					frame.getFrame().setCursor(DEFAULT_CURSOR);
-					frame.getBoard().removeSelectedPiece();
+					frame.getBoard().removeSummonedPiece();
 					frame.removeImage();
 				}
 				else {
 					frame.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
 					System.out.println(source.getName());
-					frame.getBoard().setSelectedPiece(new Piece(name[i]));
+					frame.getBoard().setSummonedPiece(new Piece(name[i]));
 					frame.setImage(image[i]);
 				}
 			}

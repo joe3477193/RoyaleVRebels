@@ -10,8 +10,13 @@ public class Board {
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
     
-    private Piece selectedPiece;
+    private Piece summonedPiece;
     private int turn;
+    private int[] coordinate;
+    private int[] init;
+    private int[] target;
+    private boolean moving;
+    
 
 
     public Board() {
@@ -22,7 +27,62 @@ public class Board {
             gridrows.add(new BoardRows());
         }
         turn= 0;
+        init= new int[2];
+        target= new int[2];
+        moving= false;
     }
+    
+    public boolean isMoving() {
+    	return moving;
+    }
+    
+    public void doneMoving() {
+    	moving= false;
+    }
+    
+    public void setMoving() {
+    	moving= true;
+    }
+    
+    public int[] getCoordinate() {
+    	return coordinate;
+    }
+    
+    public void setCoordinate(int i, int j) {
+    	coordinate[0]= i;
+    	coordinate[1]= j;
+    }
+    
+    public void removeCoordinate() {
+    	coordinate= null;
+    	coordinate= new int[2];
+    }
+    
+    public boolean hasCoordinate() {
+    	if(coordinate!=null) {
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public int[] getInit() {
+    	return init;
+    }
+    
+    public void setInit(int i, int j) {
+    	init[0]= i;
+    	init[1]= j;
+    }
+    
+    public int[] getTarget() {
+    	return target;
+    }
+    
+    public void setTarget(int i, int j) {
+    	target[0]= i;
+    	target[1]= j;
+    }
+    
 
     public int getRows() {
         return BOARD_ROWS;
@@ -40,16 +100,16 @@ public class Board {
     	turn =abs(turn-1);
     }
     
-    public Piece getSelectedPiece() {
-    	return selectedPiece;
+    public Piece getSummonedPiece() {
+    	return summonedPiece;
     }
     
-    public void setSelectedPiece(Piece piece) {
-    	selectedPiece= piece;
+    public void setSummonedPiece(Piece piece) {
+    	summonedPiece= piece;
     }
     
-    public void removeSelectedPiece() {
-    	selectedPiece= null;
+    public void removeSummonedPiece() {
+    	summonedPiece= null;
     }
 
     private Tile getTile(int row, int tile){
@@ -94,7 +154,7 @@ public class Board {
 
     // Check if piece in current tile is moveable
     public boolean checkMoveInit(int row, int tile) {
-        return getTile(row, tile).getPiece().isMoveable();
+        return checkInit(row, tile) && getTile(row, tile).getPiece().isMoveable();
     }
 
     // Check if piece in current tile is attackable
@@ -121,10 +181,10 @@ public class Board {
         int tileDiff= abs(inTile-tgTile);
         Piece piece= getPiece(inRow, inTile);
         if(type.equals("mov")){
-            return piece.getMov()<=rowDiff && piece.getMov()<=tileDiff;
+            return piece.getMov()>=rowDiff && piece.getMov()>=tileDiff;
         }
         else if(type.equals("range")){
-            return piece.getRange()<=rowDiff && piece.getRange()<=tileDiff;
+            return piece.getRange()>=rowDiff && piece.getRange()>=tileDiff;
         }
         return false;
     }

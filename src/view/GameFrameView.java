@@ -67,7 +67,7 @@ public class GameFrameView extends JFrame {
 	private String currentImage;
 
 	private JButton lastTile;
-
+	
 
 
 	public GameFrameView() {
@@ -166,6 +166,7 @@ public class GameFrameView extends JFrame {
 	public void drawActionBtns() {
 		moveBtn = new JButton("Move");
 		bottomPanel.add(moveBtn);
+		moveBtn.addActionListener(new MoveActionListener(this));
 		attackBtn = new JButton("Attack");
 		bottomPanel.add(attackBtn);
 	}
@@ -212,7 +213,9 @@ public class GameFrameView extends JFrame {
 
 	}
 
-	public void updateBar(int turn) {
+	public void updateBar() {
+		board.cycleTurn();
+		int turn= board.getTurn();
 		if(turn==0) {
 			removeSpawn(royalButton);
 			loadSpawn(rebelButton);
@@ -252,9 +255,9 @@ public class GameFrameView extends JFrame {
 	public void removeImage() {
 		currentImage= null;
 	}
-
+	
 	public boolean hasSummon() {
-		if(currentImage!=null) {
+		if(board.getSummonedPiece()!=null) {
 			return true;
 		}
 		return false;
@@ -282,6 +285,10 @@ public class GameFrameView extends JFrame {
 
 	public String[] getRoyalImage() {
 		return royalImage;
+	}
+	
+	public String getGrass() {
+		return GRASS_IMAGE;
 	}
 }
 
