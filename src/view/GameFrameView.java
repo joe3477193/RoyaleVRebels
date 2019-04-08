@@ -27,7 +27,7 @@ public class GameFrameView extends JFrame {
     private JLabel healthLabel;
     private JLabel combatPlabel;
     private JLabel playername, playertype;
-    private static JButton[][] tileBtn;
+    private static JButton[][] tileBtns;
     private JButton item1, item2, item3, item4, item5, item6;
 
     protected static final String GRASS_IMAGE      = "../images/grass.png";
@@ -67,12 +67,12 @@ public class GameFrameView extends JFrame {
     	statsPanel.add(new JLabel("HP: "));
         statsPanel.add(healthLabel);*/
         
-        tileBtn = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
+        tileBtns = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
 
         selectPanel.setMaximumSize(new Dimension(100, 100));
 
         frame.setSize(925, 600);
-        paintGridforRoyal();
+        paintRoyalDeck();
 
         JPanel main = new JPanel(new BorderLayout());
         main.add(statsPanel, BorderLayout.NORTH);
@@ -85,7 +85,7 @@ public class GameFrameView extends JFrame {
         frame.add(gridPanel, BorderLayout.CENTER);
     }
 
-    private void paintGridforRoyal() {
+    private void paintRoyalDeck() {
         item1 = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
         item1.setName("spawn_General");
         item1.addActionListener(new SummonPieceActionListener(this.frame));
@@ -123,20 +123,24 @@ public class GameFrameView extends JFrame {
     public void genGrid() {
         for (int i = 0; i < Board.BOARD_ROWS; i++) {
             for (int j = 0; j < Board.BOARD_COLS; j++) {
-                tileBtn[i][j] = new JButton();
+                tileBtns[i][j] = new JButton();
 
                 if ((i % 5 <= 2) && j % 4 == 3)
-                    tileBtn[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
+                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
                 else
-                    tileBtn[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
 
-                tileBtn[i][j].putClientProperty("row", i);
-                tileBtn[i][j].putClientProperty("column", j);
+                tileBtns[i][j].putClientProperty("row", i);
+                tileBtns[i][j].putClientProperty("column", j);
                 // btn[i][j].addActionListener(new AddPlayerActionListener(this));
 
-                gridPanel.add(tileBtn[i][j]);
+                gridPanel.add(tileBtns[i][j]);
             }
         }
+    }
+    
+    public JButton[][] getTileBtns() {
+    	return tileBtns;
     }
 
 
