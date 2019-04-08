@@ -27,7 +27,7 @@ public class GameFrameView extends JFrame {
     private JLabel healthLabel;
     private JLabel combatPlabel;
     private JLabel playername, playertype;
-    private static JButton[][] btn;
+    private static JButton[][] tileBtn;
     private JButton item1, item2, item3, item4, item5, item6;
 
     protected static final String GRASS_IMAGE      = "../images/grass.png";
@@ -67,7 +67,7 @@ public class GameFrameView extends JFrame {
     	statsPanel.add(new JLabel("HP: "));
         statsPanel.add(healthLabel);*/
         
-        btn = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
+        tileBtn = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
 
         selectPanel.setMaximumSize(new Dimension(100, 100));
 
@@ -123,18 +123,18 @@ public class GameFrameView extends JFrame {
     public void genGrid() {
         for (int i = 0; i < Board.BOARD_ROWS; i++) {
             for (int j = 0; j < Board.BOARD_COLS; j++) {
-                btn[i][j] = new JButton();
+                tileBtn[i][j] = new JButton();
 
                 if ((i % 5 <= 2) && j % 4 == 3)
-                    btn[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
+                    tileBtn[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
                 else
-                    btn[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+                    tileBtn[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
 
-                btn[i][j].putClientProperty("row", i);
-                btn[i][j].putClientProperty("column", j);
+                tileBtn[i][j].putClientProperty("row", i);
+                tileBtn[i][j].putClientProperty("column", j);
                 // btn[i][j].addActionListener(new AddPlayerActionListener(this));
 
-                gridPanel.add(btn[i][j]);
+                gridPanel.add(tileBtn[i][j]);
             }
         }
     }
