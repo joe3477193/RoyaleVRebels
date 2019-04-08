@@ -27,9 +27,11 @@ public class StartPlayerInfoFrame {
 
         JLabel nameLabelone = new JLabel("Please enter player one name:");
         player_one_name = new JTextField(40);
+        player_one_name.setText("Player One");
 
         JLabel nameLabeltwo = new JLabel("Please enter player two name:");
         player_two_name = new JTextField(40);
+        player_two_name.setText("Player Two");
 
         JButton start = new JButton("Begin Game");
 
