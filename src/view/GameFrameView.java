@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import controller.SummonPieceActionListener;
+import controller.*;
 import model.*;
 
 
@@ -28,6 +28,7 @@ public class GameFrameView extends JFrame {
     private JLabel combatPlabel;
     private JLabel playername, playertype;
     private static JButton[][] tileBtns;
+    private static Board board;
     private JButton item1, item2, item3, item4, item5, item6;
 
     protected static final String GRASS_IMAGE      = "../images/grass.png";
@@ -132,7 +133,7 @@ public class GameFrameView extends JFrame {
 
                 tileBtns[i][j].putClientProperty("row", i);
                 tileBtns[i][j].putClientProperty("column", j);
-                // btn[i][j].addActionListener(new AddPlayerActionListener(this));
+                tileBtns[i][j].addActionListener(new PlacePieceActionListener(this));
 
                 gridPanel.add(tileBtns[i][j]);
             }
@@ -141,6 +142,10 @@ public class GameFrameView extends JFrame {
     
     public JButton[][] getTileBtns() {
     	return tileBtns;
+    }
+    
+    public Board getBoard() {
+    	return board;
     }
 
 
