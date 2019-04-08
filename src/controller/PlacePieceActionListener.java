@@ -52,6 +52,10 @@ public class PlacePieceActionListener implements ActionListener{
 					else if (board.placePiece(piece, i, j)) {
 						tileBtn.setIcon(new ImageIcon(this.getClass().getResource(GameFrameView.ONE_IMAGE)));
 					}
+					else {
+						JOptionPane.showMessageDialog(gameFrameView, "Please place the piece on a valid tile,\n"
+								+ "The top three rows for Royales,\nThe bottom three rows for Rebels.");
+					}
 				}
 		   }
         }
