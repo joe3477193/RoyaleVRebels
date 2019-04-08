@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 
 import controller.*;
 import model.*;
+import model.Piece.Type;
 
 
 public class GameFrameView extends JFrame {
@@ -55,6 +57,23 @@ public class GameFrameView extends JFrame {
     public static final String RE_FIVE_IMAGE      = "../images/watchout.png";
     public static final String RE_SIX_IMAGE      = "../images/watchout.png";
     
+    /*LEADER("Rebel", "LD", Type.TROOP, 5, 50, 30, 1, 1),
+	SCOUNDREL("Rebel", "SC", Type.TROOP, 3, 100, 10, 1, 1),
+	MOBSTER("Rebel", "MB", Type.TROOP, 1, 20, 20, 3, 1),
+	ANGRYMAN("Rebel", "AG", Type.TROOP, 3, 20, 50, 4, 3),
+	SPEARER("Rebel", "SP", Type.TROOP, 3, 40, 30, 1, 6),
+	CATAPULT("Rebel", "CA", Type.ARTILLERY, 5, 50, 20, 1, 8),
+	GENERAL("Royale", "GN", Type.TROOP, 5, 50, 50, 1, 1),
+	LIUTENANT("Royale", "LT", Type.TROOP, 3, 30, 30, 2, 1),
+	INFANTRY("Royale", "IF", Type.TROOP, 5, 20, 20, 3, 1),
+	BALISTA("Royale", "BA", Type.ARTILLERY, 8, 40, 30, 1, 8),
+	CANNON("Royale", "CA", Type.ARTILLERY, 10, 50, 50, 1, 10),
+	ARCHER("Royale", "AC", Type.TROOP, 5, 50, 30, 2, 6);*/
+    
+    private JButton[] rebelSpawnButton;
+    private String[] rebelSpawnName;
+    private String[] rebelSpawnImage;
+    
     public GameFrameView() {
 
         frame = new JFrame("Royals vs Rebels");
@@ -63,7 +82,16 @@ public class GameFrameView extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         board = new Board();
+        
+        rebelSpawnButton= new JButton[6]; 
 
+    }
+    
+    private void createSpawn() {
+    	spawn_General = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
+    	spawn_General.setName("spawn_General");
+    	spawn_General.addActionListener(new SummonPieceActionListener(this));
+        selectPanel.add(spawn_General);
     }
     
 
