@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import model.*;
 import view.GameFrameView;
 
 
@@ -19,6 +20,7 @@ public class SummonPieceActionListener implements ActionListener{
 	
 	GameFrameView frame; 
 	public boolean placing;
+	
 	public SummonPieceActionListener(GameFrameView frame){
 		this.frame = frame;
 	}

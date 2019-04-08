@@ -57,6 +57,15 @@ public class Piece {
 		numCount += 1;
 		num = numCount;
 	}
+	
+	public Piece(String name) {
+		if(name.equals("general")) {
+		unit= Unit.GENERAL;	
+		}
+		this.hp = unit.initHp;
+		numCount += 1;
+		num = numCount;
+	}
 
 	public int getHp() {
 		return hp;

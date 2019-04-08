@@ -6,8 +6,6 @@ import static java.lang.Math.abs;
 
 public class Board {
 
-
-
     protected static ArrayList<BoardRows> gridrows;
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
@@ -45,8 +43,8 @@ public class Board {
         return false;
     }
 
-    //summons a piece and returns true if successful
-    public boolean summonPiece(Piece piece, int row, int tile){
+    //places a piece and returns true if successful
+    public boolean placePiece(Piece piece, int row, int tile){
         boolean isRowValid;
         if(piece.getFaction().equals("Royale")){
             isRowValid= row<3;

@@ -12,20 +12,21 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.text.View;
 
-import model.Board;
-import model.Tile;
-import view.GameFrameView;
+import model.*;
+import view.*;
 
 
 // Placing a piece on the board
 public class PlacePieceActionListener implements ActionListener{
 	
-	JFrame gameFrameView; 
-	JButton[][] tileBtns;
+	private JFrame gameFrameView; 
+	private JButton[][] tileBtns;
 	Board board;
+	Piece piece = new Piece("general");
 	
 	
 	public PlacePieceActionListener(GameFrameView gameFrameView) {
+		
 		this.gameFrameView = gameFrameView;
 		tileBtns = gameFrameView.getTileBtns();
 		board = gameFrameView.getBoard();
@@ -48,9 +49,9 @@ public class PlacePieceActionListener implements ActionListener{
 					if (tile.hasPiece()) {
 						System.out.println("Attempted to place on occupied tile");
 					}*/
-					else {
+
+					else if (board.placePiece(piece, i, j)) {
 						tileBtn.setIcon(new ImageIcon(this.getClass().getResource(GameFrameView.ONE_IMAGE)));
-						//board.placePiece(tile, piece);
 					}
 				}
 		   }
