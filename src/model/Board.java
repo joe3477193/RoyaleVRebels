@@ -9,6 +9,10 @@ public class Board {
     protected static ArrayList<BoardRows> gridrows;
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
+    
+    private Piece selectedPiece;
+    private int turn;
+
 
     public Board() {
 
@@ -17,6 +21,7 @@ public class Board {
         for (int i = 0; i < BOARD_ROWS; i++) {
             gridrows.add(new BoardRows());
         }
+        turn= 0;
     }
 
     public int getRows() {
@@ -25,6 +30,26 @@ public class Board {
 
     public int getCols() {
         return BOARD_COLS;
+    }
+    
+    public int getTurn(){
+    	return turn;
+    }
+    
+    public void cycleTurn(){
+    	turn =abs(turn-1);
+    }
+    
+    public Piece getSelectedPiece() {
+    	return selectedPiece;
+    }
+    
+    public void setSelectedPiece(Piece piece) {
+    	selectedPiece= piece;
+    }
+    
+    public void removeSelectedPiece() {
+    	selectedPiece= null;
     }
 
     private Tile getTile(int row, int tile){
@@ -50,7 +75,7 @@ public class Board {
             isRowValid= row<3;
         }
         else{
-            isRowValid= row>10;
+            isRowValid= row>9;
         }
 
         if(checkMoveTarget(row, tile) && isRowValid){

@@ -31,7 +31,7 @@ public class SelectPieceActionListener implements ActionListener{
             return;
         } else {
         	frame.setCursor(Toolkit.getDefaultToolkit().
-                    createCustomCursor(new ImageIcon(this.getClass().getResource(GameFrameView.ONE_IMAGE)).getImage(),
+                    createCustomCursor(new ImageIcon(this.getClass().getResource(GameFrameView.RE_ONE_IMAGE)).getImage(),
                             new Point(0, 0), "general"));
             return;
         }

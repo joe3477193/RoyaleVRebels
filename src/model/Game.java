@@ -45,7 +45,7 @@ public class Game {
 	
 	public void startGame() {
 		Board b = new Board();
-		view.assembleBoard(rebel, b);
+		view.assembleBoard(rebel,royale, b);
 		currPlayer = rebel;
 		isRunning = true;
 	}

@@ -6,7 +6,7 @@ public class Piece {
 	private final int num;
 	private static int numCount;
 	static enum Type{
-        TROOP(true, true), ARTILLERY(true, false), TRAP(false, false);
+		TROOP(true, true), ARTILLERY(true, false), TRAP(false, false);
 		final boolean attackable;
 		final boolean moveable;
 
@@ -20,7 +20,7 @@ public class Piece {
 		SCOUNDREL("Rebel", "SC", Type.TROOP, 3, 100, 10, 1, 1),
 		MOBSTER("Rebel", "MB", Type.TROOP, 1, 20, 20, 3, 1),
 		ANGRYMAN("Rebel", "AG", Type.TROOP, 3, 20, 50, 4, 3),
-		SPEARER("Rebel", "SP", Type.TROOP, 3, 40, 30, 1, 6),
+		RASCAL("Rebel", "SP", Type.TROOP, 3, 40, 30, 1, 6),
 		CATAPULT("Rebel", "CA", Type.ARTILLERY, 5, 50, 20, 1, 8),
 		GENERAL("Royale", "GN", Type.TROOP, 5, 50, 50, 1, 1),
 		LIUTENANT("Royale", "LT", Type.TROOP, 3, 30, 30, 2, 1),
@@ -52,15 +52,50 @@ public class Piece {
 	private Unit unit;
 
 	public Piece(Unit unit) {
-		this.unit = unit;
+		this.unit= unit;
 		this.hp = unit.initHp;
 		numCount += 1;
 		num = numCount;
 	}
 	
 	public Piece(String name) {
-		if(name.equals("general")) {
-		unit= Unit.GENERAL;	
+		switch(name) {
+		case "General":
+			unit= Unit.GENERAL;
+			break;
+		case "Liutenant":
+			unit= unit.LIUTENANT;
+			break;
+		case "Leader":
+			unit= Unit.LEADER;
+			break;
+		case "Scoundrel":
+			unit= unit.SCOUNDREL;
+			break;
+		case "Rascal":
+			unit= unit.RASCAL;
+			break;
+		case "Mobster":
+			unit= unit.MOBSTER;
+			break;
+		case "Angryman":
+			unit= unit.ANGRYMAN;
+			break;
+		case "Catapult":
+			unit= unit.CATAPULT;
+			break;
+		case "Infantry":
+			unit= unit.INFANTRY;
+			break;
+		case "Cannon":
+			unit= unit.CANNON;
+			break;
+		case "Balista":
+			unit= unit.BALISTA;
+			break;
+		case "Archer":
+			unit= unit.ARCHER;
+			break;
 		}
 		this.hp = unit.initHp;
 		numCount += 1;
@@ -139,6 +174,6 @@ public class Piece {
 	}
 
 	public int getNum() {
-	    return num;
+		return num;
 	}
 }
