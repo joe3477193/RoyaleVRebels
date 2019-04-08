@@ -5,6 +5,7 @@ import java.util.Random;
 
 import view.GameFrameView;
 
+
 public class Game {
 	ArrayList<Player> players = new ArrayList<>();
 	Royale royale;
