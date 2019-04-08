@@ -24,7 +24,8 @@ public class PlacePieceActionListener implements ActionListener{
 	JButton[][] tileBtns;
 	Board board;
 	
-	public PlacePieceActionListener(GameFrameView gameFrameView){
+	
+	public PlacePieceActionListener(GameFrameView gameFrameView) {
 		this.gameFrameView = gameFrameView;
 		tileBtns = gameFrameView.getTileBtns();
 		board = gameFrameView.getBoard();
