@@ -168,8 +168,6 @@ public class GameFrameView extends JFrame {
     	return board;
     }
 
-
-
     public JFrame getFrame() {
     	return frame;
     }

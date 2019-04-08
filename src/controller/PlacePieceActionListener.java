@@ -2,8 +2,6 @@ package controller;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
 
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
