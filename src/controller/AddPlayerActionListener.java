@@ -32,6 +32,7 @@ public class AddPlayerActionListener implements ActionListener {
         	ArrayList<String> players = new ArrayList<String>();
         	players.add(name1.getText());
         	players.add(name2.getText());
+        	System.out.println(name1.getText() +" "+name2.getText());
         	
         	GameFrameView gameFrame = new GameFrameView();
     		SwingUtilities.invokeLater(new Runnable(){			
