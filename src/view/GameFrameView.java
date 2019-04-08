@@ -73,7 +73,7 @@ public class GameFrameView extends JFrame {
         selectPanel.setMaximumSize(new Dimension(100, 100));
 
         frame.setSize(925, 600);
-        paintRoyalDeck();
+        paintRoyaleDeck();
 
         JPanel main = new JPanel(new BorderLayout());
         main.add(statsPanel, BorderLayout.NORTH);
@@ -86,7 +86,7 @@ public class GameFrameView extends JFrame {
         frame.add(gridPanel, BorderLayout.CENTER);
     }
 
-    private void paintRoyalDeck() {
+    private void paintRoyaleDeck() {
         item1 = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
         item1.setName("spawn_General");
         item1.addActionListener(new SummonPieceActionListener(this.frame));
@@ -133,6 +133,7 @@ public class GameFrameView extends JFrame {
 
                 tileBtns[i][j].putClientProperty("row", i);
                 tileBtns[i][j].putClientProperty("column", j);
+                // add ability to place pieces on tiles
                 tileBtns[i][j].addActionListener(new PlacePieceActionListener(this));
 
                 gridPanel.add(tileBtns[i][j]);
