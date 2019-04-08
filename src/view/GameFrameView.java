@@ -40,12 +40,20 @@ public class GameFrameView extends JFrame {
 
     public static final String GRASS_IMAGE      = "../images/grass.png";
     public static final String WALL_IMAGE      = "../images/wall.jpg";
-    public static final String ONE_IMAGE      = "../images/man.png";
-    public static final String TWO_IMAGE      = "../images/megastrong.png";
-    public static final String THREE_IMAGE      = "../images/strong.png";
-    public static final String FOUR_IMAGE      = "../images/watchout.png";
-    public static final String FIVE_IMAGE      = "../images/watchout.png";
-    public static final String SIX_IMAGE      = "../images/watchout.png";
+    
+    public static final String RO_ONE_IMAGE      = "../images/man.png";
+    public static final String RO_TWO_IMAGE      = "../images/megastrong.png";
+    public static final String RO_THREE_IMAGE      = "../images/strong.png";
+    public static final String RO_FOUR_IMAGE      = "../images/watchout.png";
+    public static final String RO_FIVE_IMAGE      = "../images/watchout.png";
+    public static final String RO_SIX_IMAGE      = "../images/watchout.png";
+    
+    public static final String RE_ONE_IMAGE      = "../images/watchout.png";
+    public static final String RE_TWO_IMAGE      = "../images/watchout.png";
+    public static final String RE_THREE_IMAGE      = "../images/watchout.png";
+    public static final String RE_FOUR_IMAGE      = "../images/watchout.png";
+    public static final String RE_FIVE_IMAGE      = "../images/watchout.png";
+    public static final String RE_SIX_IMAGE      = "../images/watchout.png";
     
     public GameFrameView() {
 
@@ -99,34 +107,69 @@ public class GameFrameView extends JFrame {
     }
 
     private void paintRoyaleDeck() {
-    	spawn_General = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
+    	spawn_General = new JButton(new ImageIcon(this.getClass().getResource(RO_ONE_IMAGE)));
     	spawn_General.setName("spawn_General");
-    	spawn_General.addActionListener(new SummonPieceActionListener(this));
+    	spawn_General.addActionListener(new SummonPieceActionListener(this, "royal"));
         selectPanel.add(spawn_General);
          
-        spawn_Lieutenant = new JButton(new ImageIcon(this.getClass().getResource(TWO_IMAGE)));
+        spawn_Lieutenant = new JButton(new ImageIcon(this.getClass().getResource(RO_TWO_IMAGE)));
         spawn_Lieutenant.setName("spawn_Lieutenant");
-        spawn_Lieutenant.addActionListener(new SummonPieceActionListener(this));
+        spawn_Lieutenant.addActionListener(new SummonPieceActionListener(this, "royal"));
         selectPanel.add(spawn_Lieutenant);
 
-        spawn_Spearman = new JButton(new ImageIcon(this.getClass().getResource(THREE_IMAGE)));
+        spawn_Spearman = new JButton(new ImageIcon(this.getClass().getResource(RO_THREE_IMAGE)));
         spawn_Spearman.setName("spawn_Spearman");
-        spawn_Spearman.addActionListener(new SummonPieceActionListener(this));
+        spawn_Spearman.addActionListener(new SummonPieceActionListener(this, "royal"));
         selectPanel.add(spawn_Spearman);
 
-        spawn_Footman = new JButton(new ImageIcon(this.getClass().getResource(FOUR_IMAGE)));
+        spawn_Footman = new JButton(new ImageIcon(this.getClass().getResource(RO_FOUR_IMAGE)));
         spawn_Footman.setName("spawn_Footman");
-        spawn_Footman.addActionListener(new SummonPieceActionListener(this));
+        spawn_Footman.addActionListener(new SummonPieceActionListener(this, "royal"));
         selectPanel.add(spawn_Footman);
         
-        spawn_Archer = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
+        spawn_Archer = new JButton(new ImageIcon(this.getClass().getResource(RO_ONE_IMAGE)));
         spawn_Archer.setName("spawn_Archer");
-        spawn_Archer.addActionListener(new SummonPieceActionListener(this));
+        spawn_Archer.addActionListener(new SummonPieceActionListener(this, "royal"));
         selectPanel.add(spawn_Archer);
 
-        spawn_Cannon = new JButton(new ImageIcon(this.getClass().getResource(TWO_IMAGE)));
+        spawn_Cannon = new JButton(new ImageIcon(this.getClass().getResource(RO_TWO_IMAGE)));
         spawn_Cannon.setName("spawn_Cannon");
-        spawn_Cannon.addActionListener(new SummonPieceActionListener(this));
+        spawn_Cannon.addActionListener(new SummonPieceActionListener(this, "royal"));
+        selectPanel.add(spawn_Cannon);
+
+        genGrid();
+
+    }
+    
+    private void paintRebelDeck() {
+    	spawn_General = new JButton(new ImageIcon(this.getClass().getResource(RE_ONE_IMAGE)));
+    	spawn_General.setName("spawn_General");
+    	spawn_General.addActionListener(new SummonPieceActionListener(this, "rebel"));
+        selectPanel.add(spawn_General);
+         
+        spawn_Lieutenant = new JButton(new ImageIcon(this.getClass().getResource(RE_TWO_IMAGE)));
+        spawn_Lieutenant.setName("spawn_Lieutenant");
+        spawn_Lieutenant.addActionListener(new SummonPieceActionListener(this, "rebel"));
+        selectPanel.add(spawn_Lieutenant);
+
+        spawn_Spearman = new JButton(new ImageIcon(this.getClass().getResource(RE_THREE_IMAGE)));
+        spawn_Spearman.setName("spawn_Spearman");
+        spawn_Spearman.addActionListener(new SummonPieceActionListener(this, "rebel"));
+        selectPanel.add(spawn_Spearman);
+
+        spawn_Footman = new JButton(new ImageIcon(this.getClass().getResource(RE_FOUR_IMAGE)));
+        spawn_Footman.setName("spawn_Footman");
+        spawn_Footman.addActionListener(new SummonPieceActionListener(this,"rebel"));
+        selectPanel.add(spawn_Footman);
+        
+        spawn_Archer = new JButton(new ImageIcon(this.getClass().getResource(RE_ONE_IMAGE)));
+        spawn_Archer.setName("spawn_Archer");
+        spawn_Archer.addActionListener(new SummonPieceActionListener(this, "rebel"));
+        selectPanel.add(spawn_Archer);
+
+        spawn_Cannon = new JButton(new ImageIcon(this.getClass().getResource(RE_TWO_IMAGE)));
+        spawn_Cannon.setName("spawn_Cannon");
+        spawn_Cannon.addActionListener(new SummonPieceActionListener(this, "rebel"));
         selectPanel.add(spawn_Cannon);
 
         genGrid();

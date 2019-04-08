@@ -21,33 +21,53 @@ public class SummonPieceActionListener implements ActionListener{
 
 	GameFrameView frame; 
 	public boolean placing;
-
-	public SummonPieceActionListener(GameFrameView frame){
+	private String type;
+	public SummonPieceActionListener(GameFrameView frame, String type){
 		this.frame = frame;
+		this.type = type;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		JButton source = (JButton) e.getSource();
-		JButton[] spawns= new JButton[]{frame.spawn_General, frame.spawn_Lieutenant, frame.spawn_Footman, frame.spawn_Cannon,
-				frame.spawn_Archer, frame.spawn_Spearman
+		JButton[] spawns= new JButton[]{frame.spawn_General, frame.spawn_Lieutenant, frame.spawn_Spearman, frame.spawn_Footman,
+				frame.spawn_Archer, frame.spawn_Cannon
 		};
-		String[] image= new String[] {frame.ONE_IMAGE, frame.TWO_IMAGE, frame.THREE_IMAGE, frame.FOUR_IMAGE, frame.FIVE_IMAGE,
-				frame.SIX_IMAGE
+		String[] Royalimage= new String[] {frame.RO_ONE_IMAGE, frame.RO_TWO_IMAGE, frame.RO_THREE_IMAGE, frame.RO_FOUR_IMAGE, frame.RO_FIVE_IMAGE,
+				frame.RO_SIX_IMAGE
 		};
-		String[] name= new String[] {"General", "Liutenant", "Footman", "Cannon", "Archer", "Spearman"
+		String[] Rebelimage= new String[] {frame.RE_ONE_IMAGE, frame.RE_TWO_IMAGE, frame.RE_THREE_IMAGE, frame.RE_FOUR_IMAGE, frame.RE_FIVE_IMAGE,
+				frame.RE_SIX_IMAGE
 		};
-
+		String[] Royalname= new String[] {"General", "Liutenant", "Footman", "Cannon", "Archer", "Spearman"
+		};
+		String[] Rebelname= new String[] {"Rascal", "Scoundrel", "Hobo", "Scum", "Pegger", "Poker"
+		};
+		
 		for(int i=0;i<spawns.length;i++) {
 			if(source==spawns[i]) {
 				placing = true;
-				Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
-				if(frame.getFrame().getCursor().getName().equals(name[i])) {
-					frame.getFrame().setCursor(DEFAULT_CURSOR);
+				if(type == "rebel") {
+					Image icon = new ImageIcon(this.getClass().getResource(Rebelimage[i])).getImage();
+					if(frame.getFrame().getCursor().getName().equals(Rebelname[i])) {
+						frame.getFrame().setCursor(DEFAULT_CURSOR);
+					}
+					else {
+						frame.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), Rebelname[i]));
+						System.out.println(source.getName());
+					}
 				}
 				else {
-					frame.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
-					System.out.println(source.getName());
+					Image icon = new ImageIcon(this.getClass().getResource(Royalimage[i])).getImage();
+					if(frame.getFrame().getCursor().getName().equals(Royalname[i])) {
+						frame.getFrame().setCursor(DEFAULT_CURSOR);
+					}
+					else {
+						frame.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), Royalname[i]));
+						System.out.println(source.getName());
+					}
+					
 				}
+
 			}
 		}
 	}
