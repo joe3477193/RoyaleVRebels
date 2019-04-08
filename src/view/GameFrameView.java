@@ -31,13 +31,15 @@ public class GameFrameView extends JFrame {
     private static Board board;
     private JButton item1, item2, item3, item4, item5, item6;
 
-    protected static final String GRASS_IMAGE      = "../images/grass.png";
-    protected static final String WALL_IMAGE      = "../images/wall.jpg";
+    public static final String GRASS_IMAGE      = "../images/grass.png";
+    public static final String WALL_IMAGE      = "../images/wall.jpg";
     public static final String ONE_IMAGE      = "../images/man.png";
-    protected static final String TWO_IMAGE      = "../images/megastrong.png";
-    protected static final String THREE_IMAGE      = "../images/strong.png";
+    public static final String TWO_IMAGE      = "../images/megastrong.png";
+    public static final String THREE_IMAGE      = "../images/strong.png";
     public static final String FOUR_IMAGE      = "../images/watchout.png";
-
+    public static final String FIVE_IMAGE      = "../images/watchout.png";
+    public static final String SIX_IMAGE      = "../images/watchout.png";
+    
     public GameFrameView() {
 
         frame = new JFrame("Royals vs Rebels");
