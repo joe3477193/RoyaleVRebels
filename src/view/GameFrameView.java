@@ -212,6 +212,11 @@ public class GameFrameView extends JFrame {
 		}
 
 	}
+	
+	public void decolour() {
+		decolourMove();
+		decolourTile();
+	}
 
 	public void updateBar() {
 		board.cycleTurn();
