@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import static java.lang.Math.abs;
+
 public class Board {
 
 
@@ -20,71 +22,110 @@ public class Board {
     }
 
     public int getRows() {
-    	return BOARD_ROWS;
+        return BOARD_ROWS;
     }
-    
+
     public int getCols() {
-    	return BOARD_COLS;
+        return BOARD_COLS;
     }
-    
+
+    private Tile getTile(int row, int tile){
+        return gridrows.get(row).getTile(tile);
+    }
+
+    // Gets a piece from a tile
+    public Piece getPiece(int row, int tile){
+        return getTile(row, tile).getPiece();
+    }
+
+    public boolean checkSummon(Player player, Piece piece){
+        if(player.getFaction().equals(piece.getFaction())){
+            return true;
+        }
+        return false;
+    }
+
+    //summons a piece and returns true if successful
+    public boolean summonPiece(Piece piece, int row, int tile){
+        boolean isRowValid;
+        if(piece.getFaction().equals("Royale")){
+            isRowValid= row<3;
+        }
+        else{
+            isRowValid= row>10;
+        }
+
+        if(checkMoveTarget(row, tile) && isRowValid){
+            getTile(row, tile).setPiece(piece);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     // Check if piece has been initialized successfully in current tile
     public boolean checkInit(int row, int tile) {
-        return gridrows.get(row).getTile(tile).hasPiece();
+        return getTile(row, tile).hasPiece();
     }
 
     // Check if piece in current tile is moveable
     public boolean checkMoveInit(int row, int tile) {
-        return checkInit(row, tile) && gridrows.get(row).getTile(tile).getPiece().isMoveable();
+        return getTile(row, tile).getPiece().isMoveable();
     }
 
     // Check if piece in current tile is attackable
     public boolean checkAttackInit(int row, int tile) {
-        return checkInit(row, tile) && gridrows.get(row).getTile(tile).getPiece().isAttackable();
+        return getTile(row, tile).getPiece().isAttackable();
     }
 
     // Check if piece can move from current tile to target tile
     public boolean checkMoveTarget(int row, int tile) {
-        return !gridrows.get(row).getTile(tile).hasPiece();
+        return !getTile(row, tile).hasPiece();
     }
 
     // Check if piece can attack target from current tile
-    public boolean checkAttackTarget(Piece piece, int row, int tile) {
-        Tile space = gridrows.get(row).getTile(tile);
+    public boolean checkAttackTarget(Piece piece, int tgRow, int tgTile) {
+        Tile space = getTile(tgRow, tgTile);
         if (space.hasPiece() && !space.getPiece().getFaction().equals(piece.getFaction())) {
             return true;
         }
         return false;
     }
 
-    // Check if piece moved from current tile to target tile
-    public boolean move(int inRow, int inTile, int tgRow, int tgTile) {
-        Tile inSpace = gridrows.get(inRow).getTile(inTile);
-        Tile tgSpace = gridrows.get(tgRow).getTile(tgTile);
-        if (inSpace.getPiece() != null) {
-            // check if it can move or not
-            if (inSpace.getPiece().isMoveable() && !tgSpace.hasPiece()) {
-
-                tgSpace.setPiece(inSpace.getPiece());
-                inSpace.removePiece();
-                return true;
-            }
+    private boolean isMovRangeValid(int inRow, int inTile, int tgRow, int tgTile, String type){
+        int rowDiff= abs(inRow-tgRow);
+        int tileDiff= abs(inTile-tgTile);
+        Piece piece= getPiece(inRow, inTile);
+        if(type.equals("mov")){
+            return piece.getMov()<=rowDiff && piece.getMov()<=tileDiff;
+        }
+        else if(type.equals("range")){
+            return piece.getRange()<=rowDiff && piece.getRange()<=tileDiff;
         }
         return false;
     }
 
-    // Check if piece attacked target piece
-    public boolean attack(Piece piece, int row, int tile) {
-        Tile space = gridrows.get(row).getTile(tile);
-        Piece tgPiece = space.getPiece();
-        if (piece != null && tgPiece != null) {
-            // Check if piece can attack target piece
-            if (piece.isAttackable() && !tgPiece.getFaction().equals(piece.getFaction())) {
-                tgPiece.attackBy(piece.getAttack());
-                if (tgPiece.isDead()) {
-                    space.removePiece();
-                }
+    // Check if piece moved from current tile to target tile
+    public boolean move(int inRow, int inTile, int tgRow, int tgTile) {
+        if (checkMoveTarget(tgRow,tgTile) && isMovRangeValid(inRow,inTile,tgRow,tgTile,"mov")) {
+                getTile(tgRow,tgTile).setPiece(getPiece(inRow,inTile));
+                getTile(inRow,inTile).removePiece();
                 return true;
             }
+        return false;
+        }
+
+
+    // Check if piece attacked target piece
+    public boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
+        if (checkAttackTarget(getPiece(inRow,inTile),tgRow,tgTile) &&
+                isMovRangeValid(inRow,inTile,tgRow,tgTile,"attack")){
+            getPiece(tgRow,tgTile).attackedBy(getPiece(inRow,inTile).getAttack());
+            if (getPiece(tgRow, tgTile).isDead()) {
+                getTile(tgRow, tgTile).removePiece();
+            }
+            return true;
         }
         return false;
     }
