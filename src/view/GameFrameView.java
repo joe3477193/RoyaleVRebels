@@ -151,4 +151,8 @@ public class GameFrameView extends JFrame {
     }
 
 
+
+    public JFrame getFrame() {
+    	return frame;
+    }
 }
