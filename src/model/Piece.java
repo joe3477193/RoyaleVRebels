@@ -16,15 +16,19 @@ public class Piece {
 		}
 	}
 	static enum Unit{
-		GENERAL("Rebel", "GA", Type.TROOP, 5, 50, 30, 1, 1),
-		TANK("Rebel", "TA", Type.TROOP, 3, 100, 10, 1, 1),
-		INFANTRY("Rebel", "IF", Type.TROOP, 1, 20, 20, 3, 1),
-		ASSASSIN("Rebel", "AS", Type.TROOP, 3, 20, 50, 4, 3),
-		ARCHER("Rebel", "AC", Type.TROOP, 3, 40, 30, 1, 6),
-		CANNON("Rebel", "CN", Type.ARTILLERY, 3, 50, 30, 1, 1),
-		CATAPULT("Rebel", "CT", Type.ARTILLERY, 5, 50, 30, 1, 1),
-		GUNNER("Rebel", "GU", Type.TROOP, 5, 50, 30, 1, 1),
-		BOULDER("Rebel", "BD", Type.TRAP, 4, 200, 0, 0, 0);
+		LEADER("Rebel", "LD", Type.TROOP, 5, 50, 30, 1, 1),
+		SCOUNDREL("Rebel", "SC", Type.TROOP, 3, 100, 10, 1, 1),
+		MOBSTER("Rebel", "MB", Type.TROOP, 1, 20, 20, 3, 1),
+		ANGRYMAN("Rebel", "AG", Type.TROOP, 3, 20, 50, 4, 3),
+		SPEARER("Rebel", "SP", Type.TROOP, 3, 40, 30, 1, 6),
+		CATAPULT("Rebel", "CA", Type.ARTILLERY, 5, 50, 20, 1, 8),
+		GENERAL("Royale", "GN", Type.TROOP, 5, 50, 50, 1, 1),
+		LIUTENANT("Royale", "LT", Type.TROOP, 3, 30, 30, 2, 1),
+		INFANTRY("Royale", "IF", Type.TROOP, 5, 20, 20, 3, 1),
+		BALISTA("Royale", "BA", Type.ARTILLERY, 8, 40, 30, 1, 8),
+		CANNON("Royale", "CA", Type.ARTILLERY, 10, 50, 50, 1, 10),
+		ARCHER("Royale", "AC", Type.TROOP, 5, 50, 30, 2, 6);
+
 		final String faction;
 		final String code;
 		final Type type;
