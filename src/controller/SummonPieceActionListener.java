@@ -2,6 +2,7 @@ package controller;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
 
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -39,9 +40,14 @@ public class SummonPieceActionListener implements ActionListener{
 		for(int i=0;i<spawns.length;i++) {
 			if(source==spawns[i]) {
 				placing = true;
-				frame.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(
-						this.getClass().getResource(image[i])).getImage(), new Point(0, 0), name[i]));
-				System.out.println(source.getName());
+				Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
+				if(frame.getFrame().getCursor().getName().equals(name[i])) {
+					frame.getFrame().setCursor(DEFAULT_CURSOR);
+				}
+				else {
+					frame.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
+					System.out.println(source.getName());
+				}
 			}
 		}
 	}

@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.text.View;
 
 import model.*;
@@ -43,7 +44,7 @@ public class PlacePieceActionListener implements ActionListener{
 					JButton tileBtn = tileBtns[i][j];
 					// if attempted to place piece on top of wall
 					if ((i % 5 <= 2) && j % 4 == 3) {
-						System.out.println("Attempted to place on wall");
+						JOptionPane.showMessageDialog(gameFrameView, "You cannot place a piece on a brick wall.");
 					}
 					/*// if attempted to place piece on an an occupied tile
 					if (tile.hasPiece()) {
