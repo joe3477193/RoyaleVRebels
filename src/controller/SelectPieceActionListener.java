@@ -13,11 +13,11 @@ import javax.swing.JFrame;
 import view.GameFrameView;
 
 
-// Placing a piece on the board
-public class PlacePieceActionListener implements ActionListener{
+// Selecting a piece already on the board
+public class SelectPieceActionListener implements ActionListener{
 	
 	JFrame frame; 
-	public PlacePieceActionListener(JFrame frame){
+	public SelectPieceActionListener(JFrame frame){
 		this.frame = frame;
 	}
 	

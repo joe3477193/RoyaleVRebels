@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import controller.PlacePieceActionListener;
+import controller.SummonPieceActionListener;
 import model.*;
 
 
@@ -88,32 +88,32 @@ public class GameFrameView extends JFrame {
     private void paintGridforRoyal() {
         item1 = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
         item1.setName("spawn_General");
-        item1.addActionListener(new PlacePieceActionListener(this.frame));
+        item1.addActionListener(new SummonPieceActionListener(this.frame));
         selectPanel.add(item1);
          
         item2 = new JButton(new ImageIcon(this.getClass().getResource(TWO_IMAGE)));
         item2.setName("spawn_Lieutenant");
-        item2.addActionListener(new PlacePieceActionListener(this.frame));
+        item2.addActionListener(new SummonPieceActionListener(this.frame));
         selectPanel.add(item2);
 
         item3 = new JButton(new ImageIcon(this.getClass().getResource(THREE_IMAGE)));
         item3.setName("spawn_Spearman");
-        item3.addActionListener(new PlacePieceActionListener(this.frame));
+        item3.addActionListener(new SummonPieceActionListener(this.frame));
         selectPanel.add(item3);
 
         item4 = new JButton(new ImageIcon(this.getClass().getResource(FOUR_IMAGE)));
         item4.setName("spawn_Footman");
-        item4.addActionListener(new PlacePieceActionListener(this.frame));
+        item4.addActionListener(new SummonPieceActionListener(this.frame));
         selectPanel.add(item4);
         
         item5 = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
         item5.setName("spawn_Archer");
-        item5.addActionListener(new PlacePieceActionListener(this.frame));
+        item5.addActionListener(new SummonPieceActionListener(this.frame));
         selectPanel.add(item5);
 
         item6 = new JButton(new ImageIcon(this.getClass().getResource(TWO_IMAGE)));
         item6.setName("spawn_Cannon");
-        item6.addActionListener(new PlacePieceActionListener(this.frame));
+        item6.addActionListener(new SummonPieceActionListener(this.frame));
         selectPanel.add(item6);
 
         genGrid();
