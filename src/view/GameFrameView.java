@@ -65,7 +65,7 @@ public class GameFrameView extends JFrame {
         statsPanel.add(new JLabel("Player Type: "));
         statsPanel.add(playertype);
 
-    	healthLabel = new JLabel(Integer.toString(playerOne.()));
+    	/*healthLabel = new JLabel(Integer.toString(playerOne.()));
     	statsPanel.add(new JLabel("HP: "));
         statsPanel.add(healthLabel);*/
         
