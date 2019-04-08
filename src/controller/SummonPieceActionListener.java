@@ -22,9 +22,7 @@ public class SummonPieceActionListener implements ActionListener{
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void actionPerformed(ActionEvent e) {		
 		
         if (frame.getCursor().getType() != 0) {
         	frame.setCursor(DEFAULT_CURSOR);

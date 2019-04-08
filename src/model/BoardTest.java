@@ -15,7 +15,7 @@ public class BoardTest {
     Piece c1 = new Piece(u1);
     Unit u2 = Unit.CATAPULT;
     Piece c2 = new Piece(u2);
-    Player p1 = new Royal("Andy");
+    Player p1 = new Royale("Andy");
     Player p2 = new Rebel("Betty");
     ArrayList<Player> players = new ArrayList<Player>();
     Board b = new Board();
