@@ -18,7 +18,7 @@ public class BoardTest {
     Player p1 = new Royal("Andy");
     Player p2 = new Rebel("Betty");
     ArrayList<Player> players = new ArrayList<Player>();
-    Board b = new Board(players);
+    Board b = new Board();
     Tile t1 = Board.gridrows.get(0).getTile(0);
     Tile t2 = Board.gridrows.get(1).getTile(0);
     

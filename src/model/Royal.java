@@ -2,56 +2,18 @@ package model;
 
 public class Royal extends Player {
 	
-	String name; 
-	final String type = "ROYAL";
-	int CP, HP;
-	int startCP = 40;
+	private int hp;
 	
-	public Royal(String name) {
-		this.name= name;
-		CP = startCP;
-		
-	}
-	
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return name;
+	public Royal(String name){
+		super(name, 40,40, "ROYALE");
+		hp= 100;
 	}
 
-	@Override
-	public int getStartCP() {
-		// TODO Auto-generated method stub
-		return startCP;
+	public int getHp() {
+		return hp;
 	}
 
-	@Override
-	public int getCP() {
-		// TODO Auto-generated method stub
-		return CP;
+	public void setHp(int hp) {
+		this.hp=hp;
 	}
-
-
-	public int getHP() {
-		// TODO Auto-generated method stub
-		return HP;
-	}
-
-	@Override
-	public void setCP(int cp) {
-		this.CP = cp;
-	}
-
-	
-	public void setHP(int hp) {
-		this.HP=hp;
-		
-	}
-
-	@Override
-	public String getType() {
-		// TODO Auto-generated method stub
-		return type;
-	}
-
 }
