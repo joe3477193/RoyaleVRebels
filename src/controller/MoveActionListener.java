@@ -44,7 +44,7 @@ public class MoveActionListener implements ActionListener{
 			frame.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), "name"));
 		}
 		else {
-			JOptionPane.showMessageDialog(frame, "You have not chosen any tile.");
+			JOptionPane.showMessageDialog(frame, "You have not chosen a valid tile.");
 		}
 	}
 }
