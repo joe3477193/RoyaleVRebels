@@ -5,13 +5,13 @@ public abstract class Player {
     private int cp;
     private int start_cp;
     private String name;
-    private final String type;
+    private final String faction;
 
-    public Player(String name, int cp, int start_cp, String type){
+    public Player(String name, int cp, int start_cp, String faction){
         this.name= name;
         this.cp= cp;
         this.start_cp= start_cp;
-        this.type= type;
+        this.faction= faction;
     }
 
     public String getName(){
@@ -29,8 +29,8 @@ public abstract class Player {
     public void setCP(int cp){
         this.cp= cp;
     }
-    public String getType(){
-        return type;
+    public String getFaction(){
+        return faction;
     }
 
 

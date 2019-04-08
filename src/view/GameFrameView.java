@@ -58,7 +58,7 @@ public class GameFrameView extends JFrame {
         statsPanel.add(new JLabel("Player Name: "));
         statsPanel.add(playername);
         
-        playertype = new JLabel(playerOne.getType());
+        playertype = new JLabel(playerOne.getFaction());
         statsPanel.add(new JLabel("Player Type: "));
         statsPanel.add(playertype);
         

@@ -1,10 +1,10 @@
 package model;
 
-public class Royal extends Player {
+public class Royale extends Player {
 	
 	private int hp;
 	
-	public Royal(String name){
+	public Royale(String name){
 		super(name, 40,40, "ROYALE");
 		hp= 100;
 	}

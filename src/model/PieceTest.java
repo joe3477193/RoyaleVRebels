@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Piece.Faction;
 import model.Piece.Type;
 import model.Piece.Unit;
 
@@ -26,7 +25,7 @@ public class PieceTest {
         assertEquals(c1.getCode(), u1.code);
         assertEquals(c1.getCp(), u1.cp);
         assertEquals(c1.getInitHp(), u1.initHp);
-        assertEquals(c1.getFaction(), Faction.REBEL.toString());
+        assertEquals(c1.getFaction(), u1.faction);
         assertEquals(c1.getType(), Type.TROOP.toString());
         assertEquals(c1.getMov(), u1.mov);
         assertEquals(c1.getName(), u1.toString());
