@@ -6,6 +6,7 @@ public abstract class Player {
     private int start_cp;
     private String name;
     private final String faction;
+    private boolean turn;
 
     public Player(String name, int cp, int start_cp, String faction){
         this.name= name;
@@ -33,5 +34,8 @@ public abstract class Player {
         return faction;
     }
 
-
+    
+    public boolean finishedTurn() {
+    	return turn;
+    }
 }

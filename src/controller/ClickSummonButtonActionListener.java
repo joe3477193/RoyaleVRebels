@@ -53,7 +53,7 @@ public class ClickSummonButtonActionListener implements ActionListener{
 					frame.getBoard().removeSummonedPiece();
 					frame.removeImage();
 				}
-				else {
+				else if(!frame.getBoard().moved()){
 					frame.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
 					System.out.println(source.getName());
 					frame.getBoard().setSummonedPiece(new Piece(name[i]));

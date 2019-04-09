@@ -53,20 +53,21 @@ public class ClickTileActionListener implements ActionListener{
 					else {
 						tileBtn = tileBtns[i][j];
 						// if attempted to place piece on top of wall
-						if((frame).hasSummon()) {
+						if((frame).hasSummon() && !board.moved()) {
 							if (board.placePiece(board.getSummonedPiece(), i, j)) {
 								tileBtn.setIcon(new ImageIcon(this.getClass().getResource(frame.getImage())));
 								tileBtn.setName(frame.getImage());
 								frame.getBoard().removeSummonedPiece();
 								frame.getFrame().setCursor(DEFAULT_CURSOR);
-								frame.updateBar();
+								board.setMoved(true);
+								//frame.updateBar();
 							}
 							else {
 								JOptionPane.showMessageDialog(frame, "Please place the piece on a valid tile,\n"
 										+ "The top three rows for Royales,\nThe bottom three rows for Rebels.");
 							}
 						}
-						else if(board.isMoving()) {
+						else if(board.isMoving() && !board.moved()) {
 							if(board.move(board.getInit()[0],board.getInit()[1] , i, j)) {
 								frame.decolour();
 								System.out.println("Image= "+frame.getImage());
@@ -74,8 +75,9 @@ public class ClickTileActionListener implements ActionListener{
 								tileBtns[board.getInit()[0]][board.getInit()[1]].setIcon(new ImageIcon(
 										this.getClass().getResource(frame.getGrass())));
 								board.doneMoving();
+								board.setMoved(true);
 								board.cycleTurn();
-								frame.updateBar();
+								//frame.updateBar();
 								tileBtn.setName(frame.getImage());
 								frame.getFrame().setCursor(0);
 							}

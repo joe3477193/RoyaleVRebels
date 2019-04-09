@@ -31,16 +31,26 @@ public class Game {
 		players.add(royale);
 		
 		startGame();
-        
+		
+        //MainGameLoop
         Thread gameLoop = new Thread(new Runnable() {
             @Override
             public void run() {
                 while(isRunning) {
-                	//MainGameLoop
+                	
+
+                	if(rebel.getCP() <= 0) {
+                		//Game end
+                	}
+                	else if(royale.getHp()<=0) {
+                		//Game end
+                	}
+                	
                 }
             }
         });
-	
+        
+        gameLoop.start();
 	}
 	
 	public void startGame() {
@@ -49,4 +59,6 @@ public class Game {
 		currPlayer = rebel;
 		isRunning = true;
 	}
+	
+	
 }

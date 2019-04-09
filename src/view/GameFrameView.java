@@ -37,6 +37,7 @@ public class GameFrameView extends JFrame {
 	private static Board board;
 	private JButton moveBtn;
 	private JButton attackBtn;
+	private JButton endTurnBtn;
 
 	public static final int BUTTON_LENGTH = 6;
 
@@ -168,7 +169,12 @@ public class GameFrameView extends JFrame {
 		bottomPanel.add(moveBtn);
 		moveBtn.addActionListener(new MoveActionListener(this));
 		attackBtn = new JButton("Attack");
+		
 		bottomPanel.add(attackBtn);
+		endTurnBtn = new JButton("End Turn");
+		endTurnBtn.addActionListener(new EndTurnActionListener(this));
+		bottomPanel.add(endTurnBtn);
+		
 	}
 
 	public void genGrid() {
@@ -220,6 +226,7 @@ public class GameFrameView extends JFrame {
 
 	public void updateBar() {
 		board.cycleTurn();
+		board.setMoved(false);
 		int turn= board.getTurn();
 		if(turn==0) {
 			removeSpawn(royalButton);

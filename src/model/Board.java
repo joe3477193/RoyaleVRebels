@@ -16,7 +16,7 @@ public class Board {
     private int[] init;
     private int[] target;
     private boolean moving;
-    
+    private boolean moved = false;
 
 
     public Board() {
@@ -43,6 +43,14 @@ public class Board {
     public void setMoving() {
     	moving= true;
     }
+    
+    public boolean moved() {
+    	return moved;
+    }
+    
+    public void setMoved(boolean moved) {
+    	this.moved = moved;
+    } 
     
     public int[] getCoordinate() {
     	return coordinate;
