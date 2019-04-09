@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map;
@@ -75,15 +74,9 @@ public class GameFrameView extends JFrame {
 
 	public GameFrameView() {
 
-		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-		
 		frame = new JFrame("Royals vs Rebels");
-		frame.setResizable(true);
-		//frame.setSize(925, 600);
-		frame.setSize((int)(dimension.width/(3/2.0)),
-				dimension.height);
+		frame.setResizable(false);
 		frame.setLocationRelativeTo(null); // show gui in the middle of screen
-		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		//board = new Board();
@@ -152,7 +145,7 @@ public class GameFrameView extends JFrame {
 
 		selectPanel.setMaximumSize(new Dimension(100, 100));
 
-		
+		frame.setSize(925, 600);
 		createSpawn(rebelButton, rebelName, rebelImage, b);
 		createSpawn(royalButton, royalName, royalImage, b);
 		loadSpawn(rebelButton);
