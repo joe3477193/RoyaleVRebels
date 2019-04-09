@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
@@ -19,9 +20,15 @@ public class StartPlayerInfoFrame {
     private JTextField player_two_name;
 
     public StartPlayerInfoFrame() {
+    	
+Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         frame = new JFrame();
-        frame.setSize(new Dimension(200, 200));
+        
+        frame.setResizable(true);
+		frame.setSize(dimension.width/7,
+				dimension.height/4);
         frame.setLocationRelativeTo(null);
+        //frame.setSize(new Dimension(200, 200));
 
         JPanel infoPanel = new JPanel(new GridLayout(5, 1, 0, 0));
 
