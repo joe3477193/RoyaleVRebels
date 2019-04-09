@@ -14,7 +14,6 @@ public class Board {
     private int turn;
     private int[] coordinate;
     private int[] init;
-    private int[] target;
     private boolean moving;
     private boolean moved = false;
 
@@ -28,7 +27,7 @@ public class Board {
         }
         turn= 0;
         init= new int[2];
-        target= new int[2];
+ 
         moving= false;
     }
     
@@ -80,15 +79,6 @@ public class Board {
     public void setInit(int i, int j) {
     	init[0]= i;
     	init[1]= j;
-    }
-    
-    public int[] getTarget() {
-    	return target;
-    }
-    
-    public void setTarget(int i, int j) {
-    	target[0]= i;
-    	target[1]= j;
     }
     
 

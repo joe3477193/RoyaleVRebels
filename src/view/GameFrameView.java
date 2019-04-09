@@ -226,9 +226,7 @@ public class GameFrameView extends JFrame {
 	}
 
 	public void updateBar(int turn) {
-		//board.cycleTurn();
 		
-
 		if(turn==0) {
 			removeSpawn(royalButton);
 			loadSpawn(rebelButton);
@@ -249,9 +247,6 @@ public class GameFrameView extends JFrame {
 		return tileBtns;
 	}
 
-//	public Board getBoard() {
-//		return board;
-//	}
 
 	public JFrame getFrame() {
 		return frame;
@@ -269,12 +264,6 @@ public class GameFrameView extends JFrame {
 		currentImage= null;
 	}
 	
-//	public boolean hasSummon() {
-//		if(board.getSummonedPiece()!=null) {
-//			return true;
-//		}
-//		return false;
-//	}
 
 	public JButton[] getRebelButton() {
 		return rebelButton;
