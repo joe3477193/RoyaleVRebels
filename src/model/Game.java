@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import controller.EndTurnActionListener;
+import controller.MoveActionListener;
 import view.GameFrameView;
 
 
@@ -55,7 +57,10 @@ public class Game {
 	
 	public void startGame() {
 		Board b = new Board();
+		
 		view.assembleBoard(rebel,royale, b);
+		view.moveAddActionL(new MoveActionListener(view, b));
+		view.endAddActionL(new EndTurnActionListener(view, b));
 		currPlayer = rebel;
 		isRunning = true;
 	}

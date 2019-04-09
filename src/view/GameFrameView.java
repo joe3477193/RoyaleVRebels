@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public class GameFrameView extends JFrame {
 	private JLabel playerName, playerType;
 	private String nameOne, typeOne, nameTwo, typeTwo;
 	private static JButton[][] tileBtns;
-	private static Board board;
+
 	private JButton moveBtn;
 	private JButton attackBtn;
 	private JButton endTurnBtn;
@@ -78,7 +79,7 @@ public class GameFrameView extends JFrame {
 		frame.setLocationRelativeTo(null); // show gui in the middle of screen
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		board = new Board();
+		//board = new Board();
 
 		rebelButton= new JButton[6]; 
 		rebelImage= new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE,
@@ -95,11 +96,11 @@ public class GameFrameView extends JFrame {
 		};
 	}
 
-	private void createSpawn(JButton button[], String name[], String image[]) {
+	private void createSpawn(JButton button[], String name[], String image[], Board b) {
 		for(int i=0;i<BUTTON_LENGTH;i++) {
 			button[i]= new JButton(new ImageIcon(this.getClass().getResource(image[i])));
 			button[i].setName(name[i]);
-			button[i].addActionListener(new ClickSummonButtonActionListener(this));
+			button[i].addActionListener(new ClickSummonButtonActionListener(this, b));
 		}
 	}
 
@@ -122,7 +123,7 @@ public class GameFrameView extends JFrame {
 		typeOne= playerOne.getFaction();
 		nameTwo= playerTwo.getName();
 		typeTwo= playerTwo.getFaction();
-
+		
 		statsPanel = new JPanel(new GridLayout(1, 6, 0, 0));
 		selectPanel = new JPanel(new GridLayout(1, 5, 0, 0));
 		gridPanel = new JPanel(new GridLayout(b.getRows(), b.getCols(), 0, 1));
@@ -145,10 +146,10 @@ public class GameFrameView extends JFrame {
 		selectPanel.setMaximumSize(new Dimension(100, 100));
 
 		frame.setSize(925, 600);
-		createSpawn(rebelButton, rebelName, rebelImage);
-		createSpawn(royalButton, royalName, royalImage);
+		createSpawn(rebelButton, rebelName, rebelImage, b);
+		createSpawn(royalButton, royalName, royalImage, b);
 		loadSpawn(rebelButton);
-		genGrid();
+		genGrid(b);
 		drawActionBtns();
 
 		JPanel topPanel = new JPanel(new BorderLayout());
@@ -167,17 +168,17 @@ public class GameFrameView extends JFrame {
 	public void drawActionBtns() {
 		moveBtn = new JButton("Move");
 		bottomPanel.add(moveBtn);
-		moveBtn.addActionListener(new MoveActionListener(this));
+		
 		attackBtn = new JButton("Attack");
 		
 		bottomPanel.add(attackBtn);
 		endTurnBtn = new JButton("End Turn");
-		endTurnBtn.addActionListener(new EndTurnActionListener(this));
+		
 		bottomPanel.add(endTurnBtn);
 		
 	}
 
-	public void genGrid() {
+	public void genGrid(Board b) {
 		for (int i = 0; i < Board.BOARD_ROWS; i++) {
 			for (int j = 0; j < Board.BOARD_COLS; j++) {
 				tileBtns[i][j] = new JButton();
@@ -190,7 +191,7 @@ public class GameFrameView extends JFrame {
 				tileBtns[i][j].putClientProperty("row", i);
 				tileBtns[i][j].putClientProperty("column", j);
 				// add ability to place pieces on tiles
-				tileBtns[i][j].addActionListener(new ClickTileActionListener(this));
+				tileBtns[i][j].addActionListener(new ClickTileActionListener(this, b));
 
 				gridPanel.add(tileBtns[i][j]);
 			}
@@ -224,10 +225,10 @@ public class GameFrameView extends JFrame {
 		decolourTile();
 	}
 
-	public void updateBar() {
-		board.cycleTurn();
-		board.setMoved(false);
-		int turn= board.getTurn();
+	public void updateBar(int turn) {
+		//board.cycleTurn();
+		
+
 		if(turn==0) {
 			removeSpawn(royalButton);
 			loadSpawn(rebelButton);
@@ -248,9 +249,9 @@ public class GameFrameView extends JFrame {
 		return tileBtns;
 	}
 
-	public Board getBoard() {
-		return board;
-	}
+//	public Board getBoard() {
+//		return board;
+//	}
 
 	public JFrame getFrame() {
 		return frame;
@@ -268,12 +269,12 @@ public class GameFrameView extends JFrame {
 		currentImage= null;
 	}
 	
-	public boolean hasSummon() {
-		if(board.getSummonedPiece()!=null) {
-			return true;
-		}
-		return false;
-	}
+//	public boolean hasSummon() {
+//		if(board.getSummonedPiece()!=null) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	public JButton[] getRebelButton() {
 		return rebelButton;
@@ -302,6 +303,15 @@ public class GameFrameView extends JFrame {
 	public String getGrass() {
 		return GRASS_IMAGE;
 	}
+	
+	public void moveAddActionL(ActionListener l) {
+		moveBtn.addActionListener(l);
+	}
+	
+	public void endAddActionL(ActionListener l) {
+		endTurnBtn.addActionListener(l);
+	}
+	
 }
 
 

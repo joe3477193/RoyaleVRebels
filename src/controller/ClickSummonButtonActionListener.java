@@ -24,16 +24,18 @@ public class ClickSummonButtonActionListener implements ActionListener{
 	private JButton[] button;
 	private String[] name;
 	private String[] image;
-
-	public ClickSummonButtonActionListener(GameFrameView frame){
+	private Board board;
+	
+	public ClickSummonButtonActionListener(GameFrameView frame, Board b){
 		this.frame = frame;
+		this.board = b;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		JButton source = (JButton) e.getSource();
-		frame.getBoard().doneMoving();
+		board.doneMoving();
 
-		if(frame.getBoard().getTurn()==0) {
+		if(board.getTurn()==0) {
 			button= frame.getRebelButton();
 			name= frame.getRebelName();
 			image= frame.getRebelImage();
@@ -50,13 +52,13 @@ public class ClickSummonButtonActionListener implements ActionListener{
 				Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
 				if(frame.getFrame().getCursor().getName().equals(name[i])) {
 					frame.getFrame().setCursor(DEFAULT_CURSOR);
-					frame.getBoard().removeSummonedPiece();
+					board.removeSummonedPiece();
 					frame.removeImage();
 				}
-				else if(!frame.getBoard().moved()){
+				else if(!board.moved()){
 					frame.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
 					System.out.println(source.getName());
-					frame.getBoard().setSummonedPiece(new Piece(name[i]));
+					board.setSummonedPiece(new Piece(name[i]));
 					frame.setImage(image[i]);
 				}
 			}

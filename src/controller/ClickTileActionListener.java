@@ -27,11 +27,11 @@ public class ClickTileActionListener implements ActionListener{
 	Board board;
 
 
-	public ClickTileActionListener(GameFrameView gameFrameView) {
+	public ClickTileActionListener(GameFrameView gameFrameView, Board b) {
 
 		this.frame = gameFrameView;
 		tileBtns = gameFrameView.getTileBtns();
-		board = gameFrameView.getBoard();
+		board = b;
 
 	}
 
@@ -53,11 +53,11 @@ public class ClickTileActionListener implements ActionListener{
 					else {
 						tileBtn = tileBtns[i][j];
 						// if attempted to place piece on top of wall
-						if((frame).hasSummon() && !board.moved()) {
+						if(board.getSummonedPiece()!=null && !board.moved()) {
 							if (board.placePiece(board.getSummonedPiece(), i, j)) {
 								tileBtn.setIcon(new ImageIcon(this.getClass().getResource(frame.getImage())));
 								tileBtn.setName(frame.getImage());
-								frame.getBoard().removeSummonedPiece();
+								board.removeSummonedPiece();
 								frame.getFrame().setCursor(DEFAULT_CURSOR);
 								board.setMoved(true);
 								//frame.updateBar();
@@ -76,7 +76,7 @@ public class ClickTileActionListener implements ActionListener{
 										this.getClass().getResource(frame.getGrass())));
 								board.doneMoving();
 								board.setMoved(true);
-								board.cycleTurn();
+								//board.cycleTurn();
 								//frame.updateBar();
 								tileBtn.setName(frame.getImage());
 								frame.getFrame().setCursor(0);
