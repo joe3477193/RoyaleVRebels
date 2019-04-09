@@ -12,12 +12,12 @@ import javax.swing.SwingUtilities;
 import model.*;
 import view.*;
 
-public class AddPlayerActionListener implements ActionListener {
+public class StartGameActionListener implements ActionListener {
 
     private JFrame frame;
     private JTextField name1, name2;
 
-    public AddPlayerActionListener(JFrame frame, JTextField name1, JTextField name2) {
+    public StartGameActionListener(JFrame frame, JTextField name1, JTextField name2) {
         this.frame = frame;
         this.name1 = name1;
         this.name2 = name2;

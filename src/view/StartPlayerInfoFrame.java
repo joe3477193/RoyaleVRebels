@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import controller.AddPlayerActionListener;
+import controller.StartGameActionListener;
 
 public class StartPlayerInfoFrame {
     private JFrame frame;
@@ -56,6 +56,6 @@ Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setVisible(true);
 
        
-        start.addActionListener(new AddPlayerActionListener(frame, player_one_name, player_two_name));
+        start.addActionListener(new StartGameActionListener(frame, player_one_name, player_two_name));
     }
 }
