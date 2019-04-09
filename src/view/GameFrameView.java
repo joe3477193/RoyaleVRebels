@@ -15,8 +15,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import controller.*;
-import model.*;
+import controller.ClickSummonButtonActionListener;
+import controller.ClickTileActionListener;
+import model.Board;
+import model.Player;
+
+
+
 
 
 public class GameFrameView extends JFrame {
