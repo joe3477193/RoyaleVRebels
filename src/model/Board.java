@@ -6,29 +6,40 @@ import static java.lang.Math.abs;
 
 public class Board {
 
-    protected static ArrayList<BoardRows> gridrows;
+    protected static ArrayList<BoardRows> boardRows;
+
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
     
     private Piece summonedPiece;
+
+    // Initialize current turn;
     private int turn;
+    private int[] turns;
     private int[] coordinate;
-    private int[] init;
+    private int[] initTileCoord;
     private boolean moving;
-    private boolean moved = false;
+    private boolean moved;
+    private boolean action;
+
 
 
     public Board() {
 
-        Board.gridrows = new ArrayList<>(BOARD_ROWS);
+        Board.boardRows = new ArrayList<>(BOARD_ROWS);
 
         for (int i = 0; i < BOARD_ROWS; i++) {
-            gridrows.add(new BoardRows());
+            boardRows.add(new BoardRows());
         }
-        turn= 0;
-        init= new int[2];
- 
-        moving= false;
+
+        initTileCoord = new int[2];
+
+        // Initialize number of player turns
+        turns = new int[]{0, 1};
+
+        // Initialize current turn;
+        turn = 0;
+
     }
     
     public boolean isMoving() {
@@ -36,7 +47,12 @@ public class Board {
     }
     
     public void doneMoving() {
-    	moving= false;
+    	moving = false;
+    	doneAction();
+    }
+
+    public void doneAction () {
+        action = false;
     }
     
     public void setMoving() {
@@ -60,25 +76,25 @@ public class Board {
     	coordinate[1]= j;
     }
     
-    public void removeCoordinate() {
+    public void resetCoordinates() {
     	coordinate= null;
     	coordinate= new int[2];
     }
     
-    public boolean hasCoordinate() {
+    public boolean hasCoordinates() {
     	if(coordinate!=null) {
     		return true;
     	}
     	return false;
     }
     
-    public int[] getInit() {
-    	return init;
+    public int[] getInitTileCoord() {
+    	return initTileCoord;
     }
     
     public void setInit(int i, int j) {
-    	init[0]= i;
-    	init[1]= j;
+    	initTileCoord[0]= i;
+    	initTileCoord[1]= j;
     }
     
 
@@ -95,7 +111,16 @@ public class Board {
     }
     
     public void cycleTurn(){
-    	turn =abs(turn-1);
+        for (int i = 0; i < turns.length; i++) {
+            if (turn == turns[i]) {
+                if (turns[i] != turns[turns.length - 1]) {
+                    turn = turns[i + 1];
+                    return;
+                } else {
+                    turn = turns[0];
+                }
+            }
+        }
     }
     
     public Piece getSummonedPiece() {
@@ -111,7 +136,7 @@ public class Board {
     }
 
     private Tile getTile(int row, int tile){
-        return gridrows.get(row).getTile(tile);
+        return boardRows.get(row).getTile(tile);
     }
 
     // Gets a piece from a tile
@@ -211,4 +236,11 @@ public class Board {
         return false;
     }
 
+    public boolean getAction() {
+        return action;
+    }
+
+    public int[] getTurns() {
+        return turns;
+    }
 }

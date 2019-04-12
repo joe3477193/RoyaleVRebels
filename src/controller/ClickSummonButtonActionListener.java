@@ -1,69 +1,70 @@
 package controller;
 
-import static java.awt.Cursor.DEFAULT_CURSOR;
+import model.Board;
+import model.Piece;
+import view.GameFrameView;
 
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
-import model.*;
-import view.GameFrameView;
 
 
 // Clicking on a piece to summon
 public class ClickSummonButtonActionListener implements ActionListener{
 
-	GameFrameView frame; 
+	private GameFrameView gfv;
 
-	private JButton[] button;
-	private String[] name;
-	private String[] image;
-	private Board board;
+	private Board b;
 	
-	public ClickSummonButtonActionListener(GameFrameView frame, Board b){
-		this.frame = frame;
-		this.board = b;
+	ClickSummonButtonActionListener(GameFrameView frame, Board board){
+		gfv = frame;
+		this.b = board;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		JButton source = (JButton) e.getSource();
-		board.doneMoving();
 
-		if(board.getTurn()==0) {
-			button= frame.getRebelButton();
-			name= frame.getRebelName();
-			image= frame.getRebelImage();
+		JButton source = (JButton) e.getSource();
+
+		JButton[] button;
+		String[] name;
+		String[] image;
+
+		// Indicate that player cannot do actions any more in this turn
+		b.doneAction();
+
+		if(b.getTurn() == 0) {
+			System.out.println(b.getTurn());
+			button = gfv.getRebelButton();
+			name = gfv.getRebelName();
+			image = gfv.getRebelImage();
 		}
 		else {
-			button= frame.getRoyalButton();
-			name= frame.getRoyalName();
-			image= frame.getRoyalImage();
+			button = gfv.getRoyaleButton();
+			name = gfv.getRoyaleName();
+			image = gfv.getRoyaleImage();
 		}
-		
 
-		for(int i=0;i<button.length;i++) {
-			if(source==button[i]) {
+		for(int i = 0; i < button.length; i++) {
+			if(source == button[i]) {
 				Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
-				if(frame.getFrame().getCursor().getName().equals(name[i])) {
-					frame.getFrame().setCursor(DEFAULT_CURSOR);
-					board.removeSummonedPiece();
-					frame.removeImage();
+
+				// Click on the same piece on the deck
+				if(gfv.getFrame().getCursor().getName().equals(name[i])) {
+					gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					b.removeSummonedPiece();
+					gfv.removeImage();
 				}
-				else if(!board.moved()){
-					frame.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
+
+				// Click on a different piece on the deck
+				// else if(!b.getAction()) ???
+				else if(!b.moved()){
+					gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
 					System.out.println(source.getName());
-					board.setSummonedPiece(new Piece(name[i]));
-					frame.setImage(image[i]);
+					b.setSummonedPiece(new Piece(name[i]));
+					gfv.setImage(image[i]);
 				}
 			}
-
 		}
-
 	}
 }

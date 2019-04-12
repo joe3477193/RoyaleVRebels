@@ -1,45 +1,47 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-import controller.EndTurnActionListener;
-import controller.MoveActionListener;
+import controller.GameController;
 import view.GameFrameView;
 
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Random;
 
-public class Game {
+
+public class Game{
 	ArrayList<Player> players = new ArrayList<>();
 	Royale royale;
 	Rebel rebel;
 	Player currPlayer;
 	boolean isRunning = false;
 	GameFrameView view;
-	
-	public Game(GameFrameView view, ArrayList<String> playerName){
+	Board b;
+
+	public Game(GameFrameView view, ArrayList<String> playerNames){
 		
 		this.view = view;
 		Random r = new Random();
-		int t = r.nextInt(2);
-		if(t==0) {
-			royale = new Royale(playerName.get(t));
-			rebel =  new Rebel(playerName.get(t+1));
+		int turn = r.nextInt(playerNames.size());
+
+		// Randomly assign team for players
+		if(turn == 0) {
+			royale = new Royale(playerNames.get(turn));
+			rebel =  new Rebel(playerNames.get(turn + 1));
 		}
 		else {
-			royale = new Royale(playerName.get(t));
-			rebel =  new Rebel(playerName.get(t-1));
+			royale = new Royale(playerNames.get(turn));
+			rebel =  new Rebel(playerNames.get(turn - 1));
 		}
+
 		players.add(rebel);
 		players.add(royale);
 		
-		startGame();
-		
-        //MainGameLoop
+       /* //MainGameLoop
         Thread gameLoop = new Thread(new Runnable() {
             @Override
             public void run() {
                 while(isRunning) {
-                	
+
 
                 	if(rebel.getCP() <= 0) {
                 		//Game end
@@ -47,23 +49,28 @@ public class Game {
                 	else if(royale.getHp()<=0) {
                 		//Game end
                 	}
-                	
+
                 }
             }
         });
-        
-        gameLoop.start();
+
+        gameLoop.start();*/
 	}
 	
-	public void startGame() {
-		Board b = new Board();
-		
+	public void initGame() {
+
+		// Initialise board
+		this.b = new Board();
+
 		view.assembleBoard(rebel,royale, b);
-		view.moveAddActionL(new MoveActionListener(view, b));
-		view.endAddActionL(new EndTurnActionListener(view, b));
+		view.initSummonButtons();
+
+		// Rebel goes first
 		currPlayer = rebel;
 		isRunning = true;
 	}
-	
-	
+
+	public Board getBoard() {
+		return b;
+	}
 }

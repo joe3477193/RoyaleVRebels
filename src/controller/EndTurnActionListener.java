@@ -9,26 +9,23 @@ import view.GameFrameView;
 
 public class EndTurnActionListener implements ActionListener {
 
-	private GameFrameView game;
+	private GameFrameView gfv;
 	private Board b;
 	
-	public EndTurnActionListener(GameFrameView game, Board b){
-		this.game = game;
-		this.b = b;
+	EndTurnActionListener(GameFrameView frame, Board board){
+		gfv = frame;
+		b = board;
 	}
 	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		game.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
+		gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		b.cycleTurn();
 		b.setMoved(false);
-		int turn= b.getTurn();
-		
-		game.updateBar(turn);
-		
-	}
+		gfv.updateBar(b.getTurn());
 
-	
+		new GameController().addDeckActionListeners();
+	}
 }

@@ -1,80 +1,72 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Map;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
-
-import controller.ClickSummonButtonActionListener;
-import controller.ClickTileActionListener;
 import model.Board;
 import model.Player;
 
+import javax.swing.*;
+import java.awt.*;
 
+public class GameFrameView extends JFrame{
 
-
-
-public class GameFrameView extends JFrame {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private JFrame frame;
 	private JPanel bottomPanel;
 	private JPanel gridPanel;
 	private JPanel statsPanel;
-	private JPanel selectPanel;
+	private JPanel deckPanel;
 	private JLabel healthLabel;
 	private JLabel combatPlabel;
 	private JLabel playerName, playerType;
 	private String nameOne, typeOne, nameTwo, typeTwo;
 	private static JButton[][] tileBtns;
 
+	public JButton getMoveBtn() {
+		return moveBtn;
+	}
+
 	private JButton moveBtn;
+
+	public JButton getAttackBtn() {
+		return attackBtn;
+	}
+
 	private JButton attackBtn;
+
+	public JButton getEndTurnBtn() {
+		return endTurnBtn;
+	}
+
 	private JButton endTurnBtn;
 
-	public static final int BUTTON_LENGTH = 6;
+	private static final int BUTTON_LENGTH = 6;
 
-	public static final String GRASS_IMAGE      = "../images/grass.png";
-	public static final String WALL_IMAGE      = "../images/wall.jpg";
+	private static final String GRASS_IMAGE      = "../images/grass.png";
+	private static final String WALL_IMAGE      = "../images/wall.jpg";
 
-	public static final String RO_ONE_IMAGE      = "../images/man.png";
-	public static final String RO_TWO_IMAGE      = "../images/megastrong.png";
-	public static final String RO_THREE_IMAGE      = "../images/strong.png";
-	public static final String RO_FOUR_IMAGE      = "../images/watchout.png";
-	public static final String RO_FIVE_IMAGE      = "../images/watchout.png";
-	public static final String RO_SIX_IMAGE      = "../images/watchout.png";
+	private static final String RO_ONE_IMAGE      = "../images/man.png";
+	private static final String RO_TWO_IMAGE      = "../images/megastrong.png";
+	private static final String RO_THREE_IMAGE      = "../images/strong.png";
+	private static final String RO_FOUR_IMAGE      = "../images/watchout.png";
+	private static final String RO_FIVE_IMAGE      = "../images/watchout.png";
+	private static final String RO_SIX_IMAGE      = "../images/watchout.png";
 
-	public static final String RE_ONE_IMAGE      = "../images/archer.png";
-	public static final String RE_TWO_IMAGE      = "../images/berserker.png";
-	public static final String RE_THREE_IMAGE      = "../images/gilgamesh.png";
-	public static final String RE_FOUR_IMAGE      = "../images/rem.png";
-	public static final String RE_FIVE_IMAGE      = "../images/rin.png";
-	public static final String RE_SIX_IMAGE      = "../images/saber.png";
+	private static final String RE_ONE_IMAGE      = "../images/archer.png";
+	private static final String RE_TWO_IMAGE      = "../images/berserker.png";
+	private static final String RE_THREE_IMAGE      = "../images/gilgamesh.png";
+	private static final String RE_FOUR_IMAGE      = "../images/rem.png";
+	private static final String RE_FIVE_IMAGE      = "../images/rin.png";
+	private static final String RE_SIX_IMAGE      = "../images/saber.png";
 
 	private JButton[] rebelButton;
 	private String[] rebelName;
 	private String[] rebelImage;
-	private JButton[] royalButton;
-	private String[] royalName;
-	private String[] royalImage;
+	private JButton[] royaleButton;
+	private String[] royaleName;
+	private String[] royaleImage;
 
 	private String currentImage;
 
 	private JButton lastTile;
-	
+	private JButton[] summonButtons;
 
 
 	public GameFrameView() {
@@ -84,7 +76,6 @@ public class GameFrameView extends JFrame {
 		frame.setLocationRelativeTo(null); // show gui in the middle of screen
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		//board = new Board();
 
 		rebelButton= new JButton[6]; 
 		rebelImage= new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE,
@@ -93,31 +84,32 @@ public class GameFrameView extends JFrame {
 		rebelName= new String[] {"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Catapult"
 		};
 
-		royalButton= new JButton[6];
-		royalName= new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Archer"
+		royaleButton = new JButton[6];
+		royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Archer"
 		};
-		royalImage= new String[] {RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
+		royaleImage = new String[] {RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
 				RO_SIX_IMAGE
 		};
 	}
 
-	private void createSpawn(JButton button[], String name[], String image[], Board b) {
+	private JButton[] createSpawn(String[] name, String[] image) {
+		JButton[] button = new JButton[6];
 		for(int i=0;i<BUTTON_LENGTH;i++) {
 			button[i]= new JButton(new ImageIcon(this.getClass().getResource(image[i])));
 			button[i].setName(name[i]);
-			button[i].addActionListener(new ClickSummonButtonActionListener(this, b));
+		}
+		return button;
+	}
+
+	private void loadSpawn(JButton[] button) {
+		for(JButton icon:button) {
+			deckPanel.add(icon);
 		}
 	}
 
-	private void loadSpawn(JButton button[]) {
+	private void removeSpawn(JButton[] button) {
 		for(JButton icon:button) {
-			selectPanel.add(icon);
-		}
-	}
-
-	private void removeSpawn(JButton button[]) {
-		for(JButton icon:button) {
-			selectPanel.remove(icon);
+			deckPanel.remove(icon);
 		}
 	}
 
@@ -130,7 +122,7 @@ public class GameFrameView extends JFrame {
 		typeTwo= playerTwo.getFaction();
 		
 		statsPanel = new JPanel(new GridLayout(1, 6, 0, 0));
-		selectPanel = new JPanel(new GridLayout(1, 5, 0, 0));
+		deckPanel = new JPanel(new GridLayout(1, 5, 0, 0));
 		gridPanel = new JPanel(new GridLayout(b.getRows(), b.getCols(), 0, 1));
 		bottomPanel = new JPanel(new GridLayout(1, 2));
 
@@ -148,18 +140,20 @@ public class GameFrameView extends JFrame {
 
 		tileBtns = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
 
-		selectPanel.setMaximumSize(new Dimension(100, 100));
+		deckPanel.setMaximumSize(new Dimension(100, 100));
 
 		frame.setSize(925, 600);
-		createSpawn(rebelButton, rebelName, rebelImage, b);
-		createSpawn(royalButton, royalName, royalImage, b);
+
+		rebelButton = createSpawn(rebelName, rebelImage);
+		royaleButton = createSpawn(royaleName, royaleImage);
+
 		loadSpawn(rebelButton);
-		genGrid(b);
+		genGrid();
 		drawActionBtns();
 
 		JPanel topPanel = new JPanel(new BorderLayout());
 		topPanel.add(statsPanel, BorderLayout.NORTH);
-		topPanel.add(selectPanel, BorderLayout.CENTER);
+		topPanel.add(deckPanel, BorderLayout.CENTER);
 
 		frame.revalidate();
 		frame.repaint();
@@ -170,7 +164,7 @@ public class GameFrameView extends JFrame {
 	}
 
 
-	public void drawActionBtns() {
+	private void drawActionBtns() {
 		moveBtn = new JButton("Move");
 		bottomPanel.add(moveBtn);
 		
@@ -183,7 +177,7 @@ public class GameFrameView extends JFrame {
 		
 	}
 
-	public void genGrid(Board b) {
+	private void genGrid() {
 		for (int i = 0; i < Board.BOARD_ROWS; i++) {
 			for (int j = 0; j < Board.BOARD_COLS; j++) {
 				tileBtns[i][j] = new JButton();
@@ -195,8 +189,6 @@ public class GameFrameView extends JFrame {
 
 				tileBtns[i][j].putClientProperty("row", i);
 				tileBtns[i][j].putClientProperty("column", j);
-				// add ability to place pieces on tiles
-				tileBtns[i][j].addActionListener(new ClickTileActionListener(this, b));
 
 				gridPanel.add(tileBtns[i][j]);
 			}
@@ -207,7 +199,7 @@ public class GameFrameView extends JFrame {
 		moveBtn.setBackground(Color.green);
 	}
 
-	public void decolourMove() {
+	private void decolourMove() {
 		moveBtn.setBackground(null);
 	}
 
@@ -216,7 +208,7 @@ public class GameFrameView extends JFrame {
 		lastTile= tile;
 	}
 
-	public void decolourTile() {
+	private void decolourTile() {
 		if(lastTile!=null) {
 			lastTile.setBorder(null);
 			lastTile.setBackground(null);
@@ -233,25 +225,27 @@ public class GameFrameView extends JFrame {
 	public void updateBar(int turn) {
 		
 		if(turn==0) {
-			removeSpawn(royalButton);
+			removeSpawn(royaleButton);
 			loadSpawn(rebelButton);
+			summonButtons = rebelButton;
 			playerName.setText(nameOne);
 			playerType.setText(typeOne);
 		}
 		else {
+			System.out.println(rebelButton[2]);
 			removeSpawn(rebelButton);
-			loadSpawn(royalButton);
+			loadSpawn(royaleButton);
+			summonButtons = royaleButton;
 			playerName.setText(nameTwo);
 			playerType.setText(typeTwo);
 		}		
 		statsPanel.repaint();
-		selectPanel.repaint();
+		deckPanel.repaint();
 	}
 
 	public JButton[][] getTileBtns() {
 		return tileBtns;
 	}
-
 
 	public JFrame getFrame() {
 		return frame;
@@ -268,7 +262,6 @@ public class GameFrameView extends JFrame {
 	public void removeImage() {
 		currentImage= null;
 	}
-	
 
 	public JButton[] getRebelButton() {
 		return rebelButton;
@@ -282,30 +275,29 @@ public class GameFrameView extends JFrame {
 		return rebelImage;
 	}
 
-	public JButton[] getRoyalButton() {
-		return royalButton;
+	public JButton[] getRoyaleButton() {
+		return royaleButton;
 	}
 
-	public String[] getRoyalName() {
-		return royalName;
+	public String[] getRoyaleName() {
+		return royaleName;
 	}
 
-	public String[] getRoyalImage() {
-		return royalImage;
+	public String[] getRoyaleImage() {
+		return royaleImage;
 	}
 	
 	public String getGrass() {
 		return GRASS_IMAGE;
 	}
-	
-	public void moveAddActionL(ActionListener l) {
-		moveBtn.addActionListener(l);
+
+	public JButton[] getSummonButtons() {
+		return summonButtons;
 	}
-	
-	public void endAddActionL(ActionListener l) {
-		endTurnBtn.addActionListener(l);
+
+	public void initSummonButtons() {
+		summonButtons = getRebelButton();
 	}
-	
 }
 
 

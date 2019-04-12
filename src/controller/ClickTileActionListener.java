@@ -2,18 +2,13 @@ package controller;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
 
-import java.awt.Color;
-import java.awt.Point;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.border.LineBorder;
-import javax.swing.text.View;
 
 import model.*;
 import view.*;
@@ -22,15 +17,15 @@ import view.*;
 // Placing a piece on the board
 public class ClickTileActionListener implements ActionListener{
 
-	private GameFrameView frame; 
+	private GameFrameView gfv;
 	private JButton[][] tileBtns;
-	Board board;
+	private Board board;
 
 
-	public ClickTileActionListener(GameFrameView gameFrameView, Board b) {
+	ClickTileActionListener(GameFrameView frame, Board b) {
 
-		this.frame = gameFrameView;
-		tileBtns = gameFrameView.getTileBtns();
+		gfv = frame;
+		tileBtns = frame.getTileBtns();
 		board = b;
 
 	}
@@ -38,60 +33,70 @@ public class ClickTileActionListener implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JButton tileBtn = null;
+		JButton tileBtn;
+
+		// Default Cursor
 		if(!board.isMoving()) {
-			frame.decolour();
+			gfv.decolour();
 		}
-		board.removeCoordinate();
+		board.resetCoordinates();
 
 		for (int i = 0; i < tileBtns.length; i++) {
 			for (int j = 0; j < tileBtns[i].length; j++) {
-				if (e.getSource() == tileBtns[i][j]) {	
+				if (e.getSource() == tileBtns[i][j]) {
+
+					// Click a brick wall
+					// How to check if it is empty click or click with a piece???
 					if ((i % 5 <= 2) && j % 4 == 3) {
-						JOptionPane.showMessageDialog(frame, "You cannot place a piece on a brick wall.");
+						JOptionPane.showMessageDialog(gfv, "You cannot place a piece on a brick wall.");
 					}
+
+					// Attempt to place piece
 					else {
 						tileBtn = tileBtns[i][j];
-						// if attempted to place piece on top of wall
+
+						// Attempt to place a summoned piece
 						if(board.getSummonedPiece()!=null && !board.moved()) {
 							if (board.placePiece(board.getSummonedPiece(), i, j)) {
-								tileBtn.setIcon(new ImageIcon(this.getClass().getResource(frame.getImage())));
-								tileBtn.setName(frame.getImage());
+								tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getImage())));
+								tileBtn.setName(gfv.getImage());
 								board.removeSummonedPiece();
-								frame.getFrame().setCursor(DEFAULT_CURSOR);
+								gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
 								board.setMoved(true);
-								//frame.updateBar();
+								//gfv.updateBar();
 							}
 							else {
-								JOptionPane.showMessageDialog(frame, "Please place the piece on a valid tile,\n"
+								JOptionPane.showMessageDialog(gfv, "Please place the piece on a valid tile,\n"
 										+ "The top three rows for Royales,\nThe bottom three rows for Rebels.");
 							}
 						}
+
+						// Attempt to place a piece after movement
 						else if(board.isMoving() && !board.moved()) {
-							if(board.move(board.getInit()[0],board.getInit()[1] , i, j)) {
-								frame.decolour();
-								System.out.println("Image= "+frame.getImage());
-								tileBtn.setIcon(new ImageIcon(this.getClass().getResource(frame.getImage())));
-								tileBtns[board.getInit()[0]][board.getInit()[1]].setIcon(new ImageIcon(
-										this.getClass().getResource(frame.getGrass())));
+							if(board.move(board.getInitTileCoord()[0],board.getInitTileCoord()[1] , i, j)) {
+								gfv.decolour();
+								System.out.println("Image= "+ gfv.getImage());
+								tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getImage())));
+								tileBtns[board.getInitTileCoord()[0]][board.getInitTileCoord()[1]].setIcon(new ImageIcon(
+										this.getClass().getResource(gfv.getGrass())));
 								board.doneMoving();
 								board.setMoved(true);
-								//board.cycleTurn();
-								//frame.updateBar();
-								tileBtn.setName(frame.getImage());
-								frame.getFrame().setCursor(0);
+								tileBtn.setName(gfv.getImage());
+								gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
 							}
 							else {
-								JOptionPane.showMessageDialog(frame, "Tile not valid, press the move button again to cancel.");
+								JOptionPane.showMessageDialog(gfv, "Tile not valid, press the move button again to cancel.");
 							}
 						}
+
+						// Attempt to pick a piece for movement
 						else if(board.checkInit(i, j)) {
-							frame.setImage(tileBtn.getName());
+							gfv.setImage(tileBtn.getName());
 							System.out.println("TileButton Name: " + tileBtn.getName());
 							board.setCoordinate(i, j);
-							frame.colourTile(tileBtn);
+							gfv.colourTile(tileBtn);
 							if(board.checkMoveInit(i, j)) {
-								frame.colourMove();
+								gfv.colourMove();
 							}
 						}
 					}
