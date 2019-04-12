@@ -58,6 +58,7 @@ public class GameFrameView extends JFrame{
 	private static final String RE_FIVE_IMAGE      = "../images/rin.png";
 	private static final String RE_SIX_IMAGE      = "../images/saber.png";
 
+	public static final String STATUS = "Game status:  ";
 	private JButton[] rebelButton;
 	private String[] rebelName;
 	private String[] rebelImage;
@@ -70,11 +71,11 @@ public class GameFrameView extends JFrame{
 	private JButton lastTile;
 	private ArrayList<JButton> summonBtns;
 
-	public JLabel getMsgLabel() {
-		return msgLabel;
-	}
+	JLabel statusLabel;
 
-	private JLabel msgLabel;
+	public JLabel getStatusLabel() {
+		return statusLabel;
+	}
 
 	public GameFrameView() {
 
@@ -98,7 +99,7 @@ public class GameFrameView extends JFrame{
 				RO_SIX_IMAGE
 		};
 		summonBtns = new ArrayList<>();
-		msgLabel = new JLabel("All good!");
+		statusLabel = new JLabel(STATUS);
 	}
 
 	private JButton[] createSpawn(String[] name, String[] image) {
@@ -135,13 +136,8 @@ public class GameFrameView extends JFrame{
 		deckPanel = new JPanel(new GridLayout(1, 5, 0, 0));
 		gridPanel = new JPanel(new GridLayout(b.getRows(), b.getCols(), 0, 1));
 		actionPanel = new JPanel(new GridLayout(1, 2));
-		JPanel statusPanel = new JPanel(new GridLayout(1, 2));
-
-		JLabel statusLabel = new JLabel("Game status: ");
-
-
+		JPanel statusPanel = new JPanel(new GridLayout(1, 1));
 		statusPanel.add(statusLabel);
-		statusPanel.add(msgLabel);
 
 		playerName = new JLabel(playerOne.getName());
 		playerPanel.add(new JLabel("Player Name: "));
