@@ -45,7 +45,7 @@ public class TileBtnActionListener implements ActionListener{
 					// Click a brick wall
 					// How to check if it is empty click or click with a pieces???
 					if ((i % 5 <= 2) && j % 4 == 3) {
-						JOptionPane.showMessageDialog(gfv, "You cannot place a pieces on a brick wall.");
+						gfv.getMsgLabel().setText("You cannot place a pieces on a brick wall.");
 					}
 
 					// Attempt to place pieces
@@ -65,7 +65,7 @@ public class TileBtnActionListener implements ActionListener{
 								System.out.println(b.getAction());
 							}
 							else {
-								JOptionPane.showMessageDialog(gfv, "Please place the pieces on a valid tile,\n"
+								gfv.getMsgLabel().setText("Please place the pieces on a valid tile,\n"
 										+ "The top three rows for Royales,\nThe bottom three rows for Rebels.");
 							}
 						}
@@ -85,7 +85,7 @@ public class TileBtnActionListener implements ActionListener{
 								gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
 							}
 							else {
-								JOptionPane.showMessageDialog(gfv, "Tile not valid, press the move button again to cancel.");
+								gfv.getMsgLabel().setText("Tile not valid, press the move button again to cancel.");
 							}
 						}
 
