@@ -24,13 +24,8 @@ public class StartGame {
             gameController.addGame(game);
             gameController.initGame();
 
-            // Add ActionListeners for pieces on deck
-
             // Add ActionListeners for View
             gameController.addActionListeners();
-
-            /*// Tell View about Controller
-            gfv.addController(gameController);*/
         });
 
 

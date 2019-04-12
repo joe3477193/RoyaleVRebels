@@ -78,7 +78,7 @@ public class BoardTest {
         assertFalse(b.checkAttackTarget(c1, 1, 0));
     }
 
-    // Check if pieces moved from current tile to target tile
+    // Check if pieces getMoved from current tile to target tile
     @Test
     public void testMove1() {
         assertTrue(b.move(0, 0, 0, 1));
@@ -86,7 +86,7 @@ public class BoardTest {
         assertEquals(Board.boardRows.get(0).getTile(1).getPiece(), c1);
     }
     
-    // Check if pieces moved from current tile to target tile
+    // Check if pieces getMoved from current tile to target tile
     @Test
     public void testMove2() {
         t2.setPiece(c2);

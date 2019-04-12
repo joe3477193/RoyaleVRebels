@@ -67,7 +67,7 @@ public class GameFrameView extends JFrame{
 	private String currentImage;
 
 	private JButton lastTile;
-	private ArrayList<JButton> summonButtons;
+	private ArrayList<JButton> summonBtns;
 
 
 	public GameFrameView() {
@@ -91,7 +91,7 @@ public class GameFrameView extends JFrame{
 		royaleImage = new String[] {RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
 				RO_SIX_IMAGE
 		};
-		summonButtons= new ArrayList<JButton>();
+		summonBtns = new ArrayList<JButton>();
 	}
 
 	private JButton[] createSpawn(String[] name, String[] image) {
@@ -99,7 +99,7 @@ public class GameFrameView extends JFrame{
 		for(int i=0;i<BUTTON_LENGTH;i++) {
 			button[i]= new JButton(new ImageIcon(this.getClass().getResource(image[i])));
 			button[i].setName(name[i]);
-			summonButtons.add(button[i]);
+			summonBtns.add(button[i]);
 		}
 		return button;
 	}
@@ -292,8 +292,8 @@ public class GameFrameView extends JFrame{
 		return GRASS_IMAGE;
 	}
 
-	public ArrayList<JButton> getSummonButtons() {
-		return summonButtons;
+	public ArrayList<JButton> getSummonBtns() {
+		return summonBtns;
 	}
 }
 

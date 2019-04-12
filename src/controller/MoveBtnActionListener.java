@@ -13,41 +13,50 @@ import javax.swing.JOptionPane;
 import model.board.Board;
 import view.GameFrameView;
 
-public class MoveActionListener implements ActionListener{
+public class MoveBtnActionListener implements ActionListener{
 
 	private GameFrameView gfv;
-	private Board board;
+	private Board b;
 
 
-	MoveActionListener(GameFrameView frame, Board b) {
+	MoveBtnActionListener(GameFrameView frame, Board board) {
 
 		gfv = frame;
-		board = b;
+		b = board;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(board.isMoving() && !board.moved()) {
-			board.doneMoving();
+
+		// Cancel movement (click move button twice)
+		if(b.isMoving() && !b.getMoved()) {
+			b.doneMoving();
 			JOptionPane.showMessageDialog(gfv, "Movement cancelled.");
 			gfv.decolour();
 			gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
-		else if(board.hasCoordinates() && board.checkMoveInit(board.getCoordinate()[0], board.getCoordinate()[1]) && !board.moved() ) {
-			if((board.getTurn() == 0 && board.getPiece(board.getCoordinate()[0], board.getCoordinate()[1]).getFaction().equals("Rebel")) ||
-					board.getTurn() == 1 && board.getPiece(board.getCoordinate()[0], board.getCoordinate()[1]).getFaction().equals("Royale")) {
-				board.setMoving();
-				board.setInit(board.getCoordinate()[0], board.getCoordinate()[1]);
+
+		// Trigger movement for a piece
+		else if(b.hasCoordinates() && b.checkMoveInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.getMoved() ) {
+			if((b.getTurn() == 0 && b.getPiece(b.getCoordinates()[0], b.getCoordinates()[1]).getFaction().equals("Rebel")) ||
+					b.getTurn() == 1 && b.getPiece(b.getCoordinates()[0], b.getCoordinates()[1]).getFaction().equals("Royale")) {
+				b.setMoving();
+				b.setInit(b.getCoordinates()[0], b.getCoordinates()[1]);
 				Image icon = new ImageIcon(this.getClass().getResource(gfv.getImage())).getImage();
 				gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), "name"));
 			}
+
+			// Attempt to move opposite player's piece
 			else {
 				JOptionPane.showMessageDialog(gfv, "You cannot move your opponent's pieces.");
 			}
 		}
-		else if(board.moved()) {
-			JOptionPane.showMessageDialog(gfv, "You have already moved this turn.");
+
+		// Player has getMoved already
+		else if(b.getMoved()) {
+			JOptionPane.showMessageDialog(gfv, "You have already moved a piece this turn.");
 		}
+
 		else  {
 			JOptionPane.showMessageDialog(gfv, "You have not chosen a valid tile.");
 		}

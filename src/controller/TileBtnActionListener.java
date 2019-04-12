@@ -14,32 +14,29 @@ import model.board.Board;
 import view.*;
 
 
-// Placing a pieces on the board
-public class ClickTileActionListener implements ActionListener{
+// Placing a pieces on the b
+public class TileBtnActionListener implements ActionListener{
 
 	private GameFrameView gfv;
 	private JButton[][] tileBtns;
-	private Board board;
+	private Board b;
 
-
-	ClickTileActionListener(GameFrameView frame, Board b) {
+	TileBtnActionListener(GameFrameView frame, Board board) {
 
 		gfv = frame;
 		tileBtns = frame.getTileBtns();
-		board = b;
-
+		b = board;
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton tileBtn;
 
 		// Default Cursor
-		if(!board.isMoving()) {
+		if(!b.isMoving()) {
 			gfv.decolour();
 		}
-		board.resetCoordinates();
+		b.resetCoordinates();
 
 		for (int i = 0; i < tileBtns.length; i++) {
 			for (int j = 0; j < tileBtns[i].length; j++) {
@@ -56,14 +53,16 @@ public class ClickTileActionListener implements ActionListener{
 						tileBtn = tileBtns[i][j];
 
 						// Attempt to place a summoned pieces
-						if(board.getSummonedPiece()!=null && !board.moved()) {
-							if (board.placePiece(board.getSummonedPiece(), i, j)) {
+						if(b.getSummonedPiece()!=null && b.getAction()) {
+							if (b.placePiece(b.getSummonedPiece(), i, j)) {
 								tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getImage())));
 								tileBtn.setName(gfv.getImage());
-								board.removeSummonedPiece();
+								b.removeSummonedPiece();
 								gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
-								board.setMoved(true);
-								//gfv.updateBar();
+								System.out.println("Place here");
+								b.setSummonded(true);
+								b.setActionDone();
+								System.out.println(b.getAction());
 							}
 							else {
 								JOptionPane.showMessageDialog(gfv, "Please place the pieces on a valid tile,\n"
@@ -72,15 +71,16 @@ public class ClickTileActionListener implements ActionListener{
 						}
 
 						// Attempt to place a pieces after movement
-						else if(board.isMoving() && !board.moved()) {
-							if(board.move(board.getInitTileCoord()[0],board.getInitTileCoord()[1] , i, j)) {
+						else if(b.isMoving() && !b.getMoved()) {
+							if(b.move(b.getInitTileCoord()[0], b.getInitTileCoord()[1] , i, j)) {
 								gfv.decolour();
 								System.out.println("Image= "+ gfv.getImage());
 								tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getImage())));
-								tileBtns[board.getInitTileCoord()[0]][board.getInitTileCoord()[1]].setIcon(new ImageIcon(
+								tileBtns[b.getInitTileCoord()[0]][b.getInitTileCoord()[1]].setIcon(new ImageIcon(
 										this.getClass().getResource(gfv.getGrass())));
-								board.doneMoving();
-								board.setMoved(true);
+								b.doneMoving();
+								b.setMoved(true);
+								b.setActionDone();
 								tileBtn.setName(gfv.getImage());
 								gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
 							}
@@ -90,12 +90,14 @@ public class ClickTileActionListener implements ActionListener{
 						}
 
 						// Attempt to pick a pieces for movement
-						else if(board.checkInit(i, j)) {
+						else if(b.checkInit(i, j) && b.getAction()) {
+							System.out.println(b.getAction());
+							System.out.println(b.getMoved());
 							gfv.setImage(tileBtn.getName());
 							System.out.println("TileButton Name: " + tileBtn.getName());
-							board.setCoordinate(i, j);
+							b.setCoordinate(i, j);
 							gfv.colourTile(tileBtn);
-							if(board.checkMoveInit(i, j)) {
+							if(b.checkMoveInit(i, j)) {
 								gfv.colourMove();
 							}
 						}

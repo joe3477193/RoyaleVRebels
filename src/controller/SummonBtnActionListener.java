@@ -11,15 +11,15 @@ import java.awt.event.ActionListener;
 
 
 // Clicking on a pieces to summon
-public class ClickSummonButtonActionListener implements ActionListener{
+public class SummonBtnActionListener implements ActionListener{
 
 	private GameFrameView gfv;
 
 	private Board b;
 	
-	ClickSummonButtonActionListener(GameFrameView frame, Board board){
+	SummonBtnActionListener(GameFrameView frame, Board board){
 		gfv = frame;
-		this.b = board;
+		b = board;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -30,8 +30,8 @@ public class ClickSummonButtonActionListener implements ActionListener{
 		String[] name;
 		String[] image;
 
-		// Indicate that player cannot do actions any more in this turn
-		b.doneAction();
+		// What is this line of code for?
+		b.doneMoving();
 
 		if(b.getTurn() == 0) {
 			System.out.println(b.getTurn());
@@ -56,20 +56,16 @@ public class ClickSummonButtonActionListener implements ActionListener{
 					gfv.removeImage();
 				}
 
-				// Click on a different pieces on the deck
+				// Click on a different piece on the deck when the player has not moved any piece
 				// else if(!b.getAction()) ???
-				else if(!b.moved()){
+				else if(b.getAction()){
 					gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
 					System.out.println(source.getName());
 					try {
 						Class pieceCls = Class.forName("model.pieces." + name[i]);
 						Piece piece = (Piece) pieceCls.newInstance();
 						b.setSummonedPiece(piece);
-					} catch (ClassNotFoundException ex) {
-						ex.printStackTrace();
-					} catch (IllegalAccessException ex) {
-						ex.printStackTrace();
-					} catch (InstantiationException ex) {
+					} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
 						ex.printStackTrace();
 					}
 

@@ -24,20 +24,21 @@ public class GameController{
 
     public void addActionListeners() {
 
+        // Add ActionListeners for summonBtns
+        for (JButton btn : gfv.getSummonBtns()) {
+            btn.addActionListener(new SummonBtnActionListener(gfv, g.getBoard()));
+        }
+
+        // Add ActionListeners for tileBtns
         for (JButton[] tileRows : gfv.getTileBtns()) {
             for (JButton tile : tileRows) {
-                tile.addActionListener(new ClickTileActionListener(gfv, g.getBoard()));
+                tile.addActionListener(new TileBtnActionListener(gfv, g.getBoard()));
             }
         }
 
-        gfv.getMoveBtn().addActionListener(new MoveActionListener(gfv, g.getBoard()));
-
-        gfv.getAttackBtn().addActionListener(new AttackActionListener());
-
-        gfv.getEndTurnBtn().addActionListener(new EndTurnActionListener(gfv, g.getBoard()));
-
-        for (JButton btn : gfv.getSummonButtons()) {
-            btn.addActionListener(new ClickSummonButtonActionListener(gfv, g.getBoard()));
-        }
+        // Add ActionListeners for moveBtn, attackBtn, endTurnBtn
+        gfv.getMoveBtn().addActionListener(new MoveBtnActionListener(gfv, g.getBoard()));
+        gfv.getAttackBtn().addActionListener(new AttackBtnActionListener(gfv, g.getBoard()));
+        gfv.getEndTurnBtn().addActionListener(new EndTurnBtnActionListener(gfv, g.getBoard()));
     }
 }
