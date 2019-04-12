@@ -1,21 +1,22 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Random;
 
-import controller.EndTurnActionListener;
-import controller.MoveActionListener;
+import controller.GameController;
 import view.GameFrameView;
 
 
-public class Game {
+public class Game{
 	ArrayList<Player> players = new ArrayList<>();
 	Royale royale;
 	Rebel rebel;
 	Player currPlayer;
 	boolean isRunning = false;
 	GameFrameView view;
-	
+	Board b;
+
 	public Game(GameFrameView view, ArrayList<String> playerName){
 		
 		this.view = view;
@@ -32,14 +33,12 @@ public class Game {
 		players.add(rebel);
 		players.add(royale);
 		
-		startGame();
-		
-        //MainGameLoop
+       /* //MainGameLoop
         Thread gameLoop = new Thread(new Runnable() {
             @Override
             public void run() {
                 while(isRunning) {
-                	
+
 
                 	if(rebel.getCP() <= 0) {
                 		//Game end
@@ -47,23 +46,31 @@ public class Game {
                 	else if(royale.getHp()<=0) {
                 		//Game end
                 	}
-                	
+
                 }
             }
         });
-        
-        gameLoop.start();
+
+        gameLoop.start();*/
 	}
 	
 	public void startGame() {
-		Board b = new Board();
+
+		// Initialise board
+		this.b = new Board();
 		
 		view.assembleBoard(rebel,royale, b);
-		view.moveAddActionL(new MoveActionListener(view, b));
-		view.endAddActionL(new EndTurnActionListener(view, b));
+		view.initSummonButtons();
+		view.moveAddActionL(new GameController());
+		view.endAddActionL(new GameController());
 		currPlayer = rebel;
 		isRunning = true;
 	}
-	
-	
+
+	public Board getBoard() {
+		return b;
+	}
+
+	public void init(String s) {
+	}
 }
