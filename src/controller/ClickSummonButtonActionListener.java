@@ -1,7 +1,7 @@
 package controller;
 
 import model.board.Board;
-import model.pieces.Pieces;
+import model.pieces.Piece;
 import view.GameFrameView;
 
 import javax.swing.*;
@@ -61,7 +61,18 @@ public class ClickSummonButtonActionListener implements ActionListener{
 				else if(!b.moved()){
 					gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
 					System.out.println(source.getName());
-					b.setSummonedPiece(new Pieces(name[i]));
+					try {
+						Class pieceCls = Class.forName("model.pieces." + name[i]);
+						Piece piece = (Piece) pieceCls.newInstance();
+						b.setSummonedPiece(piece);
+					} catch (ClassNotFoundException ex) {
+						ex.printStackTrace();
+					} catch (IllegalAccessException ex) {
+						ex.printStackTrace();
+					} catch (InstantiationException ex) {
+						ex.printStackTrace();
+					}
+
 					gfv.setImage(image[i]);
 				}
 			}
