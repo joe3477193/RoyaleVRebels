@@ -1,10 +1,12 @@
-package model;
+package model.players;
 
-public class Royale extends Player {
+import model.players.Player;
+
+public class RoyalePlayer extends Player {
 	
 	private int hp;
 	
-	public Royale(String name){
+	public RoyalePlayer(String name){
 		super(name, 40,40, "ROYALE");
 		hp= 100;
 	}

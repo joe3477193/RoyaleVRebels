@@ -10,11 +10,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-import model.*;
+import model.board.Board;
 import view.*;
 
 
-// Placing a piece on the board
+// Placing a pieces on the board
 public class ClickTileActionListener implements ActionListener{
 
 	private GameFrameView gfv;
@@ -46,16 +46,16 @@ public class ClickTileActionListener implements ActionListener{
 				if (e.getSource() == tileBtns[i][j]) {
 
 					// Click a brick wall
-					// How to check if it is empty click or click with a piece???
+					// How to check if it is empty click or click with a pieces???
 					if ((i % 5 <= 2) && j % 4 == 3) {
-						JOptionPane.showMessageDialog(gfv, "You cannot place a piece on a brick wall.");
+						JOptionPane.showMessageDialog(gfv, "You cannot place a pieces on a brick wall.");
 					}
 
-					// Attempt to place piece
+					// Attempt to place pieces
 					else {
 						tileBtn = tileBtns[i][j];
 
-						// Attempt to place a summoned piece
+						// Attempt to place a summoned pieces
 						if(board.getSummonedPiece()!=null && !board.moved()) {
 							if (board.placePiece(board.getSummonedPiece(), i, j)) {
 								tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getImage())));
@@ -66,12 +66,12 @@ public class ClickTileActionListener implements ActionListener{
 								//gfv.updateBar();
 							}
 							else {
-								JOptionPane.showMessageDialog(gfv, "Please place the piece on a valid tile,\n"
+								JOptionPane.showMessageDialog(gfv, "Please place the pieces on a valid tile,\n"
 										+ "The top three rows for Royales,\nThe bottom three rows for Rebels.");
 							}
 						}
 
-						// Attempt to place a piece after movement
+						// Attempt to place a pieces after movement
 						else if(board.isMoving() && !board.moved()) {
 							if(board.move(board.getInitTileCoord()[0],board.getInitTileCoord()[1] , i, j)) {
 								gfv.decolour();
@@ -89,7 +89,7 @@ public class ClickTileActionListener implements ActionListener{
 							}
 						}
 
-						// Attempt to pick a piece for movement
+						// Attempt to pick a pieces for movement
 						else if(board.checkInit(i, j)) {
 							gfv.setImage(tileBtn.getName());
 							System.out.println("TileButton Name: " + tileBtn.getName());

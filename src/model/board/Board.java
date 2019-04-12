@@ -1,4 +1,8 @@
-package model;
+package model.board;
+
+import model.pieces.Piece;
+import model.pieces.Pieces;
+import model.players.Player;
 
 import java.util.ArrayList;
 
@@ -10,7 +14,8 @@ public class Board {
 
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
-    
+
+    private ArrayList<Piece> pieces;
     private Piece summonedPiece;
 
     // Initialize current turn;
@@ -39,7 +44,6 @@ public class Board {
 
         // Initialize current turn;
         turn = 0;
-
     }
     
     public boolean isMoving() {
@@ -139,19 +143,19 @@ public class Board {
         return boardRows.get(row).getTile(tile);
     }
 
-    // Gets a piece from a tile
+    // Gets a pieces from a tile
     public Piece getPiece(int row, int tile){
         return getTile(row, tile).getPiece();
     }
 
-    public boolean checkSummon(Player player, Piece piece){
+    public boolean checkSummon(Player player, Pieces piece){
         if(player.getFaction().equals(piece.getFaction())){
             return true;
         }
         return false;
     }
 
-    //places a piece and returns true if successful
+    //places a pieces and returns true if successful
     public boolean placePiece(Piece piece, int row, int tile){
         boolean isRowValid;
         if(piece.getFaction().equals("Royale")){
@@ -170,27 +174,27 @@ public class Board {
         }
     }
 
-    // Check if piece has been initialized successfully in current tile
+    // Check if pieces has been initialized successfully in current tile
     public boolean checkInit(int row, int tile) {
         return getTile(row, tile).hasPiece();
     }
 
-    // Check if piece in current tile is moveable
+    // Check if pieces in current tile is moveable
     public boolean checkMoveInit(int row, int tile) {
         return checkInit(row, tile) && getTile(row, tile).getPiece().isMoveable();
     }
 
-    // Check if piece in current tile is attackable
+    // Check if pieces in current tile is attackable
     public boolean checkAttackInit(int row, int tile) {
         return getTile(row, tile).getPiece().isAttackable();
     }
 
-    // Check if piece can move from current tile to target tile
+    // Check if pieces can move from current tile to target tile
     public boolean checkMoveTarget(int row, int tile) {
         return !getTile(row, tile).hasPiece();
     }
 
-    // Check if piece can attack target from current tile
+    // Check if pieces can attack target from current tile
     public boolean checkAttackTarget(Piece piece, int tgRow, int tgTile) {
         Tile space = getTile(tgRow, tgTile);
         if (space.hasPiece() && !space.getPiece().getFaction().equals(piece.getFaction())) {
@@ -202,7 +206,7 @@ public class Board {
     private boolean isMovRangeValid(int inRow, int inTile, int tgRow, int tgTile, String type){
         int rowDiff= abs(inRow-tgRow);
         int tileDiff= abs(inTile-tgTile);
-        Piece piece= getPiece(inRow, inTile);
+        Piece piece = getPiece(inRow, inTile);
         if(type.equals("mov")){
             return piece.getMov()>=rowDiff && piece.getMov()>=tileDiff;
         }
@@ -212,7 +216,7 @@ public class Board {
         return false;
     }
 
-    // Check if piece moved from current tile to target tile
+    // Check if pieces moved from current tile to target tile
     public boolean move(int inRow, int inTile, int tgRow, int tgTile) {
         if (checkMoveTarget(tgRow,tgTile) && isMovRangeValid(inRow,inTile,tgRow,tgTile,"mov")) {
                 getTile(tgRow,tgTile).setPiece(getPiece(inRow,inTile));
@@ -223,7 +227,7 @@ public class Board {
         }
 
 
-    // Check if piece attacked target piece
+    // Check if pieces attacked target pieces
     public boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
         if (checkAttackTarget(getPiece(inRow,inTile),tgRow,tgTile) &&
                 isMovRangeValid(inRow,inTile,tgRow,tgTile,"attack")){

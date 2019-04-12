@@ -1,4 +1,7 @@
-package model;
+package model.board;
+
+import model.pieces.Piece;
+import model.pieces.Pieces;
 
 public class Tile {
 

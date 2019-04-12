@@ -1,7 +1,7 @@
 package controller;
 
-import model.Board;
-import model.Piece;
+import model.board.Board;
+import model.pieces.Pieces;
 import view.GameFrameView;
 
 import javax.swing.*;
@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-// Clicking on a piece to summon
+// Clicking on a pieces to summon
 public class ClickSummonButtonActionListener implements ActionListener{
 
 	private GameFrameView gfv;
@@ -49,19 +49,19 @@ public class ClickSummonButtonActionListener implements ActionListener{
 			if(source == button[i]) {
 				Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
 
-				// Click on the same piece on the deck
+				// Click on the same pieces on the deck
 				if(gfv.getFrame().getCursor().getName().equals(name[i])) {
 					gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					b.removeSummonedPiece();
 					gfv.removeImage();
 				}
 
-				// Click on a different piece on the deck
+				// Click on a different pieces on the deck
 				// else if(!b.getAction()) ???
 				else if(!b.moved()){
 					gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
 					System.out.println(source.getName());
-					b.setSummonedPiece(new Piece(name[i]));
+					b.setSummonedPiece(new Pieces(name[i]));
 					gfv.setImage(image[i]);
 				}
 			}

@@ -1,7 +1,7 @@
 package view;
 
-import model.Board;
-import model.Player;
+import model.board.Board;
+import model.players.Player;
 
 import javax.swing.*;
 import java.awt.*;

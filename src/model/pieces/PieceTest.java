@@ -1,7 +1,8 @@
-package model;
+package model.pieces;
 
-import model.Piece.Type;
-import model.Piece.Unit;
+import model.pieces.Pieces;
+import model.pieces.Pieces.Type;
+import model.pieces.Pieces.Unit;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,14 +11,14 @@ import static org.junit.Assert.assertEquals;
 public class PieceTest {
 
     Unit u1 = Unit.GENERAL;
-    Piece c1 = new Piece(u1);
+    Pieces c1 = new Pieces(u1);
 
     @Before
     public void setUp() throws Exception {
 
     }
 
-    // test if the piece has been initialized as expected
+    // test if the pieces has been initialized as expected
     @Test
     public void testMove1() {
         assertEquals(c1.getAttack(), u1.attack);

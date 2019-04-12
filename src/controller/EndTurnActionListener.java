@@ -4,7 +4,7 @@ import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import model.Board;
+import model.board.Board;
 import view.GameFrameView;
 
 public class EndTurnActionListener implements ActionListener {
