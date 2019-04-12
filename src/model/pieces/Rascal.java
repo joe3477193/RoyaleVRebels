@@ -3,7 +3,7 @@ package model.pieces;
 import model.interfaces.Troop;
 
 public class Rascal extends Rebel implements Troop {
-    Rascal() {
+    public Rascal() {
         code = "RC";
         typeOf = type;
         cp = 3;

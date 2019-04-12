@@ -3,7 +3,7 @@ package model.pieces;
 import model.interfaces.Artillery;
 
 public class Balista extends Royale implements Artillery {
-    Balista() {
+    public Balista() {
         code = "BA";
         typeOf = type;
         cp = 8;

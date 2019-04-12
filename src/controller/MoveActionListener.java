@@ -34,8 +34,8 @@ public class MoveActionListener implements ActionListener{
 			gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 		else if(board.hasCoordinates() && board.checkMoveInit(board.getCoordinate()[0], board.getCoordinate()[1]) && !board.moved() ) {
-			if((board.getTurn() == 0 && board.getPiece(board.getCoordinate()[0], board.getCoordinate()[1]).getFaction().equals("RebelPlayer")) ||
-					board.getTurn() == 1 && board.getPiece(board.getCoordinate()[0], board.getCoordinate()[1]).getFaction().equals("RoyalePlayer")) {
+			if((board.getTurn() == 0 && board.getPiece(board.getCoordinate()[0], board.getCoordinate()[1]).getFaction().equals("Rebel")) ||
+					board.getTurn() == 1 && board.getPiece(board.getCoordinate()[0], board.getCoordinate()[1]).getFaction().equals("Royale")) {
 				board.setMoving();
 				board.setInit(board.getCoordinate()[0], board.getCoordinate()[1]);
 				Image icon = new ImageIcon(this.getClass().getResource(gfv.getImage())).getImage();

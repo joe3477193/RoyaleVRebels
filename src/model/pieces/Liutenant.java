@@ -3,7 +3,7 @@ package model.pieces;
 import model.interfaces.Troop;
 
 public class Liutenant extends Royale implements Troop {
-    Liutenant() {
+    public Liutenant() {
         code = "LT";
         typeOf = type;
         cp = 3;

@@ -3,7 +3,7 @@ package model.pieces;
 import model.interfaces.Troop;
 
 public class Mobster extends Rebel implements Troop {
-    Mobster() {
+    public Mobster() {
         code = "MB";
         typeOf = type;
         cp = 1;
