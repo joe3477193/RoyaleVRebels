@@ -35,9 +35,7 @@ public class GameController{
         gfv.getAttackBtn().addActionListener(new AttackActionListener());
 
         gfv.getEndTurnBtn().addActionListener(new EndTurnActionListener(gfv, g.getBoard()));
-    }
 
-    public void addDeckActionListeners() {
         for (JButton btn : gfv.getSummonButtons()) {
             btn.addActionListener(new ClickSummonButtonActionListener(gfv, g.getBoard()));
         }

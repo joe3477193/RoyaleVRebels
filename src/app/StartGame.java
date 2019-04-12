@@ -25,7 +25,6 @@ public class StartGame {
             gameController.initGame();
 
             // Add ActionListeners for pieces on deck
-            gameController.addDeckActionListeners();
 
             // Add ActionListeners for View
             gameController.addActionListeners();

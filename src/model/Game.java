@@ -65,7 +65,6 @@ public class Game{
 		this.b = new Board();
 
 		gfv.assembleBoard(rebel,royale, b);
-		gfv.initSummonButtons();
 
 		// RebelPlayer goes first
 		currPlayer = rebel;

@@ -25,7 +25,5 @@ public class EndTurnActionListener implements ActionListener {
 		b.cycleTurn();
 		b.setMoved(false);
 		gfv.updateBar(b.getTurn());
-
-		new GameController().addDeckActionListeners();
 	}
 }

@@ -5,6 +5,7 @@ import model.players.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GameFrameView extends JFrame{
 
@@ -66,7 +67,7 @@ public class GameFrameView extends JFrame{
 	private String currentImage;
 
 	private JButton lastTile;
-	private JButton[] summonButtons;
+	private ArrayList<JButton> summonButtons;
 
 
 	public GameFrameView() {
@@ -90,6 +91,7 @@ public class GameFrameView extends JFrame{
 		royaleImage = new String[] {RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
 				RO_SIX_IMAGE
 		};
+		summonButtons= new ArrayList<JButton>();
 	}
 
 	private JButton[] createSpawn(String[] name, String[] image) {
@@ -97,6 +99,7 @@ public class GameFrameView extends JFrame{
 		for(int i=0;i<BUTTON_LENGTH;i++) {
 			button[i]= new JButton(new ImageIcon(this.getClass().getResource(image[i])));
 			button[i].setName(name[i]);
+			summonButtons.add(button[i]);
 		}
 		return button;
 	}
@@ -227,7 +230,6 @@ public class GameFrameView extends JFrame{
 		if(turn==0) {
 			removeSpawn(royaleButton);
 			loadSpawn(rebelButton);
-			summonButtons = rebelButton;
 			playerName.setText(nameOne);
 			playerType.setText(typeOne);
 		}
@@ -235,7 +237,6 @@ public class GameFrameView extends JFrame{
 			System.out.println(rebelButton[2]);
 			removeSpawn(rebelButton);
 			loadSpawn(royaleButton);
-			summonButtons = royaleButton;
 			playerName.setText(nameTwo);
 			playerType.setText(typeTwo);
 		}		
@@ -291,12 +292,8 @@ public class GameFrameView extends JFrame{
 		return GRASS_IMAGE;
 	}
 
-	public JButton[] getSummonButtons() {
+	public ArrayList<JButton> getSummonButtons() {
 		return summonButtons;
-	}
-
-	public void initSummonButtons() {
-		summonButtons = getRebelButton();
 	}
 }
 
