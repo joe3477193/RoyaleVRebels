@@ -1,11 +1,11 @@
 package model;
 
+import controller.GameController;
+import view.GameFrameView;
+
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
-
-import controller.GameController;
-import view.GameFrameView;
 
 
 public class Game{
@@ -17,19 +17,22 @@ public class Game{
 	GameFrameView view;
 	Board b;
 
-	public Game(GameFrameView view, ArrayList<String> playerName){
+	public Game(GameFrameView view, ArrayList<String> playerNames){
 		
 		this.view = view;
 		Random r = new Random();
-		int t = r.nextInt(2);
-		if(t==0) {
-			royale = new Royale(playerName.get(t));
-			rebel =  new Rebel(playerName.get(t+1));
+		int turn = r.nextInt(playerNames.size());
+
+		// Randomly assign team for players
+		if(turn == 0) {
+			royale = new Royale(playerNames.get(turn));
+			rebel =  new Rebel(playerNames.get(turn + 1));
 		}
 		else {
-			royale = new Royale(playerName.get(t));
-			rebel =  new Rebel(playerName.get(t-1));
+			royale = new Royale(playerNames.get(turn));
+			rebel =  new Rebel(playerNames.get(turn - 1));
 		}
+
 		players.add(rebel);
 		players.add(royale);
 		
@@ -54,23 +57,20 @@ public class Game{
         gameLoop.start();*/
 	}
 	
-	public void startGame() {
+	public void initGame() {
 
 		// Initialise board
 		this.b = new Board();
-		
+
 		view.assembleBoard(rebel,royale, b);
 		view.initSummonButtons();
-		view.moveAddActionL(new GameController());
-		view.endAddActionL(new GameController());
+
+		// Rebel goes first
 		currPlayer = rebel;
 		isRunning = true;
 	}
 
 	public Board getBoard() {
 		return b;
-	}
-
-	public void init(String s) {
 	}
 }

@@ -115,6 +115,7 @@ public class Board {
             if (turn == turns[i]) {
                 if (turns[i] != turns[turns.length - 1]) {
                     turn = turns[i + 1];
+                    return;
                 } else {
                     turn = turns[0];
                 }

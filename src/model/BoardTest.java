@@ -1,13 +1,12 @@
 package model;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
+import model.Piece.Unit;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Piece.Unit;
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 public class BoardTest {
 

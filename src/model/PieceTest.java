@@ -1,12 +1,11 @@
 package model;
 
-import static org.junit.Assert.*;
-
+import model.Piece.Type;
+import model.Piece.Unit;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Piece.Type;
-import model.Piece.Unit;
+import static org.junit.Assert.assertEquals;
 
 public class PieceTest {
 
