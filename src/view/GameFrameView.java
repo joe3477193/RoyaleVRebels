@@ -155,7 +155,7 @@ public class GameFrameView extends JFrame{
 
 		deckPanel.setMaximumSize(new Dimension(100, 100));
 
-		frame.setSize(925, 600);
+		frame.setSize(1000, 750);
 		frame.setLocationRelativeTo(null); // show gui in the middle of screen
 
 		rebelButton = createSpawn(rebelName, rebelImage);
