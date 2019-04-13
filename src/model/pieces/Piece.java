@@ -2,6 +2,7 @@ package model.pieces;
 
 public abstract class Piece {
 
+    String name;
     private String faction;
     private String type;
     private String code;
@@ -14,8 +15,9 @@ public abstract class Piece {
     private boolean moveable;
     private boolean attackable;
 
-    public Piece(String faction, String type, String code, int cp, int initHp, int attack, int mov, int range,
+    public Piece(String name, String faction, String type, String code, int cp, int initHp, int attack, int mov, int range,
                  boolean moveable, boolean attackable) {
+        this.name= name;
         this.faction= faction;
         this.type= type;
         this.code= code;
@@ -37,8 +39,10 @@ public abstract class Piece {
     }
 
     public void attackedBy(int attack) {
-
         hp-=attack;
+        if (hp <= 0) {
+            hp=0;
+        }
     }
 
     public String getFaction() {
@@ -67,6 +71,10 @@ public abstract class Piece {
 
     public int getHp() {
         return hp;
+    }
+
+    public  String getName(){
+        return name;
     }
 
     public boolean isMoveValid(int difference, String movType) {

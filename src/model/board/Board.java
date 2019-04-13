@@ -27,6 +27,7 @@ public class Board {
     private int[] coordinate;
     private int[] initTileCoord;
     private boolean isMoving;
+    private boolean isAttacking;
     private boolean hasMoved;
 
 
@@ -54,25 +55,93 @@ public class Board {
         return isMoving;
     }
 
-    public void resetMoving() {
-        isMoving = false;
-        //gfv.getStatusLabel().setText(gfv.STATUS + "Movement cancelled.");
-        gfv.decolour();
-        gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    public boolean isAttacking() {
+        return isAttacking;
     }
 
-    public void setMoving() {
+    public void resetAttacking() {
+        isAttacking = false;
+        gfv.decolour();
+        depaintMove();
+    }
+
+    public void setAttacking() {
         if (isFactionMatched(coordinate[0], coordinate[1])) {
-            isMoving= true;
+            isAttacking = true;
             setInit(coordinate[0], coordinate[1]);
-            System.out.println(gfv.getImage());
-            Image icon = new ImageIcon(this.getClass().getResource("../"+gfv.getImage())).getImage();
+            Image icon = new ImageIcon(this.getClass().getResource("../../images/target.png")).getImage();
             gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), "name"));
+
+            int range = getPiece(coordinate[0], coordinate[1]).getRange();
+            int row = coordinate[0];
+            int col = coordinate[1];
+            paintMove(row, col, range);
+
         }
 
         // Attempt to move opposite player's piece
         else {
+
+            {
+                gfv.getStatusLabel().setText(gfv.STATUS + "You cannot move your opponent's pieces.");
+            }
+
+        }
+    }
+
+    public void resetMoving() {
+        isMoving = false;
+        //gfv.getStatusLabel().setText(gfv.STATUS + "Movement cancelled.");
+        gfv.decolour();
+        depaintMove();
+    }
+
+    public void setMoving() {
+        if (isFactionMatched(coordinate[0], coordinate[1])) {
+            isMoving = true;
+            setInit(coordinate[0], coordinate[1]);
+            Image icon = new ImageIcon(this.getClass().getResource("../" + gfv.getImage())).getImage();
+            gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), "name"));
+
+            int mov = getPiece(coordinate[0], coordinate[1]).getMov();
+            int row = coordinate[0];
+            int col = coordinate[1];
+            paintMove(row, col, mov);
+        }
+
+
+        // Attempt to move opposite player's piece
+        else {
             gfv.getStatusLabel().setText(gfv.STATUS + "You cannot move your opponent's pieces.");
+        }
+    }
+
+    private void paintMove(int row, int col, int radius) {
+        for (int i = -radius; i <= radius; i++) {
+            for (int j = -radius; j <= radius; j++) {
+                if (checkMoveRepaint(row + i, col + j) && abs(i) + abs(j) <= radius) {
+                    gfv.colourTile(row + i, col + j);
+                }
+            }
+        }
+    }
+
+    private void depaintMove() {
+        JButton[][] tileBtns = gfv.getTileBtns();
+        for (int i = 0; i < BOARD_ROWS; i++) {
+            for (int j = 0; j < BOARD_COLS; j++) {
+                if (!isWall(i, j) && !getTile(i, j).hasPiece()) {
+                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../../images/grass.png")));
+                }
+            }
+        }
+    }
+
+    private boolean checkMoveRepaint(int i, int j) {
+        try {
+            return !isWall(i, j) && !getTile(i, j).hasPiece();
+        } catch (RuntimeException e) {
+            return true;
         }
     }
 
@@ -93,6 +162,9 @@ public class Board {
         gfv.updateBar(turn);
         gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         gfv.getStatusLabel().setText(gfv.STATUS + "");
+        depaintMove();
+        resetAttacking();
+        resetMoving();
     }
 
     public int[] getCoordinates() {
@@ -103,24 +175,25 @@ public class Board {
         coordinate[0] = i;
         coordinate[1] = j;
         System.out.println("TileButton Name: " + tileBtn.getName());
-        boolean match= isFactionMatched(i, j);
-        if(match && !hasMoved){
+        boolean match = isFactionMatched(i, j);
+        if (match && !hasMoved) {
             gfv.setImage(tileBtn.getName());
             gfv.colourTile(tileBtn);
             if (checkMoveInit(i, j)) {
                 gfv.colourMove();
-            }
-            else{
+            } else {
                 gfv.colourRedMove();
             }
-            if(checkAttackInit(i, j)){
+            if (checkAttackInit(i, j)) {
                 gfv.colourAttack();
-            }
-            else{
+            } else {
                 gfv.colourRedAttack();
             }
         }
-        else{
+        else if(hasMoved){
+            gfv.decolour();
+        }
+        else {
             gfv.colourRed(tileBtn);
         }
     }
@@ -134,9 +207,9 @@ public class Board {
         return coordinate != null;
     }
 
-    private boolean isFactionMatched(int i, int j){
-        return turn == 0 && getPiece(i,j).getFaction().equals("Rebel") ||
-                turn==1 && getPiece(i, j).getFaction().equals("Royale");
+    private boolean isFactionMatched(int i, int j) {
+        return turn == 0 && getPiece(i, j).getFaction().equals("Rebel") ||
+                turn == 1 && getPiece(i, j).getFaction().equals("Royale");
     }
 
     public int[] getInitTileCoord() {
@@ -205,24 +278,27 @@ public class Board {
     }
 
     // Check if pieces in current tile is attackable
-    boolean checkAttackInit(int row, int tile) {
-        return getTile(row, tile).getPiece().isAttackable();
+    public boolean checkAttackInit(int row, int tile) {
+        return checkInit(row, tile) && getTile(row, tile).getPiece().isAttackable();
     }
 
     // Check if pieces can move from current tile to target tile
-    boolean checkMoveTarget(int row, int tile) {
+    public boolean checkMoveTarget(int row, int tile) {
         return !getTile(row, tile).hasPiece();
     }
 
     // Check if pieces can attack target from current tile
-    boolean checkAttackTarget(Piece piece, int tgRow, int tgTile) {
+    public boolean checkAttackTarget(Piece piece, int tgRow, int tgTile) {
         Tile space = getTile(tgRow, tgTile);
-        return space.hasPiece() && !space.getPiece().getFaction().equals(piece.getFaction());
+        String inFaction= piece.getFaction();
+        String outFaction= space.getPiece().getFaction();
+        return space.hasPiece() && !(inFaction.equals(outFaction));
     }
 
     private boolean isMovRangeValid(int inRow, int inTile, int tgRow, int tgTile, String type) {
         int rowDiff = abs(inRow - tgRow);
         int tileDiff = abs(inTile - tgTile);
+
         Piece piece = getPiece(inRow, inTile);
         return piece.isMoveValid(rowDiff + tileDiff, type);
     }
@@ -240,12 +316,9 @@ public class Board {
 
     // Check if pieces hasAttacked target pieces
     public boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
-        if (checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) &&
-                isMovRangeValid(inRow, inTile, tgRow, tgTile, "attack")) {
+        if (checkInit(tgRow, tgTile) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) &&
+                isMovRangeValid(inRow, inTile, tgRow, tgTile, "range")) {
             getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttack());
-            if (getPiece(tgRow, tgTile).isDead()) {
-                getTile(tgRow, tgTile).removePiece();
-            }
             return true;
         }
         return false;
@@ -280,11 +353,10 @@ public class Board {
 
     public void placeSummonedPiece(JButton tileBtn, int i, int j) {
         if (checkSummonValid(getSummonedPiece(), i, j)) {
-            tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../"+gfv.getImage())));
+            tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
             tileBtn.setName(gfv.getImage());
             removeSummonedPiece();
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
-            System.out.println("Place here");
             setMoved();
         } else {
             gfv.getStatusLabel().setText(gfv.STATUS + "Please place the pieces on a valid tile,\n"
@@ -297,10 +369,10 @@ public class Board {
         if (move(getInitTileCoord()[0], getInitTileCoord()[1], i, j)) {
             gfv.decolour();
             System.out.println("Image= " + gfv.getImage());
-            tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../"+gfv.getImage())));
+            tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
             tileBtns[getInitTileCoord()[0]][getInitTileCoord()[1]].setIcon(new ImageIcon(
-                    this.getClass().getResource("../"+gfv.getGrass())));
-            isMoving= false;
+                    this.getClass().getResource("../" + gfv.getGrass())));
+            resetMoving();
             setMoved();
             tileBtn.setName(gfv.getImage());
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
@@ -311,6 +383,28 @@ public class Board {
 
     public boolean isWall(int i, int j) {
         return i % 5 <= 2 && j % 4 == 3;
+    }
+
+    public void placeAttackPiece(int i, int j){
+        JButton tileBtns[][] = gfv.getTileBtns();
+        if (attack(getInitTileCoord()[0], getInitTileCoord()[1], i, j)) {
+            Piece piece= getPiece(getInitTileCoord()[0], getInitTileCoord()[1]);
+            String message;
+            message= String.format("%d damage dealt! Remaining HP: %d", piece.getAttack(),
+            getPiece(i,j).getHp());
+            if(getPiece(i,j).isDead()){
+                message+=String.format(", %s is dead!", getPiece(i,j).getName());
+                getTile(i,j).removePiece();
+                tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../../images/grass.png")));
+            }
+            gfv.decolour();
+            resetAttacking();
+            setMoved();
+            gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
+            gfv.getStatusLabel().setText(gfv.STATUS + message);
+        } else {
+            gfv.getStatusLabel().setText(gfv.STATUS + "Tile not valid, press the move button again to cancel.");
+        }
     }
 
 }

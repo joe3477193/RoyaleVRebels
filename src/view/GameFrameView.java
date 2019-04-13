@@ -237,6 +237,14 @@ public class GameFrameView extends JFrame{
 		lastTile= tile;
 	}
 
+	public void colourTile(int i, int j){
+		try{
+			tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../images/move.jpg")));
+		}
+		catch(ArrayIndexOutOfBoundsException e){
+		}
+	}
+
 	public void colourRedTile(JButton tile){
 		tile.setBackground(Color.red);
 		lastTile= tile;

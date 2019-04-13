@@ -65,9 +65,9 @@ public class GameController {
         for (int i = 0; i < button.length; i++) {
             if (source == button[i]) {
                 Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
-
                 // Click on the same pieces on the deck
                 if (gfv.getFrame().getCursor().getName().equals(name[i])) {
+
                     gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     b.removeSummonedPiece();
                     gfv.removeImage();
@@ -77,7 +77,6 @@ public class GameController {
                 // else if(!b.getAction()) ???
                 else if (!b.hasMoved()) {
                     gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
-                    System.out.println(source.getName());
                     b.createPiece(name[i]);
                     gfv.setImage(image[i]);
                 }
@@ -91,7 +90,7 @@ public class GameController {
         JButton tileBtn;
 
         // Default Cursor
-        if (!b.isMoving()) {
+        if (!b.isMoving() && !b.isAttacking()) {
             gfv.decolour();
         }
         b.resetCoordinates();
@@ -103,7 +102,7 @@ public class GameController {
                     // Click a brick wall
                     // How to check if it is empty click or click with a pieces???
                     if (b.isWall(i, j)) {
-                        gfv.getStatusLabel().setText(gfv.STATUS + "You cannot place a pieces on a brick wall.");
+                        gfv.getStatusLabel().setText(gfv.STATUS + "You cannot place a piece on a brick wall.");
                     }
 
                     // Attempt to place pieces
@@ -113,15 +112,16 @@ public class GameController {
                         if (b.getSummonedPiece() != null && !b.hasMoved()) {
                             b.placeSummonedPiece(tileBtn, i, j);
                         }
-
                         // Attempt to place a pieces after movement
                         else if (b.isMoving() && !b.hasMoved()) {
-                           b.placeMovedPiece(tileBtns, i, j);
+                            b.placeMovedPiece(tileBtns, i, j);
                         }
-
+                        else if(b.isAttacking() && !b.hasMoved()){
+                            b.placeAttackPiece(i,j);
+                        }
                         // Attempt to pick a pieces for movement
                         else if (b.checkInit(i, j)) {
-                            b.clickTile(tileBtn,i, j);
+                            b.clickTile(tileBtn, i, j);
                         }
                     }
                 }
@@ -133,10 +133,12 @@ public class GameController {
         // Cancel movement (click move button twice)
         if (b.isMoving() && !b.hasMoved()) {
             b.resetMoving();
+            gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
         // Trigger movement for a piece
         else if (b.hasCoordinates() && b.checkMoveInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.hasMoved()) {
+            b.resetAttacking();
             b.setMoving();
         }
 
@@ -153,7 +155,24 @@ public class GameController {
     }
 
     public void attack(ActionEvent e) {
-        b.getCoordinates();
-        gfv.getFrame().getCursor();
+        // Cancel movement (click move button twice)
+        if (b.isAttacking() && !b.hasMoved()) {
+            b.resetAttacking();
+            gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+
+        // Trigger movement for a piece
+        else if (b.hasCoordinates() && b.checkAttackInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.hasMoved()) {
+            b.resetMoving();
+            b.setAttacking();
+        }
+
+        // Player has hasMoved already
+        else if (b.hasMoved()) {
+            gfv.getStatusLabel().setText(gfv.STATUS + "You have already moved a piece this turn.");
+        } else {
+            gfv.getStatusLabel().setText(gfv.STATUS + "You have not chosen a valid tile.");
+        }
     }
 }
+
