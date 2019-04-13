@@ -170,8 +170,8 @@ public class GameFrameView extends JFrame{
 		topPanel.add(playerPanel, BorderLayout.NORTH);
 		topPanel.add(deckPanel, BorderLayout.CENTER);
 
-		botPanel.add(actionPanel, BorderLayout.NORTH);
-		botPanel.add(statusPanel, BorderLayout.SOUTH);
+		botPanel.add(actionPanel, BorderLayout.SOUTH);
+		botPanel.add(statusPanel, BorderLayout.NORTH);
 
 
 		frame.revalidate();
