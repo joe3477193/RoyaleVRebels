@@ -31,7 +31,7 @@ public class MoveBtnActionListener implements ActionListener{
 		// Cancel movement (click move button twice)
 		if(b.isMoving() && !b.getMoved()) {
 			b.doneMoving();
-			JOptionPane.showMessageDialog(gfv, "Movement cancelled.");
+			gfv.getMsgLabel().setText("Movement cancelled.");
 			gfv.decolour();
 			gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
@@ -48,17 +48,17 @@ public class MoveBtnActionListener implements ActionListener{
 
 			// Attempt to move opposite player's piece
 			else {
-				JOptionPane.showMessageDialog(gfv, "You cannot move your opponent's pieces.");
+				gfv.getMsgLabel().setText("You cannot move your opponent's pieces.");
 			}
 		}
 
 		// Player has getMoved already
 		else if(b.getMoved()) {
-			JOptionPane.showMessageDialog(gfv, "You have already moved a piece this turn.");
+			gfv.getMsgLabel().setText("You have already moved a piece this turn.");
 		}
 
 		else  {
-			JOptionPane.showMessageDialog(gfv, "You have not chosen a valid tile.");
+			gfv.getMsgLabel().setText("You have not chosen a valid tile.");
 		}
 	}
 }
