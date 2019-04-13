@@ -10,11 +10,10 @@ import java.util.ArrayList;
 public class GameFrameView extends JFrame{
 
 	private JFrame frame;
-	private JPanel actionPanel;
+	private JPanel bottomPanel;
 	private JPanel gridPanel;
-	private JPanel playerPanel;
+	private JPanel statsPanel;
 	private JPanel deckPanel;
-
 	private JLabel healthLabel;
 	private JLabel combatPlabel;
 	private JLabel playerName, playerType;
@@ -70,11 +69,6 @@ public class GameFrameView extends JFrame{
 	private JButton lastTile;
 	private ArrayList<JButton> summonBtns;
 
-	public JLabel getMsgLabel() {
-		return msgLabel;
-	}
-
-	private JLabel msgLabel;
 
 	public GameFrameView() {
 
@@ -98,8 +92,7 @@ public class GameFrameView extends JFrame{
 		royaleImage = new String[] {RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
 				RO_SIX_IMAGE
 		};
-		summonBtns = new ArrayList<>();
-		msgLabel = new JLabel("All good!");
+		summonBtns = new ArrayList<JButton>();
 	}
 
 	private JButton[] createSpawn(String[] name, String[] image) {
@@ -132,29 +125,22 @@ public class GameFrameView extends JFrame{
 		nameTwo= playerTwo.getName();
 		typeTwo= playerTwo.getFaction();
 		
-		playerPanel = new JPanel(new GridLayout(1, 6, 0, 0));
+		statsPanel = new JPanel(new GridLayout(1, 6, 0, 0));
 		deckPanel = new JPanel(new GridLayout(1, 5, 0, 0));
 		gridPanel = new JPanel(new GridLayout(b.getRows(), b.getCols(), 0, 1));
-		actionPanel = new JPanel(new GridLayout(1, 2));
-		JPanel statusPanel = new JPanel(new GridLayout(1, 2));
-
-		JLabel statusLabel = new JLabel("Game status: ");
-
-
-		statusPanel.add(statusLabel);
-		statusPanel.add(msgLabel);
+		bottomPanel = new JPanel(new GridLayout(1, 2));
 
 		playerName = new JLabel(playerOne.getName());
-		playerPanel.add(new JLabel("Player Name: "));
-		playerPanel.add(playerName);
+		statsPanel.add(new JLabel("Player Name: "));
+		statsPanel.add(playerName);
 
 		playerType = new JLabel(playerOne.getFaction());
-		playerPanel.add(new JLabel("Player Type: "));
-		playerPanel.add(playerType);
+		statsPanel.add(new JLabel("Player Type: "));
+		statsPanel.add(playerType);
 
 		/*healthLabel = new JLabel(Integer.toString(playerOne.()));
-    	playerPanel.add(new JLabel("HP: "));
-        playerPanel.add(healthLabel);*/
+    	statsPanel.add(new JLabel("HP: "));
+        statsPanel.add(healthLabel);*/
 
 		tileBtns = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
 
@@ -168,33 +154,28 @@ public class GameFrameView extends JFrame{
 		drawActionBtns();
 
 		JPanel topPanel = new JPanel(new BorderLayout());
-		JPanel botPanel = new JPanel(new BorderLayout());
-		topPanel.add(playerPanel, BorderLayout.NORTH);
+		topPanel.add(statsPanel, BorderLayout.NORTH);
 		topPanel.add(deckPanel, BorderLayout.CENTER);
-
-		botPanel.add(actionPanel, BorderLayout.NORTH);
-		botPanel.add(statusPanel, BorderLayout.SOUTH);
-
 
 		frame.revalidate();
 		frame.repaint();
 
 		frame.add(topPanel, BorderLayout.NORTH);
 		frame.add(gridPanel, BorderLayout.CENTER);
-		frame.add(botPanel, BorderLayout.SOUTH);
+		frame.add(bottomPanel, BorderLayout.SOUTH);
 	}
 
 
 	private void drawActionBtns() {
 		moveBtn = new JButton("Move");
-		actionPanel.add(moveBtn);
+		bottomPanel.add(moveBtn);
 		
 		attackBtn = new JButton("Attack");
 		
-		actionPanel.add(attackBtn);
+		bottomPanel.add(attackBtn);
 		endTurnBtn = new JButton("End Turn");
 		
-		actionPanel.add(endTurnBtn);
+		bottomPanel.add(endTurnBtn);
 		
 	}
 
@@ -258,7 +239,7 @@ public class GameFrameView extends JFrame{
 			playerName.setText(nameTwo);
 			playerType.setText(typeTwo);
 		}		
-		playerPanel.repaint();
+		statsPanel.repaint();
 		deckPanel.repaint();
 	}
 
