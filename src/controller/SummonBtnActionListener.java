@@ -62,7 +62,7 @@ public class SummonBtnActionListener implements ActionListener{
 					gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
 					System.out.println(source.getName());
 					try {
-						Class pieceCls = Class.forName("model.pieces." + name[i]);
+						Class pieceCls = Class.forName("model.pieces.type." + name[i]);
 						Piece piece = (Piece) pieceCls.newInstance();
 						b.setSummonedPiece(piece);
 					} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {

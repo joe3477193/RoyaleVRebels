@@ -1,7 +1,7 @@
 package model.board;
 
-import model.pieces.Catapult;
-import model.pieces.General;
+import model.pieces.type.Catapult;
+import model.pieces.type.General;
 import model.pieces.Piece;
 import model.players.Player;
 import model.players.RebelPlayer;

@@ -1,4 +1,4 @@
-package model.interfaces;
+package model.pieces.typeInterface;
 
 public interface Troop {
     String type = "Troop";

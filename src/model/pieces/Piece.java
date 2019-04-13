@@ -2,19 +2,31 @@ package model.pieces;
 
 public abstract class Piece {
 
-    String faction;
-    String typeOf;
-    String code;
-    int cp;
-    int initHp;
-    int hp;
-    int attack;
-    int mov;
-    int range;
-    boolean moveableOf;
-    boolean attackableOf;
+    private String faction;
+    private String type;
+    private String code;
+    private int cp;
+    private int initHp;
+    private int hp;
+    private int attack;
+    private int mov;
+    private int range;
+    private boolean moveable;
+    private boolean attackable;
 
-    Piece() {
+    public Piece(String faction, String type, String code, int cp, int initHp, int attack, int mov, int range,
+                 boolean moveable, boolean attackable) {
+        this.faction= faction;
+        this.type= type;
+        this.code= code;
+        this.cp= cp;
+        this.initHp= initHp;
+        this.hp= initHp;
+        this.attack= attack;
+        this.mov= mov;
+        this.range= range;
+        this.moveable= moveable;
+        this.attackable= attackable;
     }
 
     public boolean isDead() {
@@ -25,6 +37,7 @@ public abstract class Piece {
     }
 
     public void attackedBy(int attack) {
+
         hp-=attack;
     }
 
@@ -33,11 +46,11 @@ public abstract class Piece {
     }
 
     public boolean isMoveable() {
-        return moveableOf;
+        return moveable;
     }
 
     public boolean isAttackable() {
-        return attackableOf;
+        return attackable;
     }
 
     public int getMov() {
