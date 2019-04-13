@@ -58,6 +58,7 @@ public class GameFrameView extends JFrame{
 	private static final String RE_FIVE_IMAGE      = "../images/rin.png";
 	private static final String RE_SIX_IMAGE      = "../images/saber.png";
 
+	public static final String STATUS = "Game status:  ";
 	private JButton[] rebelButton;
 	private String[] rebelName;
 	private String[] rebelImage;
@@ -70,17 +71,17 @@ public class GameFrameView extends JFrame{
 	private JButton lastTile;
 	private ArrayList<JButton> summonBtns;
 
-	public JLabel getMsgLabel() {
-		return msgLabel;
-	}
+	JLabel statusLabel;
 
-	private JLabel msgLabel;
+	public JLabel getStatusLabel() {
+		return statusLabel;
+	}
 
 	public GameFrameView() {
 
 		frame = new JFrame("Royals vs Rebels");
 		frame.setResizable(false);
-		frame.setLocationRelativeTo(null); // show gui in the middle of screen
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
@@ -98,7 +99,7 @@ public class GameFrameView extends JFrame{
 				RO_SIX_IMAGE
 		};
 		summonBtns = new ArrayList<>();
-		msgLabel = new JLabel("All good!");
+		statusLabel = new JLabel(STATUS);
 	}
 
 	private JButton[] createSpawn(String[] name, String[] image) {
@@ -135,13 +136,8 @@ public class GameFrameView extends JFrame{
 		deckPanel = new JPanel(new GridLayout(1, 5, 0, 0));
 		gridPanel = new JPanel(new GridLayout(b.getRows(), b.getCols(), 0, 1));
 		actionPanel = new JPanel(new GridLayout(1, 2));
-		JPanel statusPanel = new JPanel(new GridLayout(1, 2));
-
-		JLabel statusLabel = new JLabel("Game status: ");
-
-
+		JPanel statusPanel = new JPanel(new GridLayout(1, 1));
 		statusPanel.add(statusLabel);
-		statusPanel.add(msgLabel);
 
 		playerName = new JLabel(playerOne.getName());
 		playerPanel.add(new JLabel("Player Name: "));
@@ -159,7 +155,8 @@ public class GameFrameView extends JFrame{
 
 		deckPanel.setMaximumSize(new Dimension(100, 100));
 
-		frame.setSize(925, 600);
+		frame.setSize(1000, 750);
+		frame.setLocationRelativeTo(null); // show gui in the middle of screen
 
 		rebelButton = createSpawn(rebelName, rebelImage);
 		royaleButton = createSpawn(royaleName, royaleImage);
