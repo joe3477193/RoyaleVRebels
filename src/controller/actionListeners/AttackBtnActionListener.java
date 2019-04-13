@@ -1,5 +1,6 @@
 package controller.actionListeners;
 
+import controller.GameController;
 import model.board.Board;
 import view.GameFrameView;
 
@@ -7,17 +8,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AttackBtnActionListener implements ActionListener {
-    private GameFrameView gfv;
-    private Board b;
 
-    public AttackBtnActionListener(GameFrameView frame, Board board){
-        gfv = frame;
-        b = board;
+    private GameController c;
+
+    public AttackBtnActionListener(GameController c){
+        this.c= c;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        b.getCoordinates();
-        gfv.getFrame().getCursor();
+        c.attack(e);
     }
 }

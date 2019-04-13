@@ -1,4 +1,4 @@
-package controller.actionListeners;
+package controller;
 
 import model.Game;
 
@@ -7,12 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class StartButtonActionListener implements ActionListener {
+public class StartButton implements ActionListener {
 
     private JFrame frame;
     private JTextField name1, name2;
 
-    public StartButtonActionListener(JFrame frame, JTextField name1, JTextField name2) {
+    public StartButton(JFrame frame, JTextField name1, JTextField name2) {
         this.frame = frame;
         this.name1 = name1;
         this.name2 = name2;
