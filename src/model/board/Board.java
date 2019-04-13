@@ -180,10 +180,6 @@ public class Board {
         return summonedPiece;
     }
 
-    public void setSummonedPiece(Piece piece) {
-        summonedPiece = piece;
-    }
-
     public void removeSummonedPiece() {
         summonedPiece = null;
     }
