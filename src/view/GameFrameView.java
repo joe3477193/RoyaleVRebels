@@ -220,8 +220,16 @@ public class GameFrameView extends JFrame{
 		moveBtn.setBackground(Color.green);
 	}
 
-	private void decolourMove() {
-		moveBtn.setBackground(null);
+	public void colourAttack(){
+		attackBtn.setBackground((Color.green));
+	}
+
+	public void colourRedAttack(){
+		attackBtn.setBackground((Color.RED));
+	}
+
+	public void colourRedMove(){
+		moveBtn.setBackground(Color.RED);
 	}
 
 	public void colourTile(JButton tile) {
@@ -229,22 +237,36 @@ public class GameFrameView extends JFrame{
 		lastTile= tile;
 	}
 
-	private void decolourTile() {
+	public void colourRedTile(JButton tile){
+		tile.setBackground(Color.red);
+		lastTile= tile;
+	}
+
+	public void colourRed(JButton tile){
+		colourRedTile(tile);
+		colourRedAttack();
+		colourRedMove();
+	}
+
+	public void colourEndTurn(){
+		endTurnBtn.setBackground(Color.green);
+	}
+
+	public void decolour() {
 		if(lastTile!=null) {
 			lastTile.setBorder(null);
 			lastTile.setBackground(null);
 			lastTile= null;
 		}
-
+		moveBtn.setBackground(null);
+		attackBtn.setBackground(null);
 	}
-	
-	public void decolour() {
-		decolourMove();
-		decolourTile();
+
+	public void decolourEndTurn(){
+		endTurnBtn.setBackground(null);
 	}
 
 	public void updateBar(int turn) {
-		
 		if(turn==0) {
 			removeSpawn(royaleButton);
 			loadSpawn(rebelButton);
