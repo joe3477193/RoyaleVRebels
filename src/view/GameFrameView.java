@@ -79,8 +79,7 @@ public class GameFrameView extends JFrame{
 	public GameFrameView() {
 
 		frame = new JFrame("Royals vs Rebels");
-		frame.setResizable(true);
-		frame.setSize(925, 600);
+		frame.setResizable(false);
 		frame.setLocationRelativeTo(null); // show gui in the middle of screen
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -159,6 +158,8 @@ public class GameFrameView extends JFrame{
 		tileBtns = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
 
 		deckPanel.setMaximumSize(new Dimension(100, 100));
+
+		frame.setSize(925, 600);
 
 		rebelButton = createSpawn(rebelName, rebelImage);
 		royaleButton = createSpawn(royaleName, royaleImage);
