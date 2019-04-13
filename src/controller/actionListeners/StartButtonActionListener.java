@@ -1,18 +1,18 @@
-package controller;
+package controller.actionListeners;
 
-import app.StartGame;
+import model.Game;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class StartController implements ActionListener {
+public class StartButtonActionListener implements ActionListener {
 
     private JFrame frame;
     private JTextField name1, name2;
 
-    public StartController(JFrame frame, JTextField name1, JTextField name2) {
+    public StartButtonActionListener(JFrame frame, JTextField name1, JTextField name2) {
         this.frame = frame;
         this.name1 = name1;
         this.name2 = name2;
@@ -29,7 +29,11 @@ public class StartController implements ActionListener {
         	System.out.println(name1.getText() +" "+name2.getText());
 
         	// Start the game
-        	new StartGame(playerNames);
+            SwingUtilities.invokeLater(() -> {
+
+                // Create Game Model
+                Game game = new Game(playerNames);
+            });
 
         	// Close Register
             frame.dispose();

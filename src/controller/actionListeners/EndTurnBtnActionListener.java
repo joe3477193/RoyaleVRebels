@@ -1,4 +1,4 @@
-package controller;
+package controller.actionListeners;
 
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
@@ -12,7 +12,7 @@ public class EndTurnBtnActionListener implements ActionListener {
 	private GameFrameView gfv;
 	private Board b;
 	
-	EndTurnBtnActionListener(GameFrameView frame, Board board){
+	public EndTurnBtnActionListener(GameFrameView frame, Board board){
 		gfv = frame;
 		b = board;
 	}

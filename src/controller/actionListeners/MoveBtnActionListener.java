@@ -1,4 +1,4 @@
-package controller;
+package controller.actionListeners;
 
 import java.awt.Cursor;
 import java.awt.Image;
@@ -19,7 +19,7 @@ public class MoveBtnActionListener implements ActionListener{
 	private Board b;
 
 
-	MoveBtnActionListener(GameFrameView frame, Board board) {
+	public MoveBtnActionListener(GameFrameView frame, Board board) {
 
 		gfv = frame;
 		b = board;

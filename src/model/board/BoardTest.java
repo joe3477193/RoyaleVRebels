@@ -8,6 +8,7 @@ import model.players.RebelPlayer;
 import model.players.RoyalePlayer;
 import org.junit.Before;
 import org.junit.Test;
+import view.GameFrameView;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,8 @@ public class BoardTest {
     Player p1 = new RoyalePlayer("Andy");
     Player p2 = new RebelPlayer("Betty");
     ArrayList<Player> players = new ArrayList<Player>();
-    Board b = new Board();
+    GameFrameView view= new GameFrameView();
+    Board b = new Board(view);
     Tile t1 = Board.boardRows.get(0).getTile(0);
     Tile t2 = Board.boardRows.get(1).getTile(0);
     

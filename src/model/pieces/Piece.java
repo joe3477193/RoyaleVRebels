@@ -68,4 +68,14 @@ public abstract class Piece {
     public int getHp() {
         return hp;
     }
+
+    public boolean isMoveValid(int difference, String movType) {
+        boolean valid= false;
+        if (movType.equals("mov")) {
+            valid= mov >= difference;
+        } else if (movType.equals("range")) {
+            valid= range >= difference;
+        }
+        return valid;
+    }
 }

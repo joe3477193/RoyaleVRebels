@@ -1,4 +1,4 @@
-package controller;
+package controller.actionListeners;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
 
@@ -21,7 +21,7 @@ public class TileBtnActionListener implements ActionListener{
 	private JButton[][] tileBtns;
 	private Board b;
 
-	TileBtnActionListener(GameFrameView frame, Board board) {
+	public TileBtnActionListener(GameFrameView frame, Board board) {
 
 		gfv = frame;
 		tileBtns = frame.getTileBtns();

@@ -1,4 +1,4 @@
-package controller;
+package controller.actionListeners;
 
 import model.board.Board;
 import view.GameFrameView;
@@ -10,7 +10,7 @@ public class AttackBtnActionListener implements ActionListener {
     private GameFrameView gfv;
     private Board b;
 
-    AttackBtnActionListener(GameFrameView frame, Board board){
+    public AttackBtnActionListener(GameFrameView frame, Board board){
         gfv = frame;
         b = board;
     }

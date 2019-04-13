@@ -1,5 +1,6 @@
 package model;
 
+import controller.GameController;
 import model.board.Board;
 import model.players.Player;
 import model.players.RebelPlayer;
@@ -11,17 +12,17 @@ import java.util.Random;
 
 
 public class Game{
-	ArrayList<Player> players = new ArrayList<>();
+	ArrayList<Player> players;
 	RoyalePlayer royale;
 	RebelPlayer rebel;
-	Player currPlayer;
-	boolean isRunning = false;
 	GameFrameView gfv;
 	Board b;
+	GameController c;
 
-	public Game(GameFrameView frame, ArrayList<String> playerNames){
+	public Game(ArrayList<String> playerNames){
+		players = new ArrayList<>();
 		
-		this.gfv = frame;
+		gfv= new GameFrameView();
 		Random r = new Random();
 		int turn = r.nextInt(playerNames.size());
 
@@ -37,41 +38,15 @@ public class Game{
 
 		players.add(rebel);
 		players.add(royale);
-		
-       /* //MainGameLoop
-        Thread gameLoop = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(isRunning) {
 
-
-                	if(rebel.getCP() <= 0) {
-                		//Game end
-                	}
-                	else if(royale.getHp()<=0) {
-                		//Game end
-                	}
-
-                }
-            }
-        });
-
-        gameLoop.start();*/
+		initGame();
 	}
 	
 	public void initGame() {
-
 		// Initialise board
-		this.b = new Board();
-
+		this.b = new Board(gfv);
 		gfv.assembleBoard(rebel,royale, b);
-
+		c= new GameController(b, gfv);
 		// RebelPlayer goes first
-		currPlayer = rebel;
-		isRunning = true;
-	}
-
-	public Board getBoard() {
-		return b;
 	}
 }

@@ -1,6 +1,6 @@
 package view;
 
-import controller.StartController;
+import controller.actionListeners.StartButtonActionListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,7 +45,7 @@ public class EnterNameView {
     }
 
     private void addController() {
-        ActionListener startController = new StartController(frame, player_one_name, player_two_name);
+        ActionListener startController = new StartButtonActionListener(frame, player_one_name, player_two_name);
         startBtn.addActionListener(startController);
     }
 }

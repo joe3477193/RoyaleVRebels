@@ -1,6 +1,7 @@
 package model.board;
 
 import model.pieces.Piece;
+import view.GameFrameView;
 
 import java.util.ArrayList;
 
@@ -9,6 +10,8 @@ import static java.lang.Math.abs;
 public class Board {
 
     static ArrayList<BoardRows> boardRows;
+
+    private GameFrameView view;
 
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
@@ -28,7 +31,8 @@ public class Board {
 
 
 
-    public Board() {
+    public Board(GameFrameView view) {
+        this.view= view;
 
         Board.boardRows = new ArrayList<>(BOARD_ROWS);
 
@@ -197,13 +201,7 @@ public class Board {
         int rowDiff= abs(inRow-tgRow);
         int tileDiff= abs(inTile-tgTile);
         Piece piece = getPiece(inRow, inTile);
-        if(type.equals("mov")){
-            return piece.getMov()>=rowDiff && piece.getMov()>=tileDiff;
-        }
-        else if(type.equals("range")){
-            return piece.getRange()>=rowDiff && piece.getRange()>=tileDiff;
-        }
-        return false;
+        return piece.isMoveValid(rowDiff+tileDiff, type);
     }
 
     // Check if pieces getMoved from current tile to target tile

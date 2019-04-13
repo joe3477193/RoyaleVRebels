@@ -1,4 +1,4 @@
-package controller;
+package controller.actionListeners;
 
 import model.board.Board;
 import model.pieces.Piece;
@@ -17,7 +17,7 @@ public class SummonBtnActionListener implements ActionListener{
 
 	private Board b;
 	
-	SummonBtnActionListener(GameFrameView frame, Board board){
+	public SummonBtnActionListener(GameFrameView frame, Board board){
 		gfv = frame;
 		b = board;
 	}

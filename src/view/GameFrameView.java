@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GameFrameView extends JFrame{
+	private Board b;
 
 	private JFrame frame;
 	private JPanel actionPanel;
@@ -127,6 +128,7 @@ public class GameFrameView extends JFrame{
 
 	public void assembleBoard(Player playerOne, Player playerTwo, Board b) {
 
+		this.b= b;
 		nameOne= playerOne.getName();
 		typeOne= playerOne.getFaction();
 		nameTwo= playerTwo.getName();
