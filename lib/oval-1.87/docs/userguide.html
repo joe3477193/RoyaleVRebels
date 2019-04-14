@@ -1,0 +1,1651 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>OVal - the object validation framework for Java&#8482; 5 or later</title><link rel="stylesheet" type="text/css" href="css/userguide.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article"><div class="titlepage"><div><div><h2 class="title"><a name="d5e1"></a>OVal - the object validation framework for
+  <span class="trademark">Java</span>&#8482; 5 or later</h2></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="section"><a href="#about">1. What is OVal?</a></span></dt><dt><span class="section"><a href="#dependencies">2. Dependencies</a></span></dt><dt><span class="section"><a href="#property-validation">3. Using OVal for property validation</a></span></dt><dd><dl><dt><span class="section"><a href="#declaring-field-constraints">3.1. Declaring constraints for class fields</a></span></dt><dt><span class="section"><a href="#declaring-getter-constraints">3.2. Declaring constraints for getter methods' return value</a></span></dt><dt><span class="section"><a href="#declaring-conditional-constraints">3.3. Declaring conditional constraints using expression languages</a></span></dt><dt><span class="section"><a href="#declaring-activation-rules">3.4. Declaring activation rules for constraints</a></span></dt><dt><span class="section"><a href="#declaring-nested-property-constraints">3.5. Declaring constraints for nested properties</a></span></dt><dt><span class="section"><a href="#recursive-validation">3.6. Recursive validation</a></span></dt><dt><span class="section"><a href="#interpreting-ejb3-jpa-annotations">3.7. Interpreting EJB3 JPA annotations</a></span></dt><dt><span class="section"><a href="#interpreting-bean-validation-annotations">3.8. Interpreting Bean Validation (JSR303) annotations</a></span></dt></dl></dd><dt><span class="section"><a href="#programming-by-contract">4. Using OVal for programming by contract</a></span></dt><dd><dl><dt><span class="section"><a href="#project-preparation">4.1. Preparing your project</a></span></dt><dt><span class="section"><a href="#preconditions">4.2. Working with preconditions</a></span></dt><dt><span class="section"><a href="#declaring-postconditions">4.3. Working with postconditions</a></span></dt><dt><span class="section"><a href="#invariants">4.4. Working with invariants</a></span></dt><dt><span class="section"><a href="#probe-mode">4.5. Using the probe mode to simplify UI user input validation</a></span></dt><dt><span class="section"><a href="#converting-exceptions">4.6. Converting ConstraintsViolatedExceptions</a></span></dt></dl></dd><dt><span class="section"><a href="#custom-constraint-annotations">5. Creating custom annotation based constraints</a></span></dt><dt><span class="section"><a href="#complex-class-specific-constraints">6. Expressing complex class specific constraints</a></span></dt><dd><dl><dt><span class="section"><a href="#using-validatewithmethod">6.1. Using @ValidateWithMethod</a></span></dt><dt><span class="section"><a href="#using-checkwith">6.2. Using @CheckWith</a></span></dt></dl></dd><dt><span class="section"><a href="#xml-configuration">7. XML based configuration</a></span></dt><dt><span class="section"><a href="#additional-configuration">8. Additional configuration and customization options</a></span></dt><dd><dl><dt><span class="section"><a href="#constraint-profiles">8.1. Constraint profiles</a></span></dt><dt><span class="section"><a href="#collection-factory">8.2. Collection factory</a></span></dt><dt><span class="section"><a href="#additiona-expression-languages">8.3. Adding additional expression languages</a></span></dt><dt><span class="section"><a href="#spring-integration">8.4. Spring framework integration</a></span></dt><dt><span class="section"><a href="#apache-struts-integration">8.5. Apache Struts 2 integration</a></span></dt></dl></dd><dt><span class="section"><a href="#api-documentation">9. API documentation</a></span></dt><dt><span class="section"><a href="#download">10. Download</a></span></dt><dt><span class="section"><a href="#references">11. References</a></span></dt><dt><span class="section"><a href="#acknowledgements">12. Acknowledgements</a></span></dt><dt><span class="section"><a href="#trademark-disclaimer">13. Trademark disclaimer</a></span></dt></dl></div>
+
+  
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="about"></a>1.&nbsp;What is OVal?</h2></div></div></div>
+    
+
+    <p>OVal is a pragmatic and extensible general purpose validation framework for any kind of Java objects
+    (not only JavaBeans) and allows you:</p>
+
+    <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+        <p>to easily validate objects on demand,</p>
+      </li><li class="listitem">
+        <p>to specify constraints for class fields and getter methods,</p>
+      </li><li class="listitem">
+        <p>to validate objects based on certain EJB3 JPA annotations (namely all field annotations that require a
+         not-null value),</p>
+      </li><li class="listitem">
+        <p>to configure constraints via annotations, POJOs and/or simple XML files,</p>
+      </li><li class="listitem">
+        <p>to express constraints using scripting languages such as Groovy, BeanShell, and JavaScript</p>
+      </li><li class="listitem">
+        <p>to easily create custom constraints, and</p>
+      </li><li class="listitem">
+        <p>to develop new constraint configuration mechanisms</p>
+      </li></ul></div>
+
+    <p>When using AspectJ certain programming by contract (aka <span class="trademark">Design By Contract</span>&#8482; or DBC)
+    features are available:</p>
+
+    <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+        <p>specifying constraints for <span class="emphasis"><em>constructor parameters</em></span> that are automatically checked
+        when a constructor is called (preconditions),</p>
+      </li><li class="listitem">
+        <p>specifying constraints for <span class="emphasis"><em>method parameters</em></span> that are automatically checked when
+        a method is called (preconditions),</p>
+      </li><li class="listitem">
+        <p>requiring a certain object state before a method is called (preconditions)</p>
+      </li><li class="listitem">
+        <p>enforcing object validation after an object has been created (invariants),</p>
+      </li><li class="listitem">
+        <p>enforcing object validation before/after a method of an object is/has been called (invariants),</p>
+      </li><li class="listitem">
+        <p>specifying constrains for a method's return value that are automatically checked after a method has been
+        executed (postconditions),</p>
+      </li><li class="listitem">
+        <p>requiring a certain object state after a method is called (postconditions).</p>
+      </li></ul></div>
+
+    <p>Missing a useful feature? Let's discuss it in the
+    <a class="ulink" href="http://sourceforge.net/forum/forum.php?forum_id=488109" target="'_self'">OVal forum</a></p>
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="dependencies"></a>2.&nbsp;Dependencies</h2></div></div></div>
+    
+
+    <p>OVal requires Java 5 or later - mainly for annotation support but other new language features (generics, for
+    each loop, etc.) are used across the OVal source code too. Java 5 is actually the only hard requirement, depending
+    on the features you want to use additional libraries are required:</p>
+
+    <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+        <p>AspectJ is required if you want to use the above mentioned programming by contract features.</p>
+      </li><li class="listitem">
+        <p>Apache Commons JEXL is required if you want to define constraints via JEXL expressions.</p>
+      </li><li class="listitem">
+        <p>BeanShell is required if you want to define constraints via BeanShell expressions.</p>
+      </li><li class="listitem">
+        <p>Groovy is required if you want to define constraints via Groovy expressions.</p>
+      </li><li class="listitem">
+        <p>JRuby is required if you want to define constraints via Ruby expressions.</p>
+      </li><li class="listitem">
+        <p>Mozilla Rhino is required if you want to define constraints via JavaScript expressions.</p>
+      </li><li class="listitem">
+        <p>MVEL is required if you want to define constraints via MVEL expressions.</p>
+      </li><li class="listitem">
+        <p>OGNL is required if you want to define constraints via OGNL expressions.</p>
+      </li><li class="listitem">
+        <p>XStream is required if you want to configure OVal via XML configuration files.</p>
+      </li><li class="listitem">
+        <p>GNU Trove is required if you want to have OVal to internally use the GNU Trove high performance collections.</p>
+      </li><li class="listitem">
+        <p>Javolution is required if you want to have OVal to internally use Javolution's high performance collections.</p>
+      </li><li class="listitem">
+        <p>JXPath is required if you want to use JXPath expressions for the constraint target declarations.</p>
+      </li><li class="listitem">
+        <p>JUnit and all other libraries are required if you want to run the test cases.</p>
+      </li></ul></div>
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="property-validation"></a>3.&nbsp;Using OVal for property validation</h2></div></div></div>
+    
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="declaring-field-constraints"></a>3.1.&nbsp;Declaring constraints for class fields</h3></div></div></div>
+      
+
+      <p>You can add constraint annotations to class fields that are checked when an object validation is performed.
+      There exists a number of pre-built constraints that you can find in the package
+      <span class="command"><strong>net.sf.oval.constraint</strong></span> .</p>
+
+      <p>An object can be validated by using the <span class="command"><strong>public validate(Object validatedObject)</strong></span> method
+      of <span class="command"><strong>net.sf.oval.Validator</strong></span></p>
+
+      <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject {
+
+  <em><span class="hl-annotation" style="color: gray">@NotNull</span></em>
+  <em><span class="hl-annotation" style="color: gray">@NotEmpty</span></em>
+  <em><span class="hl-annotation" style="color: gray">@Length(max=32)</span></em>
+  <strong class="hl-keyword">private</strong> String name;
+
+  ...
+}</pre>
+
+      <p>Example usage:</p>
+
+      <pre class="programlisting">Validator validator = <strong class="hl-keyword">new</strong> Validator();
+
+BusinessObject bo = <strong class="hl-keyword">new</strong> BusinessObject(); <em class="hl-comment" style="color: silver">// name is null</em>
+
+<em class="hl-comment" style="color: silver">// collect the constraint violations</em>
+List&lt;ConstraintViolation&gt; violations = validator.validate(bo);
+
+<strong class="hl-keyword">if</strong>(violations.size()&gt;<span class="hl-number">0</span>)
+{
+  LOG.severe(<strong class="hl-string"><em style="color:red">"Object "</em></strong> + bo + <strong class="hl-string"><em style="color:red">" is invalid."</em></strong>);
+  <strong class="hl-keyword">throw</strong> <strong class="hl-keyword">new</strong> BussinessException(violations);
+}</pre>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="declaring-getter-constraints"></a>3.2.&nbsp;Declaring constraints for getter methods' return value</h3></div></div></div>
+      
+
+      <p>You can specify constraints for the return value of getter methods. When validating the object the values
+      of all fields and the return values of the getter methods are checked against the specified constraints.</p>
+
+      <p>The methods need to be annotated with <span class="command"><strong>@net.sf.oval.configuration.annotation.IsInvariant</strong></span>.
+      Return value constraints specified for methods missing this annotation are ignored during validation.</p>
+
+      <p><span class="emphasis"><em>Important:</em></span> To retrieve the return value of the getter method OVal invokes the getter
+      during the validation process. Therefore you need to ensure that the getter method really is just a getter method
+      and does not change the object state.</p>
+
+      <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <strong class="hl-keyword">private</strong> String name = null;
+
+  <em><span class="hl-annotation" style="color: gray">@IsInvariant</span></em>
+  <em><span class="hl-annotation" style="color: gray">@NotNull</span></em>
+  <em><span class="hl-annotation" style="color: gray">@Length(max = 4)</span></em>
+  <strong class="hl-keyword">public</strong> String getName()
+  {
+    <strong class="hl-keyword">return</strong> name;
+  }
+
+  ...
+}</pre>
+
+      <p>Example usage:</p>
+
+      <pre class="programlisting">Validator validator = <strong class="hl-keyword">new</strong> Validator();
+
+BusinessObject bo = <strong class="hl-keyword">new</strong> BusinessObject(<strong class="hl-string"><em style="color:red">"blabla"</em></strong>);
+
+<em class="hl-comment" style="color: silver">// collect the constraint violations</em>
+List&lt;ConstraintViolation&gt; violations = validator.validate(bo);
+
+<strong class="hl-keyword">if</strong>(violations.size()&gt;<span class="hl-number">0</span>)
+{
+  LOG.severe(<strong class="hl-string"><em style="color:red">"Object "</em></strong> + bo + <strong class="hl-string"><em style="color:red">" is invalid."</em></strong>);
+  <strong class="hl-keyword">throw</strong> <strong class="hl-keyword">new</strong> BussinessException(violations);
+}
+</pre>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="declaring-conditional-constraints"></a>3.3.&nbsp;Declaring conditional constraints using expression languages</h3></div></div></div>
+      
+
+      <p>When you annotate a field or getter with multiple constraint annotations they are ANDed.
+      If you require other logical constructs you can use a scripting language to express them.
+      To do so annotate the field or getter with the <span class="command"><strong>@net.sf.oval.constraint.Assert</strong></span>
+      annotation as shown in the following example:</p>
+
+      <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <em><span class="hl-annotation" style="color: gray">@NotNull</span></em>
+  <strong class="hl-keyword">public</strong> String deliveryAddress;
+
+  <em><span class="hl-annotation" style="color: gray">@NotNull</span></em>
+  <strong class="hl-keyword">public</strong> String invoiceAddress;
+
+  <em class="hl-comment" style="color: silver">// mailingAddress must either be the delivery address or the invoice address</em>
+  <em><span class="hl-annotation" style="color: gray">@Assert(expr = "_value ==_this.deliveryAddress || _value == _this.invoiceAddress", lang = "groovy")</span></em>
+  <strong class="hl-keyword">public</strong> String mailingAddress;
+}
+</pre>
+
+      <p>The <span class="command"><strong>expr</strong></span> parameter holds the script to be evaluated.  If the script returns
+      <span class="command"><strong>true</strong></span> the constraint is satisfied. OVal provides two special variables:</p>
+
+      <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+          <p><span class="command"><strong>_value</strong></span> - contains the value to validate (field value or getter return value)</p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>_this</strong></span> - is a reference to the validated object</p>
+        </li></ul></div>
+
+      <p>The <span class="command"><strong>lang</strong></span> parameter specifies the scripting language you want to use. In case the required
+      libraries are loaded, OVal is aware of these languages:</p>
+
+      <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+          <p><span class="command"><strong>bsh</strong></span> or <span class="command"><strong>beanshell</strong></span> for BeanShell,</p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>groovy</strong></span> for Groovy,</p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>jexl</strong></span> for JEXL,</p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>js</strong></span> or <span class="command"><strong>javascript</strong></span> for JavaScript (via Mozilla Rhino),</p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>mvel</strong></span> for MVEL,</p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>ognl</strong></span> for OGNL,</p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>ruby</strong></span> or <span class="command"><strong>jruby</strong></span> for Ruby (via JRuby)</p>
+        </li></ul></div>
+
+      <p>Additional scripting languages can be registered via <span class="command"><strong>Validator.addExpressionLanguage(String, ExpressionLanguage)</strong></span>.</p>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="declaring-activation-rules"></a>3.4.&nbsp;Declaring activation rules for constraints</h3></div></div></div>
+      
+
+      <p>Besides using @Assert to declare conditional constraints it is also possible to specify a activation rules
+      for other constraints using the <span class="command"><strong>when</strong></span> attribute. This way you can for example turn on or off
+      constraints based on a given state of the object. The <span class="command"><strong>when</strong></span> attribute can hold a formula in one
+      of the supported expression languages, it is prefixed by the id of the expression language to be used.</p>
+
+      <p>In the following example <span class="command"><strong>fieldB</strong></span> must not be <span class="command"><strong>null</strong></span> only if
+      <span class="command"><strong>fieldA</strong></span> is not <span class="command"><strong>null</strong></span> as well. With the prefix <span class="command"><strong>groovy:</strong></span> it
+      is indicated that the formula is expressed in the Groovy language.</p>
+
+      <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <strong class="hl-keyword">private</strong> String fieldA;
+
+  <em><span class="hl-annotation" style="color: gray">@NotNull(when = "groovy:_this.fieldA != null")</span></em>
+  <strong class="hl-keyword">private</strong> String fieldB;
+}</pre>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="declaring-nested-property-constraints"></a>3.5.&nbsp;Declaring constraints for nested properties</h3></div></div></div>
+      
+
+      <p>Using the <span class="command"><strong>target</strong></span> attribute of constraints you can specify the path to an object where the constraint should be applied.
+      In the following example the <span class="command"><strong>@NotNull</strong></span> constraint will be validated for the <span class="command"><strong>customer.homeAddress.street</strong></span> field.</p>
+
+      <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <em><span class="hl-annotation" style="color: gray">@AssertValid</span></em>
+  <em><span class="hl-annotation" style="color: gray">@NotNull(target="homeAddress.street")</span></em>
+  <strong class="hl-keyword">private</strong> Customer customer;
+}</pre>
+
+      <p>If JXPath is on the classpath you can also use the XPath syntax to specify the target value. In the following example the <span class="command"><strong>@NotNull</strong></span> constraint
+      will be checked for <span class="command"><strong>street</strong></span> field of the first address object in the <span class="command"><strong>customer.addresses</strong></span> collection.</p>
+
+      <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <em><span class="hl-annotation" style="color: gray">@AssertValid</span></em>
+  <em><span class="hl-annotation" style="color: gray">@NotNull(target="jxpath:addresses[0]/street")</span></em>
+  <strong class="hl-keyword">private</strong> Customer customer;
+}</pre>
+
+	  <p>To target values of maps or collections JXPath must be used, the built-in implementation does not support this yet.</p>
+
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="recursive-validation"></a>3.6.&nbsp;Recursive validation</h3></div></div></div>
+      
+
+      <p>By specifying the special constraint annotation @AssertValid you instruct OVal to ensure that all constraints
+      declared on the referenced object are satisfied too.</p>
+
+      <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <em><span class="hl-annotation" style="color: gray">@NotNull</span></em>
+  <em><span class="hl-annotation" style="color: gray">@AssertValid</span></em>
+  <strong class="hl-keyword">private</strong> Address address;
+}</pre>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="interpreting-ejb3-jpa-annotations"></a>3.7.&nbsp;Interpreting EJB3 JPA annotations</h3></div></div></div>
+      
+
+      <p>OVal's configuration mechanism is highly customizable. Using the
+      <span class="command"><strong>net.sf.oval.configuration.Configurer</strong></span> interface you can write your own constraint configurers
+      configuring OVal based on other XML schemas, other sets of annotations or anything else you like.</p>
+
+      <p>OVal comes with a configurer that is capable of translating certain EJB3 JPA annotations into equivalent
+      OVal constraints. The <span class="command"><strong>net.sf.oval.configuration.annotation.JPAAnnotationsConfigurer</strong></span> interprets
+      the EJB3 JPA annotations as follows:</p>
+
+      <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+          <p><span class="command"><strong>@javax.persistence.Basic(optional=false) =&gt; @net.sf.oval.constraint.NotNull</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.persistence.OneToOne(optional=false) =&gt; @net.sf.oval.constraint.NotNull</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.persistence.OneToOne =&gt; @net.sf.oval.constraint.AssertValid</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.persistence.OneToMany =&gt; @net.sf.oval.constraint.AssertValid</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.persistence.ManyToOne(optional=false) =&gt; @net.sf.oval.constraint.NotNull</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.persistence.ManyToOne =&gt; @net.sf.oval.constraint.AssertValid</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.persistence.Column(nullable=false) =&gt; @net.sf.oval.constraint.NotNull
+          (only applied for fields not  annotated with @javax.persistence.GeneratedValue or @javax.persistence.Version)</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.persistence.Column(length=5) =&gt; @net.sf.oval.constraint.Length</strong></span></p>
+        </li></ul></div>
+
+      <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Entity</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> MyEntity
+{
+  <em><span class="hl-annotation" style="color: gray">@Basic(optional = false)</span></em>
+  <em><span class="hl-annotation" style="color: gray">@Column(length = 4)</span></em>
+  <strong class="hl-keyword">public</strong> String id;
+
+  <em><span class="hl-annotation" style="color: gray">@Column(nullable = false)</span></em>
+  <strong class="hl-keyword">public</strong> String descr;
+
+  <em><span class="hl-annotation" style="color: gray">@ManyToOne(optional = false)</span></em>
+  <strong class="hl-keyword">public</strong> MyEntity parent;
+}</pre>
+
+      <p>Example usage:</p>
+
+      <pre class="programlisting"><em class="hl-comment" style="color: silver">// configure OVal to interprete OVal constraint annotations as well as EJB3 JPA annotations</em>
+Validator validator = <strong class="hl-keyword">new</strong> Validator(<strong class="hl-keyword">new</strong> AnnotationsConfigurer(), <strong class="hl-keyword">new</strong> JPAAnnotationsConfigurer());
+
+MyEntity entity = <strong class="hl-keyword">new</strong> MyEntity();
+
+entity.id = <strong class="hl-string"><em style="color:red">"12345"</em></strong>; <em class="hl-comment" style="color: silver">// violation - the max length is 4</em>
+entity.descr = null; <em class="hl-comment" style="color: silver">// violation - cannot be null</em>
+entity.parent = null; <em class="hl-comment" style="color: silver">// violation - cannot be null</em>
+
+<em class="hl-comment" style="color: silver">// collect the constraint violations</em>
+List&lt;ConstraintViolation&gt; violations = validator.validate(entity);
+</pre>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="interpreting-bean-validation-annotations"></a>3.8.&nbsp;Interpreting Bean Validation (JSR303) annotations</h3></div></div></div>
+      
+
+      <p>OVal itself is not a JSR303 compliant bean validation framework. However it now comes with a configurer
+      that can translate the JSR303 built-in standard constraints into equivalent OVal constraints.
+      The <span class="command"><strong>net.sf.oval.configuration.annotation.BeanValidationAnnotationsConfigurer</strong></span> interprets
+      the JSR303 annotations as follows:</p>
+
+      <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.AssertFalse =&gt; @net.sf.oval.constraint.AssertFalse</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.AssertTrue =&gt; @net.sf.oval.constraint.AssertTrue</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.DecimalMax =&gt; @net.sf.oval.constraint.Max</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.DecimalMin =&gt; @net.sf.oval.constraint.Min</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.Digits =&gt; @net.sf.oval.constraint.Digits </strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.Future =&gt; @net.sf.oval.constraint.Future</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.Max =&gt; @net.sf.oval.constraint.Max</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.Min =&gt; @net.sf.oval.constraint.Min</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.NotNull =&gt; @net.sf.oval.constraint.NotNull</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.Null =&gt; @net.sf.oval.constraint.Null</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.Past =&gt; @net.sf.oval.constraint.Past</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.Pattern =&gt; @net.sf.oval.constraint.Pattern</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.Size =&gt; @net.sf.oval.constraint.Size</strong></span></p>
+        </li><li class="listitem">
+          <p><span class="command"><strong>@javax.validation.constraints.Valid =&gt; @net.sf.oval.constraint.AssertValid</strong></span></p>
+        </li></ul></div>
+
+      <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> MyEntity
+{
+  <em><span class="hl-annotation" style="color: gray">@javax.validation.constraints.NotNull</span></em>
+  <em><span class="hl-annotation" style="color: gray">@javax.validation.constraints.Size(max = 4)</span></em>
+  <strong class="hl-keyword">public</strong> String id;
+
+  <em><span class="hl-annotation" style="color: gray">@javax.validation.constraints.NotNull</span></em>
+  <strong class="hl-keyword">public</strong> String descr;
+
+  <em><span class="hl-annotation" style="color: gray">@javax.validation.constraints.NotNull</span></em>
+  <strong class="hl-keyword">public</strong> MyEntity parent;
+}</pre>
+
+      <p>Example usage:</p>
+
+      <pre class="programlisting"><em class="hl-comment" style="color: silver">// configure OVal to interprete OVal constraint annotations as well as built-in JSR303 annotations</em>
+Validator validator = <strong class="hl-keyword">new</strong> Validator(<strong class="hl-keyword">new</strong> AnnotationsConfigurer(), <strong class="hl-keyword">new</strong> BeanValidationAnnotationsConfigurer());
+
+MyEntity entity = <strong class="hl-keyword">new</strong> MyEntity();
+
+entity.id = <strong class="hl-string"><em style="color:red">"12345"</em></strong>; <em class="hl-comment" style="color: silver">// violation - the max length is 4</em>
+entity.descr = null; <em class="hl-comment" style="color: silver">// violation - cannot be null</em>
+entity.parent = null; <em class="hl-comment" style="color: silver">// violation - cannot be null</em>
+
+<em class="hl-comment" style="color: silver">// collect the constraint violations</em>
+List&lt;ConstraintViolation&gt; violations = validator.validate(entity);</pre>
+    </div>
+
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="programming-by-contract"></a>4.&nbsp;Using OVal for programming by contract</h2></div></div></div>
+    
+
+    <p>By utilizing AspectJ OVal provides support for several aspects of programming by contract - however it is
+    not a full blown programming by contract implementation.</p>
+
+    <p>With OVal you can</p>
+
+    <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+        <p>enforce that a parameterized constructor/method is invoked only if the given arguments satisfy prior defined constraints(precondition)</p>
+      </li><li class="listitem">
+        <p>enforce that a method is invoked only if the object is in a certain state (precondition/invariant)</p>
+      </li><li class="listitem">
+        <p>enforce that the return value of a method must satisfy prior defined constraints (postcondition)</p>
+      </li><li class="listitem">
+        <p>enforce that the object must be in a certain state after a method has been executed (postcondition/invariant)</p>
+      </li></ul></div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="project-preparation"></a>4.1.&nbsp;Preparing your project</h3></div></div></div>
+      
+
+      <p>The easiest way to getting started is to use the
+      <a class="ulink" href="http://www.eclipse.org/" target="'_self'"><em class="citetitle">Eclipse IDE</em></a> in conjunction with the
+      <a class="ulink" href="http://www.eclipse.org/ajdt/" target="'_self'"><em class="citetitle">AspectJ plug-in</em></a>.</p>
+
+      <p>Create a new AspectJ project or add AspectJ support to an existing Java project by right-clicking the project
+      in the Package Explorer and selecting <span class="command"><strong>Convert To AspectJ Project</strong></span></p>
+
+      <p>Add the <span class="command"><strong>net.sf.oval_x.x.jar</strong></span> file to your library path.</p>
+
+      <p>Create a new aspect via <span class="command"><strong>File -&gt; New -&gt; Aspect</strong></span> that extends the abstract aspect
+      <span class="command"><strong>net.sf.oval.guard.GuardAspect</strong></span>. When the new aspect is created the AspectJ builder will
+      automatically weave the validation related code into your compiled classes annotated with
+      <span class="command"><strong>@net.sf.oval.guard.Guarded</strong></span>.</p>
+
+      <p>Now you can create all your business classes, add the <span class="command"><strong>@net.sf.oval.guard.Guarded</strong></span>
+      annotation and define the required constraints using the built-in or custom constraint annotations.</p>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="preconditions"></a>4.2.&nbsp;Working with preconditions</h3></div></div></div>
+      
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="declaring-constructor-parameter-constraints"></a>4.2.1.&nbsp;Declaring constraints for constructor parameters</h4></div></div></div>
+        
+
+        <p>Constraints specified for constructor parameters are automatically checked when the constructor is invoked.
+        Invocations of the constructor will be prohibited if any of the constraints is not satisfied. In such a case a
+        <span class="command"><strong>net.sf.oval.exception.ConstraintsViolatedException</strong></span> will be thrown.</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Guarded</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <strong class="hl-keyword">public</strong> BusinessObject(<em><span class="hl-annotation" style="color: gray">@NotNull</span></em> String name)
+  {
+    <strong class="hl-keyword">this</strong>.name = name;
+  }
+
+  ...
+}</pre>
+
+        <p>Example usage:</p>
+
+        <pre class="programlisting"><em class="hl-comment" style="color: silver">// throws a ConstraintsViolatedException because parameter name is null</em>
+BusinessObject bo = <strong class="hl-keyword">new</strong>  BusinessObject(null);</pre>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="declaring-method-parameter-constraints"></a>4.2.2.&nbsp;Declaring constraints for method parameters</h4></div></div></div>
+        
+
+        <p>Constraints specified for method parameters are automatically checked when the method is invoked.
+        Invocations of to the method will be prohibited if any of the constraints is not satisfied. In such a case
+        a <span class="command"><strong>net.sf.oval.exception.ConstraintsViolatedException</strong></span> will be thrown.</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Guarded</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> setName(<em><span class="hl-annotation" style="color: gray">@NotNull</span></em> String name)
+  {
+    <strong class="hl-keyword">this</strong>.name = name;
+  }
+  ...
+}</pre>
+
+        <p>Example usage:</p>
+
+        <pre class="programlisting">BusinessObject bo = <strong class="hl-keyword">new</strong> BusinessObject();
+bo.setName(null); <em class="hl-comment" style="color: silver">// throws a ConstraintsViolatedException because parameter name is null</em></pre>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="applying-field-constraints-to-method-parameters"></a>4.2.3.&nbsp;Applying field constraints to constructor/method parameters</h4></div></div></div>
+        
+
+        <p>You can apply the constraints specified for a field in the same or a super class to any constructor or
+        method parameter by using the <span class="command"><strong>@net.sf.oval.constraint.AssertFieldConstraints</strong></span> annotation.</p>
+
+        <p>If you do not specify a field name within the <span class="command"><strong>@net.sf.oval.constraint.AssertFieldConstraints</strong></span>
+        annotation the constraints of the field with the same name as the annotated parameter are applied to the parameter.</p>
+
+        <p>If you specify a field name within the <span class="command"><strong>@net.sf.oval.constraint.AssertFieldConstraints</strong></span>
+        annotation the constraints of the field with the specified name are applied to the annotated parameter.</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Guarded</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <em><span class="hl-annotation" style="color: gray">@NotNull</span></em>
+  <em><span class="hl-annotation" style="color: gray">@NotEmpty</span></em>
+  <em><span class="hl-annotation" style="color: gray">@Length(max=10)</span></em>
+  <strong class="hl-keyword">private</strong> String name;
+
+  <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> setName(<em><span class="hl-annotation" style="color: gray">@AssertFieldConstraints</span></em> String name)
+  {
+    <strong class="hl-keyword">this</strong>.name = name;
+  }
+
+  <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> setAlternativeName(<em><span class="hl-annotation" style="color: gray">@AssertFieldConstraints("name")</span></em> String altName)
+  {
+    <strong class="hl-keyword">this</strong>.alternativeName = altName;
+  }
+
+  ...
+}</pre>
+
+        <p>Example usage:</p>
+
+        <pre class="programlisting">BusinessObject bo = <strong class="hl-keyword">new</strong> BusinessObject();
+
+bo.setName(<strong class="hl-string"><em style="color:red">""</em></strong>); <em class="hl-comment" style="color: silver">// throws a ConstraintsViolatedException because parameter is empty</em>
+
+bo.setAlternativeName(null); <em class="hl-comment" style="color: silver">// throws a ConstraintsViolatedException because parameter is null</em></pre>
+
+        <p>If you like to apply the constraints of all fields to their corresponding setter methods you can
+        alternatively set the <span class="command"><strong>applyFieldConstraintsToSetters</strong></span> property of the
+        <span class="command"><strong>Guarded</strong></span> annotation to <span class="command"><strong>true</strong></span>. This is especially useful if you have
+        a lot of setter methods and you are following the JavaBean convention. <span class="emphasis"><em>Important:</em></span> The setter method
+        must be declared within the same class as the property.</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Guarded(applyFieldConstraintsToSetters=true)</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <em><span class="hl-annotation" style="color: gray">@NotNull</span></em>
+  <em><span class="hl-annotation" style="color: gray">@NotEmpty</span></em>
+  <em><span class="hl-annotation" style="color: gray">@Length(max=10)</span></em>
+  <strong class="hl-keyword">private</strong> String name;
+
+  <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> setName(String name)
+  {
+    <strong class="hl-keyword">this</strong>.name = name;
+  }
+
+  ...
+}</pre>
+
+        <p>Another convenience option is the <span class="command"><strong>applyFieldConstraintsToConstructors</strong></span> property of the
+        <span class="command"><strong>Guarded</strong></span> annotation. If set to true, OVal applies the specified field constraints to the
+        corresponding parameters of the declared constructors within the same class. In this context, a corresponding
+        parameter is a constructor parameter with the same name and type as the field.</p>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="scripted-preconditions"></a>4.2.4.&nbsp;Using scripted expressions for preconditions</h4></div></div></div>
+        
+
+        <p>Similar to the above described <span class="command"><strong>@net.sf.constraint.Assert</strong></span> constraint annotation for
+        fields you can annotate a method with <span class="command"><strong>@net.sf.guard.Pre</strong></span> allowing you to express
+        conditional constraints using a scripting language.</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Guarded</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> Transaction
+{
+  <strong class="hl-keyword">private</strong> BigDecimal amount;
+
+  <em class="hl-comment" style="color: silver">// ensure that amount is not null, ensure that value2add is greater than amount</em>
+  <em><span class="hl-annotation" style="color: gray">@Pre(expr = "_this.amount!=null &amp;&amp; amount2add &gt; _this.amount", lang = "groovy")</span></em>
+  <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> increase(BigDecimal amount2add)
+  {
+    amount = amount.add(amount2add);
+  }
+}</pre>
+
+        <p>The <span class="command"><strong>expr</strong></span> parameter holds the script to be evaluated. If the script returns
+        <span class="command"><strong>true</strong></span> the constraint is satisfied. OVal provides special variables for use
+        within the expression:</p>
+
+        <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+            <p><span class="command"><strong>_args[]</strong></span> - array holding the method arguments</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>_this</strong></span> - is a reference to the current object</p>
+          </li><li class="listitem">
+            <p>additionally variables matching the parameter names are available</p>
+          </li></ul></div>
+
+        <p>The <span class="command"><strong>lang</strong></span> parameter specifies the scripting language you want to use.
+        In case the required libraries are loaded, OVal is aware of these languages:</p>
+
+        <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+            <p><span class="command"><strong>bsh</strong></span> or <span class="command"><strong>beanshell</strong></span> for BeanShell,</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>groovy</strong></span> for Groovy,</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>jexl</strong></span> for JEXL,</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>js</strong></span> or <span class="command"><strong>javascript</strong></span> for JavaScript (via Mozilla Rhino),</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>mvel</strong></span> for MVEL,</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>ognl</strong></span> for OGNL, or</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>ruby</strong></span> or <span class="command"><strong>jruby</strong></span> for Ruby (via JRuby)</p>
+          </li></ul></div>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="disabling-preconditions"></a>4.2.5.&nbsp;Disabling precondition checks</h4></div></div></div>
+        
+
+        <p>You can globally disable or enable the checking of preconditions via the
+        <span class="command"><strong>Guard.setPreConditionsEnabled(boolean)</strong></span> method.</p>
+
+        <p>Example usage:</p>
+
+        <pre class="programlisting">MyAspect.aspectOf().getGuard().setPreConditionsEnabled(false);</pre>
+      </div>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="declaring-postconditions"></a>4.3.&nbsp;Working with postconditions</h3></div></div></div>
+      
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="declaring-method-return-value-constraints"></a>4.3.1.&nbsp;Declaring method return value constraints</h4></div></div></div>
+        
+
+        <p>By adding constraint annotations to a non-void method you can specify constraints for the method's
+        return value. When the method is invoked and the return value does not satisfy all constraints a
+        <span class="command"><strong>ConstraintsViolatedException</strong></span> is thrown.</p>
+
+        <p><span class="emphasis"><em>Note:</em></span> Despite the thrown exception the method code still has been executed,
+        you have to rollback the changes performed by this method manually.</p>
+
+        <p>If a non-void, non-parameterized method is also annotated with <span class="command"><strong>@IsInvariant</strong></span>
+        it's constraints will also be checked when calling the <span class="command"><strong>Validator.validate(Object)</strong></span>
+        method on an object of this type.</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Guarded</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <strong class="hl-keyword">private</strong> String name = null;
+
+  <em><span class="hl-annotation" style="color: gray">@IsInvariant</span></em>
+  <em><span class="hl-annotation" style="color: gray">@NotNull</span></em>
+  <em><span class="hl-annotation" style="color: gray">@Length(max = 4)</span></em>
+  <strong class="hl-keyword">public</strong> String getName()
+  {
+    <strong class="hl-keyword">return</strong> name;
+  }
+
+  <em><span class="hl-annotation" style="color: gray">@NotNull</span></em>
+  <em><span class="hl-annotation" style="color: gray">@Length(max = 4)</span></em>
+  <strong class="hl-keyword">public</strong> String getNameOrDefault(String <strong class="hl-keyword">default</strong>)
+  {
+    <strong class="hl-keyword">return</strong> name == null ? <strong class="hl-keyword">default</strong> : name;
+  }
+
+  ...
+}</pre>
+
+        <p>Example usage:</p>
+
+        <pre class="programlisting">BusinessObject bo = <strong class="hl-keyword">new</strong> BusinessObject();
+
+<em class="hl-comment" style="color: silver">// throws a ConstraintsViolatedException because field name is null</em>
+bo.getName();
+
+<em class="hl-comment" style="color: silver">// throws a ConstraintsViolatedException because the field "name" is null and therefore the default parameter will be returned which has a length &amp;lt; 4 characters</em>
+bo.getNameOrDefault(<strong class="hl-string"><em style="color:red">"abc"</em></strong>);
+
+Validator validator = <strong class="hl-keyword">new</strong> Validator();
+
+<em class="hl-comment" style="color: silver">// returns one ConstraintViolation because the getter method getName() is declared as invariant and returns an invalid value (null)</em>
+List&lt;ConstraintViolation&gt; violations = validator.validate(bo);</pre>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="scripted-postconditions"></a>4.3.2.&nbsp;Using scripted expressions for postconditions</h4></div></div></div>
+        
+
+        <p>For declaring scripted postconditions you can use the <span class="command"><strong>@net.sf.guard.Post</strong></span> annotation
+        which works similar to <span class="command"><strong>@net.sf.guard.Pre</strong></span> for preconditions.</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Guarded</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> Transaction
+{
+  <strong class="hl-keyword">private</strong> BigDecimal amount;
+
+  <em class="hl-comment" style="color: silver">// ensure that amount after calling the method is greater than it was before</em>
+  <em><span class="hl-annotation" style="color: gray">@Post(expr = "_this.amount&gt;_old", old = "_this.amount", lang = "groovy")</span></em>
+  <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> increase(BigDecimal  amount2add)
+  {
+    amount = amount.add(amount2add);
+  }
+}</pre>
+
+        <p>The <span class="command"><strong>expr</strong></span> parameter holds the script to be evaluated. If the script returns
+        <span class="command"><strong>true</strong></span> the constraint is satisfied. OVal provides special variables for use within the
+        expression:</p>
+
+        <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+            <p><span class="command"><strong>_args[]</strong></span> - array holding the method arguments</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>_this</strong></span> - is a reference to the current object</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>_returns</strong></span> - the method's return value</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>_old</strong></span> - see the description of the <span class="command"><strong>old</strong></span> parameter below</p>
+          </li><li class="listitem">
+            <p>additionally variables matching the parameter names are available</p>
+          </li></ul></div>
+
+        <p>The <span class="command"><strong>lang</strong></span> parameter specifies the scripting language you want to use.
+        In case the required libraries are loaded, OVal is aware of these languages:</p>
+
+        <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+            <p><span class="command"><strong>bsh</strong></span> or <span class="command"><strong>beanshell</strong></span> for BeanShell,</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>groovy</strong></span> for Groovy,</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>jexl</strong></span> for Groovy,</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>js</strong></span> or <span class="command"><strong>javascript</strong></span> for JavaScript (via Mozilla Rhino),</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>mvel</strong></span> for MVEL,</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>ognl</strong></span> for OGNL, or</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>ruby</strong></span> or <span class="command"><strong>jruby</strong></span> for Ruby (via JRuby)</p>
+          </li></ul></div>
+
+        <p>The <span class="command"><strong>old</strong></span> parameter is optionally, it can hold another expression that is evaluated
+        before the method is executed. The result is made available in the post constraint expression as a special
+        variable called <span class="command"><strong>_old</strong></span>. The old expression can also return an array or a map allowing you
+        to store multiple values. This way you can "remember" the old state of multiple properties of an object.
+        An expression like <span class="command"><strong>old = "[amount:_this.amount, date:_this.date]"</strong></span> in Groovy returns a map
+        with the keys <span class="command"><strong>amount</strong></span> and <span class="command"><strong>date</strong></span> holding the values of the object's properties
+        <span class="command"><strong>amount</strong></span> and <span class="command"><strong>date</strong></span>. These values then can be used in the constraint expression
+        like this: <span class="command"><strong>expression = "_this.amount&gt;_old.amount &amp;&amp; _this.date&gt;_old.date"</strong></span>.</p>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="disabling-postconditions"></a>4.3.3.&nbsp;Disabling postcondition checks</h4></div></div></div>
+        
+
+        <p>You can globally disable or enable the checking of postconditions via the
+        <span class="command"><strong>Guard.setPostConditionsEnabled(boolean)</strong></span> method.</p>
+
+        <p>Example usage:</p>
+
+        <pre class="programlisting">MyAspect.aspectOf().getGuard().setPostConditionsEnabled(false);</pre>
+      </div>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="invariants"></a>4.4.&nbsp;Working with invariants</h3></div></div></div>
+      
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="disabling-invariants"></a>4.4.1.&nbsp;Disabling automatic invariants checks</h4></div></div></div>
+        
+
+        <p>By default OVal checks class invariants before and after calls to any non-private method of guarded
+        classes and after constructor execution. If required you can globally disable the automatic checking of
+        invariants via the <span class="command"><strong>Guard.setInvariantsEnabled(boolean)</strong></span> method or for all objects of a
+        specific class using the <span class="command"><strong>Guard.setInvariantsEnabled(Class&lt;?&gt;, boolean)</strong></span> method.</p>
+
+        <p>Example usage:</p>
+
+        <pre class="programlisting">MyAspect.aspectOf().getGuard().setInvariantsEnabled(false);</pre>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="object-validation-before-method-execution"></a>4.4.2.&nbsp;Enforcing object validation before method execution</h4></div></div></div>
+        
+
+        <p>If you disabled the automatic check of class invariants you can still enable the checking of the
+        invariants prior calls to a certain method by annotating the respective method with
+        <span class="command"><strong>@net.sf.oval.guard.PreValidateThis</strong></span>.</p>
+
+        <p>In case of constraint violations a ConstraintsViolatedException is thrown and the method will not be executed.</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Guarded</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <em><span class="hl-annotation" style="color: gray">@NotNull</span></em>
+  <strong class="hl-keyword">private</strong> String name = null;
+
+  <em><span class="hl-annotation" style="color: gray">@PreValidateThis</span></em>
+  <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> save()
+  {
+    <em class="hl-comment" style="color: silver">// do something fancy</em>
+  }
+
+  ...
+}</pre>
+
+        <p>Example usage:</p>
+
+        <pre class="programlisting"><em class="hl-comment" style="color: silver">// create a new business object and leaving the field name null</em>
+BusinessObject bo = <strong class="hl-keyword">new</strong>  BusinessObject();
+
+<em class="hl-comment" style="color: silver">// the save() method will throw a ConstraintsViolatedException because field name is null</em>
+bo.save();</pre>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="object-validation-after-constructor-execution"></a>4.4.3.&nbsp;Enforcing object validation after constructor execution</h4></div></div></div>
+        
+
+        <p>If you disabled the automatic check of class invariants you can still enable the checking of the
+        invariants after an object has been instantiated by annotating the constructors of the corresponding class
+        with <span class="command"><strong>@net.sf.oval.guard.PostValidateThis</strong></span>.</p>
+
+        <p>In case of constraint violations the constructor will throw a <span class="command"><strong>ConstraintsViolatedException</strong></span>
+        which effectively means the code trying to instantiate the object cannot get hold of a reference to the object
+        being in an invalidate state and the invalid object will get garbage collected.</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Guarded</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <em><span class="hl-annotation" style="color: gray">@NotNull</span></em>
+  <strong class="hl-keyword">private</strong> String name;
+
+  <strong class="hl-tag" style="color: blue">/**
+   * constructor
+   */</strong>
+  <em><span class="hl-annotation" style="color: gray">@PostValidateThis</span></em>
+  <strong class="hl-keyword">public</strong> BusinessObject()
+  {
+  	<strong class="hl-keyword">super</strong>();
+  }
+
+  ...
+}</pre>
+
+        <p>Example usage:</p>
+
+        <pre class="programlisting"><em class="hl-comment" style="color: silver">// throws a ConstraintsViolatedException because the name field is null</em>
+BusinessObject bo = <strong class="hl-keyword">new</strong>  BusinessObject();</pre>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="object-validation-after-method-execution"></a>4.4.4.&nbsp;Enforcing object validation after method execution</h4></div></div></div>
+        
+
+        <p>If you disabled the automatic check of class invariants you can still enable the checking of the
+        invariants after a method has been executed by annotating the method with
+        <span class="command"><strong>@net.sf.oval.guard.PostValidateThis</strong></span>.</p>
+
+        <p>In case of constraint violations the method will throw an ConstraintsViolatedException.</p>
+
+        <p><span class="emphasis"><em>Note:</em></span> Despite the thrown exception the method code still has been executed,
+        you have to manually rollback the changes performed by this method.</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Guarded</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <em><span class="hl-annotation" style="color: gray">@Length(max=10)</span></em>
+  <strong class="hl-keyword">private</strong> String name = <strong class="hl-string"><em style="color:red">"12345"</em></strong>;
+
+  <em><span class="hl-annotation" style="color: gray">@PostValidateThis</span></em>
+  <strong class="hl-keyword">public</strong> appendToName(String appendix)
+  {
+    name += appendix;
+  }
+
+  ...
+}</pre>
+
+        <p>Example usage:</p>
+
+        <pre class="programlisting">BusinessObject bo = <strong class="hl-keyword">new</strong> BusinessObject();
+bo.appendToName(<strong class="hl-string"><em style="color:red">"123456"</em></strong>); <em class="hl-comment" style="color: silver">// throws a ConstraintsViolatedException because field name is now too long</em></pre>
+      </div>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="probe-mode"></a>4.5.&nbsp;Using the probe mode to simplify UI user input validation</h3></div></div></div>
+      
+
+      <p>OVal provides a so called probe mode in which you can execute all methods of an object and the guard will
+      only check the preconditions (e.g. parameter constraints) and not execute the method.</p>
+
+      <p>This is especially useful if you want to test input values received from the end user in the UI layer
+      against the setter methods of a business object. You can simply pass the values to the corresponding setters and
+      have any detected violations collect by a <span class="command"><strong>ConstraintsViolatedListener</strong></span>. Afterwards you can
+      report all violations back to the UI layer and have them displayed to the end user.</p>
+
+      <p>Example business object:</p>
+
+      <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Guarded</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> Person
+{
+  <em><span class="hl-annotation" style="color: gray">@NotNegative</span></em>
+  <strong class="hl-keyword">private</strong> <strong class="hl-keyword">int</strong> age;
+
+  <em><span class="hl-annotation" style="color: gray">@Min(5)</span></em>
+  <strong class="hl-keyword">private</strong> String name = <strong class="hl-string"><em style="color:red">""</em></strong>;
+
+  <em><span class="hl-annotation" style="color: gray">@Length(min=5, max=5)</span></em>
+  <strong class="hl-keyword">private</strong> String zipCode = <strong class="hl-string"><em style="color:red">""</em></strong>;
+
+  <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> setAge(<em><span class="hl-annotation" style="color: gray">@AssertFieldConstraints</span></em> <strong class="hl-keyword">int</strong> age)
+  {
+    <strong class="hl-keyword">this</strong>.age = age;
+  }
+
+  <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> setName(<em><span class="hl-annotation" style="color: gray">@AssertFieldConstraints</span></em> String name)
+  {
+    <strong class="hl-keyword">this</strong>.name = name;
+  }
+
+  <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> setZipCode(<em><span class="hl-annotation" style="color: gray">@AssertFieldConstraints</span></em> String zipCode)
+  {
+    <strong class="hl-keyword">this</strong>.zipCode = zipCode;
+  }
+
+  ...
+}</pre>
+
+      <p>Example usage:</p>
+
+      <pre class="programlisting"><em class="hl-comment" style="color: silver">/* *****************************************************
+ * somewhere in the UI layer
+ * *****************************************************/</em>
+ inputForm.setName(<strong class="hl-string"><em style="color:red">"1234"</em></strong>);
+ inputForm.setAge(-<span class="hl-number">4</span>);
+ inputForm.setZipCode(<strong class="hl-string"><em style="color:red">"123"</em></strong>);
+
+...
+
+<em class="hl-comment" style="color: silver">/* *****************************************************
+ * later in the business layer
+ * *****************************************************/</em>
+<strong class="hl-keyword">public</strong> Person createPerson(PersonInputForm inputForm) <strong class="hl-keyword">throws</strong> ConstraintsViolatedException
+{
+  Person person = <strong class="hl-keyword">new</strong> Person();
+
+  Guard guard = MyGuardAspect.aspectOf().getGuard();
+
+  <em class="hl-comment" style="color: silver">// enable the probe mode in the current thread for the person object</em>
+  guard.enableProbeMode(person);
+
+  <em class="hl-comment" style="color: silver">// simulate applying the values to the person bean</em>
+  person.setName(inputForm.getName());
+  person.setAge(inputForm.getAge());
+  person.setZipCode(inputForm.getZipCode());
+
+  <em class="hl-comment" style="color: silver">// disable the probe mode in the current thread for the person object</em>
+  ProbeModeListener result = guard.disableProbeMode(person);
+
+  <em class="hl-comment" style="color: silver">// check if any constraint violations occured</em>
+  <strong class="hl-keyword">if</strong>(result.getConstraintViolations().size() &gt; <span class="hl-number">0</span>)
+  {
+     <em class="hl-comment" style="color: silver">// report the collected constraint violations to the UI layer</em>
+     <strong class="hl-keyword">throw</strong> <strong class="hl-keyword">new</strong> ConstraintsViolatedException(result.getConstraintViolations());
+  }
+  <strong class="hl-keyword">else</strong>
+  {
+    <em class="hl-comment" style="color: silver">// apply the values to the person bean</em>
+    result.commit();
+
+    dao.save(person);
+    <strong class="hl-keyword">return</strong> person;
+  }
+}
+</pre>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="converting-exceptions"></a>4.6.&nbsp;Converting ConstraintsViolatedExceptions</h3></div></div></div>
+      
+
+      <p>When calling methods on guarded objects these methods will throw
+      <span class="command"><strong>ConstraintsViolatedException</strong></span>s in case any pre- or postconditions are violated. Their might be
+      good reasons why you may want to have other exceptions thrown instead of OVal's proprietary exceptions, e.g. JRE
+      standard exceptions such as <span class="command"><strong>IllegalArgumentException</strong></span> or <span class="command"><strong>IllegalStateException</strong></span>.</p>
+
+      <p>OVal's Guard class allows you to register an exception translator. The exception translator defines a
+      <span class="command"><strong>translateException()</strong></span> method that is executed for all occurring exceptions during runtime validation.
+      This allows you to translate any <span class="command"><strong>OValException</strong></span> thrown during validation into another
+      <span class="command"><strong>RuntimeException</strong></span> which will be thrown instead. As an example have a look at the
+      <span class="command"><strong>net.sf.oval.exception.ExceptionTranslatorJDKExceptionsImpl</strong></span> class how an implementation could look like.</p>
+
+      <p>Example usage:</p>
+
+      <pre class="programlisting"><strong class="hl-keyword">public</strong> aspect MyAspect <strong class="hl-keyword">extends</strong> GuardAspect
+{
+  <strong class="hl-keyword">public</strong> MyAspect()
+  {
+    <strong class="hl-keyword">super</strong>();
+
+    <em class="hl-comment" style="color: silver">// specify an exception translator</em>
+    getGuard().setExceptionTranslator(<strong class="hl-keyword">new</strong> net.sf.oval.exception.ExceptionTranslatorJDKExceptionsImpl());
+  }
+}</pre>
+    </div>
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom-constraint-annotations"></a>5.&nbsp;Creating custom annotation based constraints</h2></div></div></div>
+    
+
+    <p>Developing custom annotation based constraints is fairly easy. All you need to do is:</p>
+
+    <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+        <p>Create a constraint check class that implements <span class="command"><strong>net.sf.oval.AnnotationCheck</strong></span> or extends
+        <span class="command"><strong>net.sf.oval.AbstractAnnotationCheck</strong></span>.</p>
+
+        <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> UpperCaseCheck <strong class="hl-keyword">extends</strong> AbstractAnnotationCheck&lt;UpperCase&gt;
+{
+  <strong class="hl-keyword">public</strong> <strong class="hl-keyword">boolean</strong> isSatisfied(Object validatedObject, Object valueToValidate, OValContext context, Validator validator)
+  {
+    <strong class="hl-keyword">if</strong> (valueToValidate == null) <strong class="hl-keyword">return</strong> true;
+
+    String val = valueToValidate.toString();
+
+    <strong class="hl-keyword">return</strong> val.equals(val.toUpperCase());
+  }
+}</pre>
+      </li><li class="listitem">
+        <p>Create an annotation for your constraint and annotated it with <span class="command"><strong>@net.sf.oval.configuration.annotation.Constraint</strong></span>.
+        Specify your check class as value for parameter "check".</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Retention(RetentionPolicy.RUNTIME)</span></em>
+<em><span class="hl-annotation" style="color: gray">@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})</span></em>
+<em><span class="hl-annotation" style="color: gray">@net.sf.oval.configuration.annotation.Constraint(checkWith = UpperCaseCheck.class)</span></em>
+<strong class="hl-keyword">public</strong> <em><span class="hl-annotation" style="color: gray">@interface</span></em> UpperCase
+{
+  <strong class="hl-tag" style="color: blue">/**
+  * message to be used for the ConstraintsViolatedException
+  *
+  * @see ConstraintsViolatedException
+  */</strong>
+  String message() <strong class="hl-keyword">default</strong> <strong class="hl-string"><em style="color:red">"must be upper case"</em></strong>;
+}</pre>
+      </li><li class="listitem">
+        <p>Use the custom constraint annotation in your code.</p>
+
+        <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> BusinessObject
+{
+  <em><span class="hl-annotation" style="color: gray">@UpperCase</span></em>
+  <strong class="hl-keyword">private</strong> String userId;
+
+  ...
+}</pre>
+      </li></ol></div>
+
+    <p>Localization of the constraint violation message can be achieved as follows:</p>
+
+    <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+        <p>Specify a unique message key for the default message string of the constraint annotation, e.g.</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Retention(RetentionPolicy.RUNTIME)</span></em>
+<em><span class="hl-annotation" style="color: gray">@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})</span></em>
+<em><span class="hl-annotation" style="color: gray">@net.sf.oval.configuration.annotation.Constraint(checkWith = UpperCaseCheck.class)</span></em>
+<strong class="hl-keyword">public</strong> <em><span class="hl-annotation" style="color: gray">@interface</span></em> UpperCase
+{
+  <strong class="hl-tag" style="color: blue">/**
+   * message to be used for the ConstraintsViolatedException
+   *
+   * @see ConstraintsViolatedException
+   */</strong>
+  String message() <strong class="hl-keyword">default</strong> <strong class="hl-string"><em style="color:red">"UpperCase.violated"</em></strong>;
+}</pre>
+      </li><li class="listitem">
+        <p>Create custom message bundles (one per language) and specify the translated sting in each bundle:</p>
+
+        <pre class="programlisting">UpperCase.violated={context} must be upper <strong class="hl-keyword">case</strong></pre>
+
+        <p>There exist two default variables that can be used in the message string:</p>
+
+        <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+            <p><span class="command"><strong>{context}</strong></span> = the validation context (e.g. a field, a method return value or a
+            constructor/method parameter</p>
+          </li><li class="listitem">
+            <p><span class="command"><strong>{invalidValue}</strong></span> = the value that has been checked</p>
+          </li></ul></div>
+
+        <p>If required, you can introduce additional variables - e.g. which reflect additional configuration
+        properties of your constraint such as {max}, {min}, {size} - by overriding the
+        <span class="command"><strong>createMessageVariables</strong></span> method of your custom check class:</p>
+
+        <pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Override</span></em>
+<strong class="hl-keyword">public</strong> Map&lt;String, String&gt; createMessageVariables()
+{
+  Map&lt;String, String&gt; messageVariables = <strong class="hl-keyword">new</strong> HashMap&lt;String, String&gt;(<span class="hl-number">2</span>)
+  messageVariables.put(<strong class="hl-string"><em style="color:red">"max"</em></strong>, Integer.toString(max));
+  messageVariables.put(<strong class="hl-string"><em style="color:red">"min"</em></strong>, Integer.toString(min));
+  <strong class="hl-keyword">return</strong> messageVariables;
+}</pre>
+
+        <p>The message variables can then be used in the corresponding message strings.</p>
+
+        <p>For performance reasons the <span class="command"><strong>createMessageVariables</strong></span> method is only executed once and the returned map is cached by OVal for this constraint check instance.
+        If you change one of the variables you need to invalidate the cache and require rebuilding of the variables map by calling <span class="command"><strong>requireMessageVariablesRecreation</strong></span>.
+        For the built-in constraints <span class="command"><strong>requireMessageVariablesRecreation</strong></span> is invoked in each setter on the constraint check implementations, e.g.:
+        </p>
+        <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> setMax(<strong class="hl-keyword">final</strong> <strong class="hl-keyword">int</strong> max)
+{
+	<strong class="hl-keyword">this</strong>.max = max;
+	requireMessageVariablesRecreation();
+}</pre>
+      </li><li class="listitem">
+        <p>Register your message bundle with OVal:</p>
+
+        <pre class="programlisting">ResourceBundleMessageResolver resolver = (ResourceBundleMessageResolver) Validator.getMessageResolver();
+resolver.addMessageBundle(ResourceBundle.getBundle(<strong class="hl-string"><em style="color:red">"mypackage/CustomMessages"</em></strong>));</pre>
+
+        <p>If you would like to store your message strings other than in message bundles (e.g. in a database):
+        Either implement the <span class="command"><strong>MessageResolver</strong></span> interface or extend the <span class="command"><strong>ResourceBundleMessageResolver</strong></span>
+        and then configure OVal using the static <span class="command"><strong>Validator.setMessageResolver(...)</strong></span> method to use an instance of
+        your custom message resolver instead.</p>
+      </li></ol></div>
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="complex-class-specific-constraints"></a>6.&nbsp;Expressing complex class specific constraints</h2></div></div></div>
+    
+
+    <p>If you have to express a rather complex constraint that is used only within one class you might not want to
+    implement it as a custom constraint. You have the following two alternatives expressing such class specific constraints
+    in a convenient way.</p>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="using-validatewithmethod"></a>6.1.&nbsp;Using @ValidateWithMethod</h3></div></div></div>
+      
+
+      <p>You can write a method within the class that has a single parameter to receive the value to validate and that
+      returns true if the constraint is satisfied and false if it is violated.</p>
+
+      <p>Example:</p>
+
+      <pre class="programlisting"><strong class="hl-keyword">private</strong> <strong class="hl-keyword">static</strong> <strong class="hl-keyword">class</strong> TestEntity
+{
+  <em><span class="hl-annotation" style="color: gray">@Min(1960)</span></em>
+  <strong class="hl-keyword">private</strong> <strong class="hl-keyword">int</strong> year = <span class="hl-number">1977</span>;
+
+  <em><span class="hl-annotation" style="color: gray">@Range(min=1, max=12)</span></em>
+  <strong class="hl-keyword">private</strong> <strong class="hl-keyword">int</strong> month = <span class="hl-number">2</span>;
+
+  <em><span class="hl-annotation" style="color: gray">@ValidateWithMethod(methodName = "isValidDay", parameterType = int.class)</span></em>
+  <strong class="hl-keyword">private</strong> <strong class="hl-keyword">int</strong> day = <span class="hl-number">31</span>;
+
+  <strong class="hl-keyword">private</strong> <strong class="hl-keyword">boolean</strong> isValidDay(<strong class="hl-keyword">int</strong> day)
+  {
+    GregorianCalendar cal = <strong class="hl-keyword">new</strong> GregorianCalendar();
+    cal.setLenient(false);
+    cal.set(GregorianCalendar.YEAR, year);
+    cal.set(GregorianCalendar.MONTH, month - <span class="hl-number">1</span>);
+    cal.set(GregorianCalendar.DATE, day);
+    <strong class="hl-keyword">try</strong> {
+      cal.getTimeInMillis(); <em class="hl-comment" style="color: silver">// throws IllegalArgumentException</em>
+    } <strong class="hl-keyword">catch</strong> (IllegalArgumentException e) {
+      <strong class="hl-keyword">return</strong> false;
+    }
+    <strong class="hl-keyword">return</strong> true;
+  }
+}</pre>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="using-checkwith"></a>6.2.&nbsp;Using @CheckWith</h3></div></div></div>
+      
+
+      <p>You can write an inner static class extending
+      <span class="command"><strong>net.sf.oval.constraint.CheckWithCheck.SimpleCheck</strong></span> which then is referenced via
+      a <span class="command"><strong>@net.sf.oval.constraint.CheckWith</strong></span> constraint annotation.</p>
+
+      <p>Example:</p>
+
+      <pre class="programlisting"><strong class="hl-keyword">private</strong> <strong class="hl-keyword">static</strong> <strong class="hl-keyword">class</strong> DayEntity
+{
+  <em><span class="hl-annotation" style="color: gray">@Min(1960)</span></em>
+  <strong class="hl-keyword">private</strong> <strong class="hl-keyword">int</strong> year;
+
+  <em><span class="hl-annotation" style="color: gray">@Range(min=1, max=12)</span></em>
+  <strong class="hl-keyword">private</strong> <strong class="hl-keyword">int</strong> month;
+
+  <em><span class="hl-annotation" style="color: gray">@CheckWith(DayCheck.class)</span></em>
+  <strong class="hl-keyword">private</strong> <strong class="hl-keyword">int</strong> day;
+
+  <strong class="hl-keyword">private</strong> <strong class="hl-keyword">static</strong> <strong class="hl-keyword">class</strong> DayCheck <strong class="hl-keyword">implements</strong> CheckWithCheck.SimpleCheck
+  {
+    <strong class="hl-keyword">public</strong> <strong class="hl-keyword">boolean</strong> isSatisfied(Object validatedObject, Object value)
+    {
+      <strong class="hl-keyword">try</strong> {
+        GregorianCalendar cal = <strong class="hl-keyword">new</strong> GregorianCalendar();
+        cal.setLenient(false);
+        cal.set(GregorianCalendar.YEAR, ((DayEntity) validatedObject).year);
+        cal.set(GregorianCalendar.MONTH, ((DayEntity) validatedObject).month - <span class="hl-number">1</span>);
+        cal.set(GregorianCalendar.DATE, ((DayEntity) validatedObject).day);
+        cal.getTimeInMillis(); <em class="hl-comment" style="color: silver">// may throw IllegalArgumentException return true;</em>
+      } <strong class="hl-keyword">catch</strong> (IllegalArgumentException e) {}
+      <strong class="hl-keyword">return</strong> false;
+    }
+  }
+}</pre>
+    </div>
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xml-configuration"></a>7.&nbsp;XML based configuration</h2></div></div></div>
+    
+
+    <p>By default the constraints configuration is done by adding annotations representing the constraints to the
+    respective locations in the source code. Alternatively constraints can also be declared via XML - either for a
+    complete configuration or to overwrite the annotations based constraint configurations for specific classes, fields, etc.</p>
+
+    <p>You can used the <span class="command"><strong>net.sf.oval.configuration.xml.XMLConfigurer</strong></span> for loading constraint definitions from an XML file:</p>
+
+    <pre class="programlisting">XMLConfigurer xmlConfigurer = <strong class="hl-keyword">new</strong> XMLConfigurer(<strong class="hl-keyword">new</strong> File(<strong class="hl-string"><em style="color:red">"oval-config.xml"</em></strong>));
+Guard guard = <strong class="hl-keyword">new</strong> Guard(xmlConfigurer);</pre>
+
+    <p>Here is an example XML configuration:</p>
+
+	<pre class="programlisting"><span class="hl-directive" style="color: maroon">&lt;?xml version="1.0" ?&gt;</span>
+<strong class="hl-tag" style="color: #000096">&lt;oval</strong>
+  <span class="hl-attribute" style="color: #F5844C">xmlns</span>=<span class="hl-value" style="color: #993300">"http://oval.sf.net/oval-configuration"</span>
+  <span class="hl-attribute" style="color: #F5844C">xmlns:xsi</span>=<span class="hl-value" style="color: #993300">"http://www.w3.org/2001/XMLSchema-instance"</span>
+  <span class="hl-attribute" style="color: #F5844C">xsi:schemaLocation</span>=<span class="hl-value" style="color: #993300">"http://oval.sf.net/oval-configuration http://oval.sourceforge.net/oval-configuration.xsd"</span><strong class="hl-tag" style="color: #000096">
+&gt;</strong>
+  <em class="hl-comment" style="color: silver">&lt;!-- define a constraint set --&gt;</em>
+  <strong class="hl-tag" style="color: #000096">&lt;constraintSet</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"user.userid"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;notNull /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;matchPattern&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;pattern</strong> <span class="hl-attribute" style="color: #F5844C">pattern</span>=<span class="hl-value" style="color: #993300">"^[a-z0-9]{8}$"</span> <span class="hl-attribute" style="color: #F5844C">flags</span>=<span class="hl-value" style="color: #993300">"0"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/matchPattern&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/constraintSet&gt;</strong>
+
+  <em class="hl-comment" style="color: silver">&lt;!-- define checks for the acme.model.User class --&gt;</em>
+  <em class="hl-comment" style="color: silver">&lt;!-- overwrite=false means already defined checks for this class will not be removed --&gt;</em>
+  <strong class="hl-tag" style="color: #000096">&lt;class</strong> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"acme.model.User"</span> <span class="hl-attribute" style="color: #F5844C">overwrite</span>=<span class="hl-value" style="color: #993300">"false"</span> <span class="hl-attribute" style="color: #F5844C">applyFieldConstraintsToSetter</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+
+    <strong class="hl-tag" style="color: #000096">&lt;field</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"firstName"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;length</strong> <span class="hl-attribute" style="color: #F5844C">min</span>=<span class="hl-value" style="color: #993300">"0"</span> <span class="hl-attribute" style="color: #F5844C">max</span>=<span class="hl-value" style="color: #993300">"3"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/field&gt;</strong>
+
+    <strong class="hl-tag" style="color: #000096">&lt;field</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"lastName"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;length</strong> <span class="hl-attribute" style="color: #F5844C">min</span>=<span class="hl-value" style="color: #993300">"0"</span> <span class="hl-attribute" style="color: #F5844C">max</span>=<span class="hl-value" style="color: #993300">"5"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/field&gt;</strong>
+
+    <em class="hl-comment" style="color: silver">&lt;!-- overwrite=true means previously defined checks for this field will be overwritten by the checks defined here --&gt;</em>
+    <strong class="hl-tag" style="color: #000096">&lt;field</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"managerId"</span> <span class="hl-attribute" style="color: #F5844C">overwrite</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <em class="hl-comment" style="color: silver">&lt;!-- use the checks defined for the constaint set "user.userid" --&gt;</em>
+      <strong class="hl-tag" style="color: #000096">&lt;assertConstraint</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"user.userid"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/field&gt;</strong>
+
+    <strong class="hl-tag" style="color: #000096">&lt;field</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"userId"</span> <span class="hl-attribute" style="color: #F5844C">overwrite</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <em class="hl-comment" style="color: silver">&lt;!-- use the checks defined for the constaint set "user.userid" --&gt;</em>
+      <strong class="hl-tag" style="color: #000096">&lt;assertConstraintSet</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"user.userid"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/field&gt;</strong>
+
+    <em class="hl-comment" style="color: silver">&lt;!-- define constructor parameter checks --&gt;</em>
+    <strong class="hl-tag" style="color: #000096">&lt;constructor&gt;</strong>
+      <em class="hl-comment" style="color: silver">&lt;!-- parameter1 --&gt;</em>
+      <strong class="hl-tag" style="color: #000096">&lt;parameter</strong> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"java.lang.String"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;notNull /&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/parameter&gt;</strong>
+
+      <em class="hl-comment" style="color: silver">&lt;!-- parameter 2 --&gt;</em>
+      <em class="hl-comment" style="color: silver">&lt;!-- the types of all parameters must be listed, even if no checks are defined --&gt;</em>
+      <strong class="hl-tag" style="color: #000096">&lt;parameter</strong> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"java.lang.String"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/constructor&gt;</strong>
+
+    <em class="hl-comment" style="color: silver">&lt;!-- define method parameter checks --&gt;</em>
+    <strong class="hl-tag" style="color: #000096">&lt;method</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"setPasswordExpirationDays"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <em class="hl-comment" style="color: silver">&lt;!-- parameter 1 --&gt;</em>
+      <strong class="hl-tag" style="color: #000096">&lt;parameter</strong> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"int"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;notNull /&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/parameter&gt;</strong>
+     <strong class="hl-tag" style="color: #000096">&lt;/method&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/class&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/oval&gt;</strong></pre>
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="additional-configuration"></a>8.&nbsp;Additional configuration and customization options</h2></div></div></div>
+    
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="constraint-profiles"></a>8.1.&nbsp;Constraint profiles</h3></div></div></div>
+      
+
+      <p>You may come across the requirement to turn on or off the checking of certain constraints across your
+      domain model, e.g. based on some global configuration settings of the application. OVal helps you to implement
+      this by introducing constraint profiles. For each declared constraint you can specify an infinite number of
+      profiles this constraint belongs to. During runtime you then can enable or disable all constraints associated
+      with a given profile by using the <span class="command"><strong>disableProfile</strong></span> , and <span class="command"><strong>enableProfile</strong></span>
+      methods of the <span class="command"><strong>Validator</strong></span> instance. Constraints not having any profiles declared are
+      automatically assigned a profile named <span class="command"><strong>default</strong></span>.</p>
+
+      <pre class="programlisting"><strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> Person
+{
+  <em><span class="hl-annotation" style="color: gray">@NotNull(profiles = {"profile1"})</span></em>
+  <strong class="hl-keyword">public</strong> String firstName;
+
+  <em><span class="hl-annotation" style="color: gray">@NotNull(profiles = {"profile1"})</span></em>
+  <strong class="hl-keyword">public</strong> String lastName;
+
+  <em><span class="hl-annotation" style="color: gray">@NotNull(profiles = {"profile2", "profile3"})</span></em>
+  <strong class="hl-keyword">public</strong> String zipCode;
+}</pre>
+
+      <p>Example usage:</p>
+
+      <pre class="programlisting">Validator v = <strong class="hl-keyword">new</strong> Validator();
+v.disableProfile(<strong class="hl-string"><em style="color:red">"profile1"</em></strong>);
+
+Person p = <strong class="hl-keyword">new</strong> Person();
+v.validate(p);</pre>
+
+      <p>In this case only the null value <span class="command"><strong>zipCode</strong></span> property will result in a
+      <span class="command"><strong>ConstraintViolation</strong></span>. The <span class="command"><strong>@NotNull</strong></span> constraints of <span class="command"><strong>firstName</strong></span>
+      and <span class="command"><strong>lastName</strong></span> are ignored since they are associated with <span class="command"><strong>profile1</strong></span>
+      and <span class="command"><strong>profile1</strong></span> has been disabled.</p>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="collection-factory"></a>8.2.&nbsp;Collection factory</h3></div></div></div>
+      
+
+      <p>OVal instantiates all internally used collections indirectly via a <span class="command"><strong>CollectionFactory</strong></span>.
+      OVal comes with three different implementations of the collection factory (Javolution Collections,
+      GNU Trove Collections, and JDK Collections). If the Javolution or GNU Trove collection classes are detected
+      in the classpath, OVal automatically uses the respective CollectionFactory otherwise the collection factory
+      for standard JDK collections is used.</p>
+
+      <p>The Collection Factory to be used by OVal can be configured via the static
+      <span class="command"><strong>Validator.setCollectionFactory(factory)</strong></span> method.</p>
+
+      <p>You can implement the <span class="command"><strong>net.sf.oval.collection.CollectionFactory</strong></span> interface to
+      support other collection implementations.</p>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="additiona-expression-languages"></a>8.3.&nbsp;Adding additional expression languages</h3></div></div></div>
+      
+
+      <p>If you want to express constraints in a scripting language not supported by OVal out of the box, you need
+      to implement the <span class="command"><strong>net.sf.oval.expression.ExpressionLanguage</strong></span> interface  for the desired language
+      and register your implementation with OVal using the <span class="command"><strong>Validator.addExpressionLanguage(languageId, expressionLanguage)</strong></span>
+      method. Then you can use the specified languageId with expression language aware constraint annotations such as
+      <span class="command"><strong>@Assert</strong></span>, <span class="command"><strong>@Pre</strong></span>, or <span class="command"><strong>@Post</strong></span> and start expressing constraints
+      in the new expression language.</p>
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="spring-integration"></a>8.4.&nbsp;Spring framework integration</h3></div></div></div>
+      
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="spring-validation"></a>8.4.1.&nbsp;Spring Validation</h4></div></div></div>
+        
+
+        <p>The class <span class="command"><strong>net.sf.oval.integration.spring.SpringValidator</strong></span> provides an implementation of Spring's
+        <span class="command"><strong>org.springframework.validation.Validator</strong></span> interface and thus can be used for
+        <a class="ulink" href="http://static.springsource.org/spring/docs/3.0.x/reference/validation.html" target="'_self'">Spring Validation</a>.</p>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="spring-aop"></a>8.4.2.&nbsp;Guarding Spring managed beans using Spring AOP</h4></div></div></div>
+        
+
+        <p>It is possible to use OVal's programming by contract feature with AOP solutions other than AspectJ.
+        Spring for example uses the AOP Alliance API in conjunction with JDK or CGLib proxies to provide certain
+        features of AOP to Spring managed beans.</p>
+
+        <p>With the class <span class="command"><strong>net.sf.oval.guard.GuardInterceptor</strong></span> we provide an AOP Alliance
+        implementation of the Guard aspect that enables you to use OVal's guarding feature in conjunction with
+        Spring managed beans without the need for AspectJ.</p>
+
+        <p>Here is an example how to configure the guarding of the methods of a Spring managed service.
+        This configuration requires CGLIB to be on the classpath.</p>
+
+        <pre class="programlisting"><strong class="hl-tag" style="color: #000096">&lt;beans&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;bean</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"myService"</span> <span class="hl-attribute" style="color: #F5844C">class</span>=<span class="hl-value" style="color: #993300">"MyServiceImpl"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+
+  <strong class="hl-tag" style="color: #000096">&lt;bean</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"ovalGuardInterceptor"</span> <span class="hl-attribute" style="color: #F5844C">class</span>=<span class="hl-value" style="color: #993300">"net.sf.oval.guard.GuardInterceptor"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+
+  <strong class="hl-tag" style="color: #000096">&lt;bean</strong> <span class="hl-attribute" style="color: #F5844C">class</span>=<span class="hl-value" style="color: #993300">"org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;property</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"proxyTargetClass"</span> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"true"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;property</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"beanNames"</span> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"*Service"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;property</strong> <span class="hl-attribute" style="color: #F5844C">name</span>=<span class="hl-value" style="color: #993300">"interceptorNames"</span><strong class="hl-tag" style="color: #000096">&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;list&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;value&gt;</strong>ovalGuardInterceptor<strong class="hl-tag" style="color: #000096">&lt;/value&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/list&gt;</strong><strong class="hl-tag" style="color: #000096">&lt;/property&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/bean&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/beans&gt;</strong>
+</pre>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="injecting-spring-beans-into-constraints"></a>8.4.3.&nbsp;Injecting Spring beans into constraint check classes</h4></div></div></div>
+
+        
+
+        <p>To have Spring beans injected automatically into Check classes you need to:</p>
+
+        <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+      	    <p>annotated the required fields in your Check implementation class with <span class="command"><strong>@Autowired</strong></span></p>
+      	  </li><li class="listitem">
+        	<p>add an instance of <span class="command"><strong>net.sf.oval.integration.spring.BeanInjectingCheckInitializationListener</strong></span> to the configurer</p>
+            <pre class="programlisting">AnnotationConfigurer myConfigurer = new AnnotationConfigurer();
+
+myConfigurer.addCheckInitializationListener(BeanInjectingCheckInitializationListener.INSTANCE);
+
+Validator myValidator = new Validator(myConfigurer);</pre>
+      	  </li><li class="listitem">
+           <p>enable annotation-based configuration in your Spring application context configuration:</p>
+           <pre class="programlisting"><strong class="hl-tag" style="color: #000096">&lt;beans&gt;</strong>
+
+  <strong class="hl-tag" style="color: #000096">&lt;context:annotation-config /&gt;</strong>
+
+<strong class="hl-tag" style="color: #000096">&lt;/beans&gt;</strong></pre>
+          </li><li class="listitem">
+           <p>setup an SpringInjector bean in your Spring application context configuration:</p>
+           <pre class="programlisting"><strong class="hl-tag" style="color: #000096">&lt;beans&gt;</strong>
+
+  <strong class="hl-tag" style="color: #000096">&lt;bean</strong> <span class="hl-attribute" style="color: #F5844C">class</span>=<span class="hl-value" style="color: #993300">"net.sf.oval.integration.spring.SpringInjector"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+
+<strong class="hl-tag" style="color: #000096">&lt;/beans&gt;</strong></pre>
+          </li></ul></div>
+      </div>
+
+      <div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="configuring-oval-with-spring"></a>8.4.4.&nbsp;Configuring OVal validator instances with Spring</h4></div></div></div>
+
+        
+
+        <p>You can instantiate OVal validators with Spring like any other Spring managed bean.
+        Here is an example setting up a validator with XML based constraint configuration:</p>
+
+        <pre class="programlisting"><strong class="hl-tag" style="color: #000096">&lt;beans&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;bean</strong> <span class="hl-attribute" style="color: #F5844C">id</span>=<span class="hl-value" style="color: #993300">"validator"</span> <span class="hl-attribute" style="color: #F5844C">class</span>=<span class="hl-value" style="color: #993300">"net.sf.oval.Validator"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;constructor-arg&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;list&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;bean</strong> <span class="hl-attribute" style="color: #F5844C">class</span>=<span class="hl-value" style="color: #993300">"net.sf.oval.configuration.xml.XMLConfigurer"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+           <strong class="hl-tag" style="color: #000096">&lt;constructor-arg</strong> <span class="hl-attribute" style="color: #F5844C">type</span>=<span class="hl-value" style="color: #993300">"java.io.InputStream"</span> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"classpath:com/acme/OValConfiguration.xml"</span><strong class="hl-tag" style="color: #000096"> /&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;/bean&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/list&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/constructor-arg&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/bean&gt;</strong>
+
+<strong class="hl-tag" style="color: #000096">&lt;/beans&gt;</strong></pre>
+      </div>
+
+    </div>
+
+    <div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="apache-struts-integration"></a>8.5.&nbsp;Apache Struts 2 integration</h3></div></div></div>
+      
+
+      <p>Musachy Barroso has developed an OVal Plug-in for Apache Struts 2, which is documented at
+      <a class="ulink" href="http://cwiki.apache.org/confluence/display/S2PLUGINS/OVal+Plugin" target="'_self'">http://cwiki.apache.org/confluence/display/S2PLUGINS/OVal+Plugin </a></p>
+    </div>
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="api-documentation"></a>9.&nbsp;API documentation</h2></div></div></div>
+    
+
+    <p>You can browse OVal's Javadoc <a class="ulink" href="api/index.html" target="'_self'">here</a> .</p>
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="download"></a>10.&nbsp;Download</h2></div></div></div>
+    
+
+    <p>You can download the latest OVal binaries and source code from the project page at
+    <a class="ulink" href="http://sourceforge.net/projects/oval/" target="'_self'">http://sourceforge.net/projects/oval/</a></p>
+
+    <p></p>
+
+    <p>
+      <a class="ulink" href="http://www.sourceforge.net/" target="'_self'"><span class="inlinemediaobject"><img src="images/sourceforge.png"></span></a>
+      <a class="ulink" href="http://www.junit.org/" target="'_self'"><span class="inlinemediaobject"><img src="images/junit.png"></span></a>
+      <a class="ulink" href="http://www.eclipse.org/aspectj/" target="'_self'"><span class="inlinemediaobject"><img src="images/aspectj.png"></span></a>
+      <a class="ulink" href="http://javolution.org/" target="'_self'"><span class="inlinemediaobject"><img src="images/javolution.png"></span></a>
+      <a class="ulink" href="http://xstream.codehaus.org/" target="'_self'"><span class="inlinemediaobject"><img src="images/xstream.png"></span></a>
+      <a class="ulink" href="http://www.mozilla.org/rhino/" target="'_self'"><span class="inlinemediaobject"><img src="images/rhino.png"></span></a>
+      <a class="ulink" href="http://groovy.codehaus.org/" target="'_self'"><span class="inlinemediaobject"><img src="images/groovy.png"></span></a>
+      <a class="ulink" href="http://paranamer.codehaus.org/" target="'_self'"><span class="inlinemediaobject"><img src="images/paranamer.png"></span></a>
+      <a class="ulink" href="http://www.ognl.org/" target="'_self'"><span class="inlinemediaobject"><img src="images/ognl.png"></span></a>
+      <a class="ulink" href="http://mvel.codehaus.org/" target="'_self'"><span class="inlinemediaobject"><img src="images/mvel.png"></span></a>
+    </p>
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="references"></a>11.&nbsp;References</h2></div></div></div>
+    
+
+    <p>There exist some articles and blog entries talking about and/or referencing OVal:</p>
+
+    <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+	    <p>Wikipedia: OVal (Framework)</p>
+        <p><a class="ulink" href="http://de.wikipedia.org/wiki/OVal_%28Framework%29" target="'_self'">http://de.wikipedia.org/wiki/OVal_%28Framework%29</a></p>
+		<p><a class="ulink" href="http://translate.google.com/translate?sl=de&amp;tl=en&amp;u=http%3A%2F%2Fde.wikipedia.org%2Fwiki%2FOVal_%28Framework%29" target="'_self'">English Translation</a></p>
+	  </li><li class="listitem">
+	    <p>How to integrate Oval validation with Spring 3 (2013)</p>
+        <p><a class="ulink" href="http://maheshjq.blogspot.de/2013/08/how-to-integrate-oval-validation-with.html" target="'_self'">http://maheshjq.blogspot.de/2013/08/how-to-integrate-oval-validation-with.html</a></p>
+	  </li><li class="listitem">
+	    <p>OVal - validate your models quickly and effortlessly (2011)</p>
+        <p><a class="ulink" href="http://mcl.jogger.pl/2011/07/14/oval-validate-your-models-quickly-and-effortlessly/" target="'_self'">http://mcl.jogger.pl/2011/07/14/oval-validate-your-models-quickly-and-effortlessly/</a></p>
+	  </li><li class="listitem">
+	    <p>A Valid Point (2011)</p>
+        <p><a class="ulink" href="http://www.grinshpoon.com/pblog/2011/06/29/a-valid-point/" target="'_self'">http://www.grinshpoon.com/pblog/2011/06/29/a-valid-point/</a></p>
+	  </li><li class="listitem">
+	    <p>Validaciones: Hibernate Validator vs OVal (2010)</p>
+        <p><a class="ulink" href="http://unpocodejava.wordpress.com/2010/05/07/validaciones-hibernate-validator-vs-oval" target="'_self'">http://unpocodejava.wordpress.com/2010/05/07/validaciones-hibernate-validator-vs-oval</a></p>
+		<p><a class="ulink" href="http://translate.google.com/translate?sl=es&amp;tl=en&amp;u=http%3A%2F%2Funpocodejava.wordpress.com%2F2010%2F05%2F07%2Fvalidaciones-hibernate-validator-vs-oval" target="'_self'">English Translation</a></p>
+	  </li><li class="listitem">
+	    <p>Enkel validering av Java-objekter med OVal (2010)</p>
+        <p><a class="ulink" href="http://open.bekk.no/enkel-validering-av-java-objekter-med-oval" target="'_self'">http://open.bekk.no/enkel-validering-av-java-objekter-med-oval</a></p>
+	  </li><li class="listitem">
+	    <p>Oval Validation Framework  (2010)</p>
+        <p><a class="ulink" href="http://vathzala.blogspot.de/2010/03/oval-validation-framework.html" target="'_self'">http://vathzala.blogspot.de/2010/03/oval-validation-framework.html</a></p>
+	  </li><li class="listitem">
+	    <p>OVal - Object Validation With POJO (2009)</p>
+        <p><a class="ulink" href="http://bitsofwizardry.wordpress.com/2009/04/14/oval-object-validation-with-pojo/" target="'_self'">http://bitsofwizardry.wordpress.com/2009/04/14/oval-object-validation-with-pojo/</a></p>
+	  </li><li class="listitem">
+	    <p>The Developer Information Resource - OVal Learning Roadmap (2009)</p>
+        <p><a class="ulink" href="https://sites.google.com/a/thedevinfo.com/thedevinfo/Home/validation-frameworks/oval/oval-learning-roadmap" target="'_self'">https://sites.google.com/a/thedevinfo.com/thedevinfo/Home/validation-frameworks/oval/oval-learning-roadmap</a></p>
+	  </li><li class="listitem">
+        <p>Dise&ntilde;o por Contrato con OVal y Spring [Design by Contract with OVal and Spring] (2009)</p>
+        <p><a class="ulink" href="http://www.dosideas.com/java/562-diseno-por-contrato-con-oval-y-spring.html" target="'_self'">http://www.dosideas.com/java/562-diseno-por-contrato-con-oval-y-spring.html</a></p>
+        <p><a class="ulink" href="http://translate.google.com/translate?sl=es&amp;tl=en&amp;u=http%3A%2F%2Fwww.dosideas.com%2Fjava%2F562-diseno-por-contrato-con-oval-y-spring.html" target="'_self'">English Translation</a></p>
+      </li><li class="listitem">
+        <p>OVal Blog Entry Series at the "JEE, BPEL, SOA" blog (2008)</p>
+        <p><a class="ulink" href="http://lukaszbudnik.blogspot.de/2008/12/jsr-303-and-oval-validation-framework.html" target="'_self'">JSR 303 and OVal Validation Framework</a></p>
+        <p><a class="ulink" href="http://lukaszbudnik.blogspot.de/2008/12/oval-and-profiles.html" target="'_self'">OVal and profiles</a></p>
+        <p><a class="ulink" href="http://lukaszbudnik.blogspot.de/2008/12/springs-piecemeal-validation-and-oval.html" target="'_self'">Spring Web Flow 1 piecemeal validation and OVal integration</a></p>
+      </li><li class="listitem">
+        <p>Pre and post condition validation with OVal as intruments of software architecture (2008)</p>
+        <p><a class="ulink" href="http://stigl.wordpress.com/2008/07/19/pre-and-post-condition-validation-with-oval-as-intruments-of-software-architecture/" target="'_self'">http://stigl.wordpress.com/2008/07/19/pre-and-post-condition-validation-with-oval-as-intruments-of-software-architecture/</a></p>
+      </li><li class="listitem">
+        <p>OVal: The simple validation framework for Java (2008)</p>
+        <p><a class="ulink" href="http://takezoe.blogspot.com/2008/03/oval-simple-validation-framework-for.html" target="'_self'">http://takezoe.blogspot.com/2008/03/oval-simple-validation-framework-for.html</a></p>
+      </li><li class="listitem">
+        <p>Validaci&oacute;n Java: OVal, una joya escondida (2007)</p>
+        <p><a class="ulink" href="http://brigomp.blogspot.com/2007/09/hay-veces-que-los-frameworks-menos.html" target="'_self'">http://brigomp.blogspot.com/2007/09/hay-veces-que-los-frameworks-menos.html</a></p>
+      </li><li class="listitem">
+        <p>Die Pro-Pix Homepage - Design by Contract (2007)</p>
+        <p><a class="ulink" href="http://pro-pix.de/joomla/index.php?option=com_content&amp;task=view&amp;id=39&amp;Itemid=1" target="'_self'">http://pro-pix.de/joomla/index.php?option=com_content&amp;task=view&amp;id=39&amp;Itemid=1</a></p>
+      </li><li class="listitem">
+        <p>Nice library for constraint checking (2007)</p>
+        <p><a class="ulink" href="http://rmeindl.wordpress.com/2007/09/06/nice-library-for-constraint-checking/" target="'_self'">http://rmeindl.wordpress.com/2007/09/06/nice-library-for-constraint-checking/</a></p>
+      </li><li class="listitem">
+        <p>Validation with Aspects &amp; design by contract (2007)</p>
+        <p><a class="ulink" href="http://sameertyagi.blogspot.com/2007/05/validation-with-aspects-and-contracts_20.html" target="'_self'">http://sameertyagi.blogspot.com/2007/05/validation-with-aspects-and-contracts_20.html</a></p>
+      </li><li class="listitem">
+        <p>In pursuit of code quality: Defensive programming with AOP (2007)</p>
+        <p><a class="ulink" href="http://www.ibm.com/developerworks/library/j-cq01307/" target="'_self'">http://www.ibm.com/developerworks/library/j-cq01307/</a></p>
+      </li><li class="listitem">
+        <p>OVal e la validazione degli oggetti in Java (2006)</p>
+        <p><a class="ulink" href="http://www.keepintech.it/blog/?p=52" target="'_self'">http://www.keepintech.it/blog/?p=52</a></p>
+      </li><li class="listitem">
+        <p>Limiting conditional complexity with AOP (2006)</p>
+        <p><a class="ulink" href="http://testearly.findtechblogs.com/default.asp?item=412603" target="'_self'">http://testearly.findtechblogs.com/default.asp?item=412603</a></p>
+        <p><a class="ulink" href="http://www.nofluffjuststuff.com/blog_detail.jsp?rssItemId=98236" target="'_self'">http://www.nofluffjuststuff.com/blog_detail.jsp?rssItemId=98236</a></p>
+        <p><a class="ulink" href="http://www.testearly.com/2006/12/31/limiting-conditional-complexity-with-aop/" target="'_self'">http://www.testearly.com/2006/12/31/limiting-conditional-complexity-with-aop/</a></p>
+      </li><li class="listitem">
+        <p>Metadata and AOP (2005)</p>
+        <p><a class="ulink" href="http://www.java.no/web/files/moter/nov05/yngvar_sorensen_metadata_and_aop.pdf" target="'_self'">http://www.java.no/web/files/moter/nov05/yngvar_sorensen_metadata_and_aop.pdf</a></p>
+      </li></ul></div>
+
+    <p>The following projects are using OVal:</p>
+
+    <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+        <p>Jadira Framework</p>
+        <p><a class="ulink" href="http://jadira.sourceforge.net/" target="'_self'">http://jadira.sourceforge.net/</a></p>
+	  </li><li class="listitem">
+        <p>Omniproperties - a lightweight configuration utility</p>
+        <p><a class="ulink" href="https://github.com/siemens/omniproperties" target="'_self'">https://github.com/siemens/omniproperties</a></p>
+	  </li><li class="listitem">
+        <p>fustewa - A full web stack based on Spring</p>
+        <p><a class="ulink" href="https://github.com/opensource21/fuwesta" target="'_self'">https://github.com/opensource21/fuwesta</a></p>
+	  </li><li class="listitem">
+        <p>eSciDoc</p>
+        <p><a class="ulink" href="https://www.escidoc.org/" target="'_self'">https://www.escidoc.org/</a></p>
+      </li><li class="listitem">
+        <p>SaferJava</p>
+        <p><a class="ulink" href="http://code.google.com/p/saferjava/" target="'_self'">http://code.google.com/p/saferjava/</a></p>
+      </li><li class="listitem">
+        <p>Pinky</p>
+        <p><a class="ulink" href="https://github.com/pk11/pinky" target="'_self'">https://github.com/pk11/pinky</a></p>
+      </li><li class="listitem">
+        <p>JProvocateur</p>
+        <p><a class="ulink" href="http://www.jprovocateur.org/" target="'_self'">http://www.jprovocateur.org/</a></p>
+      </li><li class="listitem">
+        <p>NexOpen</p>
+        <p><a class="ulink" href="http://nexopen.sourceforge.net/" target="'_self'">http://nexopen.sourceforge.net/</a></p>
+      </li><li class="listitem">
+        <p>gdv.xport</p>
+        <p><a class="ulink" href="http://repository.agentes.de/gdv/gdv-xport/site/" target="'_self'">http://repository.agentes.de/gdv/gdv-xport/site/</a></p>
+      </li><li class="listitem">
+        <p>suz-lab-gae</p>
+        <p><a class="ulink" href="http://code.google.com/p/suz-lab-gae/" target="'_self'">http://code.google.com/p/suz-lab-gae/</a></p>
+      </li><li class="listitem">
+        <p>Cubby Simple Web Application Framework</p>
+        <p><a class="ulink" href="http://cubby.seasar.org/20x/cubby-oval/index.html" target="'_self'">http://cubby.seasar.org/20x/cubby-oval/index.html</a></p>
+      </li><li class="listitem">
+        <p>Metawidget</p>
+        <p><a class="ulink" href="http://metawidget.org" target="'_self'">http://metawidget.org</a></p>
+      </li><li class="listitem">
+        <p>Struts 2 OVal Plug-in</p>
+        <p><a class="ulink" href="http://cwiki.apache.org/confluence/display/S2PLUGINS/OVal+Plugin" target="'_self'">http://cwiki.apache.org/confluence/display/S2PLUGINS/OVal+Plugin</a></p>
+      </li><li class="listitem">
+        <p>Play! Framework</p>
+        <p><a class="ulink" href="http://www.playframework.org/" target="'_self'">http://www.playframework.org/</a></p>
+      </li><li class="listitem">
+        <p>Cayenne annotations</p>
+        <p><a class="ulink" href="http://sourceforge.net/projects/cayannotations/" target="'_self'">http://sourceforge.net/projects/cayannotations/</a></p>
+      </li><li class="listitem">
+        <p>jsfatwork</p>
+        <p><a class="ulink" href="http://code.google.com/p/jsfatwork/" target="'_self'">http://code.google.com/p/jsfatwork/</a></p>
+      </li><li class="listitem">
+        <p>mtn4java</p>
+        <p><a class="ulink" href="http://www.mvnrepository.com/artifact/org.criticalsection.mtn4java/mtn4java/" target="'_self'">http://www.mvnrepository.com/artifact/org.criticalsection.mtn4java/mtn4java/</a></p>
+      </li><li class="listitem">
+        <p>Polyforms</p>
+        <p><a class="ulink" href="http://code.google.com/p/polyforms/" target="'_self'">http://code.google.com/p/polyforms/</a></p>
+      </li><li class="listitem">
+        <p>rsser</p>
+        <p><a class="ulink" href="http://code.google.com/p/rsser/" target="'_self'">http://code.google.com/p/rsser/</a></p>
+      </li><li class="listitem">
+        <p>saetc</p>
+        <p><a class="ulink" href="http://code.google.com/p/saetc/" target="'_self'">http://code.google.com/p/saetc/</a></p>
+      </li><li class="listitem">
+        <p>ultimate-roundtrip</p>
+        <p><a class="ulink" href="http://code.google.com/p/ultimate-roundtrip/" target="'_self'">http://code.google.com/p/ultimate-roundtrip/</a></p>
+      </li></ul></div>
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="acknowledgements"></a>12.&nbsp;Acknowledgements</h2></div></div></div>
+    
+
+    <p>YourKit is kindly supporting open source projects with its full-featured Java Profiler.</p>
+
+    <p>YourKit, LLC is creator of innovative and intelligent tools for profiling Java and .NET applications.
+    Take a look at YourKit's leading software products: <a class="ulink" href="http://www.yourkit.com/java/profiler/" target="'_self'">YourKit Java Profiler</a>
+    and <a class="ulink" href="http://www.yourkit.com/.net/profiler/" target="'_self'">YourKit .NET Profiler</a>.</p>
+  </div>
+
+  <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="trademark-disclaimer"></a>13.&nbsp;Trademark disclaimer</h2></div></div></div>
+    
+
+    <p><span class="trademark">Java</span>&#8482; and all Java-based trademarks are trademarks of Oracle Corporation in the United States, other
+    countries, or both. For more information please refer to: <a class="ulink" href="http://www.oracle.com/html/3party.html" target="'_self'">http://www.oracle.com/html/3party.html</a></p>
+
+    <p>This site is independent of Oracle Corporation.</p>
+
+    <p>All other trademarks are the sole property of their respective owners.</p>
+
+    <p>
+      <a class="ulink" href="http://docbook.sourceforge.net/projects/xsl/" target="'_self'"><span class="inlinemediaobject"><img src="images/docbook.png"></span></a>
+    </p>
+  </div>
+</div></body></html>

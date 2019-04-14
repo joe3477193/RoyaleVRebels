@@ -1,0 +1,140 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*******************************************************************************<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Portions created by Sebastian Thomschke are copyright (c) 2005-2017 Sebastian<a name="line.2"></a>
+<FONT color="green">003</FONT>     * Thomschke.<a name="line.3"></a>
+<FONT color="green">004</FONT>     *<a name="line.4"></a>
+<FONT color="green">005</FONT>     * All Rights Reserved. This program and the accompanying materials<a name="line.5"></a>
+<FONT color="green">006</FONT>     * are made available under the terms of the Eclipse Public License v1.0<a name="line.6"></a>
+<FONT color="green">007</FONT>     * which accompanies this distribution, and is available at<a name="line.7"></a>
+<FONT color="green">008</FONT>     * http://www.eclipse.org/legal/epl-v10.html<a name="line.8"></a>
+<FONT color="green">009</FONT>     *<a name="line.9"></a>
+<FONT color="green">010</FONT>     * Contributors:<a name="line.10"></a>
+<FONT color="green">011</FONT>     *     Sebastian Thomschke - initial implementation.<a name="line.11"></a>
+<FONT color="green">012</FONT>     *******************************************************************************/<a name="line.12"></a>
+<FONT color="green">013</FONT>    package net.sf.oval.integration.spring;<a name="line.13"></a>
+<FONT color="green">014</FONT>    <a name="line.14"></a>
+<FONT color="green">015</FONT>    import org.springframework.beans.factory.annotation.Autowired;<a name="line.15"></a>
+<FONT color="green">016</FONT>    import org.springframework.beans.factory.config.AutowireCapableBeanFactory;<a name="line.16"></a>
+<FONT color="green">017</FONT>    import org.springframework.stereotype.Component;<a name="line.17"></a>
+<FONT color="green">018</FONT>    import org.springframework.util.Assert;<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>    import net.sf.oval.internal.Log;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>    /**<a name="line.22"></a>
+<FONT color="green">023</FONT>     * Injects spring beans into unmanaged Java objects having {@link org.springframework.beans.factory.annotation.Autowired},<a name="line.23"></a>
+<FONT color="green">024</FONT>     * {@link org.springframework.beans.factory.annotation.Value} and {@link javax.inject.Inject} annotations<a name="line.24"></a>
+<FONT color="green">025</FONT>     * and executes {@link org.springframework.beans.factory.InitializingBean#afterPropertiesSet} and {@link javax.annotation.PostConstruct} callback methods.<a name="line.25"></a>
+<FONT color="green">026</FONT>     *<a name="line.26"></a>
+<FONT color="green">027</FONT>     * &lt;pre&gt;<a name="line.27"></a>
+<FONT color="green">028</FONT>     * &amp;lt;bean class="net.sf.oval.integration.spring.SpringInjector" /&amp;gt;<a name="line.28"></a>
+<FONT color="green">029</FONT>     * &lt;/pre&gt;<a name="line.29"></a>
+<FONT color="green">030</FONT>     *<a name="line.30"></a>
+<FONT color="green">031</FONT>     * or<a name="line.31"></a>
+<FONT color="green">032</FONT>     *<a name="line.32"></a>
+<FONT color="green">033</FONT>     * &lt;pre&gt;<a name="line.33"></a>
+<FONT color="green">034</FONT>     * &amp;lt;context:component-scan base-package="net.sf.oval.integration.spring" /&amp;gt;<a name="line.34"></a>
+<FONT color="green">035</FONT>     * &lt;/pre&gt;<a name="line.35"></a>
+<FONT color="green">036</FONT>     *<a name="line.36"></a>
+<FONT color="green">037</FONT>     * @author Sebastian Thomschke<a name="line.37"></a>
+<FONT color="green">038</FONT>     */<a name="line.38"></a>
+<FONT color="green">039</FONT>    @Component<a name="line.39"></a>
+<FONT color="green">040</FONT>    public class SpringInjector {<a name="line.40"></a>
+<FONT color="green">041</FONT>        private static final Log LOG = Log.getLog(SpringInjector.class);<a name="line.41"></a>
+<FONT color="green">042</FONT>    <a name="line.42"></a>
+<FONT color="green">043</FONT>        private static SpringInjector INSTANCE;<a name="line.43"></a>
+<FONT color="green">044</FONT>    <a name="line.44"></a>
+<FONT color="green">045</FONT>        public static SpringInjector get() {<a name="line.45"></a>
+<FONT color="green">046</FONT>            Assert.notNull(INSTANCE, "No SpringInjector instance created yet. Add  &lt;bean class=\"" + SpringInjector.class.getName()<a name="line.46"></a>
+<FONT color="green">047</FONT>                    + "\" /&gt; to your spring configuration!");<a name="line.47"></a>
+<FONT color="green">048</FONT>    <a name="line.48"></a>
+<FONT color="green">049</FONT>            return INSTANCE;<a name="line.49"></a>
+<FONT color="green">050</FONT>        }<a name="line.50"></a>
+<FONT color="green">051</FONT>    <a name="line.51"></a>
+<FONT color="green">052</FONT>        @Autowired<a name="line.52"></a>
+<FONT color="green">053</FONT>        private AutowireCapableBeanFactory beanFactory;<a name="line.53"></a>
+<FONT color="green">054</FONT>    <a name="line.54"></a>
+<FONT color="green">055</FONT>        private SpringInjector() {<a name="line.55"></a>
+<FONT color="green">056</FONT>            LOG.info("Instantiated.");<a name="line.56"></a>
+<FONT color="green">057</FONT>    <a name="line.57"></a>
+<FONT color="green">058</FONT>            INSTANCE = this;<a name="line.58"></a>
+<FONT color="green">059</FONT>        }<a name="line.59"></a>
+<FONT color="green">060</FONT>    <a name="line.60"></a>
+<FONT color="green">061</FONT>        /**<a name="line.61"></a>
+<FONT color="green">062</FONT>         * processes @PostConstruct, InitializingBean#afterPropertiesSet<a name="line.62"></a>
+<FONT color="green">063</FONT>         */<a name="line.63"></a>
+<FONT color="green">064</FONT>        public void initialize(final Object unmanagedBean) {<a name="line.64"></a>
+<FONT color="green">065</FONT>            beanFactory.initializeBean(unmanagedBean, "bean");<a name="line.65"></a>
+<FONT color="green">066</FONT>        }<a name="line.66"></a>
+<FONT color="green">067</FONT>    <a name="line.67"></a>
+<FONT color="green">068</FONT>        /**<a name="line.68"></a>
+<FONT color="green">069</FONT>         * processes @Autowired, @Inject<a name="line.69"></a>
+<FONT color="green">070</FONT>         */<a name="line.70"></a>
+<FONT color="green">071</FONT>        public void inject(final Object unmanagedBean) {<a name="line.71"></a>
+<FONT color="green">072</FONT>            beanFactory.autowireBean(unmanagedBean);<a name="line.72"></a>
+<FONT color="green">073</FONT>        }<a name="line.73"></a>
+<FONT color="green">074</FONT>    }<a name="line.74"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

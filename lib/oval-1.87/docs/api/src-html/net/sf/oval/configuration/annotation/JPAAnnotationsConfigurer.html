@@ -1,0 +1,336 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*******************************************************************************<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Portions created by Sebastian Thomschke are copyright (c) 2005-2017 Sebastian<a name="line.2"></a>
+<FONT color="green">003</FONT>     * Thomschke.<a name="line.3"></a>
+<FONT color="green">004</FONT>     *<a name="line.4"></a>
+<FONT color="green">005</FONT>     * All Rights Reserved. This program and the accompanying materials<a name="line.5"></a>
+<FONT color="green">006</FONT>     * are made available under the terms of the Eclipse Public License v1.0<a name="line.6"></a>
+<FONT color="green">007</FONT>     * which accompanies this distribution, and is available at<a name="line.7"></a>
+<FONT color="green">008</FONT>     * http://www.eclipse.org/legal/epl-v10.html<a name="line.8"></a>
+<FONT color="green">009</FONT>     *<a name="line.9"></a>
+<FONT color="green">010</FONT>     * Contributors:<a name="line.10"></a>
+<FONT color="green">011</FONT>     *     Sebastian Thomschke - initial implementation.<a name="line.11"></a>
+<FONT color="green">012</FONT>     *******************************************************************************/<a name="line.12"></a>
+<FONT color="green">013</FONT>    package net.sf.oval.configuration.annotation;<a name="line.13"></a>
+<FONT color="green">014</FONT>    <a name="line.14"></a>
+<FONT color="green">015</FONT>    import static net.sf.oval.Validator.*;<a name="line.15"></a>
+<FONT color="green">016</FONT>    <a name="line.16"></a>
+<FONT color="green">017</FONT>    import java.lang.annotation.Annotation;<a name="line.17"></a>
+<FONT color="green">018</FONT>    import java.lang.reflect.AccessibleObject;<a name="line.18"></a>
+<FONT color="green">019</FONT>    import java.lang.reflect.Field;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import java.lang.reflect.Method;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import java.util.Collection;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import java.util.List;<a name="line.22"></a>
+<FONT color="green">023</FONT>    <a name="line.23"></a>
+<FONT color="green">024</FONT>    import javax.persistence.Basic;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import javax.persistence.Column;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import javax.persistence.Enumerated;<a name="line.26"></a>
+<FONT color="green">027</FONT>    import javax.persistence.GeneratedValue;<a name="line.27"></a>
+<FONT color="green">028</FONT>    import javax.persistence.Lob;<a name="line.28"></a>
+<FONT color="green">029</FONT>    import javax.persistence.ManyToMany;<a name="line.29"></a>
+<FONT color="green">030</FONT>    import javax.persistence.ManyToOne;<a name="line.30"></a>
+<FONT color="green">031</FONT>    import javax.persistence.OneToMany;<a name="line.31"></a>
+<FONT color="green">032</FONT>    import javax.persistence.OneToOne;<a name="line.32"></a>
+<FONT color="green">033</FONT>    import javax.persistence.Version;<a name="line.33"></a>
+<FONT color="green">034</FONT>    <a name="line.34"></a>
+<FONT color="green">035</FONT>    import net.sf.oval.Check;<a name="line.35"></a>
+<FONT color="green">036</FONT>    import net.sf.oval.collection.CollectionFactory;<a name="line.36"></a>
+<FONT color="green">037</FONT>    import net.sf.oval.configuration.Configurer;<a name="line.37"></a>
+<FONT color="green">038</FONT>    import net.sf.oval.configuration.pojo.elements.ClassConfiguration;<a name="line.38"></a>
+<FONT color="green">039</FONT>    import net.sf.oval.configuration.pojo.elements.ConstraintSetConfiguration;<a name="line.39"></a>
+<FONT color="green">040</FONT>    import net.sf.oval.configuration.pojo.elements.FieldConfiguration;<a name="line.40"></a>
+<FONT color="green">041</FONT>    import net.sf.oval.configuration.pojo.elements.MethodConfiguration;<a name="line.41"></a>
+<FONT color="green">042</FONT>    import net.sf.oval.configuration.pojo.elements.MethodReturnValueConfiguration;<a name="line.42"></a>
+<FONT color="green">043</FONT>    import net.sf.oval.constraint.AssertValidCheck;<a name="line.43"></a>
+<FONT color="green">044</FONT>    import net.sf.oval.constraint.Length;<a name="line.44"></a>
+<FONT color="green">045</FONT>    import net.sf.oval.constraint.LengthCheck;<a name="line.45"></a>
+<FONT color="green">046</FONT>    import net.sf.oval.constraint.NotNull;<a name="line.46"></a>
+<FONT color="green">047</FONT>    import net.sf.oval.constraint.NotNullCheck;<a name="line.47"></a>
+<FONT color="green">048</FONT>    import net.sf.oval.constraint.Range;<a name="line.48"></a>
+<FONT color="green">049</FONT>    import net.sf.oval.constraint.RangeCheck;<a name="line.49"></a>
+<FONT color="green">050</FONT>    import net.sf.oval.internal.util.ReflectionUtils;<a name="line.50"></a>
+<FONT color="green">051</FONT>    <a name="line.51"></a>
+<FONT color="green">052</FONT>    /**<a name="line.52"></a>
+<FONT color="green">053</FONT>     * Constraints configurer that interprets certain EJB3 JPA annotations:<a name="line.53"></a>
+<FONT color="green">054</FONT>     * <a name="line.54"></a>
+<FONT color="green">055</FONT>     * &lt;pre&gt;<a name="line.55"></a>
+<FONT color="green">056</FONT>     * * javax.persistence.Basic(optional=false)     =&gt; net.sf.oval.constraint.NotNullCheck<a name="line.56"></a>
+<FONT color="green">057</FONT>     * * javax.persistence.OneToOne(optional=false)  =&gt; net.sf.oval.constraint.NotNullCheck, net.sf.oval.constraint.AssertValidCheck (if addAssertValidConstraints=true)<a name="line.57"></a>
+<FONT color="green">058</FONT>     * * javax.persistence.ManyToOne(optional=false) =&gt; net.sf.oval.constraint.NotNullCheck, net.sf.oval.constraint.AssertValidCheck (if addAssertValidConstraints=true)<a name="line.58"></a>
+<FONT color="green">059</FONT>     * * javax.persistence.ManyToMany                =&gt; net.sf.oval.constraint.AssertValidCheck (if addAssertValidConstraints=true)<a name="line.59"></a>
+<FONT color="green">060</FONT>     * * javax.persistence.Column(nullable=false)    =&gt; net.sf.oval.constraint.NotNullCheck<a name="line.60"></a>
+<FONT color="green">061</FONT>     * * javax.persistence.Column(length=5)          =&gt; net.sf.oval.constraint.LengthCheck<a name="line.61"></a>
+<FONT color="green">062</FONT>     * * javax.persistence.Column(precision&gt;0)       =&gt; net.sf.oval.constraint.RangeCheck (for Numbers only)<a name="line.62"></a>
+<FONT color="green">063</FONT>     * &lt;/pre&gt;<a name="line.63"></a>
+<FONT color="green">064</FONT>     *<a name="line.64"></a>
+<FONT color="green">065</FONT>     * &lt;b&gt;Important:&lt;/b&gt; by default AssertValidChecks are added for n-m relationships. This may be a problem when using lazy loading. Read<a name="line.65"></a>
+<FONT color="green">066</FONT>     * &lt;a href="http://sourceforge.net/p/oval/discussion/488110/thread/6ec11584/#4ae0"&gt;this post&lt;/a&gt; for more details.<a name="line.66"></a>
+<FONT color="green">067</FONT>     * To avoid this override the method {@link #addAssertValidCheckIfRequired(Annotation, Collection, AccessibleObject)} with an empty method body, for example<a name="line.67"></a>
+<FONT color="green">068</FONT>     * <a name="line.68"></a>
+<FONT color="green">069</FONT>     * &lt;pre&gt;<a name="line.69"></a>
+<FONT color="green">070</FONT>     * JPAAnnotationsConfigurer configurer = new JPAAnnotationsConfigurer() {<a name="line.70"></a>
+<FONT color="green">071</FONT>     *     protected void addAssertValidCheckIfRequired(Annotation constraintAnnotation, Collection&lt;Check&gt; checks, AccessibleObject fieldOrMethod) {<a name="line.71"></a>
+<FONT color="green">072</FONT>     *         // do nothing<a name="line.72"></a>
+<FONT color="green">073</FONT>     *     }<a name="line.73"></a>
+<FONT color="green">074</FONT>     * };<a name="line.74"></a>
+<FONT color="green">075</FONT>     * &lt;/pre&gt;<a name="line.75"></a>
+<FONT color="green">076</FONT>     *<a name="line.76"></a>
+<FONT color="green">077</FONT>     * @author Sebastian Thomschke<a name="line.77"></a>
+<FONT color="green">078</FONT>     */<a name="line.78"></a>
+<FONT color="green">079</FONT>    @SuppressWarnings("javadoc")<a name="line.79"></a>
+<FONT color="green">080</FONT>    public class JPAAnnotationsConfigurer implements Configurer {<a name="line.80"></a>
+<FONT color="green">081</FONT>        protected Boolean applyFieldConstraintsToSetters;<a name="line.81"></a>
+<FONT color="green">082</FONT>        protected Boolean applyFieldConstraintsToConstructors;<a name="line.82"></a>
+<FONT color="green">083</FONT>    <a name="line.83"></a>
+<FONT color="green">084</FONT>        protected void addAssertValidCheckIfRequired(final Annotation constraintAnnotation, final Collection&lt;Check&gt; checks,<a name="line.84"></a>
+<FONT color="green">085</FONT>                @SuppressWarnings("unused") /*parameter for potential use by subclasses*/final AccessibleObject fieldOrMethod) {<a name="line.85"></a>
+<FONT color="green">086</FONT>            if (containsCheckOfType(checks, AssertValidCheck.class))<a name="line.86"></a>
+<FONT color="green">087</FONT>                return;<a name="line.87"></a>
+<FONT color="green">088</FONT>    <a name="line.88"></a>
+<FONT color="green">089</FONT>            if (constraintAnnotation instanceof OneToOne || constraintAnnotation instanceof OneToMany || constraintAnnotation instanceof ManyToOne<a name="line.89"></a>
+<FONT color="green">090</FONT>                    || constraintAnnotation instanceof ManyToMany)<a name="line.90"></a>
+<FONT color="green">091</FONT>                checks.add(new AssertValidCheck());<a name="line.91"></a>
+<FONT color="green">092</FONT>        }<a name="line.92"></a>
+<FONT color="green">093</FONT>    <a name="line.93"></a>
+<FONT color="green">094</FONT>        protected boolean containsCheckOfType(final Collection&lt;Check&gt; checks, final Class&lt;? extends Check&gt; checkClass) {<a name="line.94"></a>
+<FONT color="green">095</FONT>            for (final Check check : checks)<a name="line.95"></a>
+<FONT color="green">096</FONT>                if (checkClass.isInstance(check))<a name="line.96"></a>
+<FONT color="green">097</FONT>                    return true;<a name="line.97"></a>
+<FONT color="green">098</FONT>            return false;<a name="line.98"></a>
+<FONT color="green">099</FONT>        }<a name="line.99"></a>
+<FONT color="green">100</FONT>    <a name="line.100"></a>
+<FONT color="green">101</FONT>        public Boolean getApplyFieldConstraintsToConstructors() {<a name="line.101"></a>
+<FONT color="green">102</FONT>            return applyFieldConstraintsToConstructors;<a name="line.102"></a>
+<FONT color="green">103</FONT>        }<a name="line.103"></a>
+<FONT color="green">104</FONT>    <a name="line.104"></a>
+<FONT color="green">105</FONT>        public ClassConfiguration getClassConfiguration(final Class&lt;?&gt; clazz) {<a name="line.105"></a>
+<FONT color="green">106</FONT>            final CollectionFactory cf = getCollectionFactory();<a name="line.106"></a>
+<FONT color="green">107</FONT>    <a name="line.107"></a>
+<FONT color="green">108</FONT>            final ClassConfiguration config = new ClassConfiguration();<a name="line.108"></a>
+<FONT color="green">109</FONT>            config.type = clazz;<a name="line.109"></a>
+<FONT color="green">110</FONT>            config.applyFieldConstraintsToConstructors = applyFieldConstraintsToConstructors;<a name="line.110"></a>
+<FONT color="green">111</FONT>            config.applyFieldConstraintsToSetters = applyFieldConstraintsToSetters;<a name="line.111"></a>
+<FONT color="green">112</FONT>    <a name="line.112"></a>
+<FONT color="green">113</FONT>            List&lt;Check&gt; checks = cf.createList(2);<a name="line.113"></a>
+<FONT color="green">114</FONT>    <a name="line.114"></a>
+<FONT color="green">115</FONT>            /*<a name="line.115"></a>
+<FONT color="green">116</FONT>             * determine field checks<a name="line.116"></a>
+<FONT color="green">117</FONT>             */<a name="line.117"></a>
+<FONT color="green">118</FONT>            for (final Field field : config.type.getDeclaredFields()) {<a name="line.118"></a>
+<FONT color="green">119</FONT>    <a name="line.119"></a>
+<FONT color="green">120</FONT>                // loop over all annotations of the current field<a name="line.120"></a>
+<FONT color="green">121</FONT>                for (final Annotation annotation : field.getAnnotations()) {<a name="line.121"></a>
+<FONT color="green">122</FONT>                    if (annotation instanceof Basic)<a name="line.122"></a>
+<FONT color="green">123</FONT>                        initializeChecks((Basic) annotation, checks);<a name="line.123"></a>
+<FONT color="green">124</FONT>                    else if (annotation instanceof Column)<a name="line.124"></a>
+<FONT color="green">125</FONT>                        initializeChecks((Column) annotation, checks, field);<a name="line.125"></a>
+<FONT color="green">126</FONT>                    else if (annotation instanceof OneToOne)<a name="line.126"></a>
+<FONT color="green">127</FONT>                        initializeChecks((OneToOne) annotation, checks);<a name="line.127"></a>
+<FONT color="green">128</FONT>                    else if (annotation instanceof ManyToOne)<a name="line.128"></a>
+<FONT color="green">129</FONT>                        initializeChecks((ManyToOne) annotation, checks);<a name="line.129"></a>
+<FONT color="green">130</FONT>                    else if (annotation instanceof ManyToMany)<a name="line.130"></a>
+<FONT color="green">131</FONT>                        initializeChecks((ManyToMany) annotation, checks);<a name="line.131"></a>
+<FONT color="green">132</FONT>                    else if (annotation instanceof OneToMany)<a name="line.132"></a>
+<FONT color="green">133</FONT>                        initializeChecks((OneToMany) annotation, checks);<a name="line.133"></a>
+<FONT color="green">134</FONT>    <a name="line.134"></a>
+<FONT color="green">135</FONT>                    addAssertValidCheckIfRequired(annotation, checks, field);<a name="line.135"></a>
+<FONT color="green">136</FONT>                }<a name="line.136"></a>
+<FONT color="green">137</FONT>    <a name="line.137"></a>
+<FONT color="green">138</FONT>                if (checks.size() &gt; 0) {<a name="line.138"></a>
+<FONT color="green">139</FONT>                    if (config.fieldConfigurations == null)<a name="line.139"></a>
+<FONT color="green">140</FONT>                        config.fieldConfigurations = cf.createSet(8);<a name="line.140"></a>
+<FONT color="green">141</FONT>    <a name="line.141"></a>
+<FONT color="green">142</FONT>                    final FieldConfiguration fc = new FieldConfiguration();<a name="line.142"></a>
+<FONT color="green">143</FONT>                    fc.name = field.getName();<a name="line.143"></a>
+<FONT color="green">144</FONT>                    fc.checks = checks;<a name="line.144"></a>
+<FONT color="green">145</FONT>                    checks = cf.createList(); // create a new list for the next field with checks<a name="line.145"></a>
+<FONT color="green">146</FONT>                    config.fieldConfigurations.add(fc);<a name="line.146"></a>
+<FONT color="green">147</FONT>                }<a name="line.147"></a>
+<FONT color="green">148</FONT>            }<a name="line.148"></a>
+<FONT color="green">149</FONT>    <a name="line.149"></a>
+<FONT color="green">150</FONT>            /*<a name="line.150"></a>
+<FONT color="green">151</FONT>             * determine getter checks<a name="line.151"></a>
+<FONT color="green">152</FONT>             */<a name="line.152"></a>
+<FONT color="green">153</FONT>            for (final Method method : config.type.getDeclaredMethods()) {<a name="line.153"></a>
+<FONT color="green">154</FONT>                // consider getters only<a name="line.154"></a>
+<FONT color="green">155</FONT>                if (!ReflectionUtils.isGetter(method))<a name="line.155"></a>
+<FONT color="green">156</FONT>                    continue;<a name="line.156"></a>
+<FONT color="green">157</FONT>    <a name="line.157"></a>
+<FONT color="green">158</FONT>                // loop over all annotations<a name="line.158"></a>
+<FONT color="green">159</FONT>                for (final Annotation annotation : method.getAnnotations()) {<a name="line.159"></a>
+<FONT color="green">160</FONT>                    if (annotation instanceof Basic)<a name="line.160"></a>
+<FONT color="green">161</FONT>                        initializeChecks((Basic) annotation, checks);<a name="line.161"></a>
+<FONT color="green">162</FONT>                    else if (annotation instanceof Column)<a name="line.162"></a>
+<FONT color="green">163</FONT>                        initializeChecks((Column) annotation, checks, method);<a name="line.163"></a>
+<FONT color="green">164</FONT>                    else if (annotation instanceof OneToOne)<a name="line.164"></a>
+<FONT color="green">165</FONT>                        initializeChecks((OneToOne) annotation, checks);<a name="line.165"></a>
+<FONT color="green">166</FONT>                    else if (annotation instanceof ManyToOne)<a name="line.166"></a>
+<FONT color="green">167</FONT>                        initializeChecks((ManyToOne) annotation, checks);<a name="line.167"></a>
+<FONT color="green">168</FONT>                    else if (annotation instanceof ManyToMany)<a name="line.168"></a>
+<FONT color="green">169</FONT>                        initializeChecks((ManyToMany) annotation, checks);<a name="line.169"></a>
+<FONT color="green">170</FONT>                    else if (annotation instanceof OneToMany)<a name="line.170"></a>
+<FONT color="green">171</FONT>                        initializeChecks((OneToMany) annotation, checks);<a name="line.171"></a>
+<FONT color="green">172</FONT>    <a name="line.172"></a>
+<FONT color="green">173</FONT>                    addAssertValidCheckIfRequired(annotation, checks, method);<a name="line.173"></a>
+<FONT color="green">174</FONT>                }<a name="line.174"></a>
+<FONT color="green">175</FONT>    <a name="line.175"></a>
+<FONT color="green">176</FONT>                // check if anything has been configured for this method at all<a name="line.176"></a>
+<FONT color="green">177</FONT>                if (checks.size() &gt; 0) {<a name="line.177"></a>
+<FONT color="green">178</FONT>                    if (config.methodConfigurations == null)<a name="line.178"></a>
+<FONT color="green">179</FONT>                        config.methodConfigurations = cf.createSet(2);<a name="line.179"></a>
+<FONT color="green">180</FONT>    <a name="line.180"></a>
+<FONT color="green">181</FONT>                    final MethodConfiguration mc = new MethodConfiguration();<a name="line.181"></a>
+<FONT color="green">182</FONT>                    mc.name = method.getName();<a name="line.182"></a>
+<FONT color="green">183</FONT>                    mc.isInvariant = true;<a name="line.183"></a>
+<FONT color="green">184</FONT>                    mc.returnValueConfiguration = new MethodReturnValueConfiguration();<a name="line.184"></a>
+<FONT color="green">185</FONT>                    mc.returnValueConfiguration.checks = checks;<a name="line.185"></a>
+<FONT color="green">186</FONT>                    checks = cf.createList(); // create a new list for the next method having return value checks<a name="line.186"></a>
+<FONT color="green">187</FONT>                    config.methodConfigurations.add(mc);<a name="line.187"></a>
+<FONT color="green">188</FONT>                }<a name="line.188"></a>
+<FONT color="green">189</FONT>            }<a name="line.189"></a>
+<FONT color="green">190</FONT>            return config;<a name="line.190"></a>
+<FONT color="green">191</FONT>        }<a name="line.191"></a>
+<FONT color="green">192</FONT>    <a name="line.192"></a>
+<FONT color="green">193</FONT>        public ConstraintSetConfiguration getConstraintSetConfiguration(final String constraintSetId) {<a name="line.193"></a>
+<FONT color="green">194</FONT>            return null;<a name="line.194"></a>
+<FONT color="green">195</FONT>        }<a name="line.195"></a>
+<FONT color="green">196</FONT>    <a name="line.196"></a>
+<FONT color="green">197</FONT>        protected void initializeChecks(final Basic annotation, final Collection&lt;Check&gt; checks) {<a name="line.197"></a>
+<FONT color="green">198</FONT>            if (!annotation.optional() &amp;&amp; !containsCheckOfType(checks, NotNullCheck.class))<a name="line.198"></a>
+<FONT color="green">199</FONT>                checks.add(new NotNullCheck());<a name="line.199"></a>
+<FONT color="green">200</FONT>        }<a name="line.200"></a>
+<FONT color="green">201</FONT>    <a name="line.201"></a>
+<FONT color="green">202</FONT>        protected void initializeChecks(final Column annotation, final Collection&lt;Check&gt; checks, final AccessibleObject fieldOrMethod) {<a name="line.202"></a>
+<FONT color="green">203</FONT>            /* If the value is generated (annotated with @GeneratedValue) it is allowed to be null<a name="line.203"></a>
+<FONT color="green">204</FONT>             * before the entity has been persisted, same is true in case of optimistic locking<a name="line.204"></a>
+<FONT color="green">205</FONT>             * when a field is annotated with @Version.<a name="line.205"></a>
+<FONT color="green">206</FONT>             * Therefore and because of the fact that there is no generic way to determine if an entity<a name="line.206"></a>
+<FONT color="green">207</FONT>             * has been persisted already, a not-null check will not be performed for such fields.<a name="line.207"></a>
+<FONT color="green">208</FONT>             */<a name="line.208"></a>
+<FONT color="green">209</FONT>            if (!annotation.nullable() &amp;&amp; !fieldOrMethod.isAnnotationPresent(GeneratedValue.class) &amp;&amp; !fieldOrMethod.isAnnotationPresent(Version.class)<a name="line.209"></a>
+<FONT color="green">210</FONT>                    &amp;&amp; !fieldOrMethod.isAnnotationPresent(NotNull.class))<a name="line.210"></a>
+<FONT color="green">211</FONT>                if (!containsCheckOfType(checks, NotNullCheck.class))<a name="line.211"></a>
+<FONT color="green">212</FONT>                    checks.add(new NotNullCheck());<a name="line.212"></a>
+<FONT color="green">213</FONT>    <a name="line.213"></a>
+<FONT color="green">214</FONT>            // add Length check based on Column.length parameter, but only:<a name="line.214"></a>
+<FONT color="green">215</FONT>            if (!fieldOrMethod.isAnnotationPresent(Lob.class) &amp;&amp; // if @Lob is not present<a name="line.215"></a>
+<FONT color="green">216</FONT>                    !fieldOrMethod.isAnnotationPresent(Enumerated.class) &amp;&amp; // if @Enumerated is not present<a name="line.216"></a>
+<FONT color="green">217</FONT>                    !fieldOrMethod.isAnnotationPresent(Length.class) // if an explicit @Length constraint is not present<a name="line.217"></a>
+<FONT color="green">218</FONT>            ) {<a name="line.218"></a>
+<FONT color="green">219</FONT>                final LengthCheck lengthCheck = new LengthCheck();<a name="line.219"></a>
+<FONT color="green">220</FONT>                lengthCheck.setMax(annotation.length());<a name="line.220"></a>
+<FONT color="green">221</FONT>                checks.add(lengthCheck);<a name="line.221"></a>
+<FONT color="green">222</FONT>            }<a name="line.222"></a>
+<FONT color="green">223</FONT>    <a name="line.223"></a>
+<FONT color="green">224</FONT>            // add Range check based on Column.precision/scale parameters, but only:<a name="line.224"></a>
+<FONT color="green">225</FONT>            if (!fieldOrMethod.isAnnotationPresent(Range.class) // if an explicit @Range is not present<a name="line.225"></a>
+<FONT color="green">226</FONT>                    &amp;&amp; annotation.precision() &gt; 0 // if precision is &gt; 0<a name="line.226"></a>
+<FONT color="green">227</FONT>                    &amp;&amp; Number.class.isAssignableFrom(fieldOrMethod instanceof Field ? ((Field) fieldOrMethod).getType() : ((Method) fieldOrMethod).getReturnType()) // if numeric field type<a name="line.227"></a>
+<FONT color="green">228</FONT>            ) {<a name="line.228"></a>
+<FONT color="green">229</FONT>                /* precision = 6, scale = 2  =&gt; -9999.99&lt;=x&lt;=9999.99<a name="line.229"></a>
+<FONT color="green">230</FONT>                 * precision = 4, scale = 1  =&gt;   -999.9&lt;=x&lt;=999.9<a name="line.230"></a>
+<FONT color="green">231</FONT>                 */<a name="line.231"></a>
+<FONT color="green">232</FONT>                final RangeCheck rangeCheck = new RangeCheck();<a name="line.232"></a>
+<FONT color="green">233</FONT>                rangeCheck.setMax(Math.pow(10, annotation.precision() - annotation.scale()) - Math.pow(0.1, annotation.scale()));<a name="line.233"></a>
+<FONT color="green">234</FONT>                rangeCheck.setMin(-1 * rangeCheck.getMax());<a name="line.234"></a>
+<FONT color="green">235</FONT>                checks.add(rangeCheck);<a name="line.235"></a>
+<FONT color="green">236</FONT>            }<a name="line.236"></a>
+<FONT color="green">237</FONT>        }<a name="line.237"></a>
+<FONT color="green">238</FONT>    <a name="line.238"></a>
+<FONT color="green">239</FONT>        @SuppressWarnings("unused")<a name="line.239"></a>
+<FONT color="green">240</FONT>        protected void initializeChecks(final ManyToMany annotation, final Collection&lt;Check&gt; checks) {<a name="line.240"></a>
+<FONT color="green">241</FONT>            // override if required<a name="line.241"></a>
+<FONT color="green">242</FONT>        }<a name="line.242"></a>
+<FONT color="green">243</FONT>    <a name="line.243"></a>
+<FONT color="green">244</FONT>        protected void initializeChecks(final ManyToOne annotation, final Collection&lt;Check&gt; checks) {<a name="line.244"></a>
+<FONT color="green">245</FONT>            if (!annotation.optional() &amp;&amp; !containsCheckOfType(checks, NotNullCheck.class))<a name="line.245"></a>
+<FONT color="green">246</FONT>                checks.add(new NotNullCheck());<a name="line.246"></a>
+<FONT color="green">247</FONT>        }<a name="line.247"></a>
+<FONT color="green">248</FONT>    <a name="line.248"></a>
+<FONT color="green">249</FONT>        @SuppressWarnings("unused")<a name="line.249"></a>
+<FONT color="green">250</FONT>        protected void initializeChecks(final OneToMany annotation, final Collection&lt;Check&gt; checks) {<a name="line.250"></a>
+<FONT color="green">251</FONT>            // override if required<a name="line.251"></a>
+<FONT color="green">252</FONT>        }<a name="line.252"></a>
+<FONT color="green">253</FONT>    <a name="line.253"></a>
+<FONT color="green">254</FONT>        protected void initializeChecks(final OneToOne annotation, final Collection&lt;Check&gt; checks) {<a name="line.254"></a>
+<FONT color="green">255</FONT>            if (!annotation.optional() &amp;&amp; !containsCheckOfType(checks, NotNullCheck.class))<a name="line.255"></a>
+<FONT color="green">256</FONT>                checks.add(new NotNullCheck());<a name="line.256"></a>
+<FONT color="green">257</FONT>        }<a name="line.257"></a>
+<FONT color="green">258</FONT>    <a name="line.258"></a>
+<FONT color="green">259</FONT>        public Boolean isApplyFieldConstraintsToSetter() {<a name="line.259"></a>
+<FONT color="green">260</FONT>            return applyFieldConstraintsToSetters;<a name="line.260"></a>
+<FONT color="green">261</FONT>        }<a name="line.261"></a>
+<FONT color="green">262</FONT>    <a name="line.262"></a>
+<FONT color="green">263</FONT>        public void setApplyFieldConstraintsToConstructors(final Boolean applyFieldConstraintsToConstructors) {<a name="line.263"></a>
+<FONT color="green">264</FONT>            this.applyFieldConstraintsToConstructors = applyFieldConstraintsToConstructors;<a name="line.264"></a>
+<FONT color="green">265</FONT>        }<a name="line.265"></a>
+<FONT color="green">266</FONT>    <a name="line.266"></a>
+<FONT color="green">267</FONT>        public void setApplyFieldConstraintsToSetters(final Boolean applyFieldConstraintsToSetters) {<a name="line.267"></a>
+<FONT color="green">268</FONT>            this.applyFieldConstraintsToSetters = applyFieldConstraintsToSetters;<a name="line.268"></a>
+<FONT color="green">269</FONT>        }<a name="line.269"></a>
+<FONT color="green">270</FONT>    }<a name="line.270"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

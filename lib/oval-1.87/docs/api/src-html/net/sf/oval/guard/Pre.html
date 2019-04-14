@@ -1,0 +1,138 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /*******************************************************************************<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Portions created by Sebastian Thomschke are copyright (c) 2005-2017 Sebastian<a name="line.2"></a>
+<FONT color="green">003</FONT>     * Thomschke.<a name="line.3"></a>
+<FONT color="green">004</FONT>     * <a name="line.4"></a>
+<FONT color="green">005</FONT>     * All Rights Reserved. This program and the accompanying materials<a name="line.5"></a>
+<FONT color="green">006</FONT>     * are made available under the terms of the Eclipse Public License v1.0<a name="line.6"></a>
+<FONT color="green">007</FONT>     * which accompanies this distribution, and is available at<a name="line.7"></a>
+<FONT color="green">008</FONT>     * http://www.eclipse.org/legal/epl-v10.html<a name="line.8"></a>
+<FONT color="green">009</FONT>     * <a name="line.9"></a>
+<FONT color="green">010</FONT>     * Contributors:<a name="line.10"></a>
+<FONT color="green">011</FONT>     *     Sebastian Thomschke - initial implementation.<a name="line.11"></a>
+<FONT color="green">012</FONT>     *******************************************************************************/<a name="line.12"></a>
+<FONT color="green">013</FONT>    package net.sf.oval.guard;<a name="line.13"></a>
+<FONT color="green">014</FONT>    <a name="line.14"></a>
+<FONT color="green">015</FONT>    import java.lang.annotation.Documented;<a name="line.15"></a>
+<FONT color="green">016</FONT>    import java.lang.annotation.ElementType;<a name="line.16"></a>
+<FONT color="green">017</FONT>    import java.lang.annotation.Retention;<a name="line.17"></a>
+<FONT color="green">018</FONT>    import java.lang.annotation.RetentionPolicy;<a name="line.18"></a>
+<FONT color="green">019</FONT>    import java.lang.annotation.Target;<a name="line.19"></a>
+<FONT color="green">020</FONT>    <a name="line.20"></a>
+<FONT color="green">021</FONT>    /**<a name="line.21"></a>
+<FONT color="green">022</FONT>     * Before the annotated method is executed the expression is evaluated.&lt;br&gt;<a name="line.22"></a>
+<FONT color="green">023</FONT>     * This evaluation happens &lt;u&gt;after&lt;/u&gt; the single parameter constraints were validated<a name="line.23"></a>
+<FONT color="green">024</FONT>     * and only if no parameter constraint violations were detected.<a name="line.24"></a>
+<FONT color="green">025</FONT>     * &lt;br&gt;<a name="line.25"></a>
+<FONT color="green">026</FONT>     * If constraint violations occur, the annotated method will not be executed<a name="line.26"></a>
+<FONT color="green">027</FONT>     * instead it will throw a ConstraintsViolatedException exception.<a name="line.27"></a>
+<FONT color="green">028</FONT>     * <a name="line.28"></a>
+<FONT color="green">029</FONT>     * @author Sebastian Thomschke<a name="line.29"></a>
+<FONT color="green">030</FONT>     */<a name="line.30"></a>
+<FONT color="green">031</FONT>    @Documented<a name="line.31"></a>
+<FONT color="green">032</FONT>    @Retention(RetentionPolicy.RUNTIME)<a name="line.32"></a>
+<FONT color="green">033</FONT>    @Target({ ElementType.METHOD })<a name="line.33"></a>
+<FONT color="green">034</FONT>    public @interface Pre {<a name="line.34"></a>
+<FONT color="green">035</FONT>    <a name="line.35"></a>
+<FONT color="green">036</FONT>        /**<a name="line.36"></a>
+<FONT color="green">037</FONT>         * error code passed to the ConstraintViolation object<a name="line.37"></a>
+<FONT color="green">038</FONT>         */<a name="line.38"></a>
+<FONT color="green">039</FONT>        String errorCode() default "net.sf.oval.guard.Pre";<a name="line.39"></a>
+<FONT color="green">040</FONT>    <a name="line.40"></a>
+<FONT color="green">041</FONT>        /**<a name="line.41"></a>
+<FONT color="green">042</FONT>         * formula in the given expression language describing the constraint. the formula must return true if the constraint is satisfied.<a name="line.42"></a>
+<FONT color="green">043</FONT>         * &lt;br&gt;<a name="line.43"></a>
+<FONT color="green">044</FONT>         * available variables are:&lt;br&gt;<a name="line.44"></a>
+<FONT color="green">045</FONT>         * &lt;b&gt;_this&lt;/b&gt; -&amp;gt; the validated bean&lt;br&gt;<a name="line.45"></a>
+<FONT color="green">046</FONT>         * &lt;b&gt;_args[]&lt;/b&gt; -&amp;gt; the current parameter values&lt;br&gt;<a name="line.46"></a>
+<FONT color="green">047</FONT>         * additionally variables matching the parameter names are available&lt;br&gt;<a name="line.47"></a>
+<FONT color="green">048</FONT>         */<a name="line.48"></a>
+<FONT color="green">049</FONT>        String expr();<a name="line.49"></a>
+<FONT color="green">050</FONT>    <a name="line.50"></a>
+<FONT color="green">051</FONT>        /**<a name="line.51"></a>
+<FONT color="green">052</FONT>         * the expression language that is used<a name="line.52"></a>
+<FONT color="green">053</FONT>         */<a name="line.53"></a>
+<FONT color="green">054</FONT>        String lang();<a name="line.54"></a>
+<FONT color="green">055</FONT>    <a name="line.55"></a>
+<FONT color="green">056</FONT>        /**<a name="line.56"></a>
+<FONT color="green">057</FONT>         * message to be used for the ContraintsViolatedException<a name="line.57"></a>
+<FONT color="green">058</FONT>         * <a name="line.58"></a>
+<FONT color="green">059</FONT>         * @see net.sf.oval.exception.ConstraintsViolatedException<a name="line.59"></a>
+<FONT color="green">060</FONT>         */<a name="line.60"></a>
+<FONT color="green">061</FONT>        String message() default "net.sf.oval.guard.Pre.violated";<a name="line.61"></a>
+<FONT color="green">062</FONT>    <a name="line.62"></a>
+<FONT color="green">063</FONT>        /**<a name="line.63"></a>
+<FONT color="green">064</FONT>         * The associated constraint profiles.<a name="line.64"></a>
+<FONT color="green">065</FONT>         */<a name="line.65"></a>
+<FONT color="green">066</FONT>        String[] profiles() default {};<a name="line.66"></a>
+<FONT color="green">067</FONT>    <a name="line.67"></a>
+<FONT color="green">068</FONT>        /**<a name="line.68"></a>
+<FONT color="green">069</FONT>         * severity passed to the ConstraintViolation object<a name="line.69"></a>
+<FONT color="green">070</FONT>         */<a name="line.70"></a>
+<FONT color="green">071</FONT>        int severity() default 0;<a name="line.71"></a>
+<FONT color="green">072</FONT>    }<a name="line.72"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
