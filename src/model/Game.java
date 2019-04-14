@@ -12,16 +12,12 @@ import java.util.Random;
 
 
 public class Game{
-	ArrayList<Player> players;
-	RoyalePlayer royale;
-	RebelPlayer rebel;
-	GameFrameView gfv;
-	Board b;
-	GameController c;
+	private RoyalePlayer royale;
+	private RebelPlayer rebel;
+	private GameFrameView gfv;
 
 	public Game(ArrayList<String> playerNames){
-		players = new ArrayList<>();
-		
+
 		gfv= new GameFrameView();
 		Random r = new Random();
 		int turn = r.nextInt(playerNames.size());
@@ -36,17 +32,18 @@ public class Game{
 			rebel =  new RebelPlayer(playerNames.get(turn - 1));
 		}
 
+		ArrayList<Player> players = new ArrayList<>();
 		players.add(rebel);
 		players.add(royale);
 
 		initGame();
 	}
 	
-	public void initGame() {
+	private void initGame() {
 		// Initialise board
-		this.b = new Board(gfv);
+		Board b = new Board(gfv);
 		gfv.assembleBoard(rebel,royale, b);
-		c= new GameController(b, gfv);
+		new GameController(b, gfv);
 		// RebelPlayer goes first
 	}
 }

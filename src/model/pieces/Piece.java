@@ -77,7 +77,7 @@ public abstract class Piece {
         return name;
     }
 
-    public boolean isMoveValid(int difference, String movType) {
+    public boolean isActionValid(int difference, String movType) {
         boolean valid= false;
         if (movType.equals("mov")) {
             valid= mov >= difference;

@@ -1,5 +1,7 @@
-package model.board;
+package test;
 
+import model.board.Board;
+import model.board.Tile;
 import model.pieces.type.Catapult;
 import model.pieces.type.General;
 import model.pieces.Piece;
@@ -103,7 +105,6 @@ public class BoardTest {
     public void testAttack() {
         t2.setPiece(c2);
         assertTrue(b.attack(0,0, 1, 0));
-        assertEquals(Board.boardRows.get(1).getTile(0).getPiece().getHp(), 20);
+        assertEquals(Board.boardRows.get(1).getTile(0).getPiece().getHp(), 0);
     }
-
 }

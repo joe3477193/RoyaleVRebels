@@ -6,7 +6,7 @@ public class BoardRows {
 
     private ArrayList<Tile> tiles;
 
-    public BoardRows() {
+    BoardRows() {
         tiles = new ArrayList<>(Board.BOARD_COLS);
 
         for (int i = 0; i < Board.BOARD_COLS; i++) {

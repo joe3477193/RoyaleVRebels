@@ -237,9 +237,19 @@ public class GameFrameView extends JFrame{
 		lastTile= tile;
 	}
 
-	public void colourTile(int i, int j){
+	public void colourTile(int i, int j, String isActing){
 		try{
-			tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../images/move.jpg")));
+
+			// colour for movement range
+			if (isActing.equals("move")) {
+				tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../images/move.jpg")));
+			}
+
+			// colour for attack range
+			else if (isActing.equals("attack")) {
+				// change to attack!!!
+				tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../images/move.jpg")));
+			}
 		}
 		catch(ArrayIndexOutOfBoundsException e){
 		}

@@ -7,12 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class StartButton implements ActionListener {
+public class StartBtnActionListener implements ActionListener {
 
     private JFrame frame;
     private JTextField name1, name2;
 
-    public StartButton(JFrame frame, JTextField name1, JTextField name2) {
+    public StartBtnActionListener(JFrame frame, JTextField name1, JTextField name2) {
         this.frame = frame;
         this.name1 = name1;
         this.name2 = name2;
@@ -32,7 +32,7 @@ public class StartButton implements ActionListener {
             SwingUtilities.invokeLater(() -> {
 
                 // Create Game Model
-                Game game = new Game(playerNames);
+                new Game(playerNames);
             });
 
         	// Close Register
