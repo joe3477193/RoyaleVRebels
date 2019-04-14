@@ -1,5 +1,7 @@
 package model.board;
 
+import net.sf.oval.constraint.NotNegative;
+
 import java.util.ArrayList;
 
 class BoardRows {
@@ -14,7 +16,7 @@ class BoardRows {
         }
     }
 
-    Tile getTile(int i) {
+    Tile getTile(@NotNegative int i) {
         return tiles.get(i);
     }
 

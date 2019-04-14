@@ -5,18 +5,22 @@ import model.board.Board;
 import model.players.Player;
 import model.players.RebelPlayer;
 import model.players.RoyalePlayer;
+import net.sf.oval.constraint.NotNull;
+import net.sf.oval.guard.Guarded;
+import net.sf.oval.guard.Pre;
 import view.GameFrameView;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-
+@Guarded
 public class Game{
 	private RoyalePlayer royale;
 	private RebelPlayer rebel;
 	private GameFrameView gfv;
 
-	public Game(ArrayList<String> playerNames){
+
+	public Game(@NotNull ArrayList<String> playerNames) {
         ArrayList<Player> players = new ArrayList<>();
 		
 		gfv= new GameFrameView();
@@ -38,7 +42,8 @@ public class Game{
 
 		initGame();
 	}
-	
+
+	@Pre(expr = "_this.gfv != null && _this.rebel != null && this.royale != null", lang = "groovy")
 	private void initGame() {
 		// Initialise board
 		Board b = new Board(gfv);

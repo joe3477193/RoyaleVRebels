@@ -1,5 +1,9 @@
 package model.pieces;
 
+import net.sf.oval.constraint.NotEmpty;
+import net.sf.oval.constraint.NotNegative;
+import net.sf.oval.constraint.NotNull;
+
 public abstract class Piece {
 
     String name;
@@ -15,7 +19,7 @@ public abstract class Piece {
     private boolean moveable;
     private boolean attackable;
 
-    public Piece(String name, String faction, String type, String code, int cp, int initHp, int attackPower, int moveSpeed, int attackRange,
+    public Piece(@NotNull @NotEmpty String name, @NotNull @NotEmpty String faction, @NotNull @NotEmpty String type, @NotNull @NotEmpty String code, @NotNegative int cp, @NotNegative int initHp, @NotNegative int attackPower, @NotNegative int moveSpeed, @NotNegative int attackRange,
                  boolean moveable, boolean attackable) {
         this.name= name;
         this.faction= faction;
@@ -33,12 +37,13 @@ public abstract class Piece {
 
     public boolean isDead() {
         if (hp <= 0) {
+            hp = 0;
             return true;
         }
         return false;
     }
 
-    public void attackedBy(int attack) {
+    public void attackedBy(@NotNegative int attack) {
         hp-=attack;
         if (hp <= 0) {
             hp=0;
@@ -77,11 +82,11 @@ public abstract class Piece {
         return name;
     }
 
-    public boolean isActionValid(int difference, String movType) {
+    public boolean isActionValid(@NotNegative int difference, @NotNull @NotEmpty String actionType) {
         boolean valid= false;
-        if (movType.equals("moveSpeed")) {
+        if (actionType.equals("moveSpeed")) {
             valid = moveSpeed >= difference;
-        } else if (movType.equals("attackRange")) {
+        } else if (actionType.equals("attackRange")) {
             valid = attackRange >= difference;
         }
         return valid;

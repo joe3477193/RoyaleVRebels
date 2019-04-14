@@ -2,6 +2,8 @@ package controller;
 
 import controller.gameActionListeners.*;
 import model.board.Board;
+import net.sf.oval.constraint.NotNull;
+import net.sf.oval.guard.Pre;
 import view.GameFrameView;
 
 import javax.swing.*;
@@ -15,12 +17,13 @@ public class GameController {
     private Board b;
     private GameFrameView gfv;
 
-    public GameController(Board b, GameFrameView gfv) {
+    public GameController(@NotNull Board b, @NotNull GameFrameView gfv) {
         this.b = b;
         this.gfv = gfv;
         addActionListeners();
     }
 
+    @Pre(expr = "_this.gfv != null", lang = "groovy")
     private void addActionListeners() {
         SummonBtnActionListener summonListener = new SummonBtnActionListener(this);
         TileBtnActionListener tileListener = new TileBtnActionListener(this);
@@ -43,7 +46,8 @@ public class GameController {
         gfv.getEndTurnBtn().addActionListener(new EndTurnBtnActionListener(this));
     }
 
-    public void summonButton(ActionEvent e) {
+    @Pre(expr = "_this.gfv != null && _this.b != null", lang = "groovy")
+    public void summonButton(@NotNull ActionEvent e) {
 
         JButton source = (JButton) e.getSource();
 
@@ -87,7 +91,8 @@ public class GameController {
         }
     }
 
-    public void clickTile(ActionEvent e) {
+    @Pre(expr = "_this.gfv != null && _this.b != null", lang = "groovy")
+    public void clickTile(@NotNull ActionEvent e) {
         JButton[][] tileBtns;
         tileBtns = gfv.getTileBtns();
         JButton tileBtn;
@@ -136,11 +141,11 @@ public class GameController {
         }
     }
 
+    @Pre(expr = "_this.gfv != null && _this.b != null", lang = "groovy")
     public void move() {
         // Cancel movement (click move button twice)
         if (b.isMoving() && !b.getActionPerformed()) {
             b.resetMoving();
-            gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
         // Trigger movement for a piece
@@ -157,15 +162,16 @@ public class GameController {
         }
     }
 
+    @Pre(expr = "_this.b != null", lang = "groovy")
     public void endTurn() {
         b.unsetActionPerformed();
     }
 
+    @Pre(expr = "_this.gfv != null && _this.b != null", lang = "groovy")
     public void attack() {
         // Cancel movement (click move button twice)
         if (b.isAttacking() && !b.getActionPerformed()) {
             b.resetAttacking();
-            gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
         // Trigger movement for a piece
