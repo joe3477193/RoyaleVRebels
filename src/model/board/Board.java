@@ -104,7 +104,6 @@ public class Board {
     public void resetMoving() {
         isMoving = false;
         gfv.decolour();
-        gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         depaintAction();
         gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
