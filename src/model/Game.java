@@ -1,52 +1,48 @@
 package model;
 
+import controller.GameController;
+import model.board.Board;
+import model.players.Player;
+import model.players.RebelPlayer;
+import model.players.RoyalePlayer;
+import view.GameFrameView;
+
 import java.util.ArrayList;
 import java.util.Random;
 
-import view.GameFrameView;
 
+public class Game{
+	private RoyalePlayer royale;
+	private RebelPlayer rebel;
+	private GameFrameView gfv;
 
-public class Game {
-	ArrayList<Player> players = new ArrayList<>();
-	Royale royale;
-	Rebel rebel;
-	Player currPlayer;
-	boolean isRunning = false;
-	GameFrameView view;
-	
-	public Game(GameFrameView view, ArrayList<String> playerName){
+	public Game(ArrayList<String> playerNames){
+        ArrayList<Player> players = new ArrayList<>();
 		
-		this.view = view;
+		gfv= new GameFrameView();
 		Random r = new Random();
-		int t = r.nextInt(2);
-		if(t==0) {
-			royale = new Royale(playerName.get(t));
-			rebel =  new Rebel(playerName.get(t+1));
+		int turn = r.nextInt(playerNames.size());
+
+		// Randomly assign team for players
+		if(turn == 0) {
+			royale = new RoyalePlayer(playerNames.get(turn));
+			rebel =  new RebelPlayer(playerNames.get(turn + 1));
 		}
 		else {
-			royale = new Royale(playerName.get(t));
-			rebel =  new Rebel(playerName.get(t-1));
+			royale = new RoyalePlayer(playerNames.get(turn));
+			rebel =  new RebelPlayer(playerNames.get(turn - 1));
 		}
+
 		players.add(rebel);
 		players.add(royale);
-		
-		startGame();
-        
-        Thread gameLoop = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(isRunning) {
-                	//MainGameLoop
-                }
-            }
-        });
-	
+
+		initGame();
 	}
 	
-	public void startGame() {
-		Board b = new Board();
-		view.assembleBoard(rebel, b);
-		currPlayer = rebel;
-		isRunning = true;
+	private void initGame() {
+		// Initialise board
+		Board b = new Board(gfv);
+		gfv.assembleBoard(rebel,royale, b);
+		new GameController(b, gfv);
 	}
 }

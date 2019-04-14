@@ -1,159 +1,380 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import model.board.Board;
+import model.players.Player;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+public class GameFrameView extends JFrame{
 
-import controller.*;
-import model.*;
+	private JFrame frame;
+	private JPanel actionPanel;
+	private JPanel gridPanel;
+	private JPanel playerPanel;
+	private JPanel deckPanel;
 
+	private JLabel playerName, playerType, time;
+	private String nameOne, typeOne, nameTwo, typeTwo;
+	private static JButton[][] tileBtns;
 
-public class GameFrameView extends JFrame {
+	public JButton getMoveBtn() {
+		return moveBtn;
+	}
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    private JFrame frame;
-    private JPanel gridPanel;
-    private JPanel selectPanel;
-    private JLabel healthLabel;
-    private JLabel combatPlabel;
-    private JLabel playername, playertype;
-    private static JButton[][] tileBtns;
-    private static Board board;
-    private JButton item1, item2, item3, item4, item5, item6;
+	private JButton moveBtn;
 
-    public static final String GRASS_IMAGE      = "../images/grass.png";
-    public static final String WALL_IMAGE      = "../images/wall.jpg";
-    public static final String ONE_IMAGE      = "../images/man.png";
-    public static final String TWO_IMAGE      = "../images/megastrong.png";
-    public static final String THREE_IMAGE      = "../images/strong.png";
-    public static final String FOUR_IMAGE      = "../images/watchout.png";
-    public static final String FIVE_IMAGE      = "../images/watchout.png";
-    public static final String SIX_IMAGE      = "../images/watchout.png";
-    
-    public GameFrameView() {
+	public JButton getAttackBtn() {
+		return attackBtn;
+	}
 
-        frame = new JFrame("Royals vs Rebels");
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null); // show gui in the middle of screen
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+	private JButton attackBtn;
 
-    }
-    
+	public JButton getEndTurnBtn() {
+		return endTurnBtn;
+	}
 
-    public void assembleBoard(Player playerOne, Board b) {
+	private JButton endTurnBtn;
 
-        JPanel statsPanel = new JPanel(new GridLayout(1, 6, 0, 0));
-        selectPanel = new JPanel(new GridLayout(1, 5, 0, 0));
-        gridPanel = new JPanel(new GridLayout(b.getRows(), b.getCols(), 0, 1));
-        
-        playername = new JLabel(playerOne.getName());
-        statsPanel.add(new JLabel("Player Name: "));
-        statsPanel.add(playername);
-        
-        playertype = new JLabel(playerOne.getFaction());
-        statsPanel.add(new JLabel("Player Type: "));
-        statsPanel.add(playertype);
+	private static final int BUTTON_LENGTH = 6;
 
-        // We should show the hp of castle during the whole game, and it can be a large red bar on the top side
-    	/*healthLabel = new JLabel(Integer.toString(((Royal) playerOne).getHp()));
-    	statsPanel.add(new JLabel("HP: "));
-        statsPanel.add(healthLabel);*/
-        
-        tileBtns = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
+	private static final String GRASS_IMAGE      = "../images/grass.png";
+	private static final String WALL_IMAGE      = "../images/wall.jpg";
+	private static final String CASTLE_IMAGE 	= "../images/castle.jpg";
+	private static final String CLWALL_IMAGE      = "../images/cwall.jpg";
+	private static final String CRWALL_IMAGE      = "../images/crwall.jpg";
+	
+	private static final String RO_ONE_IMAGE      = "../images/man.png";
+	private static final String RO_TWO_IMAGE      = "../images/megastrong.png";
+	private static final String RO_THREE_IMAGE      = "../images/strong.png";
+	private static final String RO_FOUR_IMAGE      = "../images/watchout.png";
+	private static final String RO_FIVE_IMAGE      = "../images/watchout.png";
+	private static final String RO_SIX_IMAGE      = "../images/watchout.png";
 
-        selectPanel.setMaximumSize(new Dimension(100, 100));
+	private static final String RE_ONE_IMAGE      = "../images/archer.png";
+	private static final String RE_TWO_IMAGE      = "../images/berserker.png";
+	private static final String RE_THREE_IMAGE      = "../images/gilgamesh.png";
+	private static final String RE_FOUR_IMAGE      = "../images/rem.png";
+	private static final String RE_FIVE_IMAGE      = "../images/rin.png";
+	private static final String RE_SIX_IMAGE      = "../images/saber.png";
 
-        frame.setSize(925, 600);
-        paintRoyaleDeck();
+	public static final String STATUS = "Game status:  ";
+	private JButton[] rebelButton;
+	private String[] rebelName;
+	private String[] rebelImage;
+	private JButton[] royaleButton;
+	private String[] royaleName;
+	private String[] royaleImage;
 
-        JPanel main = new JPanel(new BorderLayout());
-        main.add(statsPanel, BorderLayout.NORTH);
-        main.add(selectPanel, BorderLayout.CENTER);
+	private String currentImage;
 
-        frame.revalidate();
-        frame.repaint();
+	private JButton lastTile;
+	private ArrayList<JButton> summonBtns;
 
-        frame.add(main, BorderLayout.NORTH);
-        frame.add(gridPanel, BorderLayout.CENTER);
-    }
+    private JLabel statusLabel;
 
-    private void paintRoyaleDeck() {
-        item1 = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
-        item1.setName("spawn_General");
-        item1.addActionListener(new SummonPieceActionListener(this.frame));
-        selectPanel.add(item1);
-         
-        item2 = new JButton(new ImageIcon(this.getClass().getResource(TWO_IMAGE)));
-        item2.setName("spawn_Lieutenant");
-        item2.addActionListener(new SummonPieceActionListener(this.frame));
-        selectPanel.add(item2);
+	public JLabel getStatusLabel() {
+		return statusLabel;
+	}
 
-        item3 = new JButton(new ImageIcon(this.getClass().getResource(THREE_IMAGE)));
-        item3.setName("spawn_Spearman");
-        item3.addActionListener(new SummonPieceActionListener(this.frame));
-        selectPanel.add(item3);
+	public GameFrameView() {
 
-        item4 = new JButton(new ImageIcon(this.getClass().getResource(FOUR_IMAGE)));
-        item4.setName("spawn_Footman");
-        item4.addActionListener(new SummonPieceActionListener(this.frame));
-        selectPanel.add(item4);
-        
-        item5 = new JButton(new ImageIcon(this.getClass().getResource(ONE_IMAGE)));
-        item5.setName("spawn_Archer");
-        item5.addActionListener(new SummonPieceActionListener(this.frame));
-        selectPanel.add(item5);
+		frame = new JFrame("Royals vs Rebels");
+		frame.setResizable(false);
 
-        item6 = new JButton(new ImageIcon(this.getClass().getResource(TWO_IMAGE)));
-        item6.setName("spawn_Cannon");
-        item6.addActionListener(new SummonPieceActionListener(this.frame));
-        selectPanel.add(item6);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
 
-        genGrid();
+		rebelButton= new JButton[6]; 
+		rebelImage= new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE,
+				RE_SIX_IMAGE
+		};
+		rebelName= new String[] {"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Catapult"
+		};
 
-    }
+		royaleButton = new JButton[6];
+		royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Archer"
+		};
+		royaleImage = new String[] {RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
+				RO_SIX_IMAGE
+		};
+		summonBtns = new ArrayList<>();
+		statusLabel = new JLabel(STATUS);
+	}
 
-    public void genGrid() {
-        for (int i = 0; i < Board.BOARD_ROWS; i++) {
-            for (int j = 0; j < Board.BOARD_COLS; j++) {
-                tileBtns[i][j] = new JButton();
+	private JButton[] createSpawn(String[] name, String[] image) {
+		JButton[] button = new JButton[6];
+		for(int i=0;i<BUTTON_LENGTH;i++) {
+			button[i]= new JButton(new ImageIcon(this.getClass().getResource(image[i])));
+			button[i].setName(name[i]);
+			summonBtns.add(button[i]);
+		}
+		return button;
+	}
 
-                if ((i % 5 <= 2) && j % 4 == 3)
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
-                else
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+	private void loadSpawn(JButton[] button) {
+		for(JButton icon:button) {
+			deckPanel.add(icon);
+		}
+	}
 
-                tileBtns[i][j].putClientProperty("row", i);
-                tileBtns[i][j].putClientProperty("column", j);
-                // add ability to place pieces on tiles
-                tileBtns[i][j].addActionListener(new PlacePieceActionListener(this));
-
-                gridPanel.add(tileBtns[i][j]);
-            }
-        }
-    }
-    
-    public JButton[][] getTileBtns() {
-    	return tileBtns;
-    }
-    
-    public Board getBoard() {
-    	return board;
-    }
+	private void removeSpawn(JButton[] button) {
+		for(JButton icon:button) {
+			deckPanel.remove(icon);
+		}
+	}
 
 
+	public void assembleBoard(Player playerOne, Player playerTwo, Board b) {
 
-    public JFrame getFrame() {
-    	return frame;
-    }
+		nameOne= playerOne.getName();
+		typeOne= playerOne.getFaction();
+		nameTwo= playerTwo.getName();
+		typeTwo= playerTwo.getFaction();
+		
+		playerPanel = new JPanel(new GridLayout(1, 6, 0, 0));
+		deckPanel = new JPanel(new GridLayout(1, 5, 0, 0));
+		gridPanel = new JPanel(new GridLayout(b.getRows(), b.getCols(), 0, 1));
+		actionPanel = new JPanel(new GridLayout(1, 2));
+		time = new JLabel("");
+		//JPanel statusPanel = new JPanel(new GridLayout(1, 3));
+		JPanel statusPanel = new JPanel(new BorderLayout());
+		statusPanel.add(statusLabel, BorderLayout.WEST);
+		statusPanel.add(time, BorderLayout.EAST);
+		
+		playerName = new JLabel(playerOne.getName());
+		playerPanel.add(new JLabel("Player Name: "));
+		playerPanel.add(playerName);
+
+		playerType = new JLabel(playerOne.getFaction());
+		playerPanel.add(new JLabel("Player Type: "));
+		playerPanel.add(playerType);
+
+		tileBtns = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
+
+		deckPanel.setMaximumSize(new Dimension(100, 100));
+
+		frame.setSize(1000, 750);
+		frame.setLocationRelativeTo(null); // show gui in the middle of screen
+
+		rebelButton = createSpawn(rebelName, rebelImage);
+		royaleButton = createSpawn(royaleName, royaleImage);
+
+        // rebel goes first
+		loadSpawn(rebelButton);
+		genGrid();
+		drawActionBtns();
+
+		JPanel topPanel = new JPanel(new BorderLayout());
+		JPanel botPanel = new JPanel(new BorderLayout());
+		topPanel.add(playerPanel, BorderLayout.NORTH);
+		topPanel.add(deckPanel, BorderLayout.CENTER);
+
+		botPanel.add(actionPanel, BorderLayout.SOUTH);
+		botPanel.add(statusPanel, BorderLayout.NORTH);
+
+
+		frame.revalidate();
+		frame.repaint();
+
+		frame.add(topPanel, BorderLayout.NORTH);
+		frame.add(gridPanel, BorderLayout.CENTER);
+		frame.add(botPanel, BorderLayout.SOUTH);
+	}
+
+
+	private void drawActionBtns() {
+		moveBtn = new JButton("Move");
+		actionPanel.add(moveBtn);
+		
+		attackBtn = new JButton("Attack");
+		
+		actionPanel.add(attackBtn);
+		endTurnBtn = new JButton("End Turn");
+		
+		actionPanel.add(endTurnBtn);
+		
+	}
+
+	private void genGrid() {
+		for (int i = 0; i < Board.BOARD_ROWS; i++) {
+			for (int j = 0; j < Board.BOARD_COLS; j++) {
+				tileBtns[i][j] = new JButton();
+
+				if ((i % 5 <= 2) && j % 4 == 3)
+					tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
+				else if(i ==0 && j%2!=0) {
+					tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
+				}
+				else if(i==0 && j%4==0) {
+					tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
+				}
+				else if(i==0 && j%4==2) {
+					tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CRWALL_IMAGE)));
+				}
+				else
+					tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+
+				tileBtns[i][j].putClientProperty("row", i);
+				tileBtns[i][j].putClientProperty("column", j);
+
+				gridPanel.add(tileBtns[i][j]);
+			}
+		}
+	}
+
+	public void colourMove() {
+		moveBtn.setBackground(Color.green);
+	}
+
+	public void colourAttack(){
+		attackBtn.setBackground((Color.green));
+	}
+
+	public void colourRedAttack(){
+		attackBtn.setBackground((Color.RED));
+	}
+
+	public void colourRedMove(){
+		moveBtn.setBackground(Color.RED);
+	}
+
+	public void colourTile(JButton tile) {
+		tile.setBackground(Color.blue);
+		lastTile= tile;
+	}
+
+    public void colourTile(int i, int j) {
+		try{
+            tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../images/move.jpg")));
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+		}
+	}
+
+	public void setGrassTile(int i, int j){
+		try{
+			tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+		} catch (ArrayIndexOutOfBoundsException ignored) {
+		}
+	}
+
+	public void decolourTile(int i, int j){
+		try{
+			tileBtns[i][j].setBackground(null);
+		} catch (ArrayIndexOutOfBoundsException ignored) {
+		}
+	}
+
+	public void colourRedTile(int i, int j){
+		try{
+			tileBtns[i][j].setBackground(Color.red);
+		} catch (ArrayIndexOutOfBoundsException ignored) {
+		}
+	}
+
+    private void colourRedTile(JButton tile) {
+		tile.setBackground(Color.red);
+		lastTile= tile;
+	}
+
+	public void colourRed(JButton tile){
+		colourRedTile(tile);
+		colourRedAttack();
+		colourRedMove();
+	}
+
+	public void colourEndTurn(){
+		endTurnBtn.setBackground(Color.green);
+	}
+
+	public void decolour() {
+		if(lastTile!=null) {
+			lastTile.setBorder(null);
+			lastTile.setBackground(null);
+			lastTile= null;
+		}
+		moveBtn.setBackground(null);
+		attackBtn.setBackground(null);
+	}
+
+	public void decolourEndTurn(){
+		endTurnBtn.setBackground(null);
+	}
+
+	public void updateBar(int turn) {
+		if(turn==0) {
+			removeSpawn(royaleButton);
+			loadSpawn(rebelButton);
+			playerName.setText(nameOne);
+			playerType.setText(typeOne);
+		}
+		else {
+			
+			removeSpawn(rebelButton);
+			loadSpawn(royaleButton);
+			playerName.setText(nameTwo);
+			playerType.setText(typeTwo);
+		}		
+		playerPanel.repaint();
+		deckPanel.repaint();
+	}
+
+	public JButton[][] getTileBtns() {
+		return tileBtns;
+	}
+
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public String getImage() {
+		return currentImage;
+	}
+
+	public void setImage(String image) {
+		currentImage= image;
+	}
+
+	public void removeImage() {
+		currentImage= null;
+	}
+
+	public JButton[] getRebelButton() {
+		return rebelButton;
+	}
+
+	public String[] getRebelName() {
+		return rebelName;
+	}
+
+	public String[] getRebelImage() {
+		return rebelImage;
+	}
+
+	public JButton[] getRoyaleButton() {
+		return royaleButton;
+	}
+
+	public String[] getRoyaleName() {
+		return royaleName;
+	}
+
+	public String[] getRoyaleImage() {
+		return royaleImage;
+	}
+	
+	public String getGrass() {
+		return GRASS_IMAGE;
+	}
+
+	public ArrayList<JButton> getSummonBtns() {
+		return summonBtns;
+	}
+	
+	public void setTime(String text) {
+		time.setText(text);
+	}
 }
+
+

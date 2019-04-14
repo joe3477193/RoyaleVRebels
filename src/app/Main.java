@@ -1,11 +1,9 @@
 package app;
 
-import view.StartPlayerInfoFrame;
+import view.EnterNameView;
 
 public class Main {
-
     public static void main(String[] args) {
-
-        new StartPlayerInfoFrame();
+        new EnterNameView();
     }
 }
