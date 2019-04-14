@@ -153,12 +153,15 @@ public class GameController {
         // Cancel movement (click move button twice)
         if (b.isMoving() && !b.getActionPerformed()) {
             b.resetMoving();
+            gfv.colourMove();
+            gfv.colourAttack();
         }
 
         // Trigger movement for a piece
         else if (b.hasCoordinates() && b.checkMoveInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.getActionPerformed()) {
             b.resetAttacking();
             b.setMoving();
+            gfv.colourAttack();
         }
 
         // Player has getActionPerformed already
@@ -181,12 +184,15 @@ public class GameController {
         // Cancel movement (click move button twice)
         if (b.isAttacking() && !b.getActionPerformed()) {
             b.resetAttacking();
+            gfv.colourAttack();
+            gfv.colourMove();
         }
 
         // Trigger movement for a piece
         else if (b.hasCoordinates() && b.checkAttackInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.getActionPerformed()) {
             b.resetMoving();
             b.setAttacking();
+            gfv.colourMove();
         }
 
         // Player has performed action already
