@@ -321,7 +321,7 @@ public class Board {
 
     // Check if pieces can move from current tile to target tile
     boolean checkMoveTarget(@NotNegative int row, @NotNegative int tile) {
-        return !getTile(row, tile).hasPiece();
+        return !getTile(row, tile).hasPiece() && !isCastle(row);
     }
 
     // Check if pieces can attack target from current tile
