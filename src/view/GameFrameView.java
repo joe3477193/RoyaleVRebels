@@ -64,6 +64,10 @@ public class GameFrameView extends JFrame{
     private static final String RE_FIVE_IMAGE      = "../images/rascal.png";
     private static final String RE_SIX_IMAGE      = "../images/archer.png";
 
+    private static final String CASTLE_IMAGE      = "../images/castle.jpg";
+    private static final String CLWALL_IMAGE      = "../images/cwall.jpg";
+    private static final String CRWALL_IMAGE      = "../images/crwall.jpg";
+
     public static final String STATUS = "Game status:  ";
     private JButton[] rebelButton;
     private String[] rebelName;
@@ -212,6 +216,15 @@ public class GameFrameView extends JFrame{
 
                 if ((i % 5 <= 2) && j % 4 == 3)
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
+                else if(i ==0 && j%2!=0) {
+                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
+                }
+                else if(i==0 && j%4==0) {
+                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
+                }
+                else if(i==0 && j%4==2) {
+                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CRWALL_IMAGE)));
+                }
                 else
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
 
