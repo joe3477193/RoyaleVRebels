@@ -116,7 +116,6 @@ public class Board {
             setInit(coordinate[0], coordinate[1]);
             Image icon = new ImageIcon(this.getClass().getResource("../" + gfv.getImage())).getImage();
             gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), "name"));
-
             int mov = getPiece(coordinate[0], coordinate[1]).getMov();
             int row = coordinate[0];
             int col = coordinate[1];
@@ -198,6 +197,8 @@ public class Board {
         hasSummoned = false;
         hasAttacked = false;
         canDoAction = true;
+        gfv.getMoveBtn().setVisible(true);
+        gfv.getAttackBtn().setVisible(true);
         gfv.decolourEndTurn();
         gfv.decolour();
         cycleTurn();
@@ -407,11 +408,14 @@ public class Board {
     public void placeSummonedPiece(JButton tileBtn, int i, int j) {
         if (checkSummonValid(getSummonedPiece(), i, j) && !hasSummoned) {
             tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
+            
             tileBtn.setName(gfv.getImage());
             gfv.getStatusLabel().setText(STATUS + "A new " + getSummonedPiece().getName() + " has been summoned!");
             removeSummonedPiece();
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
             setSummoned();
+            gfv.getMoveBtn().setVisible(false);
+            gfv.getAttackBtn().setVisible(false);
         } else {
             gfv.getStatusLabel().setText(GameFrameView.STATUS + "Please place the pieces on a valid tile,\n"
                     + "The top three rows for Royales,\nThe bottom three rows for Rebels.");
@@ -422,6 +426,8 @@ public class Board {
         JButton tileBtn = tileBtns[i][j];
         if (move(getInitTileCoord()[0], getInitTileCoord()[1], i, j)) {
             gfv.decolour();
+            gfv.getMoveBtn().setVisible(false);
+            gfv.getAttackBtn().setVisible(false);
             System.out.println("Image= " + gfv.getImage());
             tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
             tileBtns[getInitTileCoord()[0]][getInitTileCoord()[1]].setIcon(new ImageIcon(
@@ -454,6 +460,8 @@ public class Board {
             gfv.decolour();
             resetAttacking();
             setAttcked();
+            gfv.getMoveBtn().setVisible(false);
+            gfv.getAttackBtn().setVisible(false);
             gfv.getStatusLabel().setText(gfv.STATUS + message);
         } else {
             gfv.getStatusLabel().setText(GameFrameView.STATUS + "Tile not valid, press the attack button again to cancel.");

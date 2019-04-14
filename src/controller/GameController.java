@@ -106,17 +106,12 @@ public class GameController {
                     }
 
                     else {
-
                         tileBtn = tileBtns[i][j];
-
                         if (b.canDoAction()) {
-
                             //
                             if (!b.isMoving() && !b.isAttacking()) {
                                 gfv.getStatusLabel().setText(STATUS + "You can either summon, move your valid piece or attack valid opposite piece in this turn.");
-
                             }
-
                             // Attempt to place a summoned pieces
                             if (b.getSummonedPiece() != null) {
                                 b.placeSummonedPiece(tileBtn, i, j);
@@ -124,6 +119,7 @@ public class GameController {
                             // Attempt to place a pieces after movement
                             else if (b.isMoving()) {
                                 b.placeMovedPiece(tileBtns, i, j);
+                              
                             }
                             else if(b.isAttacking()){
                                 b.placeAttackPiece(i,j);
@@ -134,7 +130,7 @@ public class GameController {
                             }
                         }
                         else {
-                            gfv.getStatusLabel().setText(STATUS + "You cannot do any more action in this turn.");
+                            gfv.getStatusLabel().setText(STATUS + "You cannot do any more actions in this turn.");
                         }
                     }
                 }

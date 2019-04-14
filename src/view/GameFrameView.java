@@ -149,9 +149,6 @@ public class GameFrameView extends JFrame{
 		playerPanel.add(new JLabel("Player Type: "));
 		playerPanel.add(playerType);
 
-		/*healthLabel = new JLabel(Integer.toString(playerOne.()));
-    	playerPanel.add(new JLabel("HP: "));
-        playerPanel.add(healthLabel);*/
 
 		tileBtns = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
 
