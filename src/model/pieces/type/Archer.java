@@ -5,6 +5,6 @@ import model.pieces.typeInterface.Troop;
 
 public class Archer extends Rebel implements Troop {
     public Archer() {
-        super("Archer",type, "AC", 5, 50,30,2,6, moveable, attackable);
+        super("Archer",type, "AC", 5, 40,30,2,6, moveable, attackable);
     }
 }

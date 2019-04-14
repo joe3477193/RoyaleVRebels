@@ -5,6 +5,6 @@ import model.pieces.typeInterface.Artillery;
 
 public class Cannon extends Royale implements Artillery {
     public Cannon() {
-        super("Cannon",type, "CA", 10, 50,50,0,10, moveable, attackable);
+        super("Cannon",type, "CA", 10, 50,60,0,6, moveable, attackable);
     }
 }
