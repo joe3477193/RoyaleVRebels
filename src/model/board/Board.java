@@ -388,7 +388,7 @@ public class Board {
     private boolean checkSummonValid(@NotNull Piece piece, @NotNegative int row, @NotNegative int tile) {
         boolean isRowValid;
         if (piece.getFaction().equals("Royale")) {
-            isRowValid = row < 3;
+            isRowValid = row < 3 && row >=1;
         } else {
             isRowValid = row > 9;
         }
