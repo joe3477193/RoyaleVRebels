@@ -67,6 +67,7 @@ public class Board {
         return isAttacking;
     }
 
+    //resets the attacking mode and resets the colour of the tiles + cursor
     @Pre(expr = "_this.isAttacking == true", lang = "groovy")
     @Post(expr = "_this.isAttacking == false", lang = "groovy")
     public void resetAttacking() {
@@ -76,6 +77,7 @@ public class Board {
         depaintAction();
     }
 
+    //set the mode for attacking
     @Pre(expr = "_this.isAttacking == false", lang = "groovy")
     public void setAttacking() {
         if (isFactionMatched(coordinate[0], coordinate[1])) {
@@ -99,6 +101,7 @@ public class Board {
         }
     }
 
+    //reset the moving mode, and resets the colour of the tiles + cursor
     @Pre(expr = "_this.isMoving == true", lang = "groovy")
     @Post(expr = "_this.isMoving == false", lang = "groovy")
     public void resetMoving() {
@@ -108,6 +111,7 @@ public class Board {
         gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
+    //enter the moving mode
     @Pre(expr = "_this.isMoving == false", lang = "groovy")
     public void setMoving() {
         if (isFactionMatched(coordinate[0], coordinate[1])) {
@@ -128,7 +132,7 @@ public class Board {
         }
     }
 
-    // want to change colour for showing attack range
+    // want to change colour for showing movement and attack range on tiles
     private void paintMovAttackRange(@NotNegative int row, @NotNegative int col, @NotNull @NotEmpty String actionType){
         Piece piece= getPiece(coordinate[0], coordinate[1]);
         int radius= piece.getActionRange(actionType);
@@ -142,6 +146,7 @@ public class Board {
         }
     }
 
+    //resets the colour of the tiles back
     @Pre(expr = "_this.gfv != null", lang = "groovy")
     private void depaintAction() {
         JButton[][] tileBtns = gfv.getTileBtns();
@@ -154,7 +159,7 @@ public class Board {
         }
     }
 
-    // Should we show the colour on the tile with opposite piece that player want to attack? I thk we should. --Andy
+    // check if a certain tile should be repainted with the paintMovAttack
     private boolean checkMoveRepaint(@NotNegative int i, @NotNegative int j) {
         try {
             return !isWall(i, j) && !getTile(i, j).hasPiece() && !isCastle(i);
@@ -167,6 +172,7 @@ public class Board {
         return actionPerformed;
     }
 
+    //sets the variable that tells the game if a player has performed an action on his turn.
     @Pre(expr = "_this.actionPerformed == false", lang = "groovy")
     @Post(expr = "_this.actionPerformed == true", lang = "groovy")
     private void setActionPerformed() {
@@ -174,6 +180,8 @@ public class Board {
         gfv.colourEndTurn();
     }
 
+    //called when the end turn button is clicked and changes the turn, including repainting the GUI
+    //with appropriate player and game info
     @Pre(expr = "_this.actionPerformed == true", lang = "groovy")
     @Post(expr = "_this.actionPerformed = false && _this.isAttacking == false && _this.isMoving == false",
             lang = "groovy")
@@ -228,6 +236,7 @@ public class Board {
         coordinate = new int[2];
     }
 
+    //resets the saved coordinate of a tile and the summoned piece which are saved in the board
     public void reset(){
         resetCoordinates();
         initTileCoord= null;
@@ -309,12 +318,12 @@ public class Board {
         return getTile(row, tile).hasPiece();
     }
 
-    // Check if pieces in current tile is moveable
+    // Check if pieces in current tile can move
     public boolean checkMoveInit(@NotNegative int row, @NotNegative int tile) {
         return checkInit(row, tile) && getTile(row, tile).getPiece().isMoveable();
     }
 
-    // Check if pieces in current tile is attackable
+    // Check if pieces in current tile can attack
     public boolean checkAttackInit(@NotNegative int row, @NotNegative int tile) {
         return checkInit(row, tile) && getTile(row, tile).getPiece().isAttackable();
     }
@@ -332,6 +341,7 @@ public class Board {
         return space.hasPiece() && !(inFaction.equals(outFaction));
     }
 
+    //checks if the target tile is valid to be attacked/moved into by the selected peicee
     private boolean isMovRangeValid(@NotNegative int inRow, @NotNegative int inTile, @NotNegative int tgRow, @NotNegative int tgTile, @NotNull @NotEmpty String type) {
         int rowDiff = abs(inRow - tgRow);
         int tileDiff = abs(inTile - tgTile);

@@ -61,11 +61,13 @@ public class GameController {
         String[] name;
         String[] image;
 
+        //resets the previous turn's actions such as moving and attacking
         b.resetMoving();
         b.resetAttacking();
 
         gfv.getFrame().setCursor(cursor);
 
+        //if rebel's turn
         if (b.getTurn() == 0) {
             button = gfv.getRebelButton();
             name = gfv.getRebelName();
@@ -105,10 +107,12 @@ public class GameController {
         tileBtns = gfv.getTileBtns();
         JButton tileBtn;
 
-        // Default Cursor
+        //if tile is clicked when a piece is not moving nor attacking
         if (!b.isMoving() && !b.isAttacking()) {
             gfv.decolour();
         }
+
+        //no piece is chosen in the board
         b.resetCoordinates();
 
         for (int i = 0; i < tileBtns.length; i++) {
@@ -127,10 +131,12 @@ public class GameController {
                         if (b.getSummonedPiece() != null && !b.getActionPerformed()) {
                             b.placeSummonedPiece(tileBtn, i, j);
                         }
-                        // Attempt to place a pieces after movement
+                        // Attempt to place a piece during movement
                         else if (b.isMoving() && !b.getActionPerformed()) {
                             b.placeMovedPiece(tileBtns, i, j);
-                        } else if (b.isAttacking() && !b.getActionPerformed()) {
+                        }
+                        // Attempt to place a piece during attack
+                        else if (b.isAttacking() && !b.getActionPerformed()) {
                             b.placeAttackPiece(i, j);
                         }
                         // Attempt to pick a pieces for action && also show piece info
