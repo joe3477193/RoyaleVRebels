@@ -140,7 +140,6 @@ public class GameController {
         // Cancel movement (click move button twice)
         if (b.isMoving() && !b.getActionPerformed()) {
             b.resetMoving();
-            gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
         // Trigger movement for a piece
@@ -166,7 +165,6 @@ public class GameController {
         // Cancel movement (click move button twice)
         if (b.isAttacking() && !b.getActionPerformed()) {
             b.resetAttacking();
-            gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
         // Trigger movement for a piece

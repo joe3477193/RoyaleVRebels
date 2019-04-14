@@ -62,7 +62,7 @@ public class Board {
     public void resetAttacking() {
         isAttacking = false;
         gfv.decolour();
-
+        gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         depaintAction();
     }
 
@@ -92,6 +92,7 @@ public class Board {
         isMoving = false;
         gfv.decolour();
         depaintAction();
+        gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
     public void setMoving() {
