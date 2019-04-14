@@ -1,6 +1,6 @@
 package controller;
 
-import model.Game;
+import app.Game;
 import net.sf.oval.constraint.NotEmpty;
 import net.sf.oval.constraint.NotNull;
 import net.sf.oval.guard.Guarded;

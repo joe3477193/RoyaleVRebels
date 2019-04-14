@@ -136,7 +136,7 @@ public class Board {
             for (int j = -radius; j <= radius; j++) {
                 if (checkMoveRepaint(row + i, col + j) &&
                         piece.isActionValid(abs(row-abs(row+i)), abs(col-abs(col+j)),actionType)) {
-                    gfv.colourTile(row + i, col + j);
+                    gfv.colourTile(row + i, col + j, actionType);
                 }
             }
         }
@@ -175,7 +175,8 @@ public class Board {
     }
 
     @Pre(expr = "_this.actionPerformed == true", lang = "groovy")
-    @Post(expr = "_this.actionPerformed = false && _this.isAttacking == false && _this.isMoving == false", lang = "groovy")
+    @Post(expr = "_this.actionPerformed = false && _this.isAttacking == false && _this.isMoving == false",
+            lang = "groovy")
     public void unsetActionPerformed() {
         actionPerformed = false;
         gfv.decolourEndTurn();

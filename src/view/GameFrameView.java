@@ -47,6 +47,8 @@ public class GameFrameView extends JFrame{
 
     private static final String GRASS_IMAGE      = "../images/grass.png";
     private static final String WALL_IMAGE      = "../images/wall.jpg";
+    private static final String RED_GRASS_IMAGE      = "../images/red_grass.png";
+    private static final String BLUE_GRASS_IMAGE      = "../images/blue_grass.png";
 
     private static final String RO_ONE_IMAGE      = "../images/man.png";
     private static final String RO_TWO_IMAGE      = "../images/megastrong.png";
@@ -244,10 +246,17 @@ public class GameFrameView extends JFrame{
         lastTile= tile;
     }
 
-    public void colourTile(@NotNegative int i, @NotNegative int j) {
+    public void colourTile(@NotNegative int i, @NotNegative int j, @NotNull @NotEmpty String actionType) {
         try{
-            tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../images/move.jpg")));
-        } catch (ArrayIndexOutOfBoundsException ignored) {
+            String name= getGrass();
+            if(actionType.equals("moveSpeed")){
+                name= BLUE_GRASS_IMAGE;
+            }
+            else if(actionType.equals("attackRange")){
+                name= RED_GRASS_IMAGE;
+            }
+            tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(name)));
+        } catch (RuntimeException ignored) {
         }
     }
 
