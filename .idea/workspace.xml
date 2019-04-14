@@ -2,10 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="882c6635-b1de-4029-b22a-ba60740e1023" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/RoyaleVRebels.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RoyaleVRebels.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/images/grass.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/images/grass.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/images/wall.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/images/wall.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/board/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/board/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/archer.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/images/archer.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/berserker.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/gilgamesh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/man.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/megastrong.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/move.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/rem.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/rin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/saber.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/strong.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/target.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/images/target.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/images/watchout.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/pieces/type/Archer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/pieces/type/Archer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/pieces/type/Catapult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/pieces/type/Catapult.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/GameFrameView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/GameFrameView.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,7 +29,48 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Catapult.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#190#191#0" expanded="true" />
+                <element signature="e#270#271#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Balista.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="7" column="24" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
+              <folding>
+                <element signature="e#190#191#0" expanded="true" />
+                <element signature="e#269#270#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Archer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#180#181#0" expanded="true" />
+                <element signature="e#258#259#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/model/board/Board.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
@@ -32,10 +83,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/Game.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="403">
+              <caret line="49" column="12" selection-start-line="49" selection-start-column="12" selection-end-line="49" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/view/GameFrameView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="252" column="19" lean-forward="true" selection-start-line="252" selection-start-column="19" selection-end-line="252" selection-end-column="19" />
+            <state relative-caret-position="299">
+              <caret line="57" column="75" selection-start-line="57" selection-start-column="75" selection-end-line="57" selection-end-column="75" />
               <folding>
                 <element signature="e#10718#10719#0" expanded="true" />
                 <element signature="e#10752#10753#0" expanded="true" />
@@ -45,71 +105,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/view/EnterNameView.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="562">
+              <caret line="46" column="4" selection-start-line="46" selection-start-column="4" selection-end-line="46" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/model/pieces/faction/Rebel.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="51">
               <caret line="3" column="29" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Angryman.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Infantry.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="7" column="25" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
-              <folding>
-                <element signature="e#184#185#0" expanded="true" />
-                <element signature="e#264#265#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Mobster.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
-              <folding>
-                <element signature="e#180#181#0" expanded="true" />
-                <element signature="e#259#260#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Rascal.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
-              <folding>
-                <element signature="e#178#179#0" expanded="true" />
-                <element signature="e#256#257#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Scoundrel.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-              <folding>
-                <element signature="e#184#185#0" expanded="true" />
-                <element signature="e#266#267#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -160,6 +168,7 @@
       <find>moveable</find>
       <find>Sys</find>
       <find>checkmove</find>
+      <find>colourtile</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -209,10 +218,8 @@
         <option value="$PROJECT_DIR$/src/model/pieces/faction/Rebel.java" />
         <option value="$PROJECT_DIR$/src/model/pieces/faction/Royale.java" />
         <option value="$PROJECT_DIR$/src/model/pieces/type/Angryman.java" />
-        <option value="$PROJECT_DIR$/src/model/pieces/type/Archer.java" />
         <option value="$PROJECT_DIR$/src/model/pieces/type/Balista.java" />
         <option value="$PROJECT_DIR$/src/model/pieces/type/Cannon.java" />
-        <option value="$PROJECT_DIR$/src/model/pieces/type/Catapult.java" />
         <option value="$PROJECT_DIR$/src/model/pieces/type/General.java" />
         <option value="$PROJECT_DIR$/src/model/pieces/type/Infantry.java" />
         <option value="$PROJECT_DIR$/src/model/pieces/type/Leader.java" />
@@ -222,8 +229,10 @@
         <option value="$PROJECT_DIR$/src/model/pieces/type/Scoundrel.java" />
         <option value="$PROJECT_DIR$/src/controller/GameController.java" />
         <option value="$PROJECT_DIR$/src/model/pieces/Piece.java" />
-        <option value="$PROJECT_DIR$/src/view/GameFrameView.java" />
         <option value="$PROJECT_DIR$/src/model/board/Board.java" />
+        <option value="$PROJECT_DIR$/src/model/pieces/type/Archer.java" />
+        <option value="$PROJECT_DIR$/src/model/pieces/type/Catapult.java" />
+        <option value="$PROJECT_DIR$/src/view/GameFrameView.java" />
       </list>
     </option>
   </component>
@@ -262,6 +271,12 @@
               <item name="RoyaleVRebels" type="b2602c69:ProjectViewProjectNode" />
               <item name="RoyaleVRebels" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RoyaleVRebels" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RoyaleVRebels" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="RoyaleVRebels" type="b2602c69:ProjectViewProjectNode" />
@@ -335,6 +350,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/view" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -395,7 +413,7 @@
       <workItem from="1554703417507" duration="29000" />
       <workItem from="1555082465090" duration="657000" />
       <workItem from="1555124363168" duration="380000" />
-      <workItem from="1555239272928" duration="916000" />
+      <workItem from="1555239272928" duration="3458000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed issues due to Polymorphism via class.forName()">
       <created>1555053387187</created>
@@ -422,7 +440,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="49861000" />
+    <option name="totallyTimeSpent" value="52403000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -433,7 +451,7 @@
       <window_info id="Capture Tool" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
-      <window_info active="true" content_ui="combo" id="Project" order="5" visible="true" weight="0.20095949" />
+      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.20095949" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.329718" />
       <window_info anchor="bottom" id="Terminal" order="1" />
@@ -442,7 +460,7 @@
       <window_info anchor="bottom" id="Docker" order="4" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="5" />
       <window_info anchor="bottom" id="Find" order="6" sideWeight="0.4989339" weight="0.17334779" />
-      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.49946696" visible="true" weight="0.32719395" />
+      <window_info active="true" anchor="bottom" id="Run" order="7" sideWeight="0.49946696" visible="true" weight="0.32719395" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.39943343" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
@@ -545,13 +563,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/Game.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="556">
-          <caret line="48" selection-start-line="48" selection-end-line="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk-12/lib/src.zip!/java.desktop/javax/swing/AbstractButton.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
@@ -639,13 +650,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/view/EnterNameView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="562">
-          <caret line="46" column="4" selection-start-line="46" selection-start-column="4" selection-end-line="46" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk-12/lib/src.zip!/java.base/java/util/ArrayList.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
@@ -688,17 +692,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Archer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
-          <folding>
-            <element signature="e#180#181#0" expanded="true" />
-            <element signature="e#249#250#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/model/pieces/type/General.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -728,28 +721,6 @@
           <folding>
             <element signature="e#186#187#0" expanded="true" />
             <element signature="e#255#256#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Catapult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-          <folding>
-            <element signature="e#190#191#0" expanded="true" />
-            <element signature="e#270#271#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Balista.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="7" column="24" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
-          <folding>
-            <element signature="e#190#191#0" expanded="true" />
-            <element signature="e#269#270#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -847,23 +818,72 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/view/GameFrameView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="252" column="19" lean-forward="true" selection-start-line="252" selection-start-column="19" selection-end-line="252" selection-end-column="19" />
-          <folding>
-            <element signature="e#10718#10719#0" expanded="true" />
-            <element signature="e#10752#10753#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/model/board/Board.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="138" column="63" selection-start-line="138" selection-start-column="63" selection-end-line="138" selection-end-column="63" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Balista.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="7" column="24" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
+          <folding>
+            <element signature="e#190#191#0" expanded="true" />
+            <element signature="e#269#270#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Archer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#180#181#0" expanded="true" />
+            <element signature="e#258#259#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model/pieces/type/Catapult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#190#191#0" expanded="true" />
+            <element signature="e#270#271#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/view/EnterNameView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="562">
+          <caret line="46" column="4" selection-start-line="46" selection-start-column="4" selection-end-line="46" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/Game.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="49" column="12" selection-start-line="49" selection-start-column="12" selection-end-line="49" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/view/GameFrameView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="57" column="75" selection-start-line="57" selection-start-column="75" selection-end-line="57" selection-end-column="75" />
+          <folding>
+            <element signature="e#10718#10719#0" expanded="true" />
+            <element signature="e#10752#10753#0" expanded="true" />
           </folding>
         </state>
       </provider>

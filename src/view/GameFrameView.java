@@ -50,19 +50,19 @@ public class GameFrameView extends JFrame{
     private static final String RED_GRASS_IMAGE      = "../images/red_grass.png";
     private static final String BLUE_GRASS_IMAGE      = "../images/blue_grass.png";
 
-    private static final String RO_ONE_IMAGE      = "../images/man.png";
-    private static final String RO_TWO_IMAGE      = "../images/megastrong.png";
-    private static final String RO_THREE_IMAGE      = "../images/strong.png";
-    private static final String RO_FOUR_IMAGE      = "../images/watchout.png";
-    private static final String RO_FIVE_IMAGE      = "../images/watchout.png";
-    private static final String RO_SIX_IMAGE      = "../images/watchout.png";
+    private static final String RO_ONE_IMAGE      = "../images/general.png";
+    private static final String RO_TWO_IMAGE      = "../images/liutenant.png";
+    private static final String RO_THREE_IMAGE      = "../images/infantry.png";
+    private static final String RO_FOUR_IMAGE      = "../images/balista.png";
+    private static final String RO_FIVE_IMAGE      = "../images/cannon.png";
+    private static final String RO_SIX_IMAGE      = "../images/catapult.png";
 
-    private static final String RE_ONE_IMAGE      = "../images/archer.png";
-    private static final String RE_TWO_IMAGE      = "../images/berserker.png";
-    private static final String RE_THREE_IMAGE      = "../images/gilgamesh.png";
-    private static final String RE_FOUR_IMAGE      = "../images/rem.png";
-    private static final String RE_FIVE_IMAGE      = "../images/rin.png";
-    private static final String RE_SIX_IMAGE      = "../images/saber.png";
+    private static final String RE_ONE_IMAGE      = "../images/leader.png";
+    private static final String RE_TWO_IMAGE      = "../images/scoundrel.png";
+    private static final String RE_THREE_IMAGE      = "../images/mobster.png";
+    private static final String RE_FOUR_IMAGE      = "../images/angryman.png";
+    private static final String RE_FIVE_IMAGE      = "../images/rascal.png";
+    private static final String RE_SIX_IMAGE      = "../images/archer.png";
 
     public static final String STATUS = "Game status:  ";
     private JButton[] rebelButton;
@@ -95,11 +95,11 @@ public class GameFrameView extends JFrame{
         rebelImage= new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE,
                 RE_SIX_IMAGE
         };
-        rebelName= new String[] {"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Catapult"
+        rebelName= new String[] {"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Archer"
         };
 
         royaleButton = new JButton[6];
-        royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Archer"
+        royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Catapult"
         };
         royaleImage = new String[] {RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
                 RO_SIX_IMAGE
