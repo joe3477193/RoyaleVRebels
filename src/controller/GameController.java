@@ -50,12 +50,16 @@ public class GameController {
     public void summonButton(@NotNull ActionEvent e) {
 
         JButton source = (JButton) e.getSource();
+        Cursor cursor= gfv.getFrame().getCursor();
 
         JButton[] button;
         String[] name;
         String[] image;
 
         b.resetMoving();
+        b.resetAttacking();
+
+        gfv.getFrame().setCursor(cursor);
 
         if (b.getTurn() == 0) {
             button = gfv.getRebelButton();
