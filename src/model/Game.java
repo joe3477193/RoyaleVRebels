@@ -17,7 +17,8 @@ public class Game{
 	private GameFrameView gfv;
 
 	public Game(ArrayList<String> playerNames){
-
+        ArrayList<Player> players = new ArrayList<>();
+		
 		gfv= new GameFrameView();
 		Random r = new Random();
 		int turn = r.nextInt(playerNames.size());
@@ -32,7 +33,6 @@ public class Game{
 			rebel =  new RebelPlayer(playerNames.get(turn - 1));
 		}
 
-		ArrayList<Player> players = new ArrayList<>();
 		players.add(rebel);
 		players.add(royale);
 
@@ -44,6 +44,5 @@ public class Game{
 		Board b = new Board(gfv);
 		gfv.assembleBoard(rebel,royale, b);
 		new GameController(b, gfv);
-		// RebelPlayer goes first
 	}
 }

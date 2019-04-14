@@ -51,6 +51,8 @@ public class GameController {
         String[] name;
         String[] image;
 
+        b.resetMoving();
+
         if (b.getTurn() == 0) {
             button = gfv.getRebelButton();
             name = gfv.getRebelName();
@@ -68,18 +70,18 @@ public class GameController {
                 // Click on the same pieces on the deck
                 if (gfv.getFrame().getCursor().getName().equals(name[i])) {
 
-                    gfv.getStatusLabel().setText(STATUS + "Summon canceled.");
                     gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     b.removeSummonedPiece();
                     gfv.removeImage();
                 }
 
                 // Click on a different piece on the deck when the player has not moved any piece
-                else if (b.canDoAction()) {
-                    gfv.getStatusLabel().setText(STATUS + "You can summon piece on valid tile. The top three rows for Royales, The bottom three rows for Rebels. Click again to cancel summon.");
+                else if (!b.getActionPerformed()) {
                     gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
                     b.createPiece(name[i]);
                     gfv.setImage(image[i]);
+                } else {
+                    gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
                 }
             }
         }
@@ -102,35 +104,31 @@ public class GameController {
 
                     // Click a brick wall
                     if (b.isWall(i, j)) {
-                        gfv.getStatusLabel().setText(STATUS + "Invalid action: brick wall clicked.");
+                        gfv.getStatusLabel().setText(STATUS + "Please do not click a brick wall.");
                     }
 
+                    // Attempt to place pieces
                     else {
                         tileBtn = tileBtns[i][j];
-                        if (b.canDoAction()) {
-                            //
-                            if (!b.isMoving() && !b.isAttacking()) {
-                                gfv.getStatusLabel().setText(STATUS + "You can either summon, move your valid piece or attack valid opposite piece in this turn.");
-                            }
-                            // Attempt to place a summoned pieces
-                            if (b.getSummonedPiece() != null) {
-                                b.placeSummonedPiece(tileBtn, i, j);
-                            }
-                            // Attempt to place a pieces after movement
-                            else if (b.isMoving()) {
-                                b.placeMovedPiece(tileBtns, i, j);
-                              
-                            }
-                            else if(b.isAttacking()){
-                                b.placeAttackPiece(i,j);
-                            }
-                            // Attempt to select a pieces for movement
-                            else if (b.checkInit(i, j)) {
-                                b.clickTile(tileBtn, i, j);
-                            }
+                        // Attempt to place a summoned pieces
+                        if (b.getSummonedPiece() != null && !b.getActionPerformed()) {
+                            b.placeSummonedPiece(tileBtn, i, j);
                         }
+                        // Attempt to place a pieces after movement
+                        else if (b.isMoving() && !b.getActionPerformed()) {
+                            b.placeMovedPiece(tileBtns, i, j);
+                        } else if (b.isAttacking() && !b.getActionPerformed()) {
+                            b.placeAttackPiece(i, j);
+                        }
+                        // Attempt to pick a pieces for action && also show piece info
+                        else if (b.checkInit(i, j)) {
+                            gfv.getStatusLabel().setText(STATUS);
+                            b.clickTile(tileBtn, i, j);
+                        }
+
+                        // Attempt to click on an empty tile
                         else {
-                            gfv.getStatusLabel().setText(STATUS + "You cannot do any more actions in this turn.");
+                            gfv.getStatusLabel().setText(STATUS);
                         }
                     }
                 }
@@ -139,49 +137,46 @@ public class GameController {
     }
 
     public void move() {
-
         // Cancel movement (click move button twice)
-        if (b.isMoving() && !b.hasMoved()) {
+        if (b.isMoving() && !b.getActionPerformed()) {
             b.resetMoving();
-            gfv.getStatusLabel().setText(GameFrameView.STATUS + "Movement cancelled.");
             gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
         // Trigger movement for a piece
-        else if (b.hasCoordinates() && b.checkMoveInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.hasMoved()) {
-            gfv.getStatusLabel().setText(STATUS + "You can move the piece within its move range. Click move button again to cancel movement.");
+        else if (b.hasCoordinates() && b.checkMoveInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.getActionPerformed()) {
+            b.resetAttacking();
             b.setMoving();
         }
 
-        // Player has hasMoved already
-        else if (b.hasMoved()) {
-            gfv.getStatusLabel().setText(STATUS + "You have already moved a piece this turn.");
+        // Player has getActionPerformed already
+        else if (b.getActionPerformed()) {
+            gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
         } else {
             gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }
     }
 
     public void endTurn() {
-        b.resetAction();
+        b.unsetActionPerformed();
     }
 
     public void attack() {
-        // Cancel attack (click attack button twice)
-        if (b.isAttacking() && !b.hasAttacked()) {
+        // Cancel movement (click move button twice)
+        if (b.isAttacking() && !b.getActionPerformed()) {
             b.resetAttacking();
             gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            gfv.getStatusLabel().setText(GameFrameView.STATUS + "Attack cancelled.");
         }
 
-        // Trigger attack for a piece
-        else if (b.hasCoordinates() && b.checkAttackInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.hasMoved()) {
-            gfv.getStatusLabel().setText(STATUS + "You can make the piece to attack opposite piece within its attack range.  Click attack button again to cancel attack.");
+        // Trigger movement for a piece
+        else if (b.hasCoordinates() && b.checkAttackInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.getActionPerformed()) {
+            b.resetMoving();
             b.setAttacking();
         }
 
-        // Player has hasMoved already
-        else if (b.hasAttacked()) {
-            gfv.getStatusLabel().setText(STATUS + "You have already attacked a piece this turn.");
+        // Player has performed action already
+        else if (b.getActionPerformed()) {
+            gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
         } else {
             gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }

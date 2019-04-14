@@ -1,9 +1,9 @@
 package controller.gameActionListeners;
 
+import controller.GameController;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import controller.GameController;
 
 
 // Click tile

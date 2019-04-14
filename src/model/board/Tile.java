@@ -2,29 +2,26 @@ package model.board;
 
 import model.pieces.Piece;
 
-public class Tile {
+class Tile {
 
     private Piece piece;
 
-    public Tile() {
+    Tile() {
     }
 
-    public void setPiece(Piece piece) {
-        this.piece = piece;
-    }
-
-    public Piece getPiece() {
+    Piece getPiece() {
         return piece;
     }
 
-    public boolean hasPiece() {
-        if (piece != null) {
-            return true;
-        }
-        return false;
+    void setPiece(Piece piece) {
+        this.piece = piece;
     }
 
-    public void removePiece() {
+    boolean hasPiece() {
+        return piece != null;
+    }
+
+    void removePiece() {
         piece = null;
     }
 

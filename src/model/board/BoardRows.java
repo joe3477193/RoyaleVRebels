@@ -2,7 +2,7 @@ package model.board;
 
 import java.util.ArrayList;
 
-public class BoardRows {
+class BoardRows {
 
     private ArrayList<Tile> tiles;
 
@@ -14,15 +14,7 @@ public class BoardRows {
         }
     }
 
-    public ArrayList<Tile> getRow() {
-        if (tiles != null) {
-            return tiles;
-        } else {
-            return null;
-        }
-    }
-
-    public Tile getTile(int i) {
+    Tile getTile(int i) {
         return tiles.get(i);
     }
 
