@@ -89,7 +89,7 @@ public class Board {
             int col = coordinate[1];
 
             // paintAttack(); to make diff colour for attack range
-            paintMove(row, col, range);
+            paintMovAttackRange(row, col, "attackRange");
 
         }
 
@@ -119,7 +119,7 @@ public class Board {
             int mov = getPiece(coordinate[0], coordinate[1]).getMoveSpeed();
             int row = coordinate[0];
             int col = coordinate[1];
-            paintMove(row, col, mov);
+            paintMovAttackRange(row, col, "moveSpeed");
         }
 
         // Attempt to move opposite player's piece
@@ -129,10 +129,13 @@ public class Board {
     }
 
     // want to change colour for showing attack range
-    private void paintMove(@NotNegative int row, @NotNegative int col, @NotNegative int radius) {
+    private void paintMovAttackRange(@NotNegative int row, @NotNegative int col, @NotNull @NotEmpty String actionType){
+        Piece piece= getPiece(coordinate[0], coordinate[1]);
+        int radius= piece.getActionRange(actionType);
         for (int i = -radius; i <= radius; i++) {
             for (int j = -radius; j <= radius; j++) {
-                if (checkMoveRepaint(row + i, col + j) && abs(i) + abs(j) <= radius) {
+                if (checkMoveRepaint(row + i, col + j) &&
+                        piece.isActionValid(abs(row-abs(row+i)), abs(col-abs(col+j)),actionType)) {
                     gfv.colourTile(row + i, col + j);
                 }
             }
@@ -333,7 +336,20 @@ public class Board {
         int tileDiff = abs(inTile - tgTile);
 
         Piece piece = getPiece(inRow, inTile);
-        return piece.isActionValid(rowDiff + tileDiff, type);
+
+        /*for(int i= -rowDiff; i<=rowDiff;i++){
+            if(i!=inRow && (isWall(inRow+i,inTile) || getTile(inRow+i, inTile).hasPiece())){
+                return false;
+            }
+        }
+        for (int i= -tileDiff;i>=tileDiff;i++){
+            if(i!=inTile && (isWall(inRow,inTile+i) || getTile(inRow, inTile+i).hasPiece())){
+                return false;
+            }
+
+
+        }*/
+        return piece.isActionValid(rowDiff, tileDiff, type);
     }
 
     // Check if pieces actionPerformed from current tile to target tile

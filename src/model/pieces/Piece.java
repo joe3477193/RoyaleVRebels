@@ -82,13 +82,18 @@ public abstract class Piece {
         return name;
     }
 
-    public boolean isActionValid(@NotNegative int difference, @NotNull @NotEmpty String actionType) {
-        boolean valid= false;
-        if (actionType.equals("moveSpeed")) {
-            valid = moveSpeed >= difference;
-        } else if (actionType.equals("attackRange")) {
-            valid = attackRange >= difference;
+    public boolean isActionValid(@NotNegative int rowdiff, @NotNegative int tilediff, @NotNull @NotEmpty String actionType) {
+        int range= getActionRange(actionType);
+        return rowdiff==0 && range >= tilediff || tilediff==0 && range>=rowdiff;
+    }
+
+    public int getActionRange(@NotNull @NotEmpty String actionType){
+        if(actionType.equals("moveSpeed")){
+            return moveSpeed;
         }
-        return valid;
+        else if (actionType.equals("attackRange")){
+            return attackRange;
+        }
+        return 0;
     }
 }
