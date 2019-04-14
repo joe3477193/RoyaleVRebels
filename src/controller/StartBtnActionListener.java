@@ -1,6 +1,6 @@
 package controller;
 
-import model.Game;
+import app.Game;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

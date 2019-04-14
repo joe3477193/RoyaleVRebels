@@ -140,13 +140,15 @@ public class GameFrameView extends JFrame{
         typeOne= playerOne.getFaction();
         nameTwo= playerTwo.getName();
         typeTwo= playerTwo.getFaction();
+        time = new JLabel("");
 
         playerPanel = new JPanel(new GridLayout(1, 6, 0, 0));
         deckPanel = new JPanel(new GridLayout(1, 5, 0, 0));
         gridPanel = new JPanel(new GridLayout(b.getRows(), b.getCols(), 0, 1));
         actionPanel = new JPanel(new GridLayout(1, 2));
         JPanel statusPanel = new JPanel(new GridLayout(1, 1));
-        statusPanel.add(statusLabel);
+        statusPanel.add(statusLabel, BorderLayout.WEST);
+        statusPanel.add(time, BorderLayout.EAST);
 
         playerName = new JLabel(playerOne.getName());
         playerPanel.add(new JLabel("Player Name: "));

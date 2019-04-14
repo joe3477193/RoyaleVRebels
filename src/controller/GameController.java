@@ -16,6 +16,7 @@ import java.util.TimerTask;
 import static view.GameFrameView.STATUS;
 
 public class GameController {
+    Timer timer;
 
     private Board b;
     private GameFrameView gfv;
@@ -161,7 +162,6 @@ public class GameController {
         else if (b.hasCoordinates() && b.checkMoveInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.getActionPerformed()) {
             b.resetAttacking();
             b.setMoving();
-            gfv.colourAttack();
         }
 
         // Player has getActionPerformed already
@@ -192,7 +192,6 @@ public class GameController {
         else if (b.hasCoordinates() && b.checkAttackInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.getActionPerformed()) {
             b.resetMoving();
             b.setAttacking();
-            gfv.colourMove();
         }
 
         // Player has performed action already
@@ -205,8 +204,8 @@ public class GameController {
     }
     
     public void startTimer() {
-    	
         TimerTask t = new TimerTask(){
+
         	int second = 60;
          
        	 	@Override
@@ -215,7 +214,7 @@ public class GameController {
        	 		gfv.setTime("Time Remaining: "+duration.toMinutesPart()+":"+duration.toSecondsPart());
        	 	} 
        	 };
-       	timer = new Timer();
+        timer = new Timer();
         timer.schedule(t,0, 1000);  
     }
     
