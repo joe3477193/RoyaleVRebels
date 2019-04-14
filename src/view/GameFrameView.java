@@ -237,6 +237,27 @@ public class GameFrameView extends JFrame{
 		}
 	}
 
+	public void setGrassTile(int i, int j){
+		try{
+			tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+		} catch (ArrayIndexOutOfBoundsException ignored) {
+		}
+	}
+
+	public void decolourTile(int i, int j){
+		try{
+			tileBtns[i][j].setBackground(null);
+		} catch (ArrayIndexOutOfBoundsException ignored) {
+		}
+	}
+
+	public void colourRedTile(int i, int j){
+		try{
+			tileBtns[i][j].setBackground(Color.red);
+		} catch (ArrayIndexOutOfBoundsException ignored) {
+		}
+	}
+
     private void colourRedTile(JButton tile) {
 		tile.setBackground(Color.red);
 		lastTile= tile;
