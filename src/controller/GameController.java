@@ -158,6 +158,7 @@ public class GameController {
         else if (b.getActionPerformed()) {
             gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
         } else {
+            b.resetAttacking();
             gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }
     }
@@ -184,6 +185,7 @@ public class GameController {
         else if (b.getActionPerformed()) {
             gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
         } else {
+            b.resetMoving();
             gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }
     }

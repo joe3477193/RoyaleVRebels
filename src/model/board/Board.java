@@ -106,6 +106,7 @@ public class Board {
         gfv.decolour();
         gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         depaintAction();
+        gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
     @Pre(expr = "_this.isMoving == false", lang = "groovy")
@@ -186,6 +187,7 @@ public class Board {
         depaintAction();
         resetAttacking();
         resetMoving();
+        reset();
     }
 
     public int[] getCoordinates() {
@@ -221,6 +223,13 @@ public class Board {
     public void resetCoordinates() {
         coordinate = null;
         coordinate = new int[2];
+    }
+
+    public void reset(){
+        resetCoordinates();
+        initTileCoord= null;
+        initTileCoord= new int[2];
+        removeSummonedPiece();
     }
 
     public boolean hasCoordinates() {
