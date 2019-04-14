@@ -9,6 +9,9 @@ import view.GameFrameView;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.time.Duration;
+import java.util.Timer; 
+import java.util.TimerTask;
 
 import static view.GameFrameView.STATUS;
 
@@ -21,6 +24,7 @@ public class GameController {
         this.b = b;
         this.gfv = gfv;
         addActionListeners();
+        startTimer();
     }
 
     @Pre(expr = "_this.gfv != null", lang = "groovy")
@@ -77,7 +81,6 @@ public class GameController {
 
                 // Click on the same pieces on the deck
                 if (gfv.getFrame().getCursor().getName().equals(name[i])) {
-
                     gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     b.removeSummonedPiece();
                     gfv.removeImage();
@@ -170,6 +173,7 @@ public class GameController {
     @Pre(expr = "_this.b != null", lang = "groovy")
     public void endTurn() {
         b.unsetActionPerformed();
+        stopTimer();
     }
 
     @Pre(expr = "_this.gfv != null && _this.b != null", lang = "groovy")
@@ -192,6 +196,39 @@ public class GameController {
             b.resetMoving();
             gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }
+    }
+    
+    public void startTimer() {
+    	
+        TimerTask t = new TimerTask(){
+        	int second = 60;
+         
+       	 	@Override
+       	 	public void run() {
+       	 		Duration duration = Duration.ofSeconds(second--);	 
+       	 		gfv.setTime("Time Remaining: "+duration.toMinutesPart()+":"+duration.toSecondsPart());
+       	 	} 
+       	 };
+       	timer = new Timer();
+        timer.schedule(t,0, 1000);  
+    }
+    
+    public void stopTimer() {
+        TimerTask t = new TimerTask(){
+        	int second = 60;
+          
+       	 	@Override
+       	 	public void run() {
+       	 		Duration duration = Duration.ofSeconds(second--);	 
+       	 		gfv.setTime("Time Remaining: "+duration.toMinutesPart()+":"+duration.toSecondsPart()+" ");
+       	 		if(second == -1) {
+       	 			endTurn();
+       	 		}
+       	 	} 
+       	 };
+       	timer.cancel();
+       	timer = new Timer();
+        timer.schedule(t,0, 1000); 
     }
 }
 

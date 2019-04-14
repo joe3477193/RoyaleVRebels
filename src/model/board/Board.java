@@ -147,7 +147,7 @@ public class Board {
         JButton[][] tileBtns = gfv.getTileBtns();
         for (int i = 0; i < BOARD_ROWS; i++) {
             for (int j = 0; j < BOARD_COLS; j++) {
-                if (!isWall(i, j) && !getTile(i, j).hasPiece()) {
+                if (!isWall(i, j) && !getTile(i, j).hasPiece() && !isCastle(i,j)) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../../images/grass.png")));
                 }
             }
@@ -413,12 +413,11 @@ public class Board {
             gfv.getAttackBtn().setVisible(false);
         } else {
             gfv.getStatusLabel().setText(STATUS + "Please place the pieces on a valid tile,\n"
-                    + "The top three rows for Royales,\nThe bottom three rows for Rebels.");
+                    + "The first two rows for Royales,\nThe bottom three rows for Rebels.");
         }
     }
 
-    @Pre(expr = "_this.gfv != null", lang = "groovy")
-    public void placeMovedPiece(@NotNull JButton[][] tileBtns, @NotNegative int i, @NotNegative int j) {
+    public void placeMovedPiece(JButton[][] tileBtns, int i, int j) {
         JButton tileBtn = tileBtns[i][j];
         if (move(getInitTileCoord()[0], getInitTileCoord()[1], i, j)) {
             gfv.decolour();
@@ -439,6 +438,10 @@ public class Board {
 
     public boolean isWall(@NotNegative int i, @NotNegative int j) {
         return i % 5 <= 2 && j % 4 == 3;
+    }
+
+    public boolean isCastle(@NotNegative int i, @NotNegative int j) {
+        return i==0;
     }
 
     @Pre(expr = "_this.gfv != null", lang = "groovy")

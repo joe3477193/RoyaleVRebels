@@ -21,7 +21,7 @@ public class GameFrameView extends JFrame{
     private JPanel playerPanel;
     private JPanel deckPanel;
 
-    private JLabel playerName, playerType;
+    private JLabel playerName, playerType, time;
     private String nameOne, typeOne, nameTwo, typeTwo;
     private static JButton[][] tileBtns;
 
@@ -361,6 +361,10 @@ public class GameFrameView extends JFrame{
     public ArrayList<JButton> getSummonBtns() {
         return summonBtns;
     }
+
+	public void setTime(String text) {
+		time.setText(text);
+	}
 }
 
 
