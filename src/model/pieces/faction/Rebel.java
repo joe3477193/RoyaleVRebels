@@ -7,7 +7,7 @@ import net.sf.oval.constraint.NotNull;
 import net.sf.oval.guard.Guarded;
 
 @Guarded
-public class Rebel extends Piece {
+public abstract class Rebel extends Piece {
 
     public Rebel(@NotNull @NotEmpty String name, @NotNull @NotEmpty String type, @NotNull @NotEmpty String code, @NotNegative int cp, @NotNegative int initHp, @NotNegative int attackPower, @NotNegative int moveSpeed, @NotNegative int attackRange,
                  boolean moveable, boolean attackable) {
