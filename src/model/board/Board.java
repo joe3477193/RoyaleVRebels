@@ -167,6 +167,7 @@ public class Board {
         depaintAction();
         resetAttacking();
         resetMoving();
+        reset();
     }
 
     public int[] getCoordinates() {
@@ -202,6 +203,13 @@ public class Board {
     public void resetCoordinates() {
         coordinate = null;
         coordinate = new int[2];
+    }
+
+    public void reset(){
+        resetCoordinates();
+        initTileCoord= null;
+        initTileCoord= new int[2];
+        removeSummonedPiece();
     }
 
     public boolean hasCoordinates() {
