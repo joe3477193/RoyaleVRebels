@@ -9,13 +9,13 @@ public abstract class Piece {
     private int cp;
     private int initHp;
     private int hp;
-    private int attack;
-    private int mov;
-    private int range;
+    private int attackPower;
+    private int moveSpeed;
+    private int attackRange;
     private boolean moveable;
     private boolean attackable;
 
-    public Piece(String name, String faction, String type, String code, int cp, int initHp, int attack, int mov, int range,
+    public Piece(String name, String faction, String type, String code, int cp, int initHp, int attackPower, int moveSpeed, int attackRange,
                  boolean moveable, boolean attackable) {
         this.name= name;
         this.faction= faction;
@@ -24,9 +24,9 @@ public abstract class Piece {
         this.cp= cp;
         this.initHp= initHp;
         this.hp= initHp;
-        this.attack= attack;
-        this.mov= mov;
-        this.range= range;
+        this.attackPower = attackPower;
+        this.moveSpeed = moveSpeed;
+        this.attackRange = attackRange;
         this.moveable= moveable;
         this.attackable= attackable;
     }
@@ -57,16 +57,16 @@ public abstract class Piece {
         return attackable;
     }
 
-    public int getMov() {
-        return mov;
+    public int getMoveSpeed() {
+        return moveSpeed;
     }
 
-    public int getRange() {
-        return range;
+    public int getAttackRange() {
+        return attackRange;
     }
 
-    public int getAttack() {
-        return attack;
+    public int getAttackPower() {
+        return attackPower;
     }
 
     public int getHp() {
@@ -79,10 +79,10 @@ public abstract class Piece {
 
     public boolean isMoveValid(int difference, String movType) {
         boolean valid= false;
-        if (movType.equals("mov")) {
-            valid= mov >= difference;
-        } else if (movType.equals("range")) {
-            valid= range >= difference;
+        if (movType.equals("moveSpeed")) {
+            valid= moveSpeed >= difference;
+        } else if (movType.equals("attackRange")) {
+            valid= attackRange >= difference;
         }
         return valid;
     }

@@ -1,12 +1,7 @@
 package controller.actionListeners;
 
 import controller.GameController;
-import model.board.Board;
-import model.pieces.Piece;
-import view.GameFrameView;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

@@ -32,7 +32,7 @@ public class StartButton implements ActionListener {
             SwingUtilities.invokeLater(() -> {
 
                 // Create Game Model
-                Game game = new Game(playerNames);
+                new Game(playerNames);
             });
 
         	// Close Register

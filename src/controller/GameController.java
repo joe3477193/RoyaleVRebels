@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+import static view.GameFrameView.STATUS;
+
 public class GameController {
 
     private Board b;
@@ -19,7 +21,7 @@ public class GameController {
         addActionListeners();
     }
 
-    public void addActionListeners() {
+    private void addActionListeners() {
         SummonBtnActionListener summonListener = new SummonBtnActionListener(this);
         TileBtnActionListener tileListener = new TileBtnActionListener(this);
 
@@ -49,7 +51,6 @@ public class GameController {
         String[] name;
         String[] image;
 
-        // What is this line of code for?
         b.resetMoving();
 
         if (b.getTurn() == 0) {
@@ -74,11 +75,14 @@ public class GameController {
                 }
 
                 // Click on a different piece on the deck when the player has not moved any piece
-                // else if(!b.getAction()) ???
-                else if (!b.hasMoved()) {
+                else if (!b.getActionPerformed()) {
                     gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
                     b.createPiece(name[i]);
                     gfv.setImage(image[i]);
+                }
+
+                else {
+                    gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
                 }
             }
         }
@@ -100,28 +104,33 @@ public class GameController {
                 if (e.getSource() == tileBtns[i][j]) {
 
                     // Click a brick wall
-                    // How to check if it is empty click or click with a pieces???
                     if (b.isWall(i, j)) {
-                        gfv.getStatusLabel().setText(gfv.STATUS + "You cannot place a piece on a brick wall.");
+                        gfv.getStatusLabel().setText(STATUS + "Please do not click a brick wall.");
                     }
 
                     // Attempt to place pieces
                     else {
                         tileBtn = tileBtns[i][j];
                         // Attempt to place a summoned pieces
-                        if (b.getSummonedPiece() != null && !b.hasMoved()) {
+                        if (b.getSummonedPiece() != null && !b.getActionPerformed()) {
                             b.placeSummonedPiece(tileBtn, i, j);
                         }
                         // Attempt to place a pieces after movement
-                        else if (b.isMoving() && !b.hasMoved()) {
+                        else if (b.isMoving() && !b.getActionPerformed()) {
                             b.placeMovedPiece(tileBtns, i, j);
                         }
-                        else if(b.isAttacking() && !b.hasMoved()){
+                        else if(b.isAttacking() && !b.getActionPerformed()){
                             b.placeAttackPiece(i,j);
                         }
-                        // Attempt to pick a pieces for movement
+                        // Attempt to pick a pieces for action && also show piece info
                         else if (b.checkInit(i, j)) {
+                            gfv.getStatusLabel().setText(STATUS);
                             b.clickTile(tileBtn, i, j);
+                        }
+
+                        // Attempt to click on an empty tile
+                        else {
+                                gfv.getStatusLabel().setText(STATUS);
                         }
                     }
                 }
@@ -129,49 +138,49 @@ public class GameController {
         }
     }
 
-    public void move(ActionEvent e) {
+    public void move() {
         // Cancel movement (click move button twice)
-        if (b.isMoving() && !b.hasMoved()) {
+        if (b.isMoving() && !b.getActionPerformed()) {
             b.resetMoving();
             gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
         // Trigger movement for a piece
-        else if (b.hasCoordinates() && b.checkMoveInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.hasMoved()) {
+        else if (b.hasCoordinates() && b.checkMoveInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.getActionPerformed()) {
             b.resetAttacking();
             b.setMoving();
         }
 
-        // Player has hasMoved already
-        else if (b.hasMoved()) {
-            gfv.getStatusLabel().setText(gfv.STATUS + "You have already moved a piece this turn.");
+        // Player has getActionPerformed already
+        else if (b.getActionPerformed()) {
+            gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
         } else {
-            gfv.getStatusLabel().setText(gfv.STATUS + "You have not chosen a valid tile.");
+            gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }
     }
 
-    public void endTurn(ActionEvent e) {
-        b.unsetMoved();
+    public void endTurn() {
+        b.unsetActionPerformed();
     }
 
-    public void attack(ActionEvent e) {
+    public void attack() {
         // Cancel movement (click move button twice)
-        if (b.isAttacking() && !b.hasMoved()) {
+        if (b.isAttacking() && !b.getActionPerformed()) {
             b.resetAttacking();
             gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
         // Trigger movement for a piece
-        else if (b.hasCoordinates() && b.checkAttackInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.hasMoved()) {
+        else if (b.hasCoordinates() && b.checkAttackInit(b.getCoordinates()[0], b.getCoordinates()[1]) && !b.getActionPerformed()) {
             b.resetMoving();
             b.setAttacking();
         }
 
-        // Player has hasMoved already
-        else if (b.hasMoved()) {
-            gfv.getStatusLabel().setText(gfv.STATUS + "You have already moved a piece this turn.");
+        // Player has performed action already
+        else if (b.getActionPerformed()) {
+            gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
         } else {
-            gfv.getStatusLabel().setText(gfv.STATUS + "You have not chosen a valid tile.");
+            gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }
     }
 }

@@ -12,15 +12,12 @@ import java.util.Random;
 
 
 public class Game{
-	ArrayList<Player> players;
-	RoyalePlayer royale;
-	RebelPlayer rebel;
-	GameFrameView gfv;
-	Board b;
-	GameController c;
+	private RoyalePlayer royale;
+	private RebelPlayer rebel;
+	private GameFrameView gfv;
 
 	public Game(ArrayList<String> playerNames){
-		players = new ArrayList<>();
+		ArrayList<Player> players = new ArrayList<>();
 		
 		gfv= new GameFrameView();
 		Random r = new Random();
@@ -42,11 +39,10 @@ public class Game{
 		initGame();
 	}
 	
-	public void initGame() {
+	private void initGame() {
 		// Initialise board
-		this.b = new Board(gfv);
+		Board b = new Board(gfv);
 		gfv.assembleBoard(rebel,royale, b);
-		c= new GameController(b, gfv);
-		// RebelPlayer goes first
+		new GameController(b, gfv);
 	}
 }

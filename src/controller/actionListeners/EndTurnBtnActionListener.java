@@ -1,12 +1,9 @@
 package controller.actionListeners;
 
-import java.awt.Cursor;
+import controller.GameController;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import controller.GameController;
-import model.board.Board;
-import view.GameFrameView;
 
 public class EndTurnBtnActionListener implements ActionListener {
 
@@ -19,6 +16,6 @@ public class EndTurnBtnActionListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		c.endTurn(e);
+		c.endTurn();
 	}
 }

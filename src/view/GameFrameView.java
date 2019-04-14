@@ -8,7 +8,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GameFrameView extends JFrame{
-	private Board b;
 
 	private JFrame frame;
 	private JPanel actionPanel;
@@ -16,8 +15,6 @@ public class GameFrameView extends JFrame{
 	private JPanel playerPanel;
 	private JPanel deckPanel;
 
-	private JLabel healthLabel;
-	private JLabel combatPlabel;
 	private JLabel playerName, playerType;
 	private String nameOne, typeOne, nameTwo, typeTwo;
 	private static JButton[][] tileBtns;
@@ -72,7 +69,7 @@ public class GameFrameView extends JFrame{
 	private JButton lastTile;
 	private ArrayList<JButton> summonBtns;
 
-	JLabel statusLabel;
+	private JLabel statusLabel;
 
 	public JLabel getStatusLabel() {
 		return statusLabel;
@@ -128,7 +125,6 @@ public class GameFrameView extends JFrame{
 
 	public void assembleBoard(Player playerOne, Player playerTwo, Board b) {
 
-		this.b= b;
 		nameOne= playerOne.getName();
 		typeOne= playerOne.getFaction();
 		nameTwo= playerTwo.getName();
@@ -149,10 +145,6 @@ public class GameFrameView extends JFrame{
 		playerPanel.add(new JLabel("Player Type: "));
 		playerPanel.add(playerType);
 
-		/*healthLabel = new JLabel(Integer.toString(playerOne.()));
-    	playerPanel.add(new JLabel("HP: "));
-        playerPanel.add(healthLabel);*/
-
 		tileBtns = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
 
 		deckPanel.setMaximumSize(new Dimension(100, 100));
@@ -163,6 +155,7 @@ public class GameFrameView extends JFrame{
 		rebelButton = createSpawn(rebelName, rebelImage);
 		royaleButton = createSpawn(royaleName, royaleImage);
 
+		// rebel goes first
 		loadSpawn(rebelButton);
 		genGrid();
 		drawActionBtns();
@@ -241,11 +234,11 @@ public class GameFrameView extends JFrame{
 		try{
 			tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../images/move.jpg")));
 		}
-		catch(ArrayIndexOutOfBoundsException e){
+		catch(ArrayIndexOutOfBoundsException ignored){
 		}
 	}
 
-	public void colourRedTile(JButton tile){
+	private void colourRedTile(JButton tile){
 		tile.setBackground(Color.red);
 		lastTile= tile;
 	}
