@@ -147,7 +147,7 @@ public class Board {
         JButton[][] tileBtns = gfv.getTileBtns();
         for (int i = 0; i < BOARD_ROWS; i++) {
             for (int j = 0; j < BOARD_COLS; j++) {
-                if (!isWall(i, j) && !getTile(i, j).hasPiece() && !isCastle(i,j)) {
+                if (!isWall(i, j) && !getTile(i, j).hasPiece() && !isCastle(i)) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../../images/grass.png")));
                 }
             }
@@ -157,7 +157,7 @@ public class Board {
     // Should we show the colour on the tile with opposite piece that player want to attack? I thk we should. --Andy
     private boolean checkMoveRepaint(@NotNegative int i, @NotNegative int j) {
         try {
-            return !isWall(i, j) && !getTile(i, j).hasPiece();
+            return !isWall(i, j) && !getTile(i, j).hasPiece() && !isCastle(i);
         } catch (RuntimeException e) {
             return true;
         }
@@ -440,8 +440,8 @@ public class Board {
         return i % 5 <= 2 && j % 4 == 3;
     }
 
-    public boolean isCastle(@NotNegative int i, @NotNegative int j) {
-        return i==0;
+    public boolean isCastle(@NotNegative int i) {
+        return i ==0;
     }
 
     @Pre(expr = "_this.gfv != null", lang = "groovy")
