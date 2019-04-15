@@ -15,10 +15,9 @@ import java.util.Random;
 
 @Guarded
 public class Game{
-	private RoyalePlayer royale;
-	private RebelPlayer rebel;
+	private Player royale;
+	private Player rebel;
 	private GameFrameView gfv;
-
 
 	public Game(@NotNull ArrayList<String> playerNames) {
         ArrayList<Player> players = new ArrayList<>();
