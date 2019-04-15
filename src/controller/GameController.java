@@ -218,6 +218,9 @@ public class GameController {
        	 	public void run() {
        	 		Duration duration = Duration.ofSeconds(second--);	 
        	 		gfv.setTime("Time Remaining: "+duration.toMinutesPart()+":"+duration.toSecondsPart());
+	       	 	if(second == -1) {
+	   	 			endTurn();
+	   	 		}
        	 	} 
        	 };
         timer = new Timer();
