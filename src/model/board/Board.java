@@ -5,6 +5,7 @@ import view.GameFrameView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
@@ -370,8 +371,7 @@ public class Board {
                     }
                 }
             }
-        }
-        else if (inRow == tgRow) {
+        } else if (inRow == tgRow) {
             Tile initTile = boardRows.get(inRow).getTile(inTile);
             for (int j = 1; j < Math.abs(inTile - tgTile) + 1; j++) {
                 if (tgTile < inTile) {
@@ -402,9 +402,9 @@ public class Board {
     public void createPiece(String name) {
         try {
             Class pieceCls = Class.forName("model.pieces.type." + name);
-            this.summonedPiece = (Piece) pieceCls.newInstance();
+            this.summonedPiece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
 
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
             ex.printStackTrace();
         }
 
