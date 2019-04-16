@@ -1,7 +1,6 @@
 package model.board;
 
 import model.pieces.Piece;
-
 import view.GameFrameView;
 
 import javax.swing.*;
@@ -14,13 +13,10 @@ import static view.GameFrameView.STATUS;
 
 public class Board {
 
-    static ArrayList<BoardRows> boardRows;
-
-    private GameFrameView gfv;
-
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
-
+    static ArrayList<BoardRows> boardRows;
+    private GameFrameView gfv;
     private Piece summonedPiece;
 
     // Initialize current turn;
@@ -35,7 +31,7 @@ public class Board {
     private boolean isAttacking;
     private boolean actionPerformed;
 
-    public Board( GameFrameView gfv) {
+    public Board(GameFrameView gfv) {
         this.gfv = gfv;
 
         Board.boardRows = new ArrayList<>(BOARD_ROWS);
@@ -123,13 +119,13 @@ public class Board {
     }
 
     // want to change colour for showing movement and attack range on tiles
-    private void paintMovAttackRange( int row,  int col,   String actionType){
-        Piece piece= getPiece(coordinate[0], coordinate[1]);
-        int radius= piece.getActionRange(actionType);
+    private void paintMovAttackRange(int row, int col, String actionType) {
+        Piece piece = getPiece(coordinate[0], coordinate[1]);
+        int radius = piece.getActionRange(actionType);
         for (int i = -radius; i <= radius; i++) {
             for (int j = -radius; j <= radius; j++) {
                 if (checkMoveRepaint(row + i, col + j) &&
-                        piece.isActionValid(abs(row-abs(row+i)), abs(col-abs(col+j)),actionType)) {
+                        piece.isActionValid(abs(row - abs(row + i)), abs(col - abs(col + j)), actionType)) {
                     gfv.colourTile(row + i, col + j, actionType);
                 }
             }
@@ -149,7 +145,7 @@ public class Board {
     }
 
     // check if a certain tile should be repainted with the paintMovAttack
-    private boolean checkMoveRepaint( int i,  int j) {
+    private boolean checkMoveRepaint(int i, int j) {
         try {
             return !isWall(i, j) && !getTile(i, j).hasPiece() && !isCastle(i);
         } catch (RuntimeException e) {
@@ -189,7 +185,7 @@ public class Board {
         return coordinate;
     }
 
-    public void clickTile( JButton tileBtn,  int i,  int j) {
+    public void clickTile(JButton tileBtn, int i, int j) {
         coordinate[0] = i;
         coordinate[1] = j;
         System.out.println("TileButton Name: " + tileBtn.getName());
@@ -220,10 +216,10 @@ public class Board {
     }
 
     //resets the saved coordinate of a tile and the summoned piece which are saved in the board
-    public void reset(){
+    public void reset() {
         resetCoordinates();
-        initTileCoord= null;
-        initTileCoord= new int[2];
+        initTileCoord = null;
+        initTileCoord = new int[2];
         removeSummonedPiece();
     }
 
@@ -232,7 +228,7 @@ public class Board {
     }
 
     // Check if the player and the piece on action is in the same team
-    private boolean isFactionMatched( int i,  int j) {
+    private boolean isFactionMatched(int i, int j) {
         return turn == 0 && getPiece(i, j).getFaction().equals("Rebel") ||
                 turn == 1 && getPiece(i, j).getFaction().equals("Royale");
     }
@@ -241,7 +237,7 @@ public class Board {
         return initTileCoord;
     }
 
-    private void setInit( int i,  int j) {
+    private void setInit(int i, int j) {
         initTileCoord[0] = i;
         initTileCoord[1] = j;
     }
@@ -282,46 +278,46 @@ public class Board {
         summonedPiece = null;
     }
 
-    private Tile getTile( int row,  int tile) {
+    private Tile getTile(int row, int tile) {
         return boardRows.get(row).getTile(tile);
     }
 
     // Gets a pieces from a tile
-    private Piece getPiece( int row,  int tile) {
+    private Piece getPiece(int row, int tile) {
         return getTile(row, tile).getPiece();
     }
 
 
     // Check if pieces has been initialized successfully in current tile
-    public boolean checkInit( int row,  int tile) {
+    public boolean checkInit(int row, int tile) {
         return getTile(row, tile).hasPiece();
     }
 
     // Check if pieces in current tile can move
-    public boolean checkMoveInit( int row,  int tile) {
+    public boolean checkMoveInit(int row, int tile) {
         return checkInit(row, tile) && getTile(row, tile).getPiece().isMoveable();
     }
 
     // Check if pieces in current tile can attack
-    public boolean checkAttackInit( int row,  int tile) {
+    public boolean checkAttackInit(int row, int tile) {
         return checkInit(row, tile) && getTile(row, tile).getPiece().isAttackable();
     }
 
     // Check if pieces can move from current tile to target tile
-    boolean checkMoveTarget( int row,  int tile) {
+    boolean checkMoveTarget(int row, int tile) {
         return !getTile(row, tile).hasPiece() && !isCastle(row);
     }
 
     // Check if pieces can attack target from current tile
-    boolean checkAttackTarget( Piece piece,  int tgRow,  int tgTile) {
+    boolean checkAttackTarget(Piece piece, int tgRow, int tgTile) {
         Tile space = getTile(tgRow, tgTile);
-        String inFaction= piece.getFaction();
-        String outFaction= space.getPiece().getFaction();
+        String inFaction = piece.getFaction();
+        String outFaction = space.getPiece().getFaction();
         return space.hasPiece() && !(inFaction.equals(outFaction));
     }
 
     //checks if the target tile is valid to be attacked/moved into by the selected peicee
-    private boolean isMovRangeValid( int inRow,  int inTile,  int tgRow,  int tgTile,   String type) {
+    private boolean isMovRangeValid(int inRow, int inTile, int tgRow, int tgTile, String type) {
         int rowDiff = abs(inRow - tgRow);
         int tileDiff = abs(inTile - tgTile);
 
@@ -343,8 +339,26 @@ public class Board {
     }
 
     // Check if pieces actionPerformed from current tile to target tile
-    boolean move( int inRow,  int inTile,  int tgRow,  int tgTile) {
+    boolean move(int inRow, int inTile, int tgRow, int tgTile) {
+
         if (checkMoveTarget(tgRow, tgTile) && isMovRangeValid(inRow, inTile, tgRow, tgTile, "moveSpeed")) {
+
+            // Check if royal piece will go across over royale piece in the direction of attacking castle, which is forbidden
+            if(inTile == tgTile) {
+                Tile initTile = boardRows.get(inRow).getTile(inTile);
+                if (initTile.getPiece().getFaction().equals("Rebel")) {
+                    for (int i = 1; i < Math.abs(inRow - tgRow) + 1; i++) {
+                        if(tgRow < inRow) {
+                            Tile currTile = boardRows.get(inRow - i).getTile(inTile);
+                            if (currTile.hasPiece()) {
+                                if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             getTile(tgRow, tgTile).setPiece(getPiece(inRow, inTile));
             getTile(inRow, inTile).removePiece();
             return true;
@@ -354,7 +368,7 @@ public class Board {
 
 
     // Check if pieces hasAttacked target pieces
-    boolean attack( int inRow,  int inTile,  int tgRow,  int tgTile) {
+    boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
         if (checkInit(tgRow, tgTile) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) &&
                 isMovRangeValid(inRow, inTile, tgRow, tgTile, "attackRange")) {
             getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttackPower());
@@ -363,7 +377,7 @@ public class Board {
         return false;
     }
 
-    public void createPiece(  String name) {
+    public void createPiece(String name) {
         try {
             Class pieceCls = Class.forName("model.pieces.type." + name);
             this.summonedPiece = (Piece) pieceCls.newInstance();
@@ -374,10 +388,10 @@ public class Board {
 
     }
 
-    private boolean checkSummonValid( Piece piece,  int row,  int tile) {
+    private boolean checkSummonValid(Piece piece, int row, int tile) {
         boolean isRowValid;
         if (piece.getFaction().equals("Royale")) {
-            isRowValid = row < 3 && row >=1;
+            isRowValid = row < 3 && row >= 1;
         } else {
             isRowValid = row > 9;
         }
@@ -390,7 +404,7 @@ public class Board {
         }
     }
 
-    public void placeSummonedPiece( JButton tileBtn,  int i,  int j) {
+    public void placeSummonedPiece(JButton tileBtn, int i, int j) {
         if (checkSummonValid(getSummonedPiece(), i, j)) {
             tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
             tileBtn.setName(gfv.getImage());
@@ -400,14 +414,18 @@ public class Board {
             gfv.getMoveBtn().setVisible(false);
             gfv.getAttackBtn().setVisible(false);
         } else {
-            gfv.getStatusLabel().setText(STATUS + "Please place the pieces on a valid tile,\n"
-                    + "The first two rows for Royales,\nThe bottom three rows for Rebels.");
+            gfv.getStatusLabel().setText(STATUS + "Invalid placement, the first two rows for Royales and the bottom three rows for Rebels.");
         }
     }
 
     public void placeMovedPiece(JButton[][] tileBtns, int i, int j) {
+
+        // target tile
         JButton tileBtn = tileBtns[i][j];
+
+
         if (move(getInitTileCoord()[0], getInitTileCoord()[1], i, j)) {
+
             gfv.decolour();
             System.out.println("Image= " + gfv.getImage());
             tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
@@ -424,24 +442,24 @@ public class Board {
         }
     }
 
-    public boolean isWall( int i,  int j) {
+    public boolean isWall(int i, int j) {
         return i % 5 <= 2 && j % 4 == 3;
     }
 
-    public boolean isCastle( int i) {
-        return i ==0;
+    public boolean isCastle(int i) {
+        return i == 0;
     }
 
-    public void placeAttackPiece( int i,  int j) {
+    public void placeAttackPiece(int i, int j) {
         JButton[][] tileBtns = gfv.getTileBtns();
         if (attack(getInitTileCoord()[0], getInitTileCoord()[1], i, j)) {
-            Piece piece= getPiece(getInitTileCoord()[0], getInitTileCoord()[1]);
+            Piece piece = getPiece(getInitTileCoord()[0], getInitTileCoord()[1]);
             String message;
             message = String.format("%d damage dealt! Remaining HP: %d", piece.getAttackPower(),
-                    getPiece(i,j).getHp());
-            if(getPiece(i,j).isDead()){
-                message+=String.format(", %s is dead!", getPiece(i,j).getName());
-                getTile(i,j).removePiece();
+                    getPiece(i, j).getHp());
+            if (getPiece(i, j).isDead()) {
+                message += String.format(", %s is dead!", getPiece(i, j).getName());
+                getTile(i, j).removePiece();
                 tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../../images/grass.png")));
             }
             gfv.decolour();
