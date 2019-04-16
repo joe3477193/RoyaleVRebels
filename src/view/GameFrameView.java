@@ -2,17 +2,11 @@ package view;
 
 import model.board.Board;
 import model.players.Player;
-import net.sf.oval.constraint.NotEmpty;
-import net.sf.oval.constraint.NotNegative;
-import net.sf.oval.constraint.NotNull;
-import net.sf.oval.guard.Guarded;
-import net.sf.oval.guard.Pre;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-@Guarded
 public class GameFrameView extends JFrame{
 
     private JFrame frame;
@@ -112,8 +106,7 @@ public class GameFrameView extends JFrame{
         statusLabel = new JLabel(STATUS);
     }
 
-    @Pre(expr = "_this.summonBtns != null", lang = "groovy")
-    private JButton[] createSpawn(@NotNull @NotEmpty String[] name, @NotNull @NotEmpty String[] image) {
+    private JButton[] createSpawn(  String[] name,   String[] image) {
         JButton[] button = new JButton[6];
         for(int i = 0; i<BUTTON_LENGTH; i++) {
             button[i]= new JButton(new ImageIcon(this.getClass().getResource(image[i])));
@@ -123,22 +116,19 @@ public class GameFrameView extends JFrame{
         return button;
     }
 
-    @Pre(expr = "_this.deckPanel != null", lang = "groovy")
-    private void loadSpawn(@NotNull JButton[] button) {
+    private void loadSpawn( JButton[] button) {
         for(JButton icon:button) {
             deckPanel.add(icon);
         }
     }
 
-    @Pre(expr = "_this.deckPanel != null", lang = "groovy")
-    private void removeSpawn(@NotNull JButton[] button) {
+    private void removeSpawn( JButton[] button) {
         for(JButton icon:button) {
             deckPanel.remove(icon);
         }
     }
 
-    @Pre(expr = "_this.statusLabel != null && _this.frame != null", lang = "groovy")
-    public void assembleBoard(@NotNull Player playerOne, @NotNull Player playerTwo, @NotNull Board b) {
+    public void assembleBoard( Player playerOne,  Player playerTwo,  Board b) {
 
         nameOne= playerOne.getName();
         typeOne= playerOne.getFaction();
@@ -194,7 +184,6 @@ public class GameFrameView extends JFrame{
         frame.add(botPanel, BorderLayout.SOUTH);
     }
 
-    @Pre(expr = "_this.actionPanel != null", lang = "groovy")
     private void drawActionBtns() {
         moveBtn = new JButton("Move");
         actionPanel.add(moveBtn);
@@ -208,7 +197,6 @@ public class GameFrameView extends JFrame{
 
     }
 
-    @Pre(expr = "_this.gridPanel != null", lang = "groovy")
     private void genGrid() {
         for (int i = 0; i < Board.BOARD_ROWS; i++) {
             for (int j = 0; j < Board.BOARD_COLS; j++) {
@@ -236,32 +224,28 @@ public class GameFrameView extends JFrame{
         }
     }
 
-    @Pre(expr = "_this.moveBtn != null", lang = "groovy")
     public void colourMove() {
         moveBtn.setBackground(Color.green);
     }
 
-    @Pre(expr = "_this.attackBtn != null", lang = "groovy")
     public void colourAttack(){
         attackBtn.setBackground((Color.green));
     }
 
-    @Pre(expr = "_this.attackBtn != null", lang = "groovy")
     public void colourRedAttack(){
         attackBtn.setBackground((Color.RED));
     }
 
-    @Pre(expr = "_this.moveBtn != null", lang = "groovy")
     public void colourRedMove(){
         moveBtn.setBackground(Color.RED);
     }
 
-    public void colourTile(@NotNull JButton tile) {
+    public void colourTile( JButton tile) {
         tile.setBackground(Color.blue);
         lastTile= tile;
     }
 
-    public void colourTile(@NotNegative int i, @NotNegative int j, @NotNull @NotEmpty String actionType) {
+    public void colourTile( int i,  int j,   String actionType) {
         try{
             String name= getGrass();
             if(actionType.equals("moveSpeed")){
@@ -275,23 +259,21 @@ public class GameFrameView extends JFrame{
         }
     }
 
-    private void colourRedTile(@NotNull JButton tile) {
+    private void colourRedTile( JButton tile) {
         tile.setBackground(Color.red);
         lastTile= tile;
     }
 
-    public void colourRed(@NotNull JButton tile) {
+    public void colourRed( JButton tile) {
         colourRedTile(tile);
         colourRedAttack();
         colourRedMove();
     }
 
-    @Pre(expr = "_this.endTurnBtn != null", lang = "groovy")
     public void colourEndTurn(){
         endTurnBtn.setBackground(Color.green);
     }
 
-    @Pre(expr = "_this.moveBtn != null && _this.attackBtn != null", lang = "groovy")
     public void decolour() {
         if(lastTile!=null) {
             lastTile.setBorder(null);
@@ -302,13 +284,11 @@ public class GameFrameView extends JFrame{
         attackBtn.setBackground(null);
     }
 
-    @Pre(expr = "_this.endTurnBtn != null", lang = "groovy")
     public void decolourEndTurn(){
         endTurnBtn.setBackground(null);
     }
 
-    @Pre(expr = "_this.playerName != null && _this.playerType != null && _this.playerPanel != null && _this.deckPanel != null", lang = "groovy")
-    public void updateBar(@NotNegative int turn) {
+    public void updateBar( int turn) {
         if(turn==0) {
             removeSpawn(royaleButton);
             loadSpawn(rebelButton);
@@ -337,7 +317,7 @@ public class GameFrameView extends JFrame{
         return currentImage;
     }
 
-    public void setImage(@NotNull @NotEmpty String image) {
+    public void setImage(  String image) {
         currentImage= image;
     }
 

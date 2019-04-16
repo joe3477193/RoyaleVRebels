@@ -1,8 +1,6 @@
 package model.board;
 
 import model.pieces.Piece;
-import net.sf.oval.constraint.NotNull;
-import net.sf.oval.guard.Post;
 
 class Tile {
 
@@ -15,7 +13,7 @@ class Tile {
         return piece;
     }
 
-    void setPiece(@NotNull Piece piece) {
+    void setPiece( Piece piece) {
         this.piece = piece;
     }
 
@@ -23,7 +21,6 @@ class Tile {
         return piece != null;
     }
 
-    @Post(expr = "_this.piece == null", lang = "groovy")
     void removePiece() {
         piece = null;
     }

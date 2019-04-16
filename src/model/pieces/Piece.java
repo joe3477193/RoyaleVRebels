@@ -1,9 +1,5 @@
 package model.pieces;
 
-import net.sf.oval.constraint.NotEmpty;
-import net.sf.oval.constraint.NotNegative;
-import net.sf.oval.constraint.NotNull;
-
 public abstract class Piece {
 
     String name;
@@ -19,7 +15,7 @@ public abstract class Piece {
     private boolean moveable;
     private boolean attackable;
 
-    public Piece(@NotNull @NotEmpty String name, @NotNull @NotEmpty String faction, @NotNull @NotEmpty String type, @NotNull @NotEmpty String code, @NotNegative int cp, @NotNegative int initHp, @NotNegative int attackPower, @NotNegative int moveSpeed, @NotNegative int attackRange,
+    public Piece(  String name,   String faction,   String type,   String code,  int cp,  int initHp,  int attackPower,  int moveSpeed,  int attackRange,
                  boolean moveable, boolean attackable) {
         this.name= name;
         this.faction= faction;
@@ -43,7 +39,7 @@ public abstract class Piece {
         return false;
     }
 
-    public void attackedBy(@NotNegative int attack) {
+    public void attackedBy( int attack) {
         hp-=attack;
         if (hp <= 0) {
             hp=0;
@@ -82,12 +78,12 @@ public abstract class Piece {
         return name;
     }
 
-    public boolean isActionValid(@NotNegative int rowdiff, @NotNegative int tilediff, @NotNull @NotEmpty String actionType) {
+    public boolean isActionValid( int rowdiff,  int tilediff,   String actionType) {
         int range= getActionRange(actionType);
         return rowdiff==0 && range >= tilediff || tilediff==0 && range>=rowdiff;
     }
 
-    public int getActionRange(@NotNull @NotEmpty String actionType){
+    public int getActionRange(  String actionType){
         if(actionType.equals("moveSpeed")){
             return moveSpeed;
         }

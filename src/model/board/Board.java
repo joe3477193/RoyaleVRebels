@@ -1,10 +1,7 @@
 package model.board;
 
 import model.pieces.Piece;
-import net.sf.oval.constraint.NotEmpty;
-import net.sf.oval.constraint.NotNegative;
-import net.sf.oval.constraint.NotNull;
-import net.sf.oval.guard.*;
+
 import view.GameFrameView;
 
 import javax.swing.*;
@@ -15,7 +12,6 @@ import static java.awt.Cursor.DEFAULT_CURSOR;
 import static java.lang.Math.abs;
 import static view.GameFrameView.STATUS;
 
-@Guarded
 public class Board {
 
     static ArrayList<BoardRows> boardRows;
@@ -28,8 +24,8 @@ public class Board {
     private Piece summonedPiece;
 
     // Initialize current turn;
-    @NotNull
-    @NotNegative
+
+
     private int turn;
 
     private int[] turns;
@@ -39,7 +35,7 @@ public class Board {
     private boolean isAttacking;
     private boolean actionPerformed;
 
-    public Board(@NotNull GameFrameView gfv) {
+    public Board( GameFrameView gfv) {
         this.gfv = gfv;
 
         Board.boardRows = new ArrayList<>(BOARD_ROWS);
@@ -68,8 +64,6 @@ public class Board {
     }
 
     //resets the attacking mode and resets the colour of the tiles + cursor
-    @Pre(expr = "_this.isAttacking == true", lang = "groovy")
-    @Post(expr = "_this.isAttacking == false", lang = "groovy")
     public void resetAttacking() {
         isAttacking = false;
         gfv.decolour();
@@ -78,7 +72,6 @@ public class Board {
     }
 
     //set the mode for attacking
-    @Pre(expr = "_this.isAttacking == false", lang = "groovy")
     public void setAttacking() {
         if (isFactionMatched(coordinate[0], coordinate[1])) {
             isAttacking = true;
@@ -102,8 +95,6 @@ public class Board {
     }
 
     //reset the moving mode, and resets the colour of the tiles + cursor
-    @Pre(expr = "_this.isMoving == true", lang = "groovy")
-    @Post(expr = "_this.isMoving == false", lang = "groovy")
     public void resetMoving() {
         isMoving = false;
         gfv.decolour();
@@ -112,7 +103,6 @@ public class Board {
     }
 
     //enter the moving mode
-    @Pre(expr = "_this.isMoving == false", lang = "groovy")
     public void setMoving() {
         if (isFactionMatched(coordinate[0], coordinate[1])) {
             isMoving = true;
@@ -133,7 +123,7 @@ public class Board {
     }
 
     // want to change colour for showing movement and attack range on tiles
-    private void paintMovAttackRange(@NotNegative int row, @NotNegative int col, @NotNull @NotEmpty String actionType){
+    private void paintMovAttackRange( int row,  int col,   String actionType){
         Piece piece= getPiece(coordinate[0], coordinate[1]);
         int radius= piece.getActionRange(actionType);
         for (int i = -radius; i <= radius; i++) {
@@ -147,7 +137,6 @@ public class Board {
     }
 
     //resets the colour of the tiles back
-    @Pre(expr = "_this.gfv != null", lang = "groovy")
     private void depaintAction() {
         JButton[][] tileBtns = gfv.getTileBtns();
         for (int i = 0; i < BOARD_ROWS; i++) {
@@ -160,7 +149,7 @@ public class Board {
     }
 
     // check if a certain tile should be repainted with the paintMovAttack
-    private boolean checkMoveRepaint(@NotNegative int i, @NotNegative int j) {
+    private boolean checkMoveRepaint( int i,  int j) {
         try {
             return !isWall(i, j) && !getTile(i, j).hasPiece() && !isCastle(i);
         } catch (RuntimeException e) {
@@ -173,8 +162,6 @@ public class Board {
     }
 
     //sets the variable that tells the game if a player has performed an action on his turn.
-    @Pre(expr = "_this.actionPerformed == false", lang = "groovy")
-    @Post(expr = "_this.actionPerformed == true", lang = "groovy")
     private void setActionPerformed() {
         actionPerformed = true;
         gfv.colourEndTurn();
@@ -182,9 +169,6 @@ public class Board {
 
     //called when the end turn button is clicked and changes the turn, including repainting the GUI
     //with appropriate player and game info
-    @Pre(expr = "_this.actionPerformed == true", lang = "groovy")
-    @Post(expr = "_this.actionPerformed = false && _this.isAttacking == false && _this.isMoving == false",
-            lang = "groovy")
     public void unsetActionPerformed() {
         actionPerformed = false;
         gfv.decolourEndTurn();
@@ -205,7 +189,7 @@ public class Board {
         return coordinate;
     }
 
-    public void clickTile(@NotNull JButton tileBtn, @NotNegative int i, @NotNegative int j) {
+    public void clickTile( JButton tileBtn,  int i,  int j) {
         coordinate[0] = i;
         coordinate[1] = j;
         System.out.println("TileButton Name: " + tileBtn.getName());
@@ -230,7 +214,6 @@ public class Board {
         }
     }
 
-    @Post(expr = "_this.coordinate != null && this.coordinate.length == 2", lang = "groovy")
     public void resetCoordinates() {
         coordinate = null;
         coordinate = new int[2];
@@ -249,9 +232,7 @@ public class Board {
     }
 
     // Check if the player and the piece on action is in the same team
-    @PreValidateThis
-    @PostValidateThis
-    private boolean isFactionMatched(@NotNegative int i, @NotNegative int j) {
+    private boolean isFactionMatched( int i,  int j) {
         return turn == 0 && getPiece(i, j).getFaction().equals("Rebel") ||
                 turn == 1 && getPiece(i, j).getFaction().equals("Royale");
     }
@@ -260,7 +241,7 @@ public class Board {
         return initTileCoord;
     }
 
-    private void setInit(@NotNegative int i, @NotNegative int j) {
+    private void setInit( int i,  int j) {
         initTileCoord[0] = i;
         initTileCoord[1] = j;
     }
@@ -279,7 +260,6 @@ public class Board {
     }
 
     // To make sure the player's turn has cycled
-    @Post(expr = "_this.turn != _old", old = "_this.turn", lang = "groovy")
     private void cycleTurn() {
         for (int i = 0; i < turns.length; i++) {
             if (turn == turns[i]) {
@@ -298,43 +278,42 @@ public class Board {
         return summonedPiece;
     }
 
-    @Pre(expr = "_this.summonedPiece != null", lang = "groovy")
     public void removeSummonedPiece() {
         summonedPiece = null;
     }
 
-    private Tile getTile(@NotNegative int row, @NotNegative int tile) {
+    private Tile getTile( int row,  int tile) {
         return boardRows.get(row).getTile(tile);
     }
 
     // Gets a pieces from a tile
-    private Piece getPiece(@NotNegative int row, @NotNegative int tile) {
+    private Piece getPiece( int row,  int tile) {
         return getTile(row, tile).getPiece();
     }
 
 
     // Check if pieces has been initialized successfully in current tile
-    public boolean checkInit(@NotNegative int row, @NotNegative int tile) {
+    public boolean checkInit( int row,  int tile) {
         return getTile(row, tile).hasPiece();
     }
 
     // Check if pieces in current tile can move
-    public boolean checkMoveInit(@NotNegative int row, @NotNegative int tile) {
+    public boolean checkMoveInit( int row,  int tile) {
         return checkInit(row, tile) && getTile(row, tile).getPiece().isMoveable();
     }
 
     // Check if pieces in current tile can attack
-    public boolean checkAttackInit(@NotNegative int row, @NotNegative int tile) {
+    public boolean checkAttackInit( int row,  int tile) {
         return checkInit(row, tile) && getTile(row, tile).getPiece().isAttackable();
     }
 
     // Check if pieces can move from current tile to target tile
-    boolean checkMoveTarget(@NotNegative int row, @NotNegative int tile) {
+    boolean checkMoveTarget( int row,  int tile) {
         return !getTile(row, tile).hasPiece() && !isCastle(row);
     }
 
     // Check if pieces can attack target from current tile
-    boolean checkAttackTarget(@NotNull Piece piece, @NotNegative int tgRow, @NotNegative int tgTile) {
+    boolean checkAttackTarget( Piece piece,  int tgRow,  int tgTile) {
         Tile space = getTile(tgRow, tgTile);
         String inFaction= piece.getFaction();
         String outFaction= space.getPiece().getFaction();
@@ -342,7 +321,7 @@ public class Board {
     }
 
     //checks if the target tile is valid to be attacked/moved into by the selected peicee
-    private boolean isMovRangeValid(@NotNegative int inRow, @NotNegative int inTile, @NotNegative int tgRow, @NotNegative int tgTile, @NotNull @NotEmpty String type) {
+    private boolean isMovRangeValid( int inRow,  int inTile,  int tgRow,  int tgTile,   String type) {
         int rowDiff = abs(inRow - tgRow);
         int tileDiff = abs(inTile - tgTile);
 
@@ -364,7 +343,7 @@ public class Board {
     }
 
     // Check if pieces actionPerformed from current tile to target tile
-    boolean move(@NotNegative int inRow, @NotNegative int inTile, @NotNegative int tgRow, @NotNegative int tgTile) {
+    boolean move( int inRow,  int inTile,  int tgRow,  int tgTile) {
         if (checkMoveTarget(tgRow, tgTile) && isMovRangeValid(inRow, inTile, tgRow, tgTile, "moveSpeed")) {
             getTile(tgRow, tgTile).setPiece(getPiece(inRow, inTile));
             getTile(inRow, inTile).removePiece();
@@ -375,7 +354,7 @@ public class Board {
 
 
     // Check if pieces hasAttacked target pieces
-    boolean attack(@NotNegative int inRow, @NotNegative int inTile, @NotNegative int tgRow, @NotNegative int tgTile) {
+    boolean attack( int inRow,  int inTile,  int tgRow,  int tgTile) {
         if (checkInit(tgRow, tgTile) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) &&
                 isMovRangeValid(inRow, inTile, tgRow, tgTile, "attackRange")) {
             getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttackPower());
@@ -384,7 +363,7 @@ public class Board {
         return false;
     }
 
-    public void createPiece(@NotNull @NotEmpty String name) {
+    public void createPiece(  String name) {
         try {
             Class pieceCls = Class.forName("model.pieces.type." + name);
             this.summonedPiece = (Piece) pieceCls.newInstance();
@@ -395,7 +374,7 @@ public class Board {
 
     }
 
-    private boolean checkSummonValid(@NotNull Piece piece, @NotNegative int row, @NotNegative int tile) {
+    private boolean checkSummonValid( Piece piece,  int row,  int tile) {
         boolean isRowValid;
         if (piece.getFaction().equals("Royale")) {
             isRowValid = row < 3 && row >=1;
@@ -411,8 +390,7 @@ public class Board {
         }
     }
 
-    @Pre(expr = "_this.gfv != null", lang = "groovy")
-    public void placeSummonedPiece(@NotNull JButton tileBtn, @NotNegative int i, @NotNegative int j) {
+    public void placeSummonedPiece( JButton tileBtn,  int i,  int j) {
         if (checkSummonValid(getSummonedPiece(), i, j)) {
             tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
             tileBtn.setName(gfv.getImage());
@@ -446,16 +424,15 @@ public class Board {
         }
     }
 
-    public boolean isWall(@NotNegative int i, @NotNegative int j) {
+    public boolean isWall( int i,  int j) {
         return i % 5 <= 2 && j % 4 == 3;
     }
 
-    public boolean isCastle(@NotNegative int i) {
+    public boolean isCastle( int i) {
         return i ==0;
     }
 
-    @Pre(expr = "_this.gfv != null", lang = "groovy")
-    public void placeAttackPiece(@NotNegative int i, @NotNegative int j) {
+    public void placeAttackPiece( int i,  int j) {
         JButton[][] tileBtns = gfv.getTileBtns();
         if (attack(getInitTileCoord()[0], getInitTileCoord()[1], i, j)) {
             Piece piece= getPiece(getInitTileCoord()[0], getInitTileCoord()[1]);
