@@ -1,6 +1,7 @@
 package app;
 
 import controller.GameController;
+import model.board.GameEngine;
 import model.board.GameEngineFacade;
 import model.players.Player;
 import model.players.RebelPlayer;
@@ -50,7 +51,7 @@ public class GameImpl implements Game{
                 gfv= new GameFrameView();
 
                 // Instantiate the GameEngineFacade
-                GameEngineFacade g = new GameEngineFacade(gfv);
+                GameEngine g = new GameEngineFacade(gfv);
                 gfv.assembleBoard(rebel,royale, g);
                 new GameController(g, gfv);
             }

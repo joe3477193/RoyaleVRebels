@@ -1,5 +1,6 @@
 package view;
 
+import model.board.GameEngine;
 import model.board.GameEngineFacade;
 import model.players.Player;
 
@@ -128,7 +129,7 @@ public class GameFrameView extends JFrame{
         }
     }
 
-    public void assembleBoard( Player playerOne,  Player playerTwo,  GameEngineFacade b) {
+    public void assembleBoard( Player playerOne,  Player playerTwo,  GameEngine g) {
 
         nameOne= playerOne.getName();
         typeOne= playerOne.getFaction();
@@ -138,7 +139,7 @@ public class GameFrameView extends JFrame{
 
         playerPanel = new JPanel(new GridLayout(1, 6, 0, 0));
         deckPanel = new JPanel(new GridLayout(1, 5, 0, 0));
-        gridPanel = new JPanel(new GridLayout(b.getRows(), b.getCols(), 0, 1));
+        gridPanel = new JPanel(new GridLayout(g.getRows(), g.getCols(), 0, 1));
         actionPanel = new JPanel(new GridLayout(1, 2));
         JPanel statusPanel = new JPanel(new GridLayout(1, 1));
         statusPanel.add(statusLabel, BorderLayout.WEST);
