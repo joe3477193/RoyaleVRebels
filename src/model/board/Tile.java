@@ -1,7 +1,7 @@
 package model.board;
 
 import model.pieces.Piece;
-
+fgfg
 class Tile {
 
     private Piece piece;
