@@ -5,6 +5,7 @@ import view.GameFrameView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
@@ -343,21 +344,9 @@ public class GameEngineFacade implements GameEngine{
 
         if (checkMoveTarget(tgRow, tgTile) && isMovRangeValid(inRow, inTile, tgRow, tgTile, "moveSpeed")) {
 
-            // Check if royal piece will go across over royale piece in the direction of attacking castle, which is forbidden
-            if(inTile == tgTile) {
-                Tile initTile = boardRows.get(inRow).getTile(inTile);
-                if (initTile.getPiece().getFaction().equals("Rebel")) {
-                    for (int i = 1; i < Math.abs(inRow - tgRow) + 1; i++) {
-                        if(tgRow < inRow) {
-                            Tile currTile = boardRows.get(inRow - i).getTile(inTile);
-                            if (currTile.hasPiece()) {
-                                if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
+            // Check if a piece will go across opposite piece no matter what directions, which is forbidden
+            if (checkAcross(inRow, inTile, tgRow, tgTile)) {
+                return false;
             }
             getTile(tgRow, tgTile).setPiece(getPiece(inRow, inTile));
             getTile(inRow, inTile).removePiece();
@@ -366,6 +355,39 @@ public class GameEngineFacade implements GameEngine{
         return false;
     }
 
+    boolean checkAcross(int inRow, int inTile, int tgRow, int tgTile) {
+        Tile currTile;
+        if (inTile == tgTile) {
+            Tile initTile = boardRows.get(inRow).getTile(inTile);
+            for (int i = 1; i < Math.abs(inRow - tgRow) + 1; i++) {
+                if (tgRow < inRow) {
+                    currTile = boardRows.get(inRow - i).getTile(inTile);
+                } else {
+                    currTile = boardRows.get(inRow + i).getTile(inTile);
+                }
+                if (currTile.hasPiece()) {
+                    if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {
+                        return true;
+                    }
+                }
+            }
+        } else if (inRow == tgRow) {
+            Tile initTile = boardRows.get(inRow).getTile(inTile);
+            for (int j = 1; j < Math.abs(inTile - tgTile) + 1; j++) {
+                if (tgTile < inTile) {
+                    currTile = boardRows.get(inRow).getTile(inTile - j);
+                } else {
+                    currTile = boardRows.get(inRow).getTile(inTile + j);
+                }
+                if (currTile.hasPiece()) {
+                    if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     // Check if pieces hasAttacked target pieces
     private boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
@@ -380,9 +402,9 @@ public class GameEngineFacade implements GameEngine{
     public void createPiece(String name) {
         try {
             Class pieceCls = Class.forName("model.pieces.type." + name);
-            this.summonedPiece = (Piece) pieceCls.newInstance();
+            this.summonedPiece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
 
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
             ex.printStackTrace();
         }
 

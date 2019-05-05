@@ -141,7 +141,7 @@ public class GameFrameView extends JFrame{
         deckPanel = new JPanel(new GridLayout(1, 5, 0, 0));
         gridPanel = new JPanel(new GridLayout(g.getRows(), g.getCols(), 0, 1));
         actionPanel = new JPanel(new GridLayout(1, 2));
-        JPanel statusPanel = new JPanel(new GridLayout(1, 1));
+        JPanel statusPanel = new JPanel(new BorderLayout());
         statusPanel.add(statusLabel, BorderLayout.WEST);
         statusPanel.add(time, BorderLayout.EAST);
 
