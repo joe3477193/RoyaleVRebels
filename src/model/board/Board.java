@@ -6,7 +6,6 @@ import view.GameFrameView;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
 import static java.lang.Math.abs;
@@ -16,12 +15,11 @@ public class Board {
 
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
-    static ArrayList<BoardRows> boardRows;
     private GameFrameView gfv;
     private Piece summonedPiece;
+    private Tile[][] tiles;
 
     // Initialize current turn;
-
 
     private int turn;
 
@@ -35,12 +33,6 @@ public class Board {
     public Board(GameFrameView gfv) {
         this.gfv = gfv;
 
-        Board.boardRows = new ArrayList<>(BOARD_ROWS);
-
-        for (int i = 0; i < BOARD_ROWS; i++) {
-            boardRows.add(new BoardRows());
-        }
-
         initTileCoord = new int[2];
 
         // Initialize number of player turns
@@ -50,7 +42,22 @@ public class Board {
         turn = 0;
 
         actionPerformed = false;
+
+        tiles = new Tile[BOARD_ROWS][BOARD_COLS];
+
+        for (int i = 0; i < Board.BOARD_ROWS; i++) {
+            for (int j = 0; j < Board.BOARD_COLS; j++) {
+                tiles[i][j] = new Tile(i,j);
+            }
+        }
+
+
     }
+
+    /*Tile getTile(int i) {
+        return tiles.get(i);
+
+    }*/
 
     public boolean isMoving() {
         return isMoving;
@@ -216,7 +223,7 @@ public class Board {
         coordinate = new int[2];
     }
 
-    //resets the saved coordinate of a tile and the summoned piece which are saved in the board
+    //resets the saved coordinate of a tile and the summoned piece which are saved in the tiles
     public void reset() {
         resetCoordinates();
         initTileCoord = null;
@@ -279,8 +286,13 @@ public class Board {
         summonedPiece = null;
     }
 
-    private Tile getTile(int row, int tile) {
+    /*private Tile getTile(int row, int tile) {
         return boardRows.get(row).getTile(tile);
+
+    }*/
+    public Tile getTile(int row, int col) {
+        return tiles[row][col];
+
     }
 
     // Gets a pieces from a tile
@@ -358,12 +370,15 @@ public class Board {
     boolean checkAcross(int inRow, int inTile, int tgRow, int tgTile) {
         Tile currTile;
         if (inTile == tgTile) {
-            Tile initTile = boardRows.get(inRow).getTile(inTile);
+            //Tile initTile = boardRows.get(inRow).getTile(inTile);
+            Tile initTile = getTile(inRow, inTile);
             for (int i = 1; i < Math.abs(inRow - tgRow) + 1; i++) {
                 if (tgRow < inRow) {
-                    currTile = boardRows.get(inRow - i).getTile(inTile);
+                    //currTile = boardRows.get(inRow - i).getTile(inTile);
+                    currTile = getTile(inRow-i, inTile);
                 } else {
-                    currTile = boardRows.get(inRow + i).getTile(inTile);
+                    //currTile = boardRows.get(inRow + i).getTile(inTile);
+                    currTile = getTile(inRow+i, inTile);
                 }
                 if (currTile.hasPiece()) {
                     if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {
@@ -372,12 +387,15 @@ public class Board {
                 }
             }
         } else if (inRow == tgRow) {
-            Tile initTile = boardRows.get(inRow).getTile(inTile);
+            //Tile initTile = boardRows.get(inRow).getTile(inTile);
+            Tile initTile = getTile(inRow, inTile);
             for (int j = 1; j < Math.abs(inTile - tgTile) + 1; j++) {
                 if (tgTile < inTile) {
-                    currTile = boardRows.get(inRow).getTile(inTile - j);
+                    //currTile = boardRows.get(inRow).getTile(inTile - j);
+                    currTile = getTile(inRow, inTile-j);
                 } else {
-                    currTile = boardRows.get(inRow).getTile(inTile + j);
+                    //currTile = boardRows.get(inRow).getTile(inTile + j);
+                    currTile = getTile(inRow, inTile+j);
                 }
                 if (currTile.hasPiece()) {
                     if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {

@@ -24,8 +24,10 @@ public class BoardTest {
     ArrayList<Player> players = new ArrayList<Player>();
     GameFrameView view= new GameFrameView();
     Board b = new Board(view);
-    Tile t1 = Board.boardRows.get(0).getTile(0);
-    Tile t2 = Board.boardRows.get(1).getTile(0);
+    //Tile t1 = Board.boardRows.get(0).getTile(0);
+    Tile t1 = b.getTile(0,0);
+    //Tile t2 = Board.boardRows.get(1).getTile(0);
+    Tile t2 = b.getTile(1,0);
     
     @Before
     public void setUp() throws Exception {
@@ -84,8 +86,10 @@ public class BoardTest {
     @Test
     public void testMove1() {
         assertTrue(b.move(0, 0, 0, 1));
-        assertEquals(Board.boardRows.get(0).getTile(0).getPiece(), null);
-        assertEquals(Board.boardRows.get(0).getTile(1).getPiece(), c1);
+        //assertEquals(Board.boardRows.get(0).getTile(0).getPiece(), null);
+        //assertEquals(Board.boardRows.get(0).getTile(1).getPiece(), c1);
+        assertEquals(b.getTile(0,0).getPiece(), null);
+        assertEquals(b.getTile(0,1).getPiece(), c1);
     }
 
     // Check if pieces getActionPerformed from current tile to target tile
@@ -93,8 +97,10 @@ public class BoardTest {
     public void testMove2() {
         t2.setPiece(c2);
         assertFalse(b.move(0, 0, 1, 0));
-        assertEquals(Board.boardRows.get(0).getTile(0).getPiece(), c1);
-        assertEquals(Board.boardRows.get(1).getTile(0).getPiece(), c2);
+        //assertEquals(Board.boardRows.get(0).getTile(0).getPiece(), c1);
+        //assertEquals(Board.boardRows.get(1).getTile(0).getPiece(), c2);
+        assertEquals(b.getTile(0,1).getPiece(), c1);
+        assertEquals(b.getTile(0,1).getPiece(), c2);
         
     }
 
@@ -103,6 +109,7 @@ public class BoardTest {
     public void testAttack() {
         t2.setPiece(c2);
         assertTrue(b.attack(0,0, 1, 0));
-        assertEquals(Board.boardRows.get(1).getTile(0).getPiece().getHp(), 0);
+        //assertEquals(Board.boardRows.get(1).getTile(0).getPiece().getHp(), 0);
+        assertEquals(b.getTile(1,0).getPiece().getHp(), 0);
     }
 }
