@@ -6,7 +6,7 @@ class Tile {
 
     private Piece piece;
 
-    Tile() {
+    Tile() {        //
     }
 
     Piece getPiece() {
