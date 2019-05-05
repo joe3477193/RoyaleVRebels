@@ -7,9 +7,9 @@ class BoardRows {
     private ArrayList<Tile> tiles;
 
     BoardRows() {
-        tiles = new ArrayList<>(Board.BOARD_COLS);
+        tiles = new ArrayList<>(GameEngineFacade.BOARD_COLS);
 
-        for (int i = 0; i < Board.BOARD_COLS; i++) {
+        for (int i = 0; i < GameEngineFacade.BOARD_COLS; i++) {
             tiles.add(new Tile());
         }
     }

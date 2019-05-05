@@ -11,11 +11,11 @@ import static java.awt.Cursor.DEFAULT_CURSOR;
 import static java.lang.Math.abs;
 import static view.GameFrameView.STATUS;
 
-public class Board {
+public class GameEngineFacade implements GameEngine{
 
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
-    static ArrayList<BoardRows> boardRows;
+    private static ArrayList<BoardRows> boardRows;
     private GameFrameView gfv;
     private Piece summonedPiece;
 
@@ -31,10 +31,10 @@ public class Board {
     private boolean isAttacking;
     private boolean actionPerformed;
 
-    public Board(GameFrameView gfv) {
+    public GameEngineFacade(GameFrameView gfv) {
         this.gfv = gfv;
 
-        Board.boardRows = new ArrayList<>(BOARD_ROWS);
+        GameEngineFacade.boardRows = new ArrayList<>(BOARD_ROWS);
 
         for (int i = 0; i < BOARD_ROWS; i++) {
             boardRows.add(new BoardRows());
@@ -216,7 +216,7 @@ public class Board {
     }
 
     //resets the saved coordinate of a tile and the summoned piece which are saved in the board
-    public void reset() {
+    private void reset() {
         resetCoordinates();
         initTileCoord = null;
         initTileCoord = new int[2];
@@ -304,12 +304,12 @@ public class Board {
     }
 
     // Check if pieces can move from current tile to target tile
-    boolean checkMoveTarget(int row, int tile) {
+    private boolean checkMoveTarget(int row, int tile) {
         return !getTile(row, tile).hasPiece() && !isCastle(row);
     }
 
     // Check if pieces can attack target from current tile
-    boolean checkAttackTarget(Piece piece, int tgRow, int tgTile) {
+    private boolean checkAttackTarget(Piece piece, int tgRow, int tgTile) {
         Tile space = getTile(tgRow, tgTile);
         String inFaction = piece.getFaction();
         String outFaction = space.getPiece().getFaction();
@@ -339,7 +339,7 @@ public class Board {
     }
 
     // Check if pieces actionPerformed from current tile to target tile
-    boolean move(int inRow, int inTile, int tgRow, int tgTile) {
+    private boolean move(int inRow, int inTile, int tgRow, int tgTile) {
 
         if (checkMoveTarget(tgRow, tgTile) && isMovRangeValid(inRow, inTile, tgRow, tgTile, "moveSpeed")) {
 
@@ -368,7 +368,7 @@ public class Board {
 
 
     // Check if pieces hasAttacked target pieces
-    boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
+    private boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
         if (checkInit(tgRow, tgTile) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) &&
                 isMovRangeValid(inRow, inTile, tgRow, tgTile, "attackRange")) {
             getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttackPower());
@@ -446,7 +446,7 @@ public class Board {
         return i % 5 <= 2 && j % 4 == 3;
     }
 
-    public boolean isCastle(int i) {
+    private boolean isCastle(int i) {
         return i == 0;
     }
 

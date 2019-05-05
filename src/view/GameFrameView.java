@@ -1,6 +1,6 @@
 package view;
 
-import model.board.Board;
+import model.board.GameEngineFacade;
 import model.players.Player;
 
 import javax.swing.*;
@@ -128,7 +128,7 @@ public class GameFrameView extends JFrame{
         }
     }
 
-    public void assembleBoard( Player playerOne,  Player playerTwo,  Board b) {
+    public void assembleBoard( Player playerOne,  Player playerTwo,  GameEngineFacade b) {
 
         nameOne= playerOne.getName();
         typeOne= playerOne.getFaction();
@@ -152,7 +152,7 @@ public class GameFrameView extends JFrame{
         playerPanel.add(new JLabel("Player Type: "));
         playerPanel.add(playerType);
 
-        tileBtns = new JButton[Board.BOARD_ROWS][Board.BOARD_COLS];
+        tileBtns = new JButton[GameEngineFacade.BOARD_ROWS][GameEngineFacade.BOARD_COLS];
 
         deckPanel.setMaximumSize(new Dimension(100, 100));
 
@@ -198,8 +198,8 @@ public class GameFrameView extends JFrame{
     }
 
     private void genGrid() {
-        for (int i = 0; i < Board.BOARD_ROWS; i++) {
-            for (int j = 0; j < Board.BOARD_COLS; j++) {
+        for (int i = 0; i < GameEngineFacade.BOARD_ROWS; i++) {
+            for (int j = 0; j < GameEngineFacade.BOARD_COLS; j++) {
                 tileBtns[i][j] = new JButton();
 
                 if ((i % 5 <= 2) && j % 4 == 3)

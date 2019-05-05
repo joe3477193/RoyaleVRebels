@@ -1,6 +1,7 @@
 package controller;
 
 import app.Game;
+import app.GameImpl;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -28,14 +29,13 @@ public class StartBtnActionListener implements ActionListener {
             playerNames.add(name2.getText());
             System.out.println(name1.getText() +" "+name2.getText());
 
-            // Start the game
-            SwingUtilities.invokeLater(() -> {
+                // Instantiate the GameImpl so player can start to play the game
+                Game gameImpl = new GameImpl(playerNames);
 
-                // Create Game Model
-                new Game(playerNames);
-            });
+                // Initialise the game
+                gameImpl.initGame();
 
-            // Close Register
+            // Close Register Frame
             frame.dispose();
         } else {
             JOptionPane.showMessageDialog(frame, "Please make sure both names are entered.", "Input error",
