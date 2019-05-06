@@ -92,4 +92,8 @@ public abstract class Piece {
         }
         return 0;
     }
+
+    public String getType(){
+        return type;
+    }
 }

@@ -38,7 +38,7 @@ public class GameFrameView extends JFrame{
 
     private JButton endTurnBtn;
 
-    private static final int BUTTON_LENGTH = 6;
+    private static final int BUTTON_LENGTH = 7;
 
     private static final String GRASS_IMAGE      = "../images/grass.png";
     private static final String WALL_IMAGE      = "../images/wall.jpg";
@@ -51,6 +51,7 @@ public class GameFrameView extends JFrame{
     private static final String RO_FOUR_IMAGE      = "../images/balista.png";
     private static final String RO_FIVE_IMAGE      = "../images/cannon.png";
     private static final String RO_SIX_IMAGE      = "../images/catapult.png";
+    private static final String RO_SEVEN_IMAGE     ="../images/pitfall.png";
 
     private static final String RE_ONE_IMAGE      = "../images/leader.png";
     private static final String RE_TWO_IMAGE      = "../images/scoundrel.png";
@@ -58,6 +59,7 @@ public class GameFrameView extends JFrame{
     private static final String RE_FOUR_IMAGE      = "../images/angryman.png";
     private static final String RE_FIVE_IMAGE      = "../images/rascal.png";
     private static final String RE_SIX_IMAGE      = "../images/archer.png";
+    private static final String RE_SEVEN_IMAGE      ="../images/boulder.png";
 
     private static final String CASTLE_IMAGE      = "../images/castle.jpg";
     private static final String CLWALL_IMAGE      = "../images/cwall.jpg";
@@ -90,25 +92,25 @@ public class GameFrameView extends JFrame{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        rebelButton= new JButton[6];
+        rebelButton= new JButton[BUTTON_LENGTH];
         rebelImage= new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE,
-                RE_SIX_IMAGE
+                RE_SIX_IMAGE, RE_SEVEN_IMAGE
         };
-        rebelName= new String[] {"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Archer"
+        rebelName= new String[] {"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Archer", "Boulder"
         };
 
-        royaleButton = new JButton[6];
-        royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Catapult"
+        royaleButton = new JButton[BUTTON_LENGTH];
+        royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Catapult", "Pitfall"
         };
         royaleImage = new String[] {RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
-                RO_SIX_IMAGE
+                RO_SIX_IMAGE, RO_SEVEN_IMAGE
         };
         summonBtns = new ArrayList<>();
         statusLabel = new JLabel(STATUS);
     }
 
     private JButton[] createSpawn(  String[] name,   String[] image) {
-        JButton[] button = new JButton[6];
+        JButton[] button = new JButton[BUTTON_LENGTH];
         for(int i = 0; i<BUTTON_LENGTH; i++) {
             button[i]= new JButton(new ImageIcon(this.getClass().getResource(image[i])));
             button[i].setName(name[i]);

@@ -1,4 +1,8 @@
 package model.pieces.typeInterface;
 
-public interface Trap {
+public interface Obstacle {
+    String type = "Obstacle";
+
+    boolean moveable = false;
+    boolean attackable = false;
 }

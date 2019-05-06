@@ -1,4 +1,10 @@
 package model.pieces.type;
 
-public class Boulder {
+import model.pieces.faction.Rebel;
+import model.pieces.typeInterface.Obstacle;
+
+public class Boulder extends Rebel implements Obstacle {
+    public Boulder() {
+        super("Boulder",type, "BD", 3, 150,0,0,0, moveable, attackable);
+    }
 }

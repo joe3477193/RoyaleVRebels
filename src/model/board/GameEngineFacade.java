@@ -412,10 +412,16 @@ public class GameEngineFacade implements GameEngine{
 
     private boolean checkSummonValid(Piece piece, int row, int tile) {
         boolean isRowValid;
+        int extraMove= 0;
+
+        if(piece.getType().equals("Obstacle")){
+            extraMove= 3;
+        }
+
         if (piece.getFaction().equals("Royale")) {
-            isRowValid = row < 3 && row >= 1;
+            isRowValid = row < 3 + extraMove && row >= 1;
         } else {
-            isRowValid = row > 9;
+            isRowValid = row > 9 - extraMove;
         }
 
         if (checkMoveTarget(row, tile) && isRowValid) {
