@@ -16,9 +16,9 @@ public class GameEngineFacade implements GameEngine{
 
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
-    private static ArrayList<BoardRows> boardRows;
     private GameFrameView gfv;
     private Piece summonedPiece;
+    private Tile[][] tiles;
 
     // Initialize current turn;
 
@@ -35,10 +35,12 @@ public class GameEngineFacade implements GameEngine{
     public GameEngineFacade(GameFrameView gfv) {
         this.gfv = gfv;
 
-        GameEngineFacade.boardRows = new ArrayList<>(BOARD_ROWS);
+        tiles = new Tile[BOARD_ROWS][BOARD_COLS];
 
         for (int i = 0; i < BOARD_ROWS; i++) {
-            boardRows.add(new BoardRows());
+            for (int j = 0; j < BOARD_COLS; j++) {
+                tiles[i][j] = new Tile(i, j);
+            }
         }
 
         initTileCoord = new int[2];
@@ -279,8 +281,8 @@ public class GameEngineFacade implements GameEngine{
         summonedPiece = null;
     }
 
-    private Tile getTile(int row, int tile) {
-        return boardRows.get(row).getTile(tile);
+    private Tile getTile(int row, int col) {
+        return tiles[row][col];
     }
 
     // Gets a pieces from a tile
@@ -358,12 +360,12 @@ public class GameEngineFacade implements GameEngine{
     boolean checkAcross(int inRow, int inTile, int tgRow, int tgTile) {
         Tile currTile;
         if (inTile == tgTile) {
-            Tile initTile = boardRows.get(inRow).getTile(inTile);
+            Tile initTile = getTile(inRow, inTile);
             for (int i = 1; i < Math.abs(inRow - tgRow) + 1; i++) {
                 if (tgRow < inRow) {
-                    currTile = boardRows.get(inRow - i).getTile(inTile);
+                    currTile = getTile(inRow-i, inTile);
                 } else {
-                    currTile = boardRows.get(inRow + i).getTile(inTile);
+                    currTile = getTile(inRow+i, inTile);
                 }
                 if (currTile.hasPiece()) {
                     if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {
@@ -372,12 +374,12 @@ public class GameEngineFacade implements GameEngine{
                 }
             }
         } else if (inRow == tgRow) {
-            Tile initTile = boardRows.get(inRow).getTile(inTile);
+            Tile initTile = getTile(inRow, inTile);
             for (int j = 1; j < Math.abs(inTile - tgTile) + 1; j++) {
                 if (tgTile < inTile) {
-                    currTile = boardRows.get(inRow).getTile(inTile - j);
+                    currTile = getTile(inRow, inTile-j);
                 } else {
-                    currTile = boardRows.get(inRow).getTile(inTile + j);
+                    currTile = getTile(inRow, inTile+j);
                 }
                 if (currTile.hasPiece()) {
                     if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {

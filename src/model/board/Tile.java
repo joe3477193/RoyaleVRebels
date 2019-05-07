@@ -5,8 +5,11 @@ import model.pieces.Piece;
 class Tile {
 
     private Piece piece;
+    private int row, col;
 
-    Tile() {
+    Tile(int row, int col) {
+        this.row = row;
+        this.col = col;
     }
 
     Piece getPiece() {
