@@ -517,7 +517,7 @@ public class GameEngineFacade implements GameEngine{
     		rebelUndo = true;
     		undoType();
     	}
-    	else  if(!royaleUndo) {
+    	else  if(getTurn() !=0 && !royaleUndo) {
     		royaleUndo = true;
     		undoType();
     	}
