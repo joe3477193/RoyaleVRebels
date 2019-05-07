@@ -15,7 +15,7 @@ public abstract class Piece {
     private boolean moveable;
     private boolean attackable;
 
-    public Piece(String name, String faction, String type, String code, int cp, int initHp, int attackPower, int moveSpeed, int attackRange,
+    public Piece(  String name,   String faction,   String type,   String code,  int cp,  int initHp,  int attackPower,  int moveSpeed,  int attackRange,
                  boolean moveable, boolean attackable) {
         this.name= name;
         this.faction= faction;
@@ -33,12 +33,13 @@ public abstract class Piece {
 
     public boolean isDead() {
         if (hp <= 0) {
+            hp = 0;
             return true;
         }
         return false;
     }
 
-    public void attackedBy(int attack) {
+    public void attackedBy( int attack) {
         hp-=attack;
         if (hp <= 0) {
             hp=0;
@@ -77,13 +78,18 @@ public abstract class Piece {
         return name;
     }
 
-    public boolean isActionValid(int difference, String movType) {
-        boolean valid= false;
-        if (movType.equals("moveSpeed")) {
-            valid = moveSpeed >= difference;
-        } else if (movType.equals("attackRange")) {
-            valid = attackRange >= difference;
+    public boolean isActionValid( int rowdiff,  int tilediff,   String actionType) {
+        int range= getActionRange(actionType);
+        return rowdiff==0 && range >= tilediff || tilediff==0 && range>=rowdiff;
+    }
+
+    public int getActionRange(  String actionType){
+        if(actionType.equals("moveSpeed")){
+            return moveSpeed;
         }
-        return valid;
+        else if (actionType.equals("attackRange")){
+            return attackRange;
+        }
+        return 0;
     }
 }

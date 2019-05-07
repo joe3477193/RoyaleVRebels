@@ -13,7 +13,7 @@ class Tile {
         return piece;
     }
 
-    void setPiece(Piece piece) {
+    void setPiece( Piece piece) {
         this.piece = piece;
     }
 
