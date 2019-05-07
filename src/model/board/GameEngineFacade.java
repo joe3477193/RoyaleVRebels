@@ -198,7 +198,9 @@ public class GameEngineFacade implements GameEngine{
     public void clickTile(JButton tileBtn, int i, int j) {
         coordinate[0] = i;
         coordinate[1] = j;
-        System.out.println("TileButton Name: " + tileBtn.getName());
+        if(getTile(i,j).hasPiece()) {
+        	gfv.getStatusLabel().setText(String.format(STATUS+" %s has %dHP remaining", getPiece(i,j).getName(),getPiece(i, j).getHp())); 
+        }
         boolean match = isFactionMatched(i, j);
         if (match && !actionPerformed) {
             gfv.setImage(tileBtn.getName());
