@@ -47,17 +47,14 @@ public class Board {
 
         for (int i = 0; i < Board.BOARD_ROWS; i++) {
             for (int j = 0; j < Board.BOARD_COLS; j++) {
-                tiles[i][j] = new Tile(i,j);
+                tiles[i][j] = new Tile();
+                tiles[i][j].setRow(i);
+                tiles[i][j].setCol(j);
             }
         }
 
 
     }
-
-    /*Tile getTile(int i) {
-        return tiles.get(i);
-
-    }*/
 
     public boolean isMoving() {
         return isMoving;

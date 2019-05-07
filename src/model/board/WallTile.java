@@ -2,15 +2,12 @@ package model.board;
 
 import model.pieces.Piece;
 
-class Tile implements TileInt{
+class WallTile implements TileInt{
 
-    //TODO change Tile class name to GrassTile
-
-    private Piece piece;
     private int row, col;
     private String type;
 
-    Tile() {
+    WallTile() {
     }
 
     public int getRow() {
@@ -35,20 +32,5 @@ class Tile implements TileInt{
         return rowString + "," + colString;
     }
 
-    Piece getPiece() {
-        return piece;
-    }
-
-    void setPiece( Piece piece) {
-        this.piece = piece;
-    }
-
-    boolean hasPiece() {
-        return piece != null;
-    }
-
-    void removePiece() {
-        piece = null;
-    }
 
 }
