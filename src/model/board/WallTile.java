@@ -2,12 +2,11 @@ package model.board;
 
 import model.pieces.Piece;
 
-class Tile implements TileInterface{
+class WallTile implements TileInterface{
 
-    private Piece piece;
     private int row, col;
 
-    Tile(int row, int col) {
+    WallTile(int row, int col) {
         this.row = row;
         this.col = col;
     }
@@ -20,20 +19,22 @@ class Tile implements TileInterface{
         this.col = col;
     }
 
+    public boolean hasPiece() {
+        return false;
+    }
+
     public Piece getPiece() {
-        return piece;
+        return null;
     }
 
     public void setPiece( Piece piece) {
-        this.piece = piece;
-    }
 
-    public boolean hasPiece() {
-        return piece != null;
     }
 
     public void removePiece() {
-        piece = null;
+
     }
+
+
 
 }
