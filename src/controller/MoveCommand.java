@@ -1,0 +1,46 @@
+package controller;
+
+import javax.swing.JButton;
+
+import model.board.GameEngine;
+
+public class MoveCommand extends AbstractTurn {
+
+	private GameEngine g;
+	public int fromTileRow;
+	public int fromTileCol;
+	public int tooTileRow;
+	public int tooTileCol;
+	
+	
+	public MoveCommand(GameEngine g){
+		this.g =g;
+	}
+	
+	
+	public MoveCommand( int fromTileRow, int fromTileCol, int tooTileRow, int tooTileCol){
+		
+		this.fromTileRow = fromTileRow;
+		this.fromTileCol = fromTileCol;
+		this.tooTileRow = tooTileRow;
+		this.tooTileCol = tooTileCol;
+		
+		
+	}
+	
+
+	@Override
+	public void executeTurn(JButton[][] tileBtns, int i, int j) {
+		
+		boolean temp = g.placeMovedPiece(tileBtns, i, j);
+		
+		if(temp) {
+			 
+			System.out.println("MOVED");
+		}
+		
+	}
+
+
+
+}

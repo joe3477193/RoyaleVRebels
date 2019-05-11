@@ -4,6 +4,7 @@ import model.pieces.Piece;
 
 import javax.swing.*;
 
+
 public interface GameEngine {
 
     boolean isMoving();
@@ -48,12 +49,14 @@ public interface GameEngine {
 
     void createPiece(String name);
 
-    void placeSummonedPiece(JButton tileBtn, int i, int j);
+    boolean placeSummonedPiece(JButton tileBtn, int i, int j);
 
-    void placeMovedPiece(JButton[][] tileBtns, int i, int j);
+    boolean placeMovedPiece(JButton[][] tileBtns, int i, int j);
 
     boolean isWall(int i, int j);
 
     void placeAttackPiece(int i, int j);
+    
+    void undoTurn();
 
 }

@@ -3,7 +3,6 @@ package controller;
 
 import controller.gameActionListeners.*;
 import model.board.GameEngine;
-
 import view.GameFrameView;
 
 import javax.swing.*;
@@ -15,17 +14,23 @@ import java.util.TimerTask;
 
 import static view.GameFrameView.STATUS;
 
-public class GameController {
+
+public class GameController  {
     private Timer timer;
 
     private GameEngine g;
     private GameFrameView gfv;
+    private MoveCommand move;
+    private SummonCommand summon;
 
     public GameController(GameEngine g, GameFrameView gfv) {
         this.g = g;
         this.gfv = gfv;
+        
         addActionListeners();
         startTimer();
+        move = new MoveCommand(g);
+        summon = new SummonCommand(g);
     }
 
     private void addActionListeners() {
@@ -48,6 +53,8 @@ public class GameController {
         gfv.getMoveBtn().addActionListener(new MoveBtnActionListener(this));
         gfv.getAttackBtn().addActionListener(new AttackBtnActionListener(this));
         gfv.getEndTurnBtn().addActionListener(new EndTurnBtnActionListener(this));
+        gfv.getUndoBtn().addActionListener(new UndoTurnActionListener(this));
+
     }
 
     public void summonButton( ActionEvent e) {
@@ -123,14 +130,20 @@ public class GameController {
 
                     // Attempt to place pieces
                     else {
-                        tileBtn = tileBtns[i][j];
+                        tileBtn = tileBtns[i][j];			//TODO Confirm btn needs to be passed to model in summo
                         // Attempt to place a summoned pieces
                         if (g.getSummonedPiece() != null && !g.getActionPerformed()) {
-                            g.placeSummonedPiece(tileBtn, i, j);
+                        	
+                        	summon.executeTurn(tileBtns, i, j);
+                           // g.placeSummonedPiece(tileBtn, i, j);
+                            
                         }
                         // Attempt to place a piece during movement
                         else if (g.isMoving() && !g.getActionPerformed()) {
-                            g.placeMovedPiece(tileBtns, i, j);
+                        	
+                            move.executeTurn(tileBtns, i, j);
+                            
+                            
                         }
                         // Attempt to place a piece during attack
                         else if (g.isAttacking() && !g.getActionPerformed()) {
@@ -237,6 +250,10 @@ public class GameController {
        	timer.cancel();
        	timer = new Timer();
         timer.schedule(t,0, 1000); 
+    }
+
+    public void undoTurn() {
+        g.undoTurn();
     }
 }
 

@@ -4,9 +4,14 @@ import model.pieces.Piece;
 import view.GameFrameView;
 
 import javax.swing.*;
+
+import controller.AbstractTurn;
+import controller.MoveCommand;
+import controller.SummonCommand;
+
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
+import java.util.Stack;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
 import static java.lang.Math.abs;
@@ -17,8 +22,11 @@ public class GameEngineFacade implements GameEngine{
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
     private GameFrameView gfv;
+    public static Stack<AbstractTurn> moves;
     private Piece summonedPiece;
     private Tile[][] tiles;
+    private boolean rebelUndo = false;
+    private boolean royaleUndo = false;
 
     // Initialize current turn;
 
@@ -44,6 +52,7 @@ public class GameEngineFacade implements GameEngine{
         }
 
         initTileCoord = new int[2];
+        moves = new Stack<AbstractTurn>();
 
         // Initialize number of player turns
         turns = new int[]{0, 1};
@@ -191,6 +200,9 @@ public class GameEngineFacade implements GameEngine{
     public void clickTile(JButton tileBtn, int i, int j) {
         coordinate[0] = i;
         coordinate[1] = j;
+        if(getTile(i,j).hasPiece()) {
+        	gfv.getStatusLabel().setText(String.format(STATUS+" %s has %dHP remaining", getPiece(i,j).getName(),getPiece(i, j).getHp())); 
+        }
         System.out.println("TileButton Name: " + tileBtn.getName());
         boolean match = isFactionMatched(i, j);
         if (match && !actionPerformed) {
@@ -434,28 +446,32 @@ public class GameEngineFacade implements GameEngine{
         }
     }
 
-    public void placeSummonedPiece(JButton tileBtn, int i, int j) {
+    public boolean placeSummonedPiece(JButton tileBtn, int i, int j) {
         if (checkSummonValid(getSummonedPiece(), i, j)) {
+        	        	
             tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
             tileBtn.setName(gfv.getImage());
             removeSummonedPiece();
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
             setActionPerformed();
-            gfv.getMoveBtn().setVisible(false);
-            gfv.getAttackBtn().setVisible(false);
+            changeButtonViews();
+            moves.push(new SummonCommand(gfv.getImage(),i,j));
+            
+            return true; 
         } else {
             gfv.getStatusLabel().setText(STATUS + "Invalid placement, the first two rows for Royales and the bottom three rows for Rebels.");
+            return false;
+             
         }
     }
 
-    public void placeMovedPiece(JButton[][] tileBtns, int i, int j) {
-
+    public boolean placeMovedPiece(JButton[][] tileBtns, int i, int j) {
         // target tile
         JButton tileBtn = tileBtns[i][j];
 
-
         if (move(getInitTileCoord()[0], getInitTileCoord()[1], i, j)) {
-
+        	
+        	moves.push(new MoveCommand(getInitTileCoord()[0], getInitTileCoord()[1], i,j));
             gfv.decolour();
             System.out.println("Image= " + gfv.getImage());
             tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
@@ -463,12 +479,14 @@ public class GameEngineFacade implements GameEngine{
                     this.getClass().getResource("../" + gfv.getGrass())));
             resetMoving();
             setActionPerformed();
-            gfv.getMoveBtn().setVisible(false);
-            gfv.getAttackBtn().setVisible(false);
+            changeButtonViews();
             tileBtn.setName(gfv.getImage());
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
+            return true;
+      
         } else {
             gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the move button again to cancel.");
+            return false;
         }
     }
 
@@ -502,6 +520,62 @@ public class GameEngineFacade implements GameEngine{
         } else {
             gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the attack button again to cancel.");
         }
+    }
+    
+    public void changeButtonViews() {
+        gfv.getMoveBtn().setVisible(false);
+        gfv.getAttackBtn().setVisible(false);
+        gfv.getUndoBtn().setVisible(true);
+    }
+    
+    public void undoTurn() {
+    	
+    	if(getTurn() ==0 && !rebelUndo) {
+    		rebelUndo = true;
+    		accessStack();
+    	}
+    	else  if(getTurn() !=0 && !royaleUndo) {
+    		royaleUndo = true;
+    		accessStack();
+    	}
+    	else {
+    		gfv.getStatusLabel().setText(STATUS + "You have already used your Undo for this game!");
+    	}
+    	
+    }
+    
+    public void accessStack() {
+    	
+    	JButton[][] tileBtns = gfv.getTileBtns();
+    	
+    	if(moves.peek().getClass() == MoveCommand.class) {
+    		MoveCommand mc = (MoveCommand) moves.pop();
+    		
+    		JButton tileBtn = tileBtns[mc.tooTileRow][mc.tooTileCol];
+    		gfv.decolour();
+	        getTile(mc.fromTileRow, mc.fromTileCol).setPiece(getPiece(mc.tooTileRow, mc.tooTileCol));
+            getTile(mc.tooTileRow, mc.tooTileCol).removePiece();
+	        tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getGrass())));
+	        tileBtns[mc.fromTileRow][mc.fromTileCol].setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
+	        tileBtns[mc.fromTileRow][mc.fromTileCol].setName(gfv.getImage());
+	        actionPerformed = false;
+	        gfv.getMoveBtn().setVisible(true);
+	        gfv.getAttackBtn().setVisible(true);
+	        gfv.getUndoBtn().setVisible(false);
+    	}
+    	else {
+    		SummonCommand sc = (SummonCommand) moves.pop();
+    		JButton tileBtnSum = tileBtns[sc.initTileRow][sc.initTileCol];
+    		gfv.decolour();
+            getTile(sc.initTileRow, sc.initTileCol).removePiece();           
+            tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getGrass())));
+            actionPerformed = false;
+	        gfv.getMoveBtn().setVisible(true);
+	        gfv.getAttackBtn().setVisible(true);
+	        gfv.getUndoBtn().setVisible(false);
+    	}
+
+
     }
 
 }

@@ -20,23 +20,8 @@ public class GameFrameView extends JFrame{
     private String nameOne, typeOne, nameTwo, typeTwo;
     private static JButton[][] tileBtns;
 
-    public JButton getMoveBtn() {
-        return moveBtn;
-    }
-
-    private JButton moveBtn;
-
-    public JButton getAttackBtn() {
-        return attackBtn;
-    }
-
-    private JButton attackBtn;
-
-    public JButton getEndTurnBtn() {
-        return endTurnBtn;
-    }
-
     private JButton endTurnBtn;
+    private JButton undoTurnBtn;
 
     private static final int BUTTON_LENGTH = 7;
 
@@ -82,6 +67,26 @@ public class GameFrameView extends JFrame{
 
     public JLabel getStatusLabel() {
         return statusLabel;
+    }
+    
+    public JButton getMoveBtn() {
+        return moveBtn;
+    }
+
+    private JButton moveBtn;
+
+    public JButton getAttackBtn() {
+        return attackBtn;
+    }
+
+    private JButton attackBtn;
+
+    public JButton getEndTurnBtn() {
+        return endTurnBtn;
+    }
+    
+    public JButton getUndoBtn() {
+        return undoTurnBtn;
     }
 
     public GameFrameView() {
@@ -191,11 +196,14 @@ public class GameFrameView extends JFrame{
         moveBtn = new JButton("Move");
         actionPanel.add(moveBtn);
 
-        attackBtn = new JButton("Attack");
-
+        attackBtn = new JButton("Attack");        
         actionPanel.add(attackBtn);
+        
+        undoTurnBtn = new JButton("Undo");
+        undoTurnBtn.setVisible(false);
+        actionPanel.add(undoTurnBtn);
+        
         endTurnBtn = new JButton("End Turn");
-
         actionPanel.add(endTurnBtn);
 
     }
