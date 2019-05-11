@@ -12,13 +12,13 @@ public class GameFrameView extends JFrame{
 
     private JFrame frame;
     private JPanel actionPanel;
-    private JPanel gridPanel;
+    private JPanel gridPanel = new JPanel(new GridLayout(GameEngineFacade.BOARD_ROWS, GameEngineFacade.BOARD_COLS, 0, 1));
     private JPanel playerPanel;
     private JPanel deckPanel;
 
     private JLabel playerName, playerType, time;
     private String nameOne, typeOne, nameTwo, typeTwo;
-    private static JButton[][] tileBtns;
+    private static JButton[][] tileBtns = new JButton[GameEngineFacade.BOARD_ROWS][GameEngineFacade.BOARD_COLS];
 
     public JButton getMoveBtn() {
         return moveBtn;
@@ -141,7 +141,7 @@ public class GameFrameView extends JFrame{
 
         playerPanel = new JPanel(new GridLayout(1, 6, 0, 0));
         deckPanel = new JPanel(new GridLayout(1, 5, 0, 0));
-        gridPanel = new JPanel(new GridLayout(g.getRows(), g.getCols(), 0, 1));
+        //gridPanel = new JPanel(new GridLayout(g.getRows(), g.getCols(), 0, 1));
         actionPanel = new JPanel(new GridLayout(1, 2));
         JPanel statusPanel = new JPanel(new BorderLayout());
         statusPanel.add(statusLabel, BorderLayout.WEST);
@@ -155,7 +155,7 @@ public class GameFrameView extends JFrame{
         playerPanel.add(new JLabel("Player Type: "));
         playerPanel.add(playerType);
 
-        tileBtns = new JButton[GameEngineFacade.BOARD_ROWS][GameEngineFacade.BOARD_COLS];
+        //tileBtns = new JButton[GameEngineFacade.BOARD_ROWS][GameEngineFacade.BOARD_COLS];
 
         deckPanel.setMaximumSize(new Dimension(100, 100));
 
@@ -167,7 +167,7 @@ public class GameFrameView extends JFrame{
 
         // rebel goes first
         loadSpawn(rebelButton);
-        genGrid();
+        //genGrid();
         drawActionBtns();
 
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -206,25 +206,57 @@ public class GameFrameView extends JFrame{
                 tileBtns[i][j] = new JButton();
 
                 if ((i % 5 <= 2) && j % 4 == 3)
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
+                    //tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
+                    drawWallTile(i, j);
                 else if(i ==0 && j%2!=0) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
+                    //tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
+                    drawCastleTile(i,j);
                 }
                 else if(i==0 && j%4==0) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
+                    //tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
+                    drawCastleLeftWallTile(i, j);
                 }
                 else if(i==0 && j%4==2) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CRWALL_IMAGE)));
+                    //tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CRWALL_IMAGE)));
+                    drawCastleRightWallTile(i, j);
                 }
                 else
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+                    //tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+                    drawGrassTile(i, j);
 
-                tileBtns[i][j].putClientProperty("row", i);
+                /*tileBtns[i][j].putClientProperty("row", i);
                 tileBtns[i][j].putClientProperty("column", j);
-
-                gridPanel.add(tileBtns[i][j]);
+                gridPanel.add(tileBtns[i][j]);*/
             }
         }
+    }
+
+    public void drawGrassTile(int i, int j) {
+        duplicate(i, j, GRASS_IMAGE);
+    }
+
+    public void drawWallTile(int i, int j) {
+        duplicate(i, j, WALL_IMAGE);
+    }
+
+    public void drawCastleTile(int i, int j) {
+        duplicate(i, j, CASTLE_IMAGE);
+    }
+
+    public void drawCastleLeftWallTile(int i, int j) {
+        duplicate(i, j, CLWALL_IMAGE);
+    }
+
+    public void drawCastleRightWallTile(int i, int j) {
+        duplicate(i, j, CRWALL_IMAGE);
+    }
+
+    private void duplicate(int i, int j, String image) {
+        tileBtns[i][j] = new JButton();
+        tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(image)));
+        tileBtns[i][j].putClientProperty("row", i);
+        tileBtns[i][j].putClientProperty("column", j);
+        gridPanel.add(tileBtns[i][j]);
     }
 
     public void colourMove() {
@@ -363,6 +395,8 @@ public class GameFrameView extends JFrame{
 	public void setTime(String text) {
 		time.setText(text);
 	}
+
+
 }
 
 

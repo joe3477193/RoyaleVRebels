@@ -1,15 +1,19 @@
 package model.board;
 
 import model.pieces.Piece;
+import view.GameFrameView;
 
-class Tile implements TileInterface{
+class GrassTile implements TileInterface{
 
     private Piece piece;
     private int row, col;
 
-    Tile(int row, int col) {
-        this.row = row;
-        this.col = col;
+    GrassTile() {
+
+    }
+
+    public void draw(GameFrameView gfv, int row, int col) {
+        gfv.drawGrassTile(row, col);
     }
 
     public void setRow(int row) {

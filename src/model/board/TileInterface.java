@@ -1,15 +1,16 @@
 package model.board;
 
 import model.pieces.Piece;
+import view.GameFrameView;
 
 public interface TileInterface {
 
-    //TODO change TileInt class name to Tile
-    public void setRow(int row);
-    public void setCol(int col);
-    public boolean hasPiece();
-    public Piece getPiece();
-    public void setPiece(Piece piece);
-    public void removePiece();
+    void setRow(int row);
+    void setCol(int col);
+    boolean hasPiece();
+    Piece getPiece();
+    void setPiece(Piece piece);
+    void removePiece();
+    void draw(GameFrameView gfv, int row, int col);
 
 }

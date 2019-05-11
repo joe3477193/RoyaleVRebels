@@ -6,7 +6,6 @@ import view.GameFrameView;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
 import static java.lang.Math.abs;
@@ -38,16 +37,21 @@ public class GameEngineFacade implements GameEngine{
 
         for (int i = 0; i < BOARD_ROWS; i++) {
             for (int j = 0; j < BOARD_COLS; j++) {
-                /*if ((i % 5 <= 2) && j % 4 == 3) {
-                    tiles[i][j] = TileFactory.getWallTile(i,j);
+                if ((i % 5 <= 2) && j % 4 == 3) {
+                    tiles[i][j] = new WallTile();
+                    TileInterface tile = TileFactory.getWallTile();
+                    tile.draw(gfv, i, j);
                 }
                 else if (i == 0) {
-                    tiles[i][j] = TileFactory.getCastleTile(i,j);
+                    tiles[i][j] = new CastleTile();
+                    TileInterface tile = TileFactory.getCastleTile();
+                    tile.draw(gfv, i, j);
                 }
                 else {
-                    tiles[i][j] = TileFactory.getGrassTile(i,j);
-                }*/
-                tiles[i][j] = new Tile(i,j);
+                    tiles[i][j] = new GrassTile();
+                    TileInterface tile = TileFactory.getGrassTile();
+                    tile.draw(gfv, i, j);
+                }
             }
         }
 
@@ -364,7 +368,7 @@ public class GameEngineFacade implements GameEngine{
         return false;
     }
 
-    boolean checkAcross(int inRow, int inCol, int tgRow, int tgCol) {
+    private boolean checkAcross(int inRow, int inCol, int tgRow, int tgCol) {
         TileInterface currTile;
         if (inCol == tgCol) {
             TileInterface initTile = getTile(inRow, inCol);

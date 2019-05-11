@@ -1,14 +1,18 @@
 package model.board;
 
 import model.pieces.Piece;
+import view.GameFrameView;
 
 class WallTile implements TileInterface{
 
     private int row, col;
 
-    WallTile(int row, int col) {
-        this.row = row;
-        this.col = col;
+    WallTile() {
+
+    }
+
+    public void draw(GameFrameView gfv, int row, int col) {
+        gfv.drawWallTile(row, col);
     }
 
     public void setRow(int row) {

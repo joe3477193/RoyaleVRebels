@@ -6,30 +6,30 @@ public class TileFactory {
 
     private static HashMap<String, TileInterface> hm = new HashMap<String, TileInterface>();
 
-    public static TileInterface getGrassTile(int row, int col) {
-        TileInterface tile = null;
+    public static TileInterface getGrassTile() {
+        TileInterface tile;
         String type = "GrassTile";
 
         if (hm.containsKey(type)) {
             tile = hm.get(type);
         }
         else {
-            tile = new Tile(row, col);
+            tile = new GrassTile();
             System.out.println("Created new grass tile");
         }
 
         hm.put(type, tile);
         return tile;
     }
-    public static TileInterface getCastleTile(int row, int col) {
-        TileInterface tile = null;
+    public static TileInterface getCastleTile() {
+        TileInterface tile;
         String type = "CastleTile";
 
         if (hm.containsKey(type)) {
             tile = hm.get(type);
         }
         else {
-            tile = new CastleTile(row, col);
+            tile = new CastleTile();
             System.out.println("Created new castle tile");
         }
 
@@ -37,15 +37,15 @@ public class TileFactory {
         return tile;
     }
 
-    public static TileInterface getWallTile(int row, int col) {
-        TileInterface tile = null;
+    public static TileInterface getWallTile() {
+        TileInterface tile;
         String type = "WallTile";
 
         if (hm.containsKey(type)) {
             tile = hm.get(type);
         }
         else {
-            tile = new WallTile(row, col);
+            tile = new WallTile();
             System.out.println("Created new wall tile");
         }
 
