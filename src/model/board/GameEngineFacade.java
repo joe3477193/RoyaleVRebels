@@ -184,7 +184,7 @@ public class GameEngineFacade implements GameEngine{
         cycleTurn();
         gfv.updateBar(turn);
         gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        gfv.getMoveBtn().setVisible(true);
+       
         gfv.getAttackBtn().setVisible(true);
         gfv.getStatusLabel().setText(STATUS + "");
         depaintAction();
@@ -204,15 +204,26 @@ public class GameEngineFacade implements GameEngine{
         	gfv.getStatusLabel().setText(String.format(STATUS+" %s has %dHP remaining", getPiece(i,j).getName(),getPiece(i, j).getHp())); 
         }
         System.out.println("TileButton Name: " + tileBtn.getName());
+        
         boolean match = isFactionMatched(i, j);
         if (match && !actionPerformed) {
             gfv.setImage(tileBtn.getName());
             gfv.colourTile(tileBtn);
-            if (checkMoveInit(i, j)) {
-                gfv.colourMove();
+            
+            //Responses for movement when a tile is clicked
+            if(!isMoving() && hasCoordinates() && checkMoveInit(getCoordinates()[0], getCoordinates()[1]) ) {	// Trigger movement for a piece
+            	resetAttacking();
+                setMoving();		
+            }else if(isMoving() && !getActionPerformed()){	// Cancel movement (click move button twice)
+            	 resetMoving();          
+                 gfv.colourAttack();
+            }else if (getActionPerformed()) {
+                gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
             } else {
-                gfv.colourRedMove();
+                resetAttacking();
+                gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
             }
+          
             if (checkAttackInit(i, j)) {
                 gfv.colourAttack();
             } else {
@@ -248,7 +259,7 @@ public class GameEngineFacade implements GameEngine{
                 turn == 1 && getPiece(i, j).getFaction().equals("Royale");
     }
 
-    private int[] getInitTileCoord() {
+    public int[] getInitTileCoord() {
         return initTileCoord;
     }
 
@@ -455,6 +466,8 @@ public class GameEngineFacade implements GameEngine{
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
             setActionPerformed();
             changeButtonViews();
+            
+            // Command is also added as an object to stack
             moves.push(new SummonCommand(gfv.getImage(),i,j));
             
             return true; 
@@ -470,7 +483,7 @@ public class GameEngineFacade implements GameEngine{
         JButton tileBtn = tileBtns[i][j];
 
         if (move(getInitTileCoord()[0], getInitTileCoord()[1], i, j)) {
-        	
+        	// Command is also added as an object to stack
         	moves.push(new MoveCommand(getInitTileCoord()[0], getInitTileCoord()[1], i,j));
             gfv.decolour();
             System.out.println("Image= " + gfv.getImage());
@@ -513,7 +526,7 @@ public class GameEngineFacade implements GameEngine{
             gfv.decolour();
             resetAttacking();
             setActionPerformed();
-            gfv.getMoveBtn().setVisible(false);
+           
             gfv.getAttackBtn().setVisible(false);
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
             gfv.getStatusLabel().setText(STATUS + message);
@@ -523,7 +536,7 @@ public class GameEngineFacade implements GameEngine{
     }
     
     public void changeButtonViews() {
-        gfv.getMoveBtn().setVisible(false);
+        
         gfv.getAttackBtn().setVisible(false);
         gfv.getUndoBtn().setVisible(true);
     }
@@ -544,38 +557,32 @@ public class GameEngineFacade implements GameEngine{
     	
     }
     
+    //Undo stack with all game movements excl attacks for now.
     public void accessStack() {
     	
     	JButton[][] tileBtns = gfv.getTileBtns();
     	
     	if(moves.peek().getClass() == MoveCommand.class) {
-    		MoveCommand mc = (MoveCommand) moves.pop();
-    		
+    		MoveCommand mc = (MoveCommand) moves.pop();    		
     		JButton tileBtn = tileBtns[mc.tooTileRow][mc.tooTileCol];
-    		gfv.decolour();
 	        getTile(mc.fromTileRow, mc.fromTileCol).setPiece(getPiece(mc.tooTileRow, mc.tooTileCol));
             getTile(mc.tooTileRow, mc.tooTileCol).removePiece();
 	        tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getGrass())));
 	        tileBtns[mc.fromTileRow][mc.fromTileCol].setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
 	        tileBtns[mc.fromTileRow][mc.fromTileCol].setName(gfv.getImage());
-	        actionPerformed = false;
-	        gfv.getMoveBtn().setVisible(true);
-	        gfv.getAttackBtn().setVisible(true);
-	        gfv.getUndoBtn().setVisible(false);
+
     	}
     	else {
     		SummonCommand sc = (SummonCommand) moves.pop();
     		JButton tileBtnSum = tileBtns[sc.initTileRow][sc.initTileCol];
-    		gfv.decolour();
             getTile(sc.initTileRow, sc.initTileCol).removePiece();           
             tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getGrass())));
-            actionPerformed = false;
-	        gfv.getMoveBtn().setVisible(true);
-	        gfv.getAttackBtn().setVisible(true);
-	        gfv.getUndoBtn().setVisible(false);
+            
     	}
-
-
+    	gfv.decolour();
+    	actionPerformed = false;  
+        gfv.getAttackBtn().setVisible(true);
+        gfv.getUndoBtn().setVisible(false);
     }
 
 }

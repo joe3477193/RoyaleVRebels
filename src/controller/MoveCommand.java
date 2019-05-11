@@ -35,8 +35,8 @@ public class MoveCommand extends AbstractTurn {
 		boolean temp = g.placeMovedPiece(tileBtns, i, j);
 		
 		if(temp) {
-			 
-			System.out.println("MOVED");
+			 //Last move reference for Abstract class as per command pattern
+			this.lastMove = new TurnType("Move", g.getInitTileCoord()[0], g.getInitTileCoord()[1], i, j);
 		}
 		
 	}

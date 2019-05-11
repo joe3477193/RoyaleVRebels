@@ -61,33 +61,11 @@ public class GameFrameView extends JFrame{
     private String currentImage;
 
     private JButton lastTile;
+    private JButton attackBtn;
+    
     private ArrayList<JButton> summonBtns;
 
     private JLabel statusLabel;
-
-    public JLabel getStatusLabel() {
-        return statusLabel;
-    }
-    
-    public JButton getMoveBtn() {
-        return moveBtn;
-    }
-
-    private JButton moveBtn;
-
-    public JButton getAttackBtn() {
-        return attackBtn;
-    }
-
-    private JButton attackBtn;
-
-    public JButton getEndTurnBtn() {
-        return endTurnBtn;
-    }
-    
-    public JButton getUndoBtn() {
-        return undoTurnBtn;
-    }
 
     public GameFrameView() {
 
@@ -123,7 +101,25 @@ public class GameFrameView extends JFrame{
         }
         return button;
     }
+    
+    public JLabel getStatusLabel() {
+        return statusLabel;
+    }
+    
 
+    public JButton getAttackBtn() {
+        return attackBtn;
+    }
+
+
+    public JButton getEndTurnBtn() {
+        return endTurnBtn;
+    }
+    
+    public JButton getUndoBtn() {
+        return undoTurnBtn;
+    }
+    
     private void loadSpawn( JButton[] button) {
         for(JButton icon:button) {
             deckPanel.add(icon);
@@ -193,8 +189,6 @@ public class GameFrameView extends JFrame{
     }
 
     private void drawActionBtns() {
-        moveBtn = new JButton("Move");
-        actionPanel.add(moveBtn);
 
         attackBtn = new JButton("Attack");        
         actionPanel.add(attackBtn);
@@ -235,9 +229,7 @@ public class GameFrameView extends JFrame{
         }
     }
 
-    public void colourMove() {
-        moveBtn.setBackground(Color.green);
-    }
+
 
     public void colourAttack(){
         attackBtn.setBackground((Color.green));
@@ -247,9 +239,6 @@ public class GameFrameView extends JFrame{
         attackBtn.setBackground((Color.RED));
     }
 
-    public void colourRedMove(){
-        moveBtn.setBackground(Color.RED);
-    }
 
     public void colourTile( JButton tile) {
         tile.setBackground(Color.blue);
@@ -278,7 +267,7 @@ public class GameFrameView extends JFrame{
     public void colourRed( JButton tile) {
         colourRedTile(tile);
         colourRedAttack();
-        colourRedMove();
+       
     }
 
     public void colourEndTurn(){
@@ -291,7 +280,7 @@ public class GameFrameView extends JFrame{
             lastTile.setBackground(null);
             lastTile= null;
         }
-        moveBtn.setBackground(null);
+       
         attackBtn.setBackground(null);
     }
 

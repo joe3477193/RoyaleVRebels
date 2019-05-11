@@ -59,4 +59,6 @@ public interface GameEngine {
     
     void undoTurn();
 
+	int[] getInitTileCoord();
+
 }
