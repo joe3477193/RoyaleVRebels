@@ -1,6 +1,6 @@
 package controller;
 
-public class Move {
+public class TurnType {
 
 	private String MoveType;
 	private int fromRow;
@@ -9,7 +9,7 @@ public class Move {
 	private int tooCol;
 	
 	
-	Move(String MoveType, int fr, int fc, int tr, int tc){
+	TurnType(String MoveType, int fr, int fc, int tr, int tc){
 		this.MoveType = MoveType;
 		this.fromRow = fromRow;
 		this.fromCol = fromCol;

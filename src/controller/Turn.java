@@ -4,7 +4,7 @@ import javax.swing.JButton;
 
 public interface Turn {
 	
-	Move returnLastMove();
+	TurnType returnLastMove();
 	void executeTurn(JButton[][] tileBtn, int i, int j);
 	
 }

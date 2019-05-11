@@ -5,10 +5,10 @@ package controller;
 public abstract class AbstractTurn implements Turn {
 
 	
-	public Move lastMove;
+	public TurnType lastMove;
 	
 	
-	public Move returnLastMove() {
+	public TurnType returnLastMove() {
 	
 		return lastMove;
 	}
