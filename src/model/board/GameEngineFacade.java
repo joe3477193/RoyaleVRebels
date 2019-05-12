@@ -17,7 +17,7 @@ public class GameEngineFacade implements GameEngine{
     public static final int BOARD_COLS = 15; // increments in 4
     private GameFrameView gfv;
     private Piece summonedPiece;
-    private TileInterface[][] tiles;
+    private Tile[][] tiles;
 
     // Initialize current turn;
 
@@ -33,23 +33,23 @@ public class GameEngineFacade implements GameEngine{
     public GameEngineFacade(GameFrameView gfv) {
         this.gfv = gfv;
 
-        tiles = new TileInterface[BOARD_ROWS][BOARD_COLS];
+        tiles = new Tile[BOARD_ROWS][BOARD_COLS];
 
         for (int i = 0; i < BOARD_ROWS; i++) {
             for (int j = 0; j < BOARD_COLS; j++) {
                 if ((i % 5 <= 2) && j % 4 == 3) {
                     tiles[i][j] = new WallTile();
-                    TileInterface tile = TileFactory.getWallTile();
+                    Tile tile = TileFactory.getWallTile();
                     tile.draw(gfv, i, j);
                 }
                 else if (i == 0) {
                     tiles[i][j] = new CastleTile();
-                    TileInterface tile = TileFactory.getCastleTile();
+                    Tile tile = TileFactory.getCastleTile();
                     tile.draw(gfv, i, j);
                 }
                 else {
                     tiles[i][j] = new GrassTile();
-                    TileInterface tile = TileFactory.getGrassTile();
+                    Tile tile = TileFactory.getGrassTile();
                     tile.draw(gfv, i, j);
                 }
             }
@@ -292,7 +292,7 @@ public class GameEngineFacade implements GameEngine{
         summonedPiece = null;
     }
 
-    private TileInterface getTile(int row, int col) {
+    private Tile getTile(int row, int col) {
         return tiles[row][col];
     }
 
@@ -324,7 +324,7 @@ public class GameEngineFacade implements GameEngine{
 
     // Check if pieces can attack target from current tile
     private boolean checkAttackTarget(Piece piece, int tgRow, int tgCol) {
-        TileInterface space = getTile(tgRow, tgCol);
+        Tile space = getTile(tgRow, tgCol);
         String inFaction = piece.getFaction();
         String outFaction = space.getPiece().getFaction();
         return space.hasPiece() && !(inFaction.equals(outFaction));
@@ -369,9 +369,9 @@ public class GameEngineFacade implements GameEngine{
     }
 
     private boolean checkAcross(int inRow, int inCol, int tgRow, int tgCol) {
-        TileInterface currTile;
+        Tile currTile;
         if (inCol == tgCol) {
-            TileInterface initTile = getTile(inRow, inCol);
+            Tile initTile = getTile(inRow, inCol);
             for (int i = 1; i < Math.abs(inRow - tgRow) + 1; i++) {
                 if (tgRow < inRow) {
                     currTile = getTile(inRow-i, inCol);
@@ -385,7 +385,7 @@ public class GameEngineFacade implements GameEngine{
                 }
             }
         } else if (inRow == tgRow) {
-            TileInterface initTile = getTile(inRow, inCol);
+            Tile initTile = getTile(inRow, inCol);
             for (int j = 1; j < Math.abs(inCol - tgCol) + 1; j++) {
                 if (tgCol < inCol) {
                     currTile = getTile(inRow, inCol-j);

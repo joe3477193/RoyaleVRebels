@@ -3,7 +3,7 @@ package model.board;
 import model.pieces.Piece;
 import view.GameFrameView;
 
-class WallTile implements TileInterface{
+class WallTile implements Tile {
 
     private int row, col;
 

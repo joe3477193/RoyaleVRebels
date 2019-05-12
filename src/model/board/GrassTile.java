@@ -3,7 +3,7 @@ package model.board;
 import model.pieces.Piece;
 import view.GameFrameView;
 
-class GrassTile implements TileInterface{
+class GrassTile implements Tile {
 
     private Piece piece;
     private int row, col;

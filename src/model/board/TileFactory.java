@@ -4,10 +4,10 @@ import java.util.HashMap;
 
 public class TileFactory {
 
-    private static HashMap<String, TileInterface> hm = new HashMap<String, TileInterface>();
+    private static HashMap<String, Tile> hm = new HashMap<String, Tile>();
 
-    public static TileInterface getGrassTile() {
-        TileInterface tile;
+    public static Tile getGrassTile() {
+        Tile tile;
         String type = "GrassTile";
 
         if (hm.containsKey(type)) {
@@ -21,8 +21,8 @@ public class TileFactory {
         hm.put(type, tile);
         return tile;
     }
-    public static TileInterface getCastleTile() {
-        TileInterface tile;
+    public static Tile getCastleTile() {
+        Tile tile;
         String type = "CastleTile";
 
         if (hm.containsKey(type)) {
@@ -37,8 +37,8 @@ public class TileFactory {
         return tile;
     }
 
-    public static TileInterface getWallTile() {
-        TileInterface tile;
+    public static Tile getWallTile() {
+        Tile tile;
         String type = "WallTile";
 
         if (hm.containsKey(type)) {

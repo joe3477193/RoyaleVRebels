@@ -3,7 +3,7 @@ package model.board;
 import model.pieces.Piece;
 import view.GameFrameView;
 
-class CastleTile implements TileInterface{
+class CastleTile implements Tile {
 
     private int row, col;
     private double health;

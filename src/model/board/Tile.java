@@ -3,7 +3,7 @@ package model.board;
 import model.pieces.Piece;
 import view.GameFrameView;
 
-public interface TileInterface {
+public interface Tile {
 
     void setRow(int row);
     void setCol(int col);
