@@ -7,6 +7,7 @@ import model.board.GameEngine;
 public class MoveCommand extends AbstractTurn {
 
 	private GameEngine g;
+	public String image;
 	public int fromTileRow;
 	public int fromTileCol;
 	public int tooTileRow;
@@ -18,8 +19,8 @@ public class MoveCommand extends AbstractTurn {
 	}
 	
 	
-	public MoveCommand( int fromTileRow, int fromTileCol, int tooTileRow, int tooTileCol){
-		
+	public MoveCommand( String image, int fromTileRow, int fromTileCol, int tooTileRow, int tooTileCol){
+		this.image = image;
 		this.fromTileRow = fromTileRow;
 		this.fromTileCol = fromTileCol;
 		this.tooTileRow = tooTileRow;

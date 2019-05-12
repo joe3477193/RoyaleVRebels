@@ -484,7 +484,7 @@ public class GameEngineFacade implements GameEngine{
 
         if (move(getInitTileCoord()[0], getInitTileCoord()[1], i, j)) {
         	// Command is also added as an object to stack
-        	moves.push(new MoveCommand(getInitTileCoord()[0], getInitTileCoord()[1], i,j));
+        	moves.push(new MoveCommand(gfv.getImage(),getInitTileCoord()[0], getInitTileCoord()[1], i,j));
             gfv.decolour();
             System.out.println("Image= " + gfv.getImage());
             tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
@@ -498,7 +498,9 @@ public class GameEngineFacade implements GameEngine{
             return true;
       
         } else {
-            gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the move button again to cancel.");
+            gfv.getStatusLabel().setText(STATUS + "Tile not valid");
+            gfv.decolour();
+            resetMoving();
             return false;
         }
     }
@@ -568,7 +570,7 @@ public class GameEngineFacade implements GameEngine{
 	        getTile(mc.fromTileRow, mc.fromTileCol).setPiece(getPiece(mc.tooTileRow, mc.tooTileCol));
             getTile(mc.tooTileRow, mc.tooTileCol).removePiece();
 	        tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getGrass())));
-	        tileBtns[mc.fromTileRow][mc.fromTileCol].setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
+	        tileBtns[mc.fromTileRow][mc.fromTileCol].setIcon(new ImageIcon(this.getClass().getResource("../" + mc.image)));
 	        tileBtns[mc.fromTileRow][mc.fromTileCol].setName(gfv.getImage());
 
     	}
