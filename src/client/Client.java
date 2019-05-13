@@ -1,8 +1,8 @@
-package app;
+package client;
 
 import view.EnterNameView;
 
-public class Main {
+public class Client {
     public static void main(String[] args) {
         new EnterNameView();
     }

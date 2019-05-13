@@ -9,13 +9,13 @@ public abstract class Piece {
     private int cp;
     private int initHp;
     private int hp;
-    private int attack;
-    private int mov;
-    private int range;
+    private int attackPower;
+    private int moveSpeed;
+    private int attackRange;
     private boolean moveable;
     private boolean attackable;
 
-    public Piece(String name, String faction, String type, String code, int cp, int initHp, int attack, int mov, int range,
+    public Piece(  String name,   String faction,   String type,   String code,  int cp,  int initHp,  int attackPower,  int moveSpeed,  int attackRange,
                  boolean moveable, boolean attackable) {
         this.name= name;
         this.faction= faction;
@@ -24,21 +24,22 @@ public abstract class Piece {
         this.cp= cp;
         this.initHp= initHp;
         this.hp= initHp;
-        this.attack= attack;
-        this.mov= mov;
-        this.range= range;
+        this.attackPower = attackPower;
+        this.moveSpeed = moveSpeed;
+        this.attackRange = attackRange;
         this.moveable= moveable;
         this.attackable= attackable;
     }
 
     public boolean isDead() {
         if (hp <= 0) {
+            hp = 0;
             return true;
         }
         return false;
     }
 
-    public void attackedBy(int attack) {
+    public void attackedBy( int attack) {
         hp-=attack;
         if (hp <= 0) {
             hp=0;
@@ -57,16 +58,16 @@ public abstract class Piece {
         return attackable;
     }
 
-    public int getMov() {
-        return mov;
+    public int getMoveSpeed() {
+        return moveSpeed;
     }
 
-    public int getRange() {
-        return range;
+    public int getAttackRange() {
+        return attackRange;
     }
 
-    public int getAttack() {
-        return attack;
+    public int getAttackPower() {
+        return attackPower;
     }
 
     public int getHp() {
@@ -77,13 +78,22 @@ public abstract class Piece {
         return name;
     }
 
-    public boolean isActionValid(int difference, String movType) {
-        boolean valid= false;
-        if (movType.equals("mov")) {
-            valid= mov >= difference;
-        } else if (movType.equals("range")) {
-            valid= range >= difference;
+    public boolean isActionValid( int rowdiff,  int tilediff,   String actionType) {
+        int range= getActionRange(actionType);
+        return rowdiff==0 && range >= tilediff || tilediff==0 && range>=rowdiff;
+    }
+
+    public int getActionRange(  String actionType){
+        if(actionType.equals("moveSpeed")){
+            return moveSpeed;
         }
-        return valid;
+        else if (actionType.equals("attackRange")){
+            return attackRange;
+        }
+        return 0;
+    }
+
+    public String getType(){
+        return type;
     }
 }
