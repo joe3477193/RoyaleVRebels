@@ -5,6 +5,7 @@ import view.GameFrameView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
@@ -12,7 +13,8 @@ import static java.awt.Cursor.DEFAULT_CURSOR;
 import static java.lang.Math.abs;
 import static view.GameFrameView.STATUS;
 
-public class GameEngineFacade implements GameEngine{
+public class GameEngineFacade implements GameEngine, Serializable {
+    private static final long serialVersionUID = 1L;
 
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4

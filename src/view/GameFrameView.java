@@ -5,20 +5,28 @@ import model.board.GameEngineFacade;
 import model.players.Player;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GameFrameView extends JFrame{
+public class GameFrameView extends JFrame implements Serializable {
+
+    private static final long serialVersionUID = 2L;
 
     private JFrame frame;
     private JPanel actionPanel;
     private JPanel gridPanel;
     private JPanel playerPanel;
     private JPanel deckPanel;
+    private JPanel menuPanel;
 
     private JLabel playerName, playerType, time;
     private String nameOne, typeOne, nameTwo, typeTwo;
     private static JButton[][] tileBtns;
+
+    private JButton saveButton;
+    private JButton quitButton;
 
     public JButton getMoveBtn() {
         return moveBtn;
@@ -172,8 +180,20 @@ public class GameFrameView extends JFrame{
 
         JPanel topPanel = new JPanel(new BorderLayout());
         JPanel botPanel = new JPanel(new BorderLayout());
-        topPanel.add(playerPanel, BorderLayout.NORTH);
-        topPanel.add(deckPanel, BorderLayout.CENTER);
+
+        menuPanel = new JPanel(new BorderLayout());
+        saveButton= new JButton("Save Game");
+        quitButton= new JButton("Quit Game");
+        menuPanel.add(saveButton, BorderLayout.EAST);
+        menuPanel.add(quitButton, BorderLayout.WEST);
+
+        JPanel topBar= new JPanel(new BorderLayout());
+
+        playerPanel.add(menuPanel);
+        topBar.add(playerPanel, BorderLayout.NORTH);
+        topBar.add(deckPanel, BorderLayout.CENTER);
+        topPanel.add(menuPanel, BorderLayout.NORTH);
+        topPanel.add(topBar, BorderLayout.CENTER);
 
         botPanel.add(actionPanel, BorderLayout.SOUTH);
         botPanel.add(statusPanel, BorderLayout.NORTH);
@@ -363,6 +383,14 @@ public class GameFrameView extends JFrame{
 	public void setTime(String text) {
 		time.setText(text);
 	}
+
+    public JButton getSaveButton() {
+        return saveButton;
+    }
+
+    public JButton getQuitButton() {
+        return quitButton;
+    }
 }
 
 

@@ -1,6 +1,9 @@
 package model.pieces;
 
-public abstract class Piece {
+import java.io.Serializable;
+
+public abstract class Piece implements Serializable {
+    private static final long serialVersionUID = 4L;
 
     String name;
     private String faction;
