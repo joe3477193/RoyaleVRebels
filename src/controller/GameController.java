@@ -261,15 +261,10 @@ public class GameController {
 
     public void saveGame() {
         try {
-            FileOutputStream gameFile = new FileOutputStream("saveGame.obj");
+            FileOutputStream gameFile = new FileOutputStream("saveGame.dat");
             ObjectOutputStream gameObject = new ObjectOutputStream(gameFile);
             gameObject.writeObject(g);
             gameObject.close();
-
-            FileOutputStream viewFile = new FileOutputStream("saveView.obj");
-            ObjectOutputStream viewObject = new ObjectOutputStream(viewFile);
-            viewObject.writeObject(gfv);
-            viewObject.close();
             System.out.println("Game has been successfully saved.");
 
         } catch (Exception e) {

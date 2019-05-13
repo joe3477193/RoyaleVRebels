@@ -23,15 +23,10 @@ public class LoadGameActionListener implements ActionListener {
         GameEngine g;
         GameFrameView gfv;
         try {
-            FileInputStream gameFile = new FileInputStream(new File("saveGame.obj"));
+            FileInputStream gameFile = new FileInputStream(new File("saveGame.dat"));
             ObjectInputStream gameObject = new ObjectInputStream(gameFile);
             g = (GameEngine) gameObject.readObject();
-
-            FileInputStream viewFile = new FileInputStream(new File("saveView.obj"));
-            ObjectInputStream viewObject = new ObjectInputStream(viewFile);
-            gfv = (GameFrameView) viewObject.readObject();
-
-            Game gameImpl = new GameImpl(gfv, g);
+            Game gameImpl = new GameImpl(g);
             frame.dispose();
         }
         catch (FileNotFoundException e1) {
