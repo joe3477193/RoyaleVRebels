@@ -5,10 +5,13 @@ import controller.gameActionListeners.*;
 import model.board.GameEngine;
 
 import view.GameFrameView;
+import view.StartGameView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.time.Duration;
 import java.util.Timer; 
 import java.util.TimerTask;
@@ -50,6 +53,8 @@ public class GameController {
         gfv.getOffensiveBtn().addActionListener(new OffensiveBtnActionListener(this));
         gfv.getDefensiveBtn().addActionListener(new DefensiveBtnActionListener(this));
         gfv.getEndTurnBtn().addActionListener(new EndTurnBtnActionListener(this));
+        gfv.getSaveButton().addActionListener(new SaveButtonActionListener(this));
+        gfv.getQuitButton().addActionListener(new QuitButtonActionListener(this));
     }
 
     public void summonButton( ActionEvent e) {
@@ -247,6 +252,29 @@ public class GameController {
 
     public void setDefensive() {
         g.setDefensive();
+    }
+
+    public void quitGame(){
+        gfv.getFrame().dispose();
+        new StartGameView();
+    }
+
+    public void saveGame() {
+        try {
+            FileOutputStream gameFile = new FileOutputStream("saveGame.obj");
+            ObjectOutputStream gameObject = new ObjectOutputStream(gameFile);
+            gameObject.writeObject(g);
+            gameObject.close();
+
+            FileOutputStream viewFile = new FileOutputStream("saveView.obj");
+            ObjectOutputStream viewObject = new ObjectOutputStream(viewFile);
+            viewObject.writeObject(gfv);
+            viewObject.close();
+            System.out.println("Game has been successfully saved.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

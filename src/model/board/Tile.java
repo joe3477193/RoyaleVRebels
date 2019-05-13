@@ -2,7 +2,10 @@ package model.board;
 
 import model.pieces.Piece;
 
-class Tile {
+import java.io.Serializable;
+
+class Tile implements Serializable {
+    private static final long serialVersionUID = 3L;
 
     private Piece piece;
     private int row, col;
