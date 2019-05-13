@@ -1,6 +1,11 @@
-package model.pieces;
+package model.pieces.decorator;
 
-public abstract class Piece implements PieceInterface{
+import model.pieces.PieceInterface;
+import model.pieces.Piece;
+
+abstract class PieceInterfaceDecorator implements PieceInterface {
+
+    private PieceInterface piece;
 
     String name;
     private String faction;
@@ -15,19 +20,8 @@ public abstract class Piece implements PieceInterface{
     private boolean moveable;
     private boolean attackable;
 
-    public Piece( String name, String faction, String type, String code, int cp, int initHp, int attackPower, int moveSpeed, int attackRange, boolean moveable, boolean attackable) {
-        this.name= name;
-        this.faction= faction;
-        this.type= type;
-        this.code= code;
-        this.cp= cp;
-        this.initHp= initHp;
-        this.hp= initHp;
-        this.attackPower = attackPower;
-        this.moveSpeed = moveSpeed;
-        this.attackRange = attackRange;
-        this.moveable= moveable;
-        this.attackable= attackable;
+    public PieceInterfaceDecorator(PieceInterface piece) {
+        this.piece = piece;
     }
 
     public boolean isDead() {
@@ -114,3 +108,4 @@ public abstract class Piece implements PieceInterface{
         }
     }
 }
+
