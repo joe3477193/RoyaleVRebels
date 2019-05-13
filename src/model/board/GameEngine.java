@@ -1,6 +1,7 @@
 package model.board;
 
 import model.pieces.Piece;
+import view.GameFrameView;
 
 import javax.swing.*;
 
@@ -56,4 +57,5 @@ public interface GameEngine {
 
     void placeAttackPiece(int i, int j);
 
+    GameFrameView getView();
 }

@@ -506,4 +506,8 @@ public class GameEngineFacade implements GameEngine, Serializable {
         }
     }
 
+    public GameFrameView getView(){
+        return gfv;
+    }
+
 }

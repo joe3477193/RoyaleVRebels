@@ -43,10 +43,15 @@ public class GameImpl implements Game {
         }
     }
 
-    public GameImpl(GameFrameView gfv, GameEngine g){
-        this.gfv= gfv;
+    public GameImpl(GameEngine g){
         this.g= g;
-        new GameController(g, gfv);
+        SwingUtilities.invokeLater(new Runnable() {
+
+            public void run() {
+                gfv= g.getView();
+                new GameController(g, gfv);
+            }
+        });
     }
 
     public void initGame() {
