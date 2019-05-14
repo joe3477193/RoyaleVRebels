@@ -10,9 +10,7 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GameFrameView extends JFrame implements Serializable {
-
-    private static final long serialVersionUID = 2L;
+public class GameFrameView extends JFrame{
 
     private JFrame frame;
     private JPanel actionPanel;
