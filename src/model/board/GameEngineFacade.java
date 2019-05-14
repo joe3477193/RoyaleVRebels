@@ -70,7 +70,7 @@ public class GameEngineFacade implements GameEngine {
                 int row= Integer.valueOf(tile[0]);
                 int col= Integer.valueOf(tile[1]);
                 String name= tile[2];
-                gfv.setTileIcon(row, col, name);
+                gfv.setTileIcon(row, col, "../images/"+name+".png");
             }
         }
 

@@ -417,7 +417,7 @@ public class GameFrameView extends JFrame implements Serializable {
 
     public void setTileIcon(int row, int col, String name){
         System.out.printf("%d, %d, %s%n", row, col, name);
-        tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource("../images/"+ name.toLowerCase() + ".png")));
+        tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(name)));
         tileBtns[row][col].setName(name);
     }
 }
