@@ -480,8 +480,7 @@ public class GameEngineFacade implements GameEngine {
         if (checkSummonValid(getSummonedPiece(), i, j)) {
             System.out.println(gfv.getImage());
             tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../"+gfv.getImage())));
-
-            tileBtn.setName(gfv.getName());
+            tileBtn.setName(gfv.getImage());
             removeSummonedPiece();
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
             setActionPerformed();
