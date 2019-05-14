@@ -246,6 +246,7 @@ public class GameController  {
 
     public void setDefensive() {
         g.setDefensive();
+    }
     public void undoTurn() {
         g.undoTurn();
     }

@@ -136,10 +136,6 @@ public class GameFrameView extends JFrame{
     public JButton getAttackBtn() {
         return attackBtn;
     }
-
-    public JButton getEndTurnBtn() {
-        return endTurnBtn;
-    }
     
     public JButton getUndoBtn() {
         return undoTurnBtn;
