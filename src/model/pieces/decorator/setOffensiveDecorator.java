@@ -1,6 +1,5 @@
 package model.pieces.decorator;
 
-import model.pieces.Piece;
 import model.pieces.PieceInterface;
 
 public class setOffensiveDecorator extends PieceInterfaceDecorator {
@@ -10,7 +9,8 @@ public class setOffensiveDecorator extends PieceInterfaceDecorator {
     }
 
     public void setOffensive() {
-        super.setAttackPower(super.getAttackPower() + 20);
-        super.setHP(super.getHp() - 50);
+        super.setOffensive();
+        this.setAttackPower(this.piece.getAttackPower() + 20);
+        this.setHP(this.piece.getHp() - 50);
     }
 }

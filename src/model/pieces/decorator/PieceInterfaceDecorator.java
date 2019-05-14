@@ -3,9 +3,9 @@ package model.pieces.decorator;
 import model.pieces.PieceInterface;
 import model.pieces.Piece;
 
-abstract class PieceInterfaceDecorator implements PieceInterface {
+public abstract class PieceInterfaceDecorator implements PieceInterface {
 
-    private PieceInterface piece;
+    protected PieceInterface piece;
 
     String name;
     private String faction;
@@ -107,5 +107,9 @@ abstract class PieceInterfaceDecorator implements PieceInterface {
             this.hp = hp;
         }
     }
+
+    public void setOffensive(){}
+
+    public void setDefensive(){}
 }
 

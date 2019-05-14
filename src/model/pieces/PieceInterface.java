@@ -25,5 +25,9 @@ public interface PieceInterface {
     void setAttackPower(int attackPower);
 
     void setHP(int hp);
+
+    void setOffensive();
+
+    void setDefensive();
 }
 
