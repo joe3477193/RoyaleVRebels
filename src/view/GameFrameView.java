@@ -217,6 +217,8 @@ public class GameFrameView extends JFrame implements Serializable {
         frame.add(topPanel, BorderLayout.NORTH);
         frame.add(gridPanel, BorderLayout.CENTER);
         frame.add(botPanel, BorderLayout.SOUTH);
+
+        updateBar(g.getTurn());
     }
 
     private void drawActionBtns() {

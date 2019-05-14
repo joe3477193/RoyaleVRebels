@@ -64,6 +64,6 @@ public interface GameEngine {
     void setDefensive();
 
     Tile[][] getTiles();
-
     void setTileIcon(ArrayList<String[]> tileList);
+
 }
