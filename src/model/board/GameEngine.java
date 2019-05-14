@@ -1,6 +1,7 @@
 package model.board;
 
 import model.pieces.Piece;
+import model.pieces.PieceInterface;
 
 import javax.swing.*;
 
@@ -36,7 +37,7 @@ public interface GameEngine {
 
     int getTurn();
 
-    Piece getSummonedPiece();
+    PieceInterface getSummonedPiece();
 
     void removeSummonedPiece();
 
@@ -56,4 +57,7 @@ public interface GameEngine {
 
     void placeAttackPiece(int i, int j);
 
+    void setOffensive();
+
+    void setDefensive();
 }

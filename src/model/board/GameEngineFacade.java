@@ -1,12 +1,14 @@
 package model.board;
 
 import model.pieces.Piece;
+import model.pieces.PieceInterface;
+import model.pieces.decorator.SetDefensiveDecorator;
+import model.pieces.decorator.SetOffensiveDecorator;
 import view.GameFrameView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
 import static java.lang.Math.abs;
@@ -483,7 +485,7 @@ public class GameEngineFacade implements GameEngine{
     public void placeAttackPiece(int i, int j) {
         JButton[][] tileBtns = gfv.getTileBtns();
         if (attack(getInitTileCoord()[0], getInitTileCoord()[1], i, j)) {
-            Piece piece = getPiece(getInitTileCoord()[0], getInitTileCoord()[1]);
+            PieceInterface piece = getPiece(getInitTileCoord()[0], getInitTileCoord()[1]);
             String message;
             message = String.format("%d damage dealt! Remaining HP: %d", piece.getAttackPower(),
                     getPiece(i, j).getHp());
@@ -502,6 +504,33 @@ public class GameEngineFacade implements GameEngine{
         } else {
             gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the attack button again to cancel.");
         }
+    }
+
+    public void setOffensive() {
+        setInit(coordinate[0], coordinate[1]);
+        System.out.println(getInitTileCoord()[0]+ ", " + getInitTileCoord()[1]);
+        PieceInterface piece = getPiece(getInitTileCoord()[0], getInitTileCoord()[1]);
+        PieceInterface piece1 = new SetOffensiveDecorator(piece);
+        piece1.setOffensive();
+
+        System.out.println("Original AP: " + piece.getAttackPower());
+        System.out.println("Original HP: " + piece.getHp());
+        System.out.println("--------------------------------------------");
+        System.out.println("Offensive AP: " + piece1.getAttackPower());
+        System.out.println("Offensive HP: " + piece1.getHp());
+    }
+
+    public void setDefensive() {
+        setInit(coordinate[0], coordinate[1]);
+        PieceInterface piece = getPiece(getInitTileCoord()[0], getInitTileCoord()[1]);
+        PieceInterface piece1 = new SetDefensiveDecorator(piece);
+        piece1.setDefensive();
+
+        System.out.println("Original AP: " + piece.getAttackPower());
+        System.out.println("Original HP: " + piece.getHp());
+        System.out.println("--------------------------------------------");
+        System.out.println("Defensive AP: " + piece1.getAttackPower());
+        System.out.println("Defensive HP: " + piece1.getHp());
     }
 
 }

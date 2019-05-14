@@ -2,9 +2,9 @@ package model.pieces.decorator;
 
 import model.pieces.PieceInterface;
 
-public class setOffensiveDecorator extends PieceInterfaceDecorator {
+public class SetOffensiveDecorator extends PieceInterfaceDecorator {
 
-    public setOffensiveDecorator(PieceInterface piece) {
+    public SetOffensiveDecorator(PieceInterface piece) {
         super(piece);
     }
 
