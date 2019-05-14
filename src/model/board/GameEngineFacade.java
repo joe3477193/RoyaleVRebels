@@ -63,6 +63,7 @@ public class GameEngineFacade implements GameEngine {
                 summonedPiece.setHP(hp);
                 tiles[row][col].setPiece(summonedPiece);
             }
+        summonedPiece= null;
         }
 
         public void setTileIcon(ArrayList<String[]> tileList){
