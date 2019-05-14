@@ -20,23 +20,35 @@ public class GameFrameView extends JFrame{
     private String nameOne, typeOne, nameTwo, typeTwo;
     private static JButton[][] tileBtns = new JButton[GameEngineFacade.BOARD_ROWS][GameEngineFacade.BOARD_COLS];
 
+    private JButton moveBtn;
+
     public JButton getMoveBtn() {
         return moveBtn;
     }
 
-    private JButton moveBtn;
+    private JButton attackBtn;
 
     public JButton getAttackBtn() {
         return attackBtn;
     }
 
-    private JButton attackBtn;
+    public JButton offensiveBtn;
+
+    public JButton getOffensiveBtn() {
+        return offensiveBtn;
+    }
+
+    public JButton defensiveBtn;
+
+    public JButton getDefensiveBtn() {
+        return defensiveBtn;
+    }
+
+    private JButton endTurnBtn;
 
     public JButton getEndTurnBtn() {
         return endTurnBtn;
     }
-
-    private JButton endTurnBtn;
 
     private static final int BUTTON_LENGTH = 7;
 
@@ -192,10 +204,15 @@ public class GameFrameView extends JFrame{
         actionPanel.add(moveBtn);
 
         attackBtn = new JButton("Attack");
-
         actionPanel.add(attackBtn);
-        endTurnBtn = new JButton("End Turn");
 
+        offensiveBtn = new JButton("OFFENSIVE");
+        actionPanel.add(offensiveBtn);
+
+        defensiveBtn = new JButton("DEFENSIVE");
+        actionPanel.add(defensiveBtn);
+
+        endTurnBtn = new JButton("End Turn");
         actionPanel.add(endTurnBtn);
 
     }

@@ -44,9 +44,11 @@ public class GameController {
             }
         }
 
-        // Add ActionListeners for moveBtn, attackBtn, endTurnBtn
+        // Add ActionListeners for moveBtn, attackBtn, offensiveBtn, defensiveBtn, endTurnBtn
         gfv.getMoveBtn().addActionListener(new MoveBtnActionListener(this));
         gfv.getAttackBtn().addActionListener(new AttackBtnActionListener(this));
+        gfv.getOffensiveBtn().addActionListener(new OffensiveBtnActionListener(this));
+        gfv.getDefensiveBtn().addActionListener(new DefensiveBtnActionListener(this));
         gfv.getEndTurnBtn().addActionListener(new EndTurnBtnActionListener(this));
     }
 
@@ -237,6 +239,14 @@ public class GameController {
        	timer.cancel();
        	timer = new Timer();
         timer.schedule(t,0, 1000); 
+    }
+
+    public void setOffensive() {
+        g.setOffensive();
+    }
+
+    public void setDefensive() {
+        g.setDefensive();
     }
 }
 

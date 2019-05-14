@@ -1,8 +1,13 @@
-package model.pieces;
+package model.pieces.decorator;
 
-public abstract class Piece implements PieceInterface{
+import model.pieces.PieceInterface;
+import model.pieces.Piece;
 
-    private String name;
+public abstract class PieceInterfaceDecorator implements PieceInterface {
+
+    protected PieceInterface piece;
+
+    String name;
     private String faction;
     private String type;
     private String code;
@@ -15,19 +20,8 @@ public abstract class Piece implements PieceInterface{
     private boolean moveable;
     private boolean attackable;
 
-    public Piece(String name, String faction, String type, String code, int cp, int initHp, int attackPower, int moveSpeed, int attackRange, boolean moveable, boolean attackable) {
-        this.name = name;
-        this.faction = faction;
-        this.type = type;
-        this.code = code;
-        this.cp = cp;
-        this.initHp = initHp;
-        this.hp = initHp;
-        this.attackPower = attackPower;
-        this.moveSpeed = moveSpeed;
-        this.attackRange = attackRange;
-        this.moveable = moveable;
-        this.attackable = attackable;
+    public PieceInterfaceDecorator(PieceInterface piece) {
+        this.piece = piece;
     }
 
     public boolean isDead() {
@@ -39,9 +33,9 @@ public abstract class Piece implements PieceInterface{
     }
 
     public void attackedBy( int attack) {
-        hp -= attack;
+        hp-=attack;
         if (hp <= 0) {
-            hp = 0;
+            hp=0;
         }
     }
 
@@ -78,8 +72,8 @@ public abstract class Piece implements PieceInterface{
     }
 
     public boolean isActionValid( int rowdiff,  int tilediff,   String actionType) {
-        int range = getActionRange(actionType);
-        return rowdiff == 0 && range >= tilediff || tilediff == 0 && range >= rowdiff;
+        int range= getActionRange(actionType);
+        return rowdiff==0 && range >= tilediff || tilediff==0 && range>=rowdiff;
     }
 
     public int getActionRange(  String actionType){
@@ -118,3 +112,4 @@ public abstract class Piece implements PieceInterface{
 
     public void setDefensive(){}
 }
+
