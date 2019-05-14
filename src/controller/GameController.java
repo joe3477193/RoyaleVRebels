@@ -4,14 +4,15 @@ package controller;
 import controller.gameActionListeners.*;
 import model.board.GameEngine;
 
+import model.board.Tile;
+import model.pieces.Piece;
 import view.GameFrameView;
 import view.StartGameView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.time.Duration;
 import java.util.Timer; 
 import java.util.TimerTask;
@@ -251,13 +252,27 @@ public class GameController {
 
     public void saveGame() {
         try {
-            FileOutputStream gameFile = new FileOutputStream("saveGame.dat");
-            ObjectOutputStream gameObject = new ObjectOutputStream(gameFile);
-            gameObject.writeObject(g);
-            gameObject.close();
+            PrintWriter out = new PrintWriter(new FileWriter("savegame.dat"));
+            for(String data:gfv.getPlayerData()){
+                out.print(data+"|");
+            }
+            out.println();
+            out.println(g.getTurn());
+            out.println(g.getActionPerformed());
+
+            for(Tile[] tileRow:g.getTiles()){
+                for(Tile tile:tileRow){
+                    if(tile.hasPiece()){
+                        Piece piece= tile.getPiece();
+                        out.printf("%d|%d|%s|%d|%n", tile.getRow(),tile.getCol(), piece.getName(), piece.getHp());
+                    }
+                }
+            }
+
+            out.close();
             System.out.println("Game has been successfully saved.");
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

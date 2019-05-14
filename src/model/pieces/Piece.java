@@ -99,4 +99,8 @@ public abstract class Piece implements Serializable {
     public String getType(){
         return type;
     }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
 }

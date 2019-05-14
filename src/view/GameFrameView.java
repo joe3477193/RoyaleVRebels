@@ -139,7 +139,7 @@ public class GameFrameView extends JFrame implements Serializable {
         }
     }
 
-    public void assembleBoard( Player playerOne,  Player playerTwo,  GameEngine g) {
+    public void assembleBoard(Player playerOne,  Player playerTwo,  GameEngine g) {
 
         nameOne= playerOne.getName();
         typeOne= playerOne.getFaction();
@@ -390,6 +390,16 @@ public class GameFrameView extends JFrame implements Serializable {
 
     public JButton getQuitButton() {
         return quitButton;
+    }
+
+    public String[] getPlayerData(){
+        return new String[]{nameOne, nameTwo};
+    }
+
+    public void setTileIcon(int row, int col, String name){
+        System.out.printf("%d, %d, %s%n", row, col, name);
+        tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource("../images/"+ name.toLowerCase() + ".png")));
+        tileBtns[row][col].setName(name);
     }
 }
 

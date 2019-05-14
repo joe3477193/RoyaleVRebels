@@ -4,26 +4,26 @@ import model.pieces.Piece;
 
 import java.io.Serializable;
 
-class Tile implements Serializable {
+public class Tile implements Serializable {
     private static final long serialVersionUID = 3L;
 
     private Piece piece;
     private int row, col;
 
-    Tile(int row, int col) {
+    public Tile(int row, int col) {
         this.row = row;
         this.col = col;
     }
 
-    Piece getPiece() {
+    public Piece getPiece() {
         return piece;
     }
 
-    void setPiece( Piece piece) {
+    public void setPiece( Piece piece) {
         this.piece = piece;
     }
 
-    boolean hasPiece() {
+    public boolean hasPiece() {
         return piece != null;
     }
 
@@ -31,4 +31,11 @@ class Tile implements Serializable {
         piece = null;
     }
 
+    public int getRow(){
+        return row;
+    }
+
+    public int getCol() {
+        return col;
+    }
 }

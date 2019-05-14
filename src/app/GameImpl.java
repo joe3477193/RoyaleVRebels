@@ -19,6 +19,7 @@ public class GameImpl implements Game {
     private Player rebel;
     private GameFrameView gfv;
     private GameEngine g;
+    private ArrayList<String[]> tileData;
 
     public GameImpl(ArrayList<String> playerNames) {
         ArrayList<Player> players = new ArrayList<>();
@@ -43,13 +44,17 @@ public class GameImpl implements Game {
         }
     }
 
-    public GameImpl(GameEngine g){
+    public GameImpl(Player rebel, Player royale, GameEngine g, GameFrameView gfv, ArrayList<String[]> tileData){
+        this.tileData= tileData;
+        this.gfv= gfv;
         this.g= g;
+        this.rebel= rebel;
+        this.royale= royale;
         SwingUtilities.invokeLater(new Runnable() {
-
             public void run() {
-                gfv= g.getView();
+                gfv.assembleBoard(rebel, royale, g);
                 new GameController(g, gfv);
+                g.setTileIcon(tileData);
             }
         });
     }
