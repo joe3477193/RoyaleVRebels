@@ -3,7 +3,6 @@ package controller;
 
 import controller.gameActionListeners.*;
 import model.board.GameEngine;
-
 import view.GameFrameView;
 
 import javax.swing.*;
@@ -15,17 +14,23 @@ import java.util.TimerTask;
 
 import static view.GameFrameView.STATUS;
 
-public class GameController {
+
+public class GameController  {
     private Timer timer;
 
     private GameEngine g;
     private GameFrameView gfv;
+    private MoveCommand move;
+    private SummonCommand summon;
 
     public GameController(GameEngine g, GameFrameView gfv) {
         this.g = g;
         this.gfv = gfv;
+        
         addActionListeners();
         startTimer();
+        move = new MoveCommand(g);
+        summon = new SummonCommand(g);
     }
 
     private void addActionListeners() {
@@ -44,12 +49,14 @@ public class GameController {
             }
         }
 
-        // Add ActionListeners for moveBtn, attackBtn, offensiveBtn, defensiveBtn, endTurnBtn
-        gfv.getMoveBtn().addActionListener(new MoveBtnActionListener(this));
+        // Add ActionListeners for moveBtn, attackBtn, endTurnBtn
+        
         gfv.getAttackBtn().addActionListener(new AttackBtnActionListener(this));
         gfv.getOffensiveBtn().addActionListener(new OffensiveBtnActionListener(this));
         gfv.getDefensiveBtn().addActionListener(new DefensiveBtnActionListener(this));
         gfv.getEndTurnBtn().addActionListener(new EndTurnBtnActionListener(this));
+        gfv.getUndoBtn().addActionListener(new UndoTurnActionListener(this));
+
     }
 
     public void summonButton( ActionEvent e) {
@@ -125,14 +132,21 @@ public class GameController {
 
                     // Attempt to place pieces
                     else {
-                        tileBtn = tileBtns[i][j];
+                        tileBtn = tileBtns[i][j];			//TODO Confirm btn needs to be passed to model in summo
                         // Attempt to place a summoned pieces
                         if (g.getSummonedPiece() != null && !g.getActionPerformed()) {
-                            g.placeSummonedPiece(tileBtn, i, j);
+                        	
+                        	//Turn is consumed and run through turn command
+                        	summon.executeTurn(tileBtns, i, j);
+                         
+                            
                         }
                         // Attempt to place a piece during movement
                         else if (g.isMoving() && !g.getActionPerformed()) {
-                            g.placeMovedPiece(tileBtns, i, j);
+                        	//Turn is consumed and run through turn command
+                            move.executeTurn(tileBtns, i, j);
+                            
+                            
                         }
                         // Attempt to place a piece during attack
                         else if (g.isAttacking() && !g.getActionPerformed()) {
@@ -154,28 +168,6 @@ public class GameController {
         }
     }
 
-    public void move() {
-        // Cancel movement (click move button twice)
-        if (g.isMoving() && !g.getActionPerformed()) {
-            g.resetMoving();
-            gfv.colourMove();
-            gfv.colourAttack();
-        }
-
-        // Trigger movement for a piece
-        else if (g.hasCoordinates() && g.checkMoveInit(g.getCoordinates()[0], g.getCoordinates()[1]) && !g.getActionPerformed()) {
-            g.resetAttacking();
-            g.setMoving();
-        }
-
-        // Player has getActionPerformed already
-        else if (g.getActionPerformed()) {
-            gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
-        } else {
-            g.resetAttacking();
-            gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
-        }
-    }
 
     public void endTurn() {
         g.unsetActionPerformed();
@@ -187,7 +179,7 @@ public class GameController {
         if (g.isAttacking() && !g.getActionPerformed()) {
             g.resetAttacking();
             gfv.colourAttack();
-            gfv.colourMove();
+            
         }
 
         // Trigger movement for a piece
@@ -247,6 +239,8 @@ public class GameController {
 
     public void setDefensive() {
         g.setDefensive();
+    public void undoTurn() {
+        g.undoTurn();
     }
 }
 

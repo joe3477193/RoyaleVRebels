@@ -49,9 +49,9 @@ public interface GameEngine {
 
     void createPiece(String name);
 
-    void placeSummonedPiece(JButton tileBtn, int i, int j);
+    boolean placeSummonedPiece(JButton tileBtn, int i, int j);
 
-    void placeMovedPiece(JButton[][] tileBtns, int i, int j);
+    boolean placeMovedPiece(JButton[][] tileBtns, int i, int j);
 
     boolean isWall(int i, int j);
 
@@ -60,4 +60,9 @@ public interface GameEngine {
     void setOffensive();
 
     void setDefensive();
+    
+    void undoTurn();
+
+	int[] getInitTileCoord();
+
 }
