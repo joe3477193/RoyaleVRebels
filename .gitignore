@@ -5,3 +5,7 @@ out/
 *.xml
 
 src/images/backup/
+
+*.dat
+
+*.txt
