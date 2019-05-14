@@ -8,6 +8,8 @@ import view.GameFrameView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
