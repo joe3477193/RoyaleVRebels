@@ -8,7 +8,6 @@ import view.GameFrameView;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
@@ -37,6 +36,43 @@ public class GameEngineFacade implements GameEngine, Serializable {
     private boolean actionPerformed;
 
     public GameEngineFacade(GameFrameView gfv) {
+        gameInit(gfv);
+        actionPerformed = false;
+        turn = 0;
+    }
+
+    public GameEngineFacade(GameFrameView gfv, String turn, String actionPerformed, ArrayList<String[]> tileList){
+        gameInit(gfv);
+        this.actionPerformed= Boolean.parseBoolean(actionPerformed);
+        this.turn= Integer.parseInt(turn);
+        this.gfv= gfv;
+        for(String[] tile:tileList){
+            int row= Integer.valueOf(tile[0]);
+            int col= Integer.valueOf(tile[1]);
+            String name= tile[2];
+            int hp= Integer.valueOf(tile[3]);
+                try {
+                    Class pieceCls = Class.forName("model.pieces.type." + name);
+                    this.summonedPiece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
+
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
+                    ex.printStackTrace();
+                }
+                summonedPiece.setHp(hp);
+                tiles[row][col].setPiece(summonedPiece);
+            }
+        }
+
+        public void setTileIcon(ArrayList<String[]> tileList){
+            for(String[] tile:tileList){
+                int row= Integer.valueOf(tile[0]);
+                int col= Integer.valueOf(tile[1]);
+                String name= tile[2];
+                gfv.setTileIcon(row, col, name);
+            }
+        }
+
+    private void gameInit(GameFrameView gfv){
         this.gfv = gfv;
 
         tiles = new Tile[BOARD_ROWS][BOARD_COLS];
@@ -53,9 +89,6 @@ public class GameEngineFacade implements GameEngine, Serializable {
         turns = new int[]{0, 1};
 
         // Initialize current turn;
-        turn = 0;
-
-        actionPerformed = false;
     }
 
     public boolean isMoving() {
@@ -440,8 +473,10 @@ public class GameEngineFacade implements GameEngine, Serializable {
 
     public void placeSummonedPiece(JButton tileBtn, int i, int j) {
         if (checkSummonValid(getSummonedPiece(), i, j)) {
-            tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
-            tileBtn.setName(gfv.getImage());
+            System.out.println(gfv.getImage());
+            tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../"+gfv.getImage())));
+
+            tileBtn.setName(gfv.getName());
             removeSummonedPiece();
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
             setActionPerformed();
@@ -533,6 +568,11 @@ public class GameEngineFacade implements GameEngine, Serializable {
         System.out.println("--------------------------------------------");
         System.out.println("Defensive AP: " + piece1.getAttackPower());
         System.out.println("Defensive HP: " + piece1.getHp());
+    }
+
+
+    public Tile[][] getTiles(){
+        return tiles;
     }
 
 }

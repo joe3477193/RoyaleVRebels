@@ -5,6 +5,7 @@ import model.pieces.PieceInterface;
 import view.GameFrameView;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public interface GameEngine {
 
@@ -61,4 +62,8 @@ public interface GameEngine {
     void setOffensive();
 
     void setDefensive();
+
+    Tile[][] getTiles();
+
+    void setTileIcon(ArrayList<String[]> tileList);
 }
