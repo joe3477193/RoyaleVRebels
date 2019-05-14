@@ -11,3 +11,5 @@ src/images/backup/
 *.dat
 
 *.txt
+
+bin/images/
