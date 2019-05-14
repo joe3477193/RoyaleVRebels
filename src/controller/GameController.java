@@ -4,11 +4,15 @@ package controller;
 import controller.gameActionListeners.*;
 import model.board.GameEngine;
 
+import model.board.Tile;
+import model.pieces.Piece;
 import view.GameFrameView;
+import view.StartGameView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.*;
 import java.time.Duration;
 import java.util.Timer; 
 import java.util.TimerTask;
@@ -50,6 +54,8 @@ public class GameController {
         gfv.getOffensiveBtn().addActionListener(new OffensiveBtnActionListener(this));
         gfv.getDefensiveBtn().addActionListener(new DefensiveBtnActionListener(this));
         gfv.getEndTurnBtn().addActionListener(new EndTurnBtnActionListener(this));
+        gfv.getSaveButton().addActionListener(new SaveButtonActionListener(this));
+        gfv.getQuitButton().addActionListener(new QuitButtonActionListener(this));
     }
 
     public void summonButton( ActionEvent e) {
@@ -247,6 +253,38 @@ public class GameController {
 
     public void setDefensive() {
         g.setDefensive();
+    }
+
+    public void quitGame(){
+        gfv.getFrame().dispose();
+        new StartGameView();
+    }
+
+    public void saveGame() {
+        try {
+            PrintWriter out = new PrintWriter(new FileWriter("savegame.dat"));
+            for(String data:gfv.getPlayerData()){
+                out.print(data+"|");
+            }
+            out.println();
+            out.println(g.getTurn());
+            out.println(g.getActionPerformed());
+
+            for(Tile[] tileRow:g.getTiles()){
+                for(Tile tile:tileRow){
+                    if(tile.hasPiece()){
+                        Piece piece= tile.getPiece();
+                        out.printf("%d|%d|%s|%d|%n", tile.getRow(),tile.getCol(), piece.getName(), piece.getHp());
+                    }
+                }
+            }
+
+            out.close();
+            System.out.println("Game has been successfully saved.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

@@ -1,9 +1,9 @@
 package client;
 
-import view.EnterNameView;
+import view.StartGameView;
 
 public class Client {
     public static void main(String[] args) {
-        new EnterNameView();
+        new StartGameView();
     }
 }

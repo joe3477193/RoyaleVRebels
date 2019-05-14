@@ -6,6 +6,8 @@ out/
 
 src/images/backup/
 
+*.obj
+
 *.dat
 
 *.txt

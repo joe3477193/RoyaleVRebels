@@ -8,13 +8,16 @@ import view.GameFrameView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
 import static java.lang.Math.abs;
 import static view.GameFrameView.STATUS;
 
-public class GameEngineFacade implements GameEngine{
+public class GameEngineFacade implements GameEngine {
 
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
@@ -35,6 +38,44 @@ public class GameEngineFacade implements GameEngine{
     private boolean actionPerformed;
 
     public GameEngineFacade(GameFrameView gfv) {
+        gameInit(gfv);
+        actionPerformed = false;
+        turn = 0;
+    }
+
+    public GameEngineFacade(GameFrameView gfv, String turn, String actionPerformed, ArrayList<String[]> tileList){
+        gameInit(gfv);
+        this.actionPerformed= Boolean.parseBoolean(actionPerformed);
+        this.turn= Integer.parseInt(turn);
+        this.gfv= gfv;
+        for(String[] tile:tileList){
+            int row= Integer.valueOf(tile[0]);
+            int col= Integer.valueOf(tile[1]);
+            String name= tile[2];
+            int hp= Integer.valueOf(tile[3]);
+                try {
+                    Class pieceCls = Class.forName("model.pieces.type." + name);
+                    this.summonedPiece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
+
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
+                    ex.printStackTrace();
+                }
+                summonedPiece.setHP(hp);
+                tiles[row][col].setPiece(summonedPiece);
+            }
+        summonedPiece= null;
+        }
+
+        public void setTileIcon(ArrayList<String[]> tileList){
+            for(String[] tile:tileList){
+                int row= Integer.valueOf(tile[0]);
+                int col= Integer.valueOf(tile[1]);
+                String name= tile[2];
+                gfv.setTileIcon(row, col, "../images/"+name+".png");
+            }
+        }
+
+    private void gameInit(GameFrameView gfv){
         this.gfv = gfv;
 
         tiles = new Tile[BOARD_ROWS][BOARD_COLS];
@@ -50,10 +91,10 @@ public class GameEngineFacade implements GameEngine{
         // Initialize number of player turns
         turns = new int[]{0, 1};
 
-        // Initialize current turn;
-        turn = 0;
+        isMoving= false;
+        isAttacking= false;
 
-        actionPerformed = false;
+        // Initialize current turn;
     }
 
     public boolean isMoving() {
@@ -438,7 +479,8 @@ public class GameEngineFacade implements GameEngine{
 
     public void placeSummonedPiece(JButton tileBtn, int i, int j) {
         if (checkSummonValid(getSummonedPiece(), i, j)) {
-            tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
+            System.out.println(gfv.getImage());
+            tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../"+gfv.getImage())));
             tileBtn.setName(gfv.getImage());
             removeSummonedPiece();
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
@@ -531,6 +573,11 @@ public class GameEngineFacade implements GameEngine{
         System.out.println("--------------------------------------------");
         System.out.println("Defensive AP: " + piece1.getAttackPower());
         System.out.println("Defensive HP: " + piece1.getHp());
+    }
+
+
+    public Tile[][] getTiles(){
+        return tiles;
     }
 
 }
