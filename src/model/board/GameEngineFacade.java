@@ -16,8 +16,8 @@ import static view.GameFrameView.STATUS;
 
 public class GameEngineFacade implements GameEngine{
 
-    public static final int BOARD_ROWS = 13; // increments in 5
-    public static final int BOARD_COLS = 15; // increments in 4
+    public static int BOARD_ROWS; // increments in 5
+    public static int BOARD_COLS; // increments in 4
     private GameFrameView gfv;
     private Piece summonedPiece;
     private Tile[][] tiles;

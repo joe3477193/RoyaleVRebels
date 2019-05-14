@@ -11,11 +11,14 @@ public class EnterNameView {
     private JFrame frame;
     private JTextField player_one_name;
     private JTextField player_two_name;
+    private JTextField rows;
+    private JTextField cols;
     private JButton startBtn = new JButton("Begin Game");
 
     public EnterNameView() {
         frame = new JFrame();
-        frame.setSize(new Dimension(200, 200));
+        //frame.setSize(new Dimension(200, 200));
+        frame.setSize(new Dimension(300, 400));
         frame.setLocationRelativeTo(null);
 
         JPanel infoPanel = new JPanel(new GridLayout(5, 1, 0, 0));
@@ -28,10 +31,22 @@ public class EnterNameView {
         player_two_name = new JTextField(40);
         player_two_name.setText("Player Two");
 
+        JLabel browsLabel = new JLabel("Please enter player two name:");
+        rows = new JTextField(40);
+        rows.setText("13");
+
+        JLabel bcolsLabel = new JLabel("Please enter player two name:");
+        cols = new JTextField(40);
+        cols.setText("15");
+
         infoPanel.add(nameLabelOne);
         infoPanel.add(player_one_name);
         infoPanel.add(nameLabelTwo);
         infoPanel.add(player_two_name);
+        infoPanel.add(browsLabel);
+        infoPanel.add(rows);
+        infoPanel.add(bcolsLabel);
+        infoPanel.add(cols);
         infoPanel.add(startBtn);
 
         frame.add(infoPanel, BorderLayout.CENTER);
@@ -45,7 +60,7 @@ public class EnterNameView {
     }
 
     private void addController() {
-        ActionListener startController = new StartBtnActionListener(frame, player_one_name, player_two_name);
+        ActionListener startController = new StartBtnActionListener(frame, player_one_name, player_two_name, rows, cols);
         startBtn.addActionListener(startController);
     }
 }

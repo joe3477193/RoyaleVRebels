@@ -16,8 +16,15 @@ public class GameImpl implements Game{
     private Player royale;
     private Player rebel;
     private GameFrameView gfv;
+    private int rows;
+    private int cols;
 
-    public GameImpl( ArrayList<String> playerNames) {
+
+    public GameImpl( ArrayList<String> playerNames, int rows, int cols) {
+
+        this.rows = rows;
+        this.cols = cols;
+
         ArrayList<Player> players = new ArrayList<>();
 
         Random r = new Random();
@@ -39,6 +46,7 @@ public class GameImpl implements Game{
         for (Player player : players) {
             System.out.println(player.getName());
         }
+
     }
 
     public void initGame() {
@@ -47,6 +55,8 @@ public class GameImpl implements Game{
 
             public void run() {
 
+                GameEngineFacade.BOARD_ROWS = rows;
+                GameEngineFacade.BOARD_COLS = cols;
                 // Instantiate the GUI view for game
                 gfv= new GameFrameView();
 

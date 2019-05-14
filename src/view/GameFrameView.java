@@ -227,19 +227,20 @@ public class GameFrameView extends JFrame{
                     drawWallTile(i, j);
                 else if(i ==0 && j%2!=0) {
                     //tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
-                    drawCastleTile(i,j);
+                    //drawCastleTile(i,j);
                 }
                 else if(i==0 && j%4==0) {
                     //tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
-                    drawCastleLeftWallTile(i, j);
+                    //drawCastleLeftWallTile(i, j);
                 }
                 else if(i==0 && j%4==2) {
                     //tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CRWALL_IMAGE)));
-                    drawCastleRightWallTile(i, j);
+                    //drawCastleRightWallTile(i, j);
                 }
-                else
+                else {
                     //tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
-                    drawGrassTile(i, j);
+                    //drawGrassTile(i, j);
+                }
 
                 /*tileBtns[i][j].putClientProperty("row", i);
                 tileBtns[i][j].putClientProperty("column", j);
