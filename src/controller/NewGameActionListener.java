@@ -11,7 +11,7 @@ public class NewGameActionListener implements ActionListener {
     JFrame frame;
 
     public NewGameActionListener(JFrame frame) {
-        this.frame= frame;
+        this.frame = frame;
     }
 
     @Override

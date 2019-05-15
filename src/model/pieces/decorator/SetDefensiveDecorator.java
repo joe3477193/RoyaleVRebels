@@ -10,7 +10,8 @@ public class SetDefensiveDecorator extends PieceInterfaceDecorator {
 
     public void setDefensive() {
         super.setDefensive();
-        this.setAttackPower(this.piece.getAttackPower() - 30);
-        this.setHP(this.piece.getHp() + 100);
+        setAttackPower(piece.getAttackPower() - 30);
+        setHP(piece.getHp() + 100);
+        isDefensive = true;
     }
 }

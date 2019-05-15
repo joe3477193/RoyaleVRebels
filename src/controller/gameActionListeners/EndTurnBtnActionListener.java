@@ -7,14 +7,14 @@ import java.awt.event.ActionListener;
 
 public class EndTurnBtnActionListener implements ActionListener {
 
-	private GameController c;
+    private GameController c;
 
-	public EndTurnBtnActionListener( GameController c) {
-		this.c= c;
-	}
+    public EndTurnBtnActionListener(GameController c) {
+        this.c = c;
+    }
 
-	@Override
-	public void actionPerformed( ActionEvent e) {
-		c.endTurn();
-	}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        c.endTurn();
+    }
 }

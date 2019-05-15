@@ -8,12 +8,12 @@ import java.awt.event.ActionListener;
 public class SaveButtonActionListener implements ActionListener {
     private GameController c;
 
-    public SaveButtonActionListener(GameController c){
-        this.c= c;
+    public SaveButtonActionListener(GameController c) {
+        this.c = c;
     }
 
     @Override
-    public void actionPerformed( ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {
         c.saveGame();
     }
 }

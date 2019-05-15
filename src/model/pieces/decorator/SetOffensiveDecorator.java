@@ -10,7 +10,12 @@ public class SetOffensiveDecorator extends PieceInterfaceDecorator {
 
     public void setOffensive() {
         super.setOffensive();
-        this.setAttackPower(this.piece.getAttackPower() + 20);
-        this.setHP(this.piece.getHp() - 50);
+        if (piece.getHp() - 50 > 0) {
+            setAttackPower(piece.getAttackPower() + 20);
+            setHP(piece.getHp() - 50);
+            isOffensive = true;
+        } else {
+            System.out.println("This piece cannot be strengthened because its hp will be smaller than 0 after the action.");
+        }
     }
 }

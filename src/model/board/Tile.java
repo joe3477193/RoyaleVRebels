@@ -1,13 +1,13 @@
 package model.board;
 
-import model.pieces.Piece;
+import model.pieces.PieceInterface;
 
 import java.io.Serializable;
 
 public class Tile implements Serializable {
     private static final long serialVersionUID = 3L;
 
-    private Piece piece;
+    private PieceInterface piece;
     private int row, col;
 
     public Tile(int row, int col) {
@@ -15,11 +15,11 @@ public class Tile implements Serializable {
         this.col = col;
     }
 
-    public Piece getPiece() {
+    public PieceInterface getPiece() {
         return piece;
     }
 
-    public void setPiece( Piece piece) {
+    void setPiece(PieceInterface piece) {
         this.piece = piece;
     }
 
@@ -31,7 +31,7 @@ public class Tile implements Serializable {
         piece = null;
     }
 
-    public int getRow(){
+    public int getRow() {
         return row;
     }
 

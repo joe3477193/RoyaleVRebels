@@ -3,24 +3,24 @@ package controller;
 
 import controller.gameActionListeners.*;
 import model.board.GameEngine;
-
 import model.board.Tile;
-import model.pieces.Piece;
+import model.pieces.PieceInterface;
 import view.GameFrameView;
 import view.StartGameView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.Duration;
-import java.util.Timer; 
+import java.util.Timer;
 import java.util.TimerTask;
 
 import static view.GameFrameView.STATUS;
 
-
-public class GameController  {
+public class GameController {
     private Timer timer;
 
     private GameEngine g;
@@ -31,7 +31,7 @@ public class GameController  {
     public GameController(GameEngine g, GameFrameView gfv) {
         this.g = g;
         this.gfv = gfv;
-        
+
         addActionListeners();
         startTimer();
         move = new MoveCommand(g);
@@ -54,8 +54,7 @@ public class GameController  {
             }
         }
 
-        // Add ActionListeners for moveBtn, attackBtn, endTurnBtn
-        
+        // Add ActionListeners for moveBtn, attackBtn, offensiveBtn, defensiveBtn, endTurnBtn
         gfv.getAttackBtn().addActionListener(new AttackBtnActionListener(this));
         gfv.getOffensiveBtn().addActionListener(new OffensiveBtnActionListener(this));
         gfv.getDefensiveBtn().addActionListener(new DefensiveBtnActionListener(this));
@@ -66,10 +65,10 @@ public class GameController  {
 
     }
 
-    public void summonButton( ActionEvent e) {
+    public void summonButton(ActionEvent e) {
 
         JButton source = (JButton) e.getSource();
-        Cursor cursor= gfv.getFrame().getCursor();
+        Cursor cursor = gfv.getFrame().getCursor();
 
         JButton[] button;
         String[] name;
@@ -115,7 +114,7 @@ public class GameController  {
         }
     }
 
-    public void clickTile( ActionEvent e) {
+    public void clickTile(ActionEvent e) {
         JButton[][] tileBtns;
         tileBtns = gfv.getTileBtns();
         JButton tileBtn;
@@ -139,21 +138,21 @@ public class GameController  {
 
                     // Attempt to place pieces
                     else {
-                        tileBtn = tileBtns[i][j];			//TODO Confirm btn needs to be passed to model in summo
+                        tileBtn = tileBtns[i][j];            //TODO Confirm btn needs to be passed to model in summo
                         // Attempt to place a summoned pieces
                         if (g.getSummonedPiece() != null && !g.getActionPerformed()) {
-                        	
-                        	//Turn is consumed and run through turn command
-                        	summon.executeTurn(tileBtns, i, j);
-                         
-                            
+
+                            //Turn is consumed and run through turn command
+                            summon.executeTurn(tileBtns, i, j);
+
+
                         }
                         // Attempt to place a piece during movement
                         else if (g.isMoving() && !g.getActionPerformed()) {
-                        	//Turn is consumed and run through turn command
+                            //Turn is consumed and run through turn command
                             move.executeTurn(tileBtns, i, j);
-                            
-                            
+
+
                         }
                         // Attempt to place a piece during attack
                         else if (g.isAttacking() && !g.getActionPerformed()) {
@@ -186,7 +185,7 @@ public class GameController  {
         if (g.isAttacking() && !g.getActionPerformed()) {
             g.resetAttacking();
             gfv.colourAttack();
-            
+
         }
 
         // Trigger movement for a piece
@@ -203,41 +202,41 @@ public class GameController  {
             gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }
     }
-    
-    private void startTimer() {
-        TimerTask t = new TimerTask(){
 
-        	int second = 60;
-         
-       	 	@Override
-       	 	public void run() {
-       	 		Duration duration = Duration.ofSeconds(second--);	 
-       	 		gfv.setTime("Time Remaining: "+duration.toMinutesPart()+":"+duration.toSecondsPart());
-	       	 	if(second == -1) {
-	   	 			endTurn();
-	   	 		}
-       	 	} 
-       	 };
+    private void startTimer() {
+        TimerTask t = new TimerTask() {
+
+            int second = 60;
+
+            @Override
+            public void run() {
+                Duration duration = Duration.ofSeconds(second--);
+                gfv.setTime("Time Remaining: " + duration.toMinutesPart() + ":" + duration.toSecondsPart());
+                if (second == -1) {
+                    endTurn();
+                }
+            }
+        };
         timer = new Timer();
-        timer.schedule(t,0, 1000);  
+        timer.schedule(t, 0, 1000);
     }
-    
+
     private void stopTimer() {
-        TimerTask t = new TimerTask(){
-        	int second = 60;
-          
-       	 	@Override
-       	 	public void run() {
-       	 		Duration duration = Duration.ofSeconds(second--);	 
-       	 		gfv.setTime("Time Remaining: "+duration.toMinutesPart()+":"+duration.toSecondsPart()+" ");
-       	 		if(second == -1) {
-       	 			endTurn();
-       	 		}
-       	 	} 
-       	 };
-       	timer.cancel();
-       	timer = new Timer();
-        timer.schedule(t,0, 1000); 
+        TimerTask t = new TimerTask() {
+            int second = 60;
+
+            @Override
+            public void run() {
+                Duration duration = Duration.ofSeconds(second--);
+                gfv.setTime("Time Remaining: " + duration.toMinutesPart() + ":" + duration.toSecondsPart() + " ");
+                if (second == -1) {
+                    endTurn();
+                }
+            }
+        };
+        timer.cancel();
+        timer = new Timer();
+        timer.schedule(t, 0, 1000);
     }
 
     public void setOffensive() {
@@ -247,11 +246,12 @@ public class GameController  {
     public void setDefensive() {
         g.setDefensive();
     }
+
     public void undoTurn() {
         g.undoTurn();
     }
 
-    public void quitGame(){
+    public void quitGame() {
         gfv.getFrame().dispose();
         new StartGameView();
     }
@@ -259,18 +259,18 @@ public class GameController  {
     public void saveGame() {
         try {
             PrintWriter out = new PrintWriter(new FileWriter("savegame.dat"));
-            for(String data:gfv.getPlayerData()){
-                out.print(data+"|");
+            for (String data : gfv.getPlayerData()) {
+                out.print(data + "|");
             }
             out.println();
             out.println(g.getTurn());
             out.println(g.getActionPerformed());
 
-            for(Tile[] tileRow:g.getTiles()){
-                for(Tile tile:tileRow){
-                    if(tile.hasPiece()){
-                        Piece piece= tile.getPiece();
-                        out.printf("%d|%d|%s|%d|%n", tile.getRow(),tile.getCol(), piece.getName(), piece.getHp());
+            for (Tile[] tileRow : g.getTiles()) {
+                for (Tile tile : tileRow) {
+                    if (tile.hasPiece()) {
+                        PieceInterface piece = tile.getPiece();
+                        out.printf("%d|%d|%s|%d|%n", tile.getRow(), tile.getCol(), piece.getName(), piece.getHp());
                     }
                 }
             }

@@ -9,8 +9,6 @@ import model.players.RoyalePlayer;
 import view.GameFrameView;
 
 import javax.swing.*;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -44,12 +42,12 @@ public class GameImpl implements Game {
         }
     }
 
-    public GameImpl(Player rebel, Player royale, GameEngine g, GameFrameView gfv, ArrayList<String[]> tileData){
-        this.tileData= tileData;
-        this.gfv= gfv;
-        this.g= g;
-        this.rebel= rebel;
-        this.royale= royale;
+    public GameImpl(Player rebel, Player royale, GameEngine g, GameFrameView gfv, ArrayList<String[]> tileData) {
+        this.tileData = tileData;
+        this.gfv = gfv;
+        this.g = g;
+        this.rebel = rebel;
+        this.royale = royale;
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 gfv.assembleBoard(rebel, royale, g);
@@ -76,4 +74,3 @@ public class GameImpl implements Game {
         });
     }
 }
-

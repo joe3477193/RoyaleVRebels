@@ -2,7 +2,6 @@ package view;
 
 import controller.LoadGameActionListener;
 import controller.NewGameActionListener;
-import controller.StartBtnActionListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,7 +38,7 @@ public class StartGameView {
     private void addController() {
         ActionListener newGame = new NewGameActionListener(frame);
         newGameButton.addActionListener(newGame);
-        ActionListener loadGame= new LoadGameActionListener(frame);
+        ActionListener loadGame = new LoadGameActionListener(frame);
         loadGameButton.addActionListener(loadGame);
     }
 }

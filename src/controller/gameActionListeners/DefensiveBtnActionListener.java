@@ -8,12 +8,12 @@ import java.awt.event.ActionListener;
 public class DefensiveBtnActionListener implements ActionListener {
     private GameController c;
 
-    public DefensiveBtnActionListener( GameController c) {
-        this.c= c;
+    public DefensiveBtnActionListener(GameController c) {
+        this.c = c;
     }
 
     @Override
-    public void actionPerformed( ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {
         c.setDefensive();
     }
 }
