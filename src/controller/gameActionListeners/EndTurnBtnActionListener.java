@@ -1,6 +1,6 @@
 package controller.gameActionListeners;
 
-import controller.GameController;
+import controller.gameController.GameController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

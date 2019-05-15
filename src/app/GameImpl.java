@@ -1,12 +1,12 @@
 package app;
 
-import controller.GameController;
-import model.board.GameEngine;
-import model.board.GameEngineFacade;
-import model.players.Player;
-import model.players.RebelPlayer;
-import model.players.RoyalePlayer;
-import view.GameFrameView;
+import controller.gameController.GameController;
+import model.gameEngine.GameEngine;
+import model.gameEngine.GameEngineFacade;
+import model.player.Player;
+import model.player.RebelPlayer;
+import model.player.RoyalePlayer;
+import view.gameView.GameFrameView;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class GameImpl implements Game {
         Random r = new Random();
         int turn = r.nextInt(playerNames.size());
 
-        // Randomly assign team for players
+        // Randomly assign team for player
         if (turn == 0) {
             royale = new RoyalePlayer(playerNames.get(turn));
             rebel = new RebelPlayer(playerNames.get(turn + 1));
