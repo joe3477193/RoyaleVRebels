@@ -684,11 +684,11 @@ public class GameEngineFacade implements GameEngine {
         PieceInterface currentPiece = getPiece(i, j);
         if (currentPiece.isOffensive() || currentPiece.isDefensive()) {
             PieceInterface originalPiece = new ResetDecorator(currentPiece);
-            originalPiece.resetStatus();
+            originalPiece.resetMode();
             getTile(i, j).setPiece(originalPiece);
             System.out.println("Reset!");
             System.out.println(originalPiece.getInitHp());
-            System.out.println(originalPiece.getInitAp());
+            System.out.println(originalPiece.getInitAttackPower());
         }
     }
 

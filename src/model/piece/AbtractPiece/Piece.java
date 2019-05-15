@@ -11,11 +11,11 @@ public abstract class Piece implements PieceInterface {
     private int cp;
     private int initHp;
     private int hp;
-    private int initAp;
+    private int initAttackPower;
     private int attackPower;
-    private int initSpeed;
+    private int initMoveSpeed;
     private int moveSpeed;
-    private int initAr;
+    private int initAttackRange;
     private int attackRange;
     private boolean moveable;
     private boolean attackable;
@@ -28,11 +28,11 @@ public abstract class Piece implements PieceInterface {
         this.cp = cp;
         this.initHp = initHp;
         this.hp = initHp;
-        this.initAp = attackPower;
+        this.initAttackPower = attackPower;
         this.attackPower = attackPower;
-        this.initSpeed = moveSpeed;
+        this.initMoveSpeed = moveSpeed;
         this.moveSpeed = moveSpeed;
-        this.initAr = attackRange;
+        this.initAttackRange = attackRange;
         this.attackRange = attackRange;
         this.moveable = moveable;
         this.attackable = attackable;
@@ -68,8 +68,8 @@ public abstract class Piece implements PieceInterface {
         return hp;
     }
 
-    public int getInitAp() {
-        return initAp;
+    public int getInitAttackPower() {
+        return initAttackPower;
     }
 
     public int getAttackPower() {
@@ -84,8 +84,8 @@ public abstract class Piece implements PieceInterface {
         }
     }
 
-    public int getInitSpeed() {
-        return initSpeed;
+    public int getInitMoveSpeed() {
+        return initMoveSpeed;
     }
 
     public int getMoveSpeed() {
@@ -96,8 +96,8 @@ public abstract class Piece implements PieceInterface {
         moveSpeed = speed;
     }
 
-    public int getInitAr() {
-        return initAr;
+    public int getInitAttackRange() {
+        return initAttackRange;
     }
 
     public int getAttackRange() {
@@ -137,7 +137,7 @@ public abstract class Piece implements PieceInterface {
         }
     }
 
-    public void resetStatus() {
+    public void resetMode() {
     }
 
     public void setOffensive() {

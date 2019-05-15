@@ -14,11 +14,11 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     private int cp;
     private int initHp;
     private int hp;
-    private int initAp;
+    private int initAttackPower;
     private int attackPower;
-    private int initSpeed;
+    private int initMoveSpeed;
     private int moveSpeed;
-    private int initAr;
+    private int initAttackRange;
     private int attackRange;
     private boolean moveable;
     private boolean attackable;
@@ -32,11 +32,11 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         cp = piece.getCp();
         initHp = piece.getInitHp();
         hp = piece.getHp();
-        initAp = piece.getInitAp();
+        initAttackPower = piece.getInitAttackPower();
         attackPower = piece.getAttackPower();
-        initSpeed = piece.getInitSpeed();
+        initMoveSpeed = piece.getInitMoveSpeed();
         moveSpeed = piece.getMoveSpeed();
-        initAr = piece.getInitAr();
+        initAttackRange = piece.getInitAttackRange();
         attackRange = piece.getAttackRange();
         moveable = piece.isMoveable();
         attackable = piece.isAttackable();
@@ -72,8 +72,8 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         return hp;
     }
 
-    public int getInitAp() {
-        return initAp;
+    public int getInitAttackPower() {
+        return initAttackPower;
     }
 
     public int getAttackPower() {
@@ -88,8 +88,8 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         }
     }
 
-    public int getInitSpeed() {
-        return initSpeed;
+    public int getInitMoveSpeed() {
+        return initMoveSpeed;
     }
 
     public int getMoveSpeed() {
@@ -100,8 +100,8 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         moveSpeed = speed;
     }
 
-    public int getInitAr() {
-        return initAr;
+    public int getInitAttackRange() {
+        return initAttackRange;
     }
 
     public int getAttackRange() {
@@ -141,7 +141,7 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         }
     }
 
-    public void resetStatus() {
+    public void resetMode() {
     }
 
     public void setOffensive() {

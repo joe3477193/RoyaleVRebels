@@ -8,10 +8,10 @@ public class ResetDecorator extends PieceInterfaceDecorator {
         super(piece);
     }
 
-    public void resetStatus() {
-        setAttackPower(piece.getInitAp());
+    public void resetMode() {
+        setAttackPower(piece.getInitAttackPower());
         setHP(piece.getInitHp());
-        setMoveSpeed(piece.getInitSpeed());
+        setMoveSpeed(piece.getInitMoveSpeed());
         isOffensive = false;
         isDefensive = false;
     }

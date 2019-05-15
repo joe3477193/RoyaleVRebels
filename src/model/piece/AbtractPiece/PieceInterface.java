@@ -16,17 +16,17 @@ public interface PieceInterface {
 
     int getHp();
 
-    int getInitAp();
+    int getInitAttackPower();
 
     int getAttackPower();
 
     void setAttackPower(int attackPower);
 
-    int getInitSpeed();
+    int getInitMoveSpeed();
 
     int getMoveSpeed();
 
-    int getInitAr();
+    int getInitAttackRange();
 
     int getAttackRange();
 
@@ -42,7 +42,7 @@ public interface PieceInterface {
 
     void setHP(int hp);
 
-    void resetStatus();
+    void resetMode();
 
     void setOffensive();
 
