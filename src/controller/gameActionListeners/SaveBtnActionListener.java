@@ -5,10 +5,11 @@ import controller.GameController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SaveButtonActionListener implements ActionListener {
+public class SaveBtnActionListener implements ActionListener {
+
     private GameController c;
 
-    public SaveButtonActionListener(GameController c) {
+    public SaveBtnActionListener(GameController c) {
         this.c = c;
     }
 

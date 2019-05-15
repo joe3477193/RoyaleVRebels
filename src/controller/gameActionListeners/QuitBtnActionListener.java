@@ -5,10 +5,11 @@ import controller.GameController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class QuitButtonActionListener implements ActionListener {
+public class QuitBtnActionListener implements ActionListener {
+
     private GameController c;
 
-    public QuitButtonActionListener(GameController c) {
+    public QuitBtnActionListener(GameController c) {
         this.c = c;
     }
 

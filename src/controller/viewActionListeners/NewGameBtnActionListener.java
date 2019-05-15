@@ -1,4 +1,4 @@
-package controller;
+package controller.viewActionListeners;
 
 import view.EnterNameView;
 
@@ -6,11 +6,11 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class NewGameActionListener implements ActionListener {
+public class NewGameBtnActionListener implements ActionListener {
 
-    JFrame frame;
+    private JFrame frame;
 
-    public NewGameActionListener(JFrame frame) {
+    public NewGameBtnActionListener(JFrame frame) {
         this.frame = frame;
     }
 

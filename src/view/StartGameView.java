@@ -1,7 +1,7 @@
 package view;
 
-import controller.LoadGameActionListener;
-import controller.NewGameActionListener;
+import controller.viewActionListeners.LoadGameBtnActionListener;
+import controller.viewActionListeners.NewGameBtnActionListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,21 +9,26 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 public class StartGameView {
+
+    private static final int START_GAME_VIEW_WIDTH = 200;
+    private static final int START_GAME_VIEW_HEIGHT = 200;
+    private static final int INFO_PANEL_ROWS = 2;
+    private static final int INFO_PANEL_COLS = 1;
+
     private JFrame frame;
-    private JButton newGameButton;
-    private JButton loadGameButton;
+    private JButton newGameBtn = new JButton("New Game");
+    private JButton loadGameBtn = new JButton("Load Game");
 
     public StartGameView() {
-        newGameButton = new JButton("New Game");
-        loadGameButton = new JButton("Load Game");
+
         frame = new JFrame();
-        frame.setSize(new Dimension(200, 200));
+        frame.setSize(new Dimension(START_GAME_VIEW_WIDTH, START_GAME_VIEW_HEIGHT));
         frame.setLocationRelativeTo(null);
 
-        JPanel infoPanel = new JPanel(new GridLayout(2, 1, 0, 0));
+        JPanel infoPanel = new JPanel(new GridLayout(INFO_PANEL_ROWS, INFO_PANEL_COLS));
 
-        infoPanel.add(newGameButton);
-        infoPanel.add(loadGameButton);
+        infoPanel.add(newGameBtn);
+        infoPanel.add(loadGameBtn);
 
         frame.add(infoPanel, BorderLayout.CENTER);
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
@@ -36,9 +41,9 @@ public class StartGameView {
     }
 
     private void addController() {
-        ActionListener newGame = new NewGameActionListener(frame);
-        newGameButton.addActionListener(newGame);
-        ActionListener loadGame = new LoadGameActionListener(frame);
-        loadGameButton.addActionListener(loadGame);
+        ActionListener newGame = new NewGameBtnActionListener(frame);
+        newGameBtn.addActionListener(newGame);
+        ActionListener loadGame = new LoadGameBtnActionListener(frame);
+        loadGameBtn.addActionListener(loadGame);
     }
 }

@@ -59,9 +59,9 @@ public class GameController {
         gfv.getOffensiveBtn().addActionListener(new OffensiveBtnActionListener(this));
         gfv.getDefensiveBtn().addActionListener(new DefensiveBtnActionListener(this));
         gfv.getEndTurnBtn().addActionListener(new EndTurnBtnActionListener(this));
-        gfv.getSaveButton().addActionListener(new SaveButtonActionListener(this));
-        gfv.getQuitButton().addActionListener(new QuitButtonActionListener(this));
-        gfv.getUndoBtn().addActionListener(new UndoTurnActionListener(this));
+        gfv.getSaveButton().addActionListener(new SaveBtnActionListener(this));
+        gfv.getQuitButton().addActionListener(new QuitBtnActionListener(this));
+        gfv.getUndoBtn().addActionListener(new UndoBtnActionListener(this));
 
     }
 

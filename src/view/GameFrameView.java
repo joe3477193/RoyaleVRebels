@@ -33,9 +33,11 @@ public class GameFrameView extends JFrame {
     private static final String CASTLE_IMAGE = "../images/castle.jpg";
     private static final String CLWALL_IMAGE = "../images/cwall.jpg";
     private static final String CRWALL_IMAGE = "../images/crwall.jpg";
+
     private static JButton[][] tileBtns;
-    public JButton offensiveBtn;
-    public JButton defensiveBtn;
+
+    private JButton offensiveBtn;
+    private JButton defensiveBtn;
     private JFrame frame;
     private JPanel actionPanel;
     private JPanel gridPanel;
@@ -44,7 +46,6 @@ public class GameFrameView extends JFrame {
     private JPanel menuPanel;
     private JLabel playerName, playerType, time;
     private String nameOne, typeOne, nameTwo, typeTwo;
-    private JButton moveBtn;
     private JButton saveButton;
     private JButton quitButton;
     private JButton undoTurnBtn;
@@ -84,10 +85,6 @@ public class GameFrameView extends JFrame {
         };
         summonBtns = new ArrayList<>();
         statusLabel = new JLabel(STATUS);
-    }
-
-    public JButton getMoveBtn() {
-        return moveBtn;
     }
 
     private JButton[] createSpawn(String[] name, String[] image) {
