@@ -27,6 +27,9 @@ public class GameController {
     private static final int TIME_DELAY = 0;
     private static final int TIME_PERIOD = 1000;
     private static final int TIME_OUT = -1;
+    private static final int ORIGINAL_BTN_INDEX = 0;
+    private static final int ORIGINAL_ROW = 0;
+    private static final int ORIGINAL_COL = 0;
 
     private Timer timer;
 
@@ -100,20 +103,20 @@ public class GameController {
             image = gfv.getRoyaleImage();
         }
 
-        for (int i = 0; i < button.length; i++) {
+        for (int i = ORIGINAL_BTN_INDEX; i < button.length; i++) {
             if (source == button[i]) {
                 Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
 
-                // click on the same piece on the deck
+                // click on the same piece on the deck, i.e. cancel summon
                 if (gfv.getFrame().getCursor().getName().equals(name[i])) {
                     gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     g.removeSummonedPiece();
                     gfv.removeImage();
                 }
 
-                // click on a different piece on the deck when the player has not moved any piece
+                // click on a different piece on the deck when the player has not moved any piece, i.e. change summon
                 else if (!g.getActionPerformed()) {
-                    gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
+                    gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), name[i]));
                     g.createPiece(name[i]);
                     gfv.setImage(image[i]);
                 } else {
@@ -140,40 +143,39 @@ public class GameController {
             for (int j = g.getOriginalCol(); j < tileBtns[i].length; j++) {
                 if (e.getSource() == tileBtns[i][j]) {
 
-                    // Click a brick wall
+                    // click a brick wall
                     if (g.isWall(i, j)) {
                         gfv.getStatusLabel().setText(STATUS + "Please do not click a brick wall.");
                     }
 
-                    // Attempt to place piece
+                    // attempt to place piece
                     else {
                         tileBtn = tileBtns[i][j];            //TODO Confirm btn needs to be passed to model in summo
-                        // Attempt to place a summoned piece
+                        // attempt to place a summoned piece
                         if (g.getSummonedPiece() != null && !g.getActionPerformed()) {
 
-                            //Turn is consumed and run through turn command
+                            // turn is consumed and run through turn command
                             summon.executeTurn(tileBtns, i, j);
-
-
                         }
-                        // Attempt to place a piece during movement
+                        // attempt to place a piece during movement
                         else if (g.isMoving() && !g.getActionPerformed()) {
-                            //Turn is consumed and run through turn command
+
+                            // turn is consumed and run through turn command
                             move.executeTurn(tileBtns, i, j);
-
-
                         }
-                        // Attempt to place a piece during attack
+                        // attempt to place a piece during attack
                         else if (g.isAttacking() && !g.getActionPerformed()) {
+
+                            // TODO: turn is consumed and run through turn command
                             g.placeAttackPiece(i, j);
                         }
-                        // Attempt to pick a piece for action && also show piece info
+                        // attempt to pick a piece for action && also show piece info
                         else if (g.checkInit(i, j)) {
                             gfv.getStatusLabel().setText(STATUS);
                             g.clickTile(tileBtn, i, j);
                         }
 
-                        // Attempt to click on an empty tile
+                        // attempt to click on an empty tile
                         else {
                             gfv.getStatusLabel().setText(STATUS);
                         }
@@ -183,27 +185,27 @@ public class GameController {
         }
     }
 
-
     public void endTurn() {
         g.unsetActionPerformed();
         stopTimer();
     }
 
     public void attack() {
-        // Cancel movement (click move button twice)
+
+        // cancel attack, i.e. click attack button twice
         if (g.isAttacking() && !g.getActionPerformed()) {
             g.resetAttacking();
             gfv.colourAttack();
 
         }
 
-        // Trigger movement for a piece
+        // trigger attack for a piece
         else if (g.hasCoordinates() && g.checkAttackInit(g.getCoordinates()[g.getRow()], g.getCoordinates()[g.getCol()]) && !g.getActionPerformed()) {
             g.resetMoving();
             g.setAttacking();
         }
 
-        // Player has performed action already
+        // check if player has performed action already
         else if (g.getActionPerformed()) {
             gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
         } else {
@@ -212,6 +214,7 @@ public class GameController {
         }
     }
 
+    // reused codes in timer section
     private TimerTask timer() {
 
         return new TimerTask() {
@@ -264,25 +267,26 @@ public class GameController {
     }
 
     public void saveGame() {
+
         try {
-            PrintWriter out = new PrintWriter(new FileWriter("savegame.dat"));
+            PrintWriter output = new PrintWriter(new FileWriter("savegame.dat"));
             for (String data : gfv.getPlayerData()) {
-                out.print(data + "|");
+                output.print(data + "|");
             }
-            out.println();
-            out.println(g.getTurn());
-            out.println(g.getActionPerformed());
+            output.println();
+            output.println(g.getTurn());
+            output.println(g.getActionPerformed());
 
             for (Tile[] tileRow : g.getTiles()) {
                 for (Tile tile : tileRow) {
                     if (tile.hasPiece()) {
                         PieceInterface piece = tile.getPiece();
-                        out.printf("%d|%d|%s|%d|%n", tile.getRow(), tile.getCol(), piece.getName(), piece.getHp());
+                        output.printf("%d|%d|%s|%d|%n", tile.getRow(), tile.getCol(), piece.getName(), piece.getHp());
                     }
                 }
             }
 
-            out.close();
+            output.close();
             System.out.println("Game has been successfully saved.");
 
         } catch (IOException e) {

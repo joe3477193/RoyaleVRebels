@@ -38,15 +38,12 @@ public class GameEngineFacade implements GameEngine {
 
     // TODO: Game model shouldn't have gui component such as icons
     private static final String IMAGE_PATH = "../../images/";
-
+    // Stack for storing moves
+    private static Stack<AbstractTurn> moves;
     private GameFrameView gfv;
     private Piece summonedPiece;
     private Piece onBoardPiece;
     private Tile[][] tiles;
-
-    // Stack for storing moves
-    private static Stack<AbstractTurn> moves;
-
     private int turn;
     private int[] turns;
     private int[] coordinate;
@@ -279,12 +276,17 @@ public class GameEngineFacade implements GameEngine {
     public void clickTile(JButton tileBtn, int i, int j) {
         coordinate[ROW] = i;
         coordinate[COL] = j;
+
+        // TODO: SHOULD MAKE A PIECE STATUS PANEL TO SHOW ALL INFO
         if (getTile(i, j).hasPiece()) {
-            gfv.getStatusLabel().setText(String.format(STATUS + " %s has %dHP remaining", getPiece(i, j).getName(), getPiece(i, j).getHp()));
+            gfv.getStatusLabel().setText(String.format(STATUS + " %s: %d HP remaining, %d AP, %d AR, %d MS.", getPiece(i, j).getName(), getPiece(i, j).getHp(),
+                    getPiece(i, j).getAttackPower(), getPiece(i, j).getAttackRange(), getPiece(i, j).getMoveSpeed()));
         }
+
         System.out.println("TileButton Name: " + tileBtn.getName());
         System.out.println("Original AP: " + getTile(i, j).getPiece().getAttackPower());
         System.out.println("Original HP: " + getTile(i, j).getPiece().getHp());
+
         boolean match = isFactionMatched(i, j);
         if (match && !actionPerformed) {
             gfv.setImage(tileBtn.getName());
