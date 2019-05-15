@@ -7,6 +7,11 @@ import java.util.ArrayList;
 
 public interface GameEngine {
 
+
+    int getRebelTurn();
+
+    int getRoyaleTurn();
+
     boolean isMoving();
 
     boolean isAttacking();

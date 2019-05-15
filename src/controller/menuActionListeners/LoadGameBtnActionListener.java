@@ -31,11 +31,21 @@ public class LoadGameBtnActionListener implements ActionListener {
         GameFrameView gfv;
 
         // Load the game status from saved file
+        // TODO: Need to save more details of the pieces on board, e,g, hp, ap, ar, ms
         try {
             BufferedReader input = new BufferedReader(new FileReader("savegame.dat"));
+
+            // Load players' names
             String[] playerName = input.readLine().split("\\|");
+
+            // Load turn
             String turn = input.readLine();
+
+            // Load actionPerformed
             String hasPerformed = input.readLine();
+
+            // Load pieces' status, e.g. hp
+            // TODO
             ArrayList<String[]> tileData = new ArrayList<>();
             String line;
 

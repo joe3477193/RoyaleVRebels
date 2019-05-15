@@ -85,7 +85,7 @@ public class GameController {
         gfv.getFrame().setCursor(cursor);
 
         //if rebel's turn
-        if (g.getTurn() == 0) {
+        if (g.getTurn() == g.getRebelTurn()) {
             button = gfv.getRebelButton();
             name = gfv.getRebelName();
             image = gfv.getRebelImage();
