@@ -8,94 +8,54 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GameFrameView extends JFrame{
+public class GameFrameView extends JFrame {
 
+    public static final String STATUS = "Game status:  ";
+    private static final int BUTTON_LENGTH = 7;
+    private static final String GRASS_IMAGE = "../images/grass.png";
+    private static final String WALL_IMAGE = "../images/wall.jpg";
+    private static final String RED_GRASS_IMAGE = "../images/red_grass.png";
+    private static final String BLUE_GRASS_IMAGE = "../images/blue_grass.png";
+    private static final String RO_ONE_IMAGE = "../images/general.png";
+    private static final String RO_TWO_IMAGE = "../images/liutenant.png";
+    private static final String RO_THREE_IMAGE = "../images/infantry.png";
+    private static final String RO_FOUR_IMAGE = "../images/balista.png";
+    private static final String RO_FIVE_IMAGE = "../images/cannon.png";
+    private static final String RO_SIX_IMAGE = "../images/catapult.png";
+    private static final String RO_SEVEN_IMAGE = "../images/pitfall.png";
+    private static final String RE_ONE_IMAGE = "../images/leader.png";
+    private static final String RE_TWO_IMAGE = "../images/scoundrel.png";
+    private static final String RE_THREE_IMAGE = "../images/mobster.png";
+    private static final String RE_FOUR_IMAGE = "../images/angryman.png";
+    private static final String RE_FIVE_IMAGE = "../images/rascal.png";
+    private static final String RE_SIX_IMAGE = "../images/archer.png";
+    private static final String RE_SEVEN_IMAGE = "../images/boulder.png";
+    private static final String CASTLE_IMAGE = "../images/castle.jpg";
+    private static final String CLWALL_IMAGE = "../images/cwall.jpg";
+    private static final String CRWALL_IMAGE = "../images/crwall.jpg";
+    private static JButton[][] tileBtns;
+    public JButton offensiveBtn;
+    public JButton defensiveBtn;
     private JFrame frame;
     private JPanel actionPanel;
     private JPanel gridPanel;
     private JPanel playerPanel;
     private JPanel deckPanel;
-
     private JLabel playerName, playerType, time;
     private String nameOne, typeOne, nameTwo, typeTwo;
-    private static JButton[][] tileBtns;
-
     private JButton moveBtn;
-
-    public JButton getMoveBtn() {
-        return moveBtn;
-    }
-
     private JButton attackBtn;
-
-    public JButton getAttackBtn() {
-        return attackBtn;
-    }
-
-    public JButton offensiveBtn;
-
-    public JButton getOffensiveBtn() {
-        return offensiveBtn;
-    }
-
-    public JButton defensiveBtn;
-
-    public JButton getDefensiveBtn() {
-        return defensiveBtn;
-    }
-
     private JButton endTurnBtn;
-
-    public JButton getEndTurnBtn() {
-        return endTurnBtn;
-    }
-
-    private static final int BUTTON_LENGTH = 7;
-
-    private static final String GRASS_IMAGE      = "../images/grass.png";
-    private static final String WALL_IMAGE      = "../images/wall.jpg";
-    private static final String RED_GRASS_IMAGE      = "../images/red_grass.png";
-    private static final String BLUE_GRASS_IMAGE      = "../images/blue_grass.png";
-
-    private static final String RO_ONE_IMAGE      = "../images/general.png";
-    private static final String RO_TWO_IMAGE      = "../images/liutenant.png";
-    private static final String RO_THREE_IMAGE      = "../images/infantry.png";
-    private static final String RO_FOUR_IMAGE      = "../images/balista.png";
-    private static final String RO_FIVE_IMAGE      = "../images/cannon.png";
-    private static final String RO_SIX_IMAGE      = "../images/catapult.png";
-    private static final String RO_SEVEN_IMAGE     ="../images/pitfall.png";
-
-    private static final String RE_ONE_IMAGE      = "../images/leader.png";
-    private static final String RE_TWO_IMAGE      = "../images/scoundrel.png";
-    private static final String RE_THREE_IMAGE      = "../images/mobster.png";
-    private static final String RE_FOUR_IMAGE      = "../images/angryman.png";
-    private static final String RE_FIVE_IMAGE      = "../images/rascal.png";
-    private static final String RE_SIX_IMAGE      = "../images/archer.png";
-    private static final String RE_SEVEN_IMAGE      ="../images/boulder.png";
-
-    private static final String CASTLE_IMAGE      = "../images/castle.jpg";
-    private static final String CLWALL_IMAGE      = "../images/cwall.jpg";
-    private static final String CRWALL_IMAGE      = "../images/crwall.jpg";
-
-    public static final String STATUS = "Game status:  ";
     private JButton[] rebelButton;
     private String[] rebelName;
     private String[] rebelImage;
     private JButton[] royaleButton;
     private String[] royaleName;
     private String[] royaleImage;
-
     private String currentImage;
-
     private JButton lastTile;
     private ArrayList<JButton> summonBtns;
-
     private JLabel statusLabel;
-
-    public JLabel getStatusLabel() {
-        return statusLabel;
-    }
-
     public GameFrameView() {
 
         frame = new JFrame("Royals vs Rebels");
@@ -104,51 +64,75 @@ public class GameFrameView extends JFrame{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        rebelButton= new JButton[BUTTON_LENGTH];
-        rebelImage= new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE,
+        rebelButton = new JButton[BUTTON_LENGTH];
+        rebelImage = new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE,
                 RE_SIX_IMAGE, RE_SEVEN_IMAGE
         };
-        rebelName= new String[] {"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Archer", "Boulder"
+        rebelName = new String[]{"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Archer", "Boulder"
         };
 
         royaleButton = new JButton[BUTTON_LENGTH];
         royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Catapult", "Pitfall"
         };
-        royaleImage = new String[] {RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
+        royaleImage = new String[]{RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
                 RO_SIX_IMAGE, RO_SEVEN_IMAGE
         };
         summonBtns = new ArrayList<>();
         statusLabel = new JLabel(STATUS);
     }
 
-    private JButton[] createSpawn(  String[] name,   String[] image) {
+    public JButton getMoveBtn() {
+        return moveBtn;
+    }
+
+    public JButton getAttackBtn() {
+        return attackBtn;
+    }
+
+    public JButton getOffensiveBtn() {
+        return offensiveBtn;
+    }
+
+    public JButton getDefensiveBtn() {
+        return defensiveBtn;
+    }
+
+    public JButton getEndTurnBtn() {
+        return endTurnBtn;
+    }
+
+    public JLabel getStatusLabel() {
+        return statusLabel;
+    }
+
+    private JButton[] createSpawn(String[] name, String[] image) {
         JButton[] button = new JButton[BUTTON_LENGTH];
-        for(int i = 0; i<BUTTON_LENGTH; i++) {
-            button[i]= new JButton(new ImageIcon(this.getClass().getResource(image[i])));
+        for (int i = 0; i < BUTTON_LENGTH; i++) {
+            button[i] = new JButton(new ImageIcon(this.getClass().getResource(image[i])));
             button[i].setName(name[i]);
             summonBtns.add(button[i]);
         }
         return button;
     }
 
-    private void loadSpawn( JButton[] button) {
-        for(JButton icon:button) {
+    private void loadSpawn(JButton[] button) {
+        for (JButton icon : button) {
             deckPanel.add(icon);
         }
     }
 
-    private void removeSpawn( JButton[] button) {
-        for(JButton icon:button) {
+    private void removeSpawn(JButton[] button) {
+        for (JButton icon : button) {
             deckPanel.remove(icon);
         }
     }
 
-    public void assembleBoard( Player playerOne,  Player playerTwo,  GameEngine g) {
+    public void assembleBoard(Player playerOne, Player playerTwo, GameEngine g) {
 
-        nameOne= playerOne.getName();
-        typeOne= playerOne.getFaction();
-        nameTwo= playerTwo.getName();
-        typeTwo= playerTwo.getFaction();
+        nameOne = playerOne.getName();
+        typeOne = playerOne.getFaction();
+        nameTwo = playerTwo.getName();
+        typeTwo = playerTwo.getFaction();
         time = new JLabel("");
 
         playerPanel = new JPanel(new GridLayout(1, 6, 0, 0));
@@ -224,16 +208,13 @@ public class GameFrameView extends JFrame{
 
                 if ((i % 5 <= 2) && j % 4 == 3)
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
-                else if(i ==0 && j%2!=0) {
+                else if (i == 0 && j % 2 != 0) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
-                }
-                else if(i==0 && j%4==0) {
+                } else if (i == 0 && j % 4 == 0) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
-                }
-                else if(i==0 && j%4==2) {
+                } else if (i == 0 && j % 4 == 2) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CRWALL_IMAGE)));
-                }
-                else
+                } else
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
 
                 tileBtns[i][j].putClientProperty("row", i);
@@ -248,68 +229,67 @@ public class GameFrameView extends JFrame{
         moveBtn.setBackground(Color.green);
     }
 
-    public void colourAttack(){
+    public void colourAttack() {
         attackBtn.setBackground((Color.green));
     }
 
-    public void colourRedAttack(){
+    public void colourRedAttack() {
         attackBtn.setBackground((Color.RED));
     }
 
-    public void colourRedMove(){
+    public void colourRedMove() {
         moveBtn.setBackground(Color.RED);
     }
 
-    public void colourTile( JButton tile) {
+    public void colourTile(JButton tile) {
         tile.setBackground(Color.blue);
-        lastTile= tile;
+        lastTile = tile;
     }
 
-    public void colourTile( int i,  int j,   String actionType) {
-        try{
-            String name= getGrass();
-            if(actionType.equals("moveSpeed")){
-                name= BLUE_GRASS_IMAGE;
-            }
-            else if(actionType.equals("attackRange")){
-                name= RED_GRASS_IMAGE;
+    public void colourTile(int i, int j, String actionType) {
+        try {
+            String name = getGrass();
+            if (actionType.equals("moveSpeed")) {
+                name = BLUE_GRASS_IMAGE;
+            } else if (actionType.equals("attackRange")) {
+                name = RED_GRASS_IMAGE;
             }
             tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(name)));
         } catch (RuntimeException ignored) {
         }
     }
 
-    private void colourRedTile( JButton tile) {
+    private void colourRedTile(JButton tile) {
         tile.setBackground(Color.red);
-        lastTile= tile;
+        lastTile = tile;
     }
 
-    public void colourRed( JButton tile) {
+    public void colourRed(JButton tile) {
         colourRedTile(tile);
         colourRedAttack();
         colourRedMove();
     }
 
-    public void colourEndTurn(){
+    public void colourEndTurn() {
         endTurnBtn.setBackground(Color.green);
     }
 
     public void decolour() {
-        if(lastTile!=null) {
+        if (lastTile != null) {
             lastTile.setBorder(null);
             lastTile.setBackground(null);
-            lastTile= null;
+            lastTile = null;
         }
         moveBtn.setBackground(null);
         attackBtn.setBackground(null);
     }
 
-    public void decolourEndTurn(){
+    public void decolourEndTurn() {
         endTurnBtn.setBackground(null);
     }
 
-    public void updateBar( int turn) {
-        if(turn==0) {
+    public void updateBar(int turn) {
+        if (turn == 0) {
             removeSpawn(royaleButton);
             loadSpawn(rebelButton);
             playerName.setText(nameOne);
@@ -337,12 +317,12 @@ public class GameFrameView extends JFrame{
         return currentImage;
     }
 
-    public void setImage(  String image) {
-        currentImage= image;
+    public void setImage(String image) {
+        currentImage = image;
     }
 
     public void removeImage() {
-        currentImage= null;
+        currentImage = null;
     }
 
     public JButton[] getRebelButton() {
@@ -377,9 +357,9 @@ public class GameFrameView extends JFrame{
         return summonBtns;
     }
 
-	public void setTime(String text) {
-		time.setText(text);
-	}
+    public void setTime(String text) {
+        time.setText(text);
+    }
 }
 
 

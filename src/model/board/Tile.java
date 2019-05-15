@@ -1,10 +1,10 @@
 package model.board;
 
-import model.pieces.Piece;
+import model.pieces.PieceInterface;
 
 class Tile {
 
-    private Piece piece;
+    private PieceInterface piece;
     private int row, col;
 
     Tile(int row, int col) {
@@ -12,11 +12,11 @@ class Tile {
         this.col = col;
     }
 
-    Piece getPiece() {
+    PieceInterface getPiece() {
         return piece;
     }
 
-    void setPiece( Piece piece) {
+    void setPiece(PieceInterface piece) {
         this.piece = piece;
     }
 

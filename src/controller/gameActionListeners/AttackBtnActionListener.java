@@ -9,12 +9,12 @@ public class AttackBtnActionListener implements ActionListener {
 
     private GameController c;
 
-    public AttackBtnActionListener( GameController c) {
-        this.c= c;
+    public AttackBtnActionListener(GameController c) {
+        this.c = c;
     }
 
     @Override
-    public void actionPerformed( ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {
         c.attack();
     }
 }

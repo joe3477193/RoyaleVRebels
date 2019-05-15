@@ -3,14 +3,13 @@ package controller;
 
 import controller.gameActionListeners.*;
 import model.board.GameEngine;
-
 import view.GameFrameView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.time.Duration;
-import java.util.Timer; 
+import java.util.Timer;
 import java.util.TimerTask;
 
 import static view.GameFrameView.STATUS;
@@ -52,10 +51,10 @@ public class GameController {
         gfv.getEndTurnBtn().addActionListener(new EndTurnBtnActionListener(this));
     }
 
-    public void summonButton( ActionEvent e) {
+    public void summonButton(ActionEvent e) {
 
         JButton source = (JButton) e.getSource();
-        Cursor cursor= gfv.getFrame().getCursor();
+        Cursor cursor = gfv.getFrame().getCursor();
 
         JButton[] button;
         String[] name;
@@ -101,7 +100,7 @@ public class GameController {
         }
     }
 
-    public void clickTile( ActionEvent e) {
+    public void clickTile(ActionEvent e) {
         JButton[][] tileBtns;
         tileBtns = gfv.getTileBtns();
         JButton tileBtn;
@@ -204,41 +203,41 @@ public class GameController {
             gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }
     }
-    
-    private void startTimer() {
-        TimerTask t = new TimerTask(){
 
-        	int second = 60;
-         
-       	 	@Override
-       	 	public void run() {
-       	 		Duration duration = Duration.ofSeconds(second--);	 
-       	 		gfv.setTime("Time Remaining: "+duration.toMinutesPart()+":"+duration.toSecondsPart());
-	       	 	if(second == -1) {
-	   	 			endTurn();
-	   	 		}
-       	 	} 
-       	 };
+    private void startTimer() {
+        TimerTask t = new TimerTask() {
+
+            int second = 60;
+
+            @Override
+            public void run() {
+                Duration duration = Duration.ofSeconds(second--);
+                gfv.setTime("Time Remaining: " + duration.toMinutesPart() + ":" + duration.toSecondsPart());
+                if (second == -1) {
+                    endTurn();
+                }
+            }
+        };
         timer = new Timer();
-        timer.schedule(t,0, 1000);  
+        timer.schedule(t, 0, 1000);
     }
-    
+
     private void stopTimer() {
-        TimerTask t = new TimerTask(){
-        	int second = 60;
-          
-       	 	@Override
-       	 	public void run() {
-       	 		Duration duration = Duration.ofSeconds(second--);	 
-       	 		gfv.setTime("Time Remaining: "+duration.toMinutesPart()+":"+duration.toSecondsPart()+" ");
-       	 		if(second == -1) {
-       	 			endTurn();
-       	 		}
-       	 	} 
-       	 };
-       	timer.cancel();
-       	timer = new Timer();
-        timer.schedule(t,0, 1000); 
+        TimerTask t = new TimerTask() {
+            int second = 60;
+
+            @Override
+            public void run() {
+                Duration duration = Duration.ofSeconds(second--);
+                gfv.setTime("Time Remaining: " + duration.toMinutesPart() + ":" + duration.toSecondsPart() + " ");
+                if (second == -1) {
+                    endTurn();
+                }
+            }
+        };
+        timer.cancel();
+        timer = new Timer();
+        timer.schedule(t, 0, 1000);
     }
 
     public void setOffensive() {

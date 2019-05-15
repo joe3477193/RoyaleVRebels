@@ -12,25 +12,24 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GameImpl implements Game{
+public class GameImpl implements Game {
     private Player royale;
     private Player rebel;
     private GameFrameView gfv;
 
-    public GameImpl( ArrayList<String> playerNames) {
+    public GameImpl(ArrayList<String> playerNames) {
         ArrayList<Player> players = new ArrayList<>();
 
         Random r = new Random();
         int turn = r.nextInt(playerNames.size());
 
         // Randomly assign team for players
-        if(turn == 0) {
+        if (turn == 0) {
             royale = new RoyalePlayer(playerNames.get(turn));
-            rebel =  new RebelPlayer(playerNames.get(turn + 1));
-        }
-        else {
+            rebel = new RebelPlayer(playerNames.get(turn + 1));
+        } else {
             royale = new RoyalePlayer(playerNames.get(turn));
-            rebel =  new RebelPlayer(playerNames.get(turn - 1));
+            rebel = new RebelPlayer(playerNames.get(turn - 1));
         }
 
         players.add(rebel);
@@ -48,11 +47,11 @@ public class GameImpl implements Game{
             public void run() {
 
                 // Instantiate the GUI view for game
-                gfv= new GameFrameView();
+                gfv = new GameFrameView();
 
                 // Instantiate the GameEngineFacade
                 GameEngine g = new GameEngineFacade(gfv);
-                gfv.assembleBoard(rebel,royale, g);
+                gfv.assembleBoard(rebel, royale, g);
                 new GameController(g, gfv);
             }
         });

@@ -1,6 +1,5 @@
 package model.board;
 
-import model.pieces.Piece;
 import model.pieces.PieceInterface;
 
 import javax.swing.*;

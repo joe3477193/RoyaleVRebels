@@ -7,7 +7,7 @@ import model.pieces.type.General;
 
 public class DecoratorTesting {
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         PieceInterface angry1 = new Angryman();
         System.out.println("Original AP:" + angry1.getAttackPower());
         System.out.println("Original HP:" + angry1.getHp());
