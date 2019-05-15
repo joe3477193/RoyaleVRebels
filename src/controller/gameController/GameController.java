@@ -31,16 +31,19 @@ public class GameController {
     private SummonCommand summon;
 
     public GameController(GameEngine g, GameFrameView gfv) {
+
         this.g = g;
         this.gfv = gfv;
 
         addActionListeners();
         startTimer();
+
         move = new MoveCommand(g);
         summon = new SummonCommand(g);
     }
 
     private void addActionListeners() {
+
         SummonBtnActionListener summonListener = new SummonBtnActionListener(this);
         TileBtnActionListener tileListener = new TileBtnActionListener(this);
 
@@ -56,7 +59,7 @@ public class GameController {
             }
         }
 
-        // Add ActionListeners for moveBtn, attackBtn, offensiveBtn, defensiveBtn, endTurnBtn
+        // Add ActionListeners for attackBtn, offensiveBtn, defensiveBtn, endTurnBtn, saveBtn, quitBtn, undoBtn
         gfv.getAttackBtn().addActionListener(new AttackBtnActionListener(this));
         gfv.getOffensiveBtn().addActionListener(new OffensiveBtnActionListener(this));
         gfv.getDefensiveBtn().addActionListener(new DefensiveBtnActionListener(this));
@@ -64,7 +67,6 @@ public class GameController {
         gfv.getSaveButton().addActionListener(new SaveBtnActionListener(this));
         gfv.getQuitButton().addActionListener(new QuitBtnActionListener(this));
         gfv.getUndoBtn().addActionListener(new UndoBtnActionListener(this));
-
     }
 
     public void summonButton(ActionEvent e) {

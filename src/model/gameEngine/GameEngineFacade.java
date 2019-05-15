@@ -24,9 +24,18 @@ public class GameEngineFacade implements GameEngine {
 
     public static final int BOARD_ROWS = 13; // increments in 5
     public static final int BOARD_COLS = 15; // increments in 4
+    public static final int REBEL_TURN = 0;
+    public static final int ROYALE_TURN = 1;
+    private static final int COORDINATE_X = 0;
+    private static final int COORDINATE_Y = 1;
+
+    // TODO: Game model shouldn't have gui component such as icons
+    private static final String IMAGE_PATH = "../../images/";
+
     public static Stack<AbstractTurn> moves;
     private GameFrameView gfv;
     private Piece summonedPiece;
+    private Piece onBoardPiece;
     private Tile[][] tiles;
     private boolean rebelUndo = false;
     private boolean royaleUndo = false;
@@ -43,14 +52,17 @@ public class GameEngineFacade implements GameEngine {
     public GameEngineFacade(GameFrameView gfv) {
         gameInit(gfv);
         actionPerformed = false;
-        turn = 0;
+        turn = REBEL_TURN;
     }
 
     public GameEngineFacade(GameFrameView gfv, String turn, String actionPerformed, ArrayList<String[]> tileList) {
+
         gameInit(gfv);
+
         this.actionPerformed = Boolean.parseBoolean(actionPerformed);
         this.turn = Integer.parseInt(turn);
         this.gfv = gfv;
+
         for (String[] tile : tileList) {
             int row = Integer.valueOf(tile[0]);
             int col = Integer.valueOf(tile[1]);
@@ -58,27 +70,30 @@ public class GameEngineFacade implements GameEngine {
             int hp = Integer.valueOf(tile[3]);
             try {
                 Class pieceCls = Class.forName("model.piece.concretePiece." + name);
-                this.summonedPiece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
+                onBoardPiece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
 
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
                 ex.printStackTrace();
             }
-            summonedPiece.setHP(hp);
-            tiles[row][col].setPiece(summonedPiece);
+            onBoardPiece.setHP(hp);
+            tiles[row][col].setPiece(onBoardPiece);
         }
-        summonedPiece = null;
+
+        onBoardPiece = null;
     }
 
     public void setTileIcon(ArrayList<String[]> tileList) {
+
         for (String[] tile : tileList) {
             int row = Integer.valueOf(tile[0]);
             int col = Integer.valueOf(tile[1]);
             String name = tile[2];
-            gfv.setTileIcon(row, col, "../images/" + name + ".png");
+            gfv.setTileIcon(row, col, IMAGE_PATH + name + ".png");
         }
     }
 
     private void gameInit(GameFrameView gfv) {
+
         this.gfv = gfv;
 
         tiles = new Tile[BOARD_ROWS][BOARD_COLS];
@@ -93,7 +108,7 @@ public class GameEngineFacade implements GameEngine {
         moves = new Stack<AbstractTurn>();
 
         // Initialize number of player turns
-        turns = new int[]{0, 1};
+        turns = new int[]{REBEL_TURN, ROYALE_TURN};
 
         isMoving = false;
         isAttacking = false;
@@ -122,7 +137,7 @@ public class GameEngineFacade implements GameEngine {
         if (isFactionMatched(coordinate[0], coordinate[1])) {
             isAttacking = true;
             setInit(coordinate[0], coordinate[1]);
-            Image icon = new ImageIcon(this.getClass().getResource("../../images/target.png")).getImage();
+            Image icon = new ImageIcon(this.getClass().getResource(IMAGE_PATH + "target.png")).getImage();
             gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), "name"));
 
             int range = getPiece(coordinate[0], coordinate[1]).getAttackRange();
@@ -153,7 +168,7 @@ public class GameEngineFacade implements GameEngine {
         if (isFactionMatched(coordinate[0], coordinate[1])) {
             isMoving = true;
             setInit(coordinate[0], coordinate[1]);
-            Image icon = new ImageIcon(this.getClass().getResource("../" + gfv.getImage())).getImage();
+            Image icon = new ImageIcon(this.getClass().getResource(gfv.getImage())).getImage();
             gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), "name"));
 
             int mov = getPiece(coordinate[0], coordinate[1]).getMoveSpeed();
@@ -188,7 +203,7 @@ public class GameEngineFacade implements GameEngine {
         for (int i = 0; i < BOARD_ROWS; i++) {
             for (int j = 0; j < BOARD_COLS; j++) {
                 if (!isWall(i, j) && !getTile(i, j).hasPiece() && !isCastle(i)) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../../images/grass.png")));
+                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(IMAGE_PATH + "grass.png")));
                 }
             }
         }
@@ -499,7 +514,9 @@ public class GameEngineFacade implements GameEngine {
     public boolean placeSummonedPiece(JButton tileBtn, int i, int j) {
         if (checkSummonValid(getSummonedPiece(), i, j)) {
 
-            tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
+            // TODO: Game model shouldn't have gui component such as icons
+            System.out.println(gfv.getImage());
+            tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getImage())));
             tileBtn.setName(gfv.getImage());
             removeSummonedPiece();
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
@@ -525,10 +542,10 @@ public class GameEngineFacade implements GameEngine {
             // Command is also added as an object to stack
             moves.push(new MoveCommand(gfv.getImage(), getInitTileCoord()[0], getInitTileCoord()[1], i, j));
             gfv.decolour();
-            System.out.println("Image= " + gfv.getImage());
-            tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getImage())));
+            System.out.println("Image = " + gfv.getImage());
+            tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getImage())));
             tileBtns[getInitTileCoord()[0]][getInitTileCoord()[1]].setIcon(new ImageIcon(
-                    this.getClass().getResource("../" + gfv.getGrass())));
+                    this.getClass().getResource(gfv.getGrass())));
             resetMoving();
             setActionPerformed();
             changeButtonViews();
@@ -562,7 +579,7 @@ public class GameEngineFacade implements GameEngine {
             if (getPiece(i, j).isDead()) {
                 message += String.format(", %s is dead!", getPiece(i, j).getName());
                 getTile(i, j).removePiece();
-                tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource("../../images/grass.png")));
+                tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(IMAGE_PATH + "grass.png")));
             }
             gfv.decolour();
             resetAttacking();
@@ -608,15 +625,15 @@ public class GameEngineFacade implements GameEngine {
             JButton tileBtn = tileBtns[mc.tooTileRow][mc.tooTileCol];
             getTile(mc.fromTileRow, mc.fromTileCol).setPiece(getPiece(mc.tooTileRow, mc.tooTileCol));
             getTile(mc.tooTileRow, mc.tooTileCol).removePiece();
-            tileBtn.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getGrass())));
-            tileBtns[mc.fromTileRow][mc.fromTileCol].setIcon(new ImageIcon(this.getClass().getResource("../" + mc.image)));
+            tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
+            tileBtns[mc.fromTileRow][mc.fromTileCol].setIcon(new ImageIcon(this.getClass().getResource(mc.image)));
             tileBtns[mc.fromTileRow][mc.fromTileCol].setName(gfv.getImage());
 
         } else {
             SummonCommand sc = (SummonCommand) moves.pop();
             JButton tileBtnSum = tileBtns[sc.initTileRow][sc.initTileCol];
             getTile(sc.initTileRow, sc.initTileCol).removePiece();
-            tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource("../" + gfv.getGrass())));
+            tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
 
         }
         gfv.decolour();
