@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 public interface GameEngine {
 
+    int getOriginalRow();
+
+    int getOriginalCol();
 
     int getRebelTurn();
 
@@ -36,9 +39,13 @@ public interface GameEngine {
 
     boolean hasCoordinates();
 
-    int getRows();
+    int getRow();
 
-    int getCols();
+    int getCol();
+
+    int getMaxRows();
+
+    int getMaxCols();
 
     int getTurn();
 

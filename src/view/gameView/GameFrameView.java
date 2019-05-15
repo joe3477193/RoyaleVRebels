@@ -145,7 +145,7 @@ public class GameFrameView extends JFrame {
 
         playerPanel = new JPanel(new GridLayout(1, 6, 0, 0));
         deckPanel = new JPanel(new GridLayout(1, 5, 0, 0));
-        gridPanel = new JPanel(new GridLayout(g.getRows(), g.getCols(), 0, 1));
+        gridPanel = new JPanel(new GridLayout(g.getMaxRows(), g.getMaxCols(), 0, 1));
         actionPanel = new JPanel(new GridLayout(1, 2));
         JPanel statusPanel = new JPanel(new BorderLayout());
         statusPanel.add(statusLabel, BorderLayout.WEST);
@@ -159,7 +159,7 @@ public class GameFrameView extends JFrame {
         playerPanel.add(new JLabel("Player Type: "));
         playerPanel.add(playerType);
 
-        tileBtns = new JButton[GameEngineFacade.BOARD_ROWS][GameEngineFacade.BOARD_COLS];
+        tileBtns = new JButton[GameEngineFacade.BOARD_MAX_ROWS][GameEngineFacade.BOARD_MAX_COLS];
 
         deckPanel.setMaximumSize(new Dimension(100, 100));
 
@@ -225,8 +225,8 @@ public class GameFrameView extends JFrame {
     }
 
     private void genGrid() {
-        for (int i = 0; i < GameEngineFacade.BOARD_ROWS; i++) {
-            for (int j = 0; j < GameEngineFacade.BOARD_COLS; j++) {
+        for (int i = 0; i < GameEngineFacade.BOARD_MAX_ROWS; i++) {
+            for (int j = 0; j < GameEngineFacade.BOARD_MAX_COLS; j++) {
                 tileBtns[i][j] = new JButton();
 
                 if ((i % 5 <= 2) && j % 4 == 3)

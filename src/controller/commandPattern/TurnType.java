@@ -8,7 +8,6 @@ public class TurnType {
     private int tooRow;
     private int tooCol;
 
-
     TurnType(String MoveType, int fr, int fc, int tr, int tc) {
         this.MoveType = MoveType;
         this.fromRow = fromRow;
@@ -16,6 +15,4 @@ public class TurnType {
         this.tooRow = tooRow;
         this.tooCol = tooCol;
     }
-
-
 }

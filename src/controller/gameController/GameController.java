@@ -1,6 +1,5 @@
 package controller.gameController;
 
-
 import controller.commandPattern.MoveCommand;
 import controller.commandPattern.SummonCommand;
 import controller.gameActionListeners.*;
@@ -23,6 +22,12 @@ import java.util.TimerTask;
 import static view.gameView.GameFrameView.STATUS;
 
 public class GameController {
+
+    private static final int TIME_LIMIT = 60;
+    private static final int TIME_DELAY = 0;
+    private static final int TIME_PERIOD = 1000;
+    private static final int TIME_OUT = -1;
+
     private Timer timer;
 
     private GameEngine g;
@@ -47,19 +52,19 @@ public class GameController {
         SummonBtnActionListener summonListener = new SummonBtnActionListener(this);
         TileBtnActionListener tileListener = new TileBtnActionListener(this);
 
-        // Add ActionListeners for summonBtns
+        // add ActionListeners for summonBtns
         for (JButton btn : gfv.getSummonBtns()) {
             btn.addActionListener(summonListener);
         }
 
-        // Add ActionListeners for tileBtns
+        // add ActionListeners for tileBtns
         for (JButton[] tileRows : gfv.getTileBtns()) {
             for (JButton tile : tileRows) {
                 tile.addActionListener(tileListener);
             }
         }
 
-        // Add ActionListeners for attackBtn, offensiveBtn, defensiveBtn, endTurnBtn, saveBtn, quitBtn, undoBtn
+        // add ActionListeners for attackBtn, offensiveBtn, defensiveBtn, endTurnBtn, saveBtn, quitBtn, undoBtn
         gfv.getAttackBtn().addActionListener(new AttackBtnActionListener(this));
         gfv.getOffensiveBtn().addActionListener(new OffensiveBtnActionListener(this));
         gfv.getDefensiveBtn().addActionListener(new DefensiveBtnActionListener(this));
@@ -78,13 +83,13 @@ public class GameController {
         String[] name;
         String[] image;
 
-        //resets the previous turn's actions such as moving and attacking
+        // reset the previous turn's actions such as moving and attacking
         g.resetMoving();
         g.resetAttacking();
 
         gfv.getFrame().setCursor(cursor);
 
-        //if rebel's turn
+        // check if it is rebel's turn
         if (g.getTurn() == g.getRebelTurn()) {
             button = gfv.getRebelButton();
             name = gfv.getRebelName();
@@ -99,14 +104,14 @@ public class GameController {
             if (source == button[i]) {
                 Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
 
-                // Click on the same piece on the deck
+                // click on the same piece on the deck
                 if (gfv.getFrame().getCursor().getName().equals(name[i])) {
                     gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     g.removeSummonedPiece();
                     gfv.removeImage();
                 }
 
-                // Click on a different piece on the deck when the player has not moved any piece
+                // click on a different piece on the deck when the player has not moved any piece
                 else if (!g.getActionPerformed()) {
                     gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(0, 0), name[i]));
                     g.createPiece(name[i]);
@@ -123,16 +128,16 @@ public class GameController {
         tileBtns = gfv.getTileBtns();
         JButton tileBtn;
 
-        //if tile is clicked when a piece is not moving nor attacking
+        // check if tile is clicked when a piece is not moving nor attacking
         if (!g.isMoving() && !g.isAttacking()) {
             gfv.decolour();
         }
 
-        //no piece is chosen in the gameEngine
+        // no piece is chosen in the gameEngine
         g.resetCoordinates();
 
-        for (int i = 0; i < tileBtns.length; i++) {
-            for (int j = 0; j < tileBtns[i].length; j++) {
+        for (int i = g.getOriginalRow(); i < tileBtns.length; i++) {
+            for (int j = g.getOriginalCol(); j < tileBtns[i].length; j++) {
                 if (e.getSource() == tileBtns[i][j]) {
 
                     // Click a brick wall
@@ -193,7 +198,7 @@ public class GameController {
         }
 
         // Trigger movement for a piece
-        else if (g.hasCoordinates() && g.checkAttackInit(g.getCoordinates()[0], g.getCoordinates()[1]) && !g.getActionPerformed()) {
+        else if (g.hasCoordinates() && g.checkAttackInit(g.getCoordinates()[g.getRow()], g.getCoordinates()[g.getCol()]) && !g.getActionPerformed()) {
             g.resetMoving();
             g.setAttacking();
         }
@@ -207,40 +212,38 @@ public class GameController {
         }
     }
 
-    private void startTimer() {
-        TimerTask t = new TimerTask() {
+    private TimerTask timer() {
 
-            int second = 60;
+        return new TimerTask() {
+
+            int second = TIME_LIMIT;
 
             @Override
             public void run() {
                 Duration duration = Duration.ofSeconds(second--);
                 gfv.setTime("Time Remaining: " + duration.toMinutesPart() + ":" + duration.toSecondsPart());
-                if (second == -1) {
+                if (second == TIME_OUT) {
                     endTurn();
                 }
             }
         };
+    }
+
+    private void startTimer() {
+
+        TimerTask t = timer();
+
         timer = new Timer();
-        timer.schedule(t, 0, 1000);
+        timer.schedule(t, TIME_DELAY, TIME_PERIOD);
     }
 
     private void stopTimer() {
-        TimerTask t = new TimerTask() {
-            int second = 60;
 
-            @Override
-            public void run() {
-                Duration duration = Duration.ofSeconds(second--);
-                gfv.setTime("Time Remaining: " + duration.toMinutesPart() + ":" + duration.toSecondsPart() + " ");
-                if (second == -1) {
-                    endTurn();
-                }
-            }
-        };
+        TimerTask t = timer();
+
         timer.cancel();
         timer = new Timer();
-        timer.schedule(t, 0, 1000);
+        timer.schedule(t, TIME_DELAY, TIME_PERIOD);
     }
 
     public void setOffensive() {

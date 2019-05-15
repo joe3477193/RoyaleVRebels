@@ -25,7 +25,7 @@ public class GameImpl implements Game {
         Random r = new Random();
         int turn = r.nextInt(playerNames.size());
 
-        // Randomly assign team for player
+        // randomly assign team for player
         if (turn == 0) {
             royale = new RoyalePlayer(playerNames.get(turn));
             rebel = new RebelPlayer(playerNames.get(turn + 1));
@@ -63,10 +63,10 @@ public class GameImpl implements Game {
 
             public void run() {
 
-                // Instantiate the GUI view for game
+                // instantiate the GUI view for game
                 gfv = new GameFrameView();
 
-                // Instantiate the GameEngineFacade
+                // instantiate the GameEngineFacade
                 g = new GameEngineFacade(gfv);
                 gfv.assembleBoard(rebel, royale, g);
                 new GameController(g, gfv);

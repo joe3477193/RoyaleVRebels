@@ -22,8 +22,8 @@ import static view.gameView.GameFrameView.STATUS;
 
 public class GameEngineFacade implements GameEngine {
 
-    public static final int BOARD_ROWS = 13; // increments in 5
-    public static final int BOARD_COLS = 15; // increments in 4
+    public static final int BOARD_MAX_ROWS = 13; // increments in 5
+    public static final int BOARD_MAX_COLS = 15; // increments in 4
     private static final int REBEL_TURN = 0;
     private static final int ROYALE_TURN = 1;
     private static final int ROW_LOADED = 0;
@@ -31,31 +31,32 @@ public class GameEngineFacade implements GameEngine {
     private static final int NAME_LOADED = 2;
     private static final int HP_LOADED = 3;
     private static final int COORDINATE_NUM = 2;
-    private static final int ORIGINAL_ROW = 0;
-    private static final int ORIGINAL_COL = 0;
-
     private static final int ROW = 0;
     private static final int COL = 1;
+    private static final int ORIGINAL_ROW = 0;
+    private static final int ORIGINAL_COL = 0;
 
     // TODO: Game model shouldn't have gui component such as icons
     private static final String IMAGE_PATH = "../../images/";
 
-    private static Stack<AbstractTurn> moves;
     private GameFrameView gfv;
     private Piece summonedPiece;
     private Piece onBoardPiece;
     private Tile[][] tiles;
-    private boolean rebelUndo = false;
-    private boolean royaleUndo = false;
+
+    // Stack for storing moves
+    private static Stack<AbstractTurn> moves;
 
     private int turn;
-
     private int[] turns;
     private int[] coordinate;
     private int[] initTileCoord;
+
     private boolean isMoving;
     private boolean isAttacking;
     private boolean actionPerformed;
+    private boolean rebelUndo = false;
+    private boolean royaleUndo = false;
 
     public GameEngineFacade(GameFrameView gfv) {
         gameInit(gfv);
@@ -90,6 +91,14 @@ public class GameEngineFacade implements GameEngine {
         onBoardPiece = null;
     }
 
+    public int getOriginalRow() {
+        return ORIGINAL_ROW;
+    }
+
+    public int getOriginalCol() {
+        return ORIGINAL_COL;
+    }
+
     public int getRebelTurn() {
         return REBEL_TURN;
     }
@@ -112,10 +121,10 @@ public class GameEngineFacade implements GameEngine {
 
         this.gfv = gfv;
 
-        tiles = new Tile[BOARD_ROWS][BOARD_COLS];
+        tiles = new Tile[BOARD_MAX_ROWS][BOARD_MAX_COLS];
 
-        for (int i = ORIGINAL_ROW; i < BOARD_ROWS; i++) {
-            for (int j = ORIGINAL_COL; j < BOARD_COLS; j++) {
+        for (int i = ORIGINAL_ROW; i < BOARD_MAX_ROWS; i++) {
+            for (int j = ORIGINAL_COL; j < BOARD_MAX_COLS; j++) {
                 tiles[i][j] = new Tile(i, j);
             }
         }
@@ -141,7 +150,7 @@ public class GameEngineFacade implements GameEngine {
         return isAttacking;
     }
 
-    //resets the attacking mode and resets the colour of the tiles + cursor
+    // reset the attacking mode and resets the colour of the tiles + cursor
     public void resetAttacking() {
         isAttacking = false;
         gfv.decolour();
@@ -149,7 +158,7 @@ public class GameEngineFacade implements GameEngine {
         depaintAction();
     }
 
-    //set the mode for attacking
+    // set the mode for attacking
     public void setAttacking() {
         if (isFactionMatched(coordinate[ROW], coordinate[COL])) {
             isAttacking = true;
@@ -217,8 +226,8 @@ public class GameEngineFacade implements GameEngine {
     //resets the colour of the tiles back
     private void depaintAction() {
         JButton[][] tileBtns = gfv.getTileBtns();
-        for (int i = ORIGINAL_ROW; i < BOARD_ROWS; i++) {
-            for (int j = ORIGINAL_COL; j < BOARD_COLS; j++) {
+        for (int i = ORIGINAL_ROW; i < BOARD_MAX_ROWS; i++) {
+            for (int j = ORIGINAL_COL; j < BOARD_MAX_COLS; j++) {
                 if (!isWall(i, j) && !getTile(i, j).hasPiece() && !isCastle(i)) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(IMAGE_PATH + "grass.png")));
                 }
@@ -339,13 +348,20 @@ public class GameEngineFacade implements GameEngine {
         initTileCoord[COL] = j;
     }
 
-
-    public int getRows() {
-        return BOARD_ROWS;
+    public int getRow() {
+        return ROW;
     }
 
-    public int getCols() {
-        return BOARD_COLS;
+    public int getCol() {
+        return COL;
+    }
+
+    public int getMaxRows() {
+        return BOARD_MAX_ROWS;
+    }
+
+    public int getMaxCols() {
+        return BOARD_MAX_COLS;
     }
 
     public int getTurn() {
