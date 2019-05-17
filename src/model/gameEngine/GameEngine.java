@@ -82,4 +82,8 @@ public interface GameEngine {
 
     int[] getInitTileCoord();
 
+    String whoseTurn();
+
+    void paintSummonRange(String faction, String troopType);
+
 }

@@ -119,6 +119,7 @@ public class GameController {
                     gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), name[i]));
                     g.createPiece(name[i]);
                     gfv.setImage(image[i]);
+                    g.paintSummonRange(g.whoseTurn(), name[i]);
                 } else {
                     gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
                 }

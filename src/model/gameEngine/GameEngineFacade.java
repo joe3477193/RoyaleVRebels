@@ -35,6 +35,10 @@ public class GameEngineFacade implements GameEngine {
     private static final int COL = 1;
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
+    private static final int ROYALE_SUMMON_TOP_LIMIT= 1;
+    private static final int ROYALE_SUMMON_BOTTOM_LIMIT= 3;
+    private static final int REBEL_SUMMON_TOP_LIMIT= 9;
+    private static final int OBSTACLE_EXTRA_SUMMON_LIMIT= 3;
 
     // TODO: Game model shouldn't have gui component such as icons
     private static final String IMAGE_PATH = "../../images/";
@@ -54,6 +58,9 @@ public class GameEngineFacade implements GameEngine {
     private boolean actionPerformed;
     private boolean rebelUndo = false;
     private boolean royaleUndo = false;
+
+    private int boardRowLength;
+    private int boardColLength;
 
     public GameEngineFacade(GameFrameView gfv) {
         gameInit(gfv);
@@ -135,6 +142,9 @@ public class GameEngineFacade implements GameEngine {
 
         isMoving = false;
         isAttacking = false;
+
+        boardRowLength= BOARD_MAX_ROWS;
+        boardColLength= BOARD_MAX_COLS;
 
         // Initialize current turn;
     }
@@ -528,15 +538,17 @@ public class GameEngineFacade implements GameEngine {
     private boolean checkSummonValid(Piece piece, int row, int tile) {
         boolean isRowValid;
         int extraMove = 0;
+        int summonRange;
 
         if (piece.getType().equals("Obstacle")) {
-            extraMove = 3;
+            extraMove = OBSTACLE_EXTRA_SUMMON_LIMIT;
         }
 
         if (piece.getFaction().equals("Royale")) {
-            isRowValid = row < 3 + extraMove && row >= 1;
+            summonRange= ROYALE_SUMMON_BOTTOM_LIMIT + extraMove;
+            isRowValid = row <= summonRange && row >= ROYALE_SUMMON_TOP_LIMIT;
         } else {
-            isRowValid = row > 9 - extraMove;
+            isRowValid = row >= REBEL_SUMMON_TOP_LIMIT - extraMove;
         }
 
         if (checkMoveTarget(row, tile) && isRowValid) {
@@ -544,6 +556,33 @@ public class GameEngineFacade implements GameEngine {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void paintSummonRange(String faction, String troopType){
+        int start;
+        int finish;
+        int extraMove= 0;
+
+        if(troopType.equals("Obstacle")){
+            extraMove= OBSTACLE_EXTRA_SUMMON_LIMIT;
+        }
+
+        if(faction.equals("Royale")){
+            start= ROYALE_SUMMON_TOP_LIMIT;
+            finish= ROYALE_SUMMON_BOTTOM_LIMIT + extraMove;
+        }
+        else{
+            start= REBEL_SUMMON_TOP_LIMIT - extraMove;
+            finish= boardRowLength - 1;
+        }
+
+        for(int i=start;i<=finish;i++){
+            for(int j=0;j<boardColLength;j++){
+                if(checkMoveRepaint(i, j)) {
+                    gfv.colourTile(i, j, "summon");
+                }
+            }
         }
     }
 
@@ -561,7 +600,7 @@ public class GameEngineFacade implements GameEngine {
 
             // Command is also added as an object to stack
             moves.push(new SummonCommand(gfv.getImage(), i, j));
-
+            depaintAction();
             return true;
         } else {
             gfv.getStatusLabel().setText(STATUS + "Invalid placement, the first two rows for Royales and the bottom three rows for Rebels.");
@@ -745,6 +784,14 @@ public class GameEngineFacade implements GameEngine {
 
     public Tile[][] getTiles() {
         return tiles;
+    }
+
+    public String whoseTurn(){
+        if (turn==0)
+                return "Rebel";
+        else{
+            return "Royale";
+        }
     }
 
 }

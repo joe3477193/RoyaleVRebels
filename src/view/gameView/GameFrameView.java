@@ -17,6 +17,7 @@ public class GameFrameView extends JFrame {
     private static final String WALL_IMAGE = IMAGE_PATH + "wall.jpg";
     private static final String RED_GRASS_IMAGE = IMAGE_PATH + "red_grass.png";
     private static final String BLUE_GRASS_IMAGE = IMAGE_PATH + "blue_grass.png";
+    private static final String PINK_GRASS_IMAGE= IMAGE_PATH + "pink_grass.png";
     private static final String RO_ONE_IMAGE = IMAGE_PATH + "general.png";
     private static final String RO_TWO_IMAGE = IMAGE_PATH + "liutenant.png";
     private static final String RO_THREE_IMAGE = IMAGE_PATH + "infantry.png";
@@ -270,6 +271,9 @@ public class GameFrameView extends JFrame {
                 name = BLUE_GRASS_IMAGE;
             } else if (actionType.equals("attackRange")) {
                 name = RED_GRASS_IMAGE;
+            }
+            else if(actionType.equals("summon")){
+                name = PINK_GRASS_IMAGE;
             }
             tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(name)));
         } catch (RuntimeException ignored) {
