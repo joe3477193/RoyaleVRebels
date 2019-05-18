@@ -9,9 +9,9 @@ import java.awt.event.WindowEvent;
 
 public class AboutView {
 
-    private static final int ABOUT_VIEW_WIDTH = 200;
-    private static final int ABOUT_VIEW_HEIGHT = 200;
-    private static final int INFO_PANEL_ROWS = 5;
+    private static final int ABOUT_VIEW_WIDTH = 300;
+    private static final int ABOUT_VIEW_HEIGHT = 300;
+    private static final int INFO_PANEL_ROWS = 6;
     private static final int INFO_PANEL_COLS = 1;
 
     private JFrame frame;
@@ -19,13 +19,13 @@ public class AboutView {
     private JButton returnBtn = new JButton("Return");
 
     public AboutView() {
-        frame = new JFrame();
+        frame = new JFrame("RMIT");
         frame.setSize(new Dimension(ABOUT_VIEW_WIDTH, ABOUT_VIEW_HEIGHT));
         frame.setLocationRelativeTo(null);
 
         JPanel infoPanel = new JPanel(new GridLayout(INFO_PANEL_ROWS, INFO_PANEL_COLS));
 
-        JLabel title = new JLabel("ABOUT");
+        JLabel title = new JLabel("ABOUT", SwingConstants.CENTER);
         JLabel author1 = new JLabel("Author: Huirong Huang");
         JLabel author2 = new JLabel("Author: Edward Kahiro Kuo");
         JLabel author3 = new JLabel("Author: Joseph Anthony Verduci");

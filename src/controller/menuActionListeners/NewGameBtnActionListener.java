@@ -16,6 +16,7 @@ public class NewGameBtnActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         new EnterNameView();
         frame.dispose();
     }

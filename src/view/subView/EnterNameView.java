@@ -1,5 +1,6 @@
 package view.subView;
 
+import controller.menuActionListeners.ReturnBtnActionListener;
 import controller.menuActionListeners.StartGameBtnActionListener;
 
 import javax.swing.*;
@@ -9,9 +10,9 @@ import java.awt.event.WindowEvent;
 
 public class EnterNameView {
 
-    private static final int ENTER_NAME_VIEW_WIDTH = 200;
-    private static final int ENTER_NAME_VIEW_HEIGHT = 200;
-    private static final int INFO_PANEL_ROWS = 5;
+    private static final int ENTER_NAME_VIEW_WIDTH = 300;
+    private static final int ENTER_NAME_VIEW_HEIGHT = 300;
+    private static final int INFO_PANEL_ROWS = 6;
     private static final int INFO_PANEL_COLS = 1;
     private static final int NAME_MAX_LENGTH = 40;
 
@@ -20,9 +21,10 @@ public class EnterNameView {
     private JTextField player_one_name;
     private JTextField player_two_name;
     private JButton startBtn = new JButton("Begin Game");
+    private JButton returnBtn = new JButton("Return");
 
     public EnterNameView() {
-        frame = new JFrame();
+        frame = new JFrame("Register...");
         frame.setSize(new Dimension(ENTER_NAME_VIEW_WIDTH, ENTER_NAME_VIEW_HEIGHT));
         frame.setLocationRelativeTo(null);
 
@@ -41,6 +43,7 @@ public class EnterNameView {
         infoPanel.add(nameLabelTwo);
         infoPanel.add(player_two_name);
         infoPanel.add(startBtn);
+        infoPanel.add(returnBtn);
 
         frame.add(infoPanel, BorderLayout.CENTER);
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
@@ -55,5 +58,7 @@ public class EnterNameView {
     private void addController() {
         ActionListener startController = new StartGameBtnActionListener(frame, player_one_name, player_two_name);
         startBtn.addActionListener(startController);
+        ActionListener returnController = new ReturnBtnActionListener(frame);
+        returnBtn.addActionListener(returnController);
     }
 }

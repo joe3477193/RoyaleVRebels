@@ -1,23 +1,23 @@
 package controller.menuActionListeners;
 
-import view.subView.AboutView;
+import view.subView.HelpView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AboutBtnActionListener implements ActionListener {
+public class HelpBtnActionListener implements ActionListener {
 
     private JFrame frame;
 
-    public AboutBtnActionListener(JFrame frame) {
+    public HelpBtnActionListener(JFrame frame) {
         this.frame = frame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        new AboutView();
+        new HelpView();
         frame.dispose();
     }
 }
