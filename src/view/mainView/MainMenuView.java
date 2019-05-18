@@ -1,5 +1,6 @@
 package view.mainView;
 
+import controller.menuActionListeners.AboutBtnActionListener;
 import controller.menuActionListeners.LoadGameBtnActionListener;
 import controller.menuActionListeners.NewGameBtnActionListener;
 
@@ -12,12 +13,15 @@ public class MainMenuView {
 
     private static final int START_GAME_VIEW_WIDTH = 200;
     private static final int START_GAME_VIEW_HEIGHT = 200;
-    private static final int INFO_PANEL_ROWS = 2;
+    private static final int INFO_PANEL_ROWS = 5;
     private static final int INFO_PANEL_COLS = 1;
 
     private JFrame frame;
     private JButton newGameBtn = new JButton("New Game");
     private JButton loadGameBtn = new JButton("Load Game");
+    private JButton helpBtn = new JButton("Help");
+    private JButton aboutBtn = new JButton("About");
+    private JButton quitBtn = new JButton("Quit");
 
     public MainMenuView() {
 
@@ -29,6 +33,9 @@ public class MainMenuView {
 
         infoPanel.add(newGameBtn);
         infoPanel.add(loadGameBtn);
+        infoPanel.add(helpBtn);
+        infoPanel.add(aboutBtn);
+        infoPanel.add(quitBtn);
 
         frame.add(infoPanel, BorderLayout.CENTER);
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
@@ -41,9 +48,11 @@ public class MainMenuView {
     }
 
     private void addController() {
-        ActionListener newGame = new NewGameBtnActionListener(frame);
-        newGameBtn.addActionListener(newGame);
-        ActionListener loadGame = new LoadGameBtnActionListener(frame);
-        loadGameBtn.addActionListener(loadGame);
+        ActionListener newGameController = new NewGameBtnActionListener(frame);
+        newGameBtn.addActionListener(newGameController);
+        ActionListener loadGameController = new LoadGameBtnActionListener(frame);
+        loadGameBtn.addActionListener(loadGameController);
+        ActionListener aboutController = new AboutBtnActionListener(frame);
+        aboutBtn.addActionListener(aboutController);
     }
 }
