@@ -6,5 +6,5 @@ public interface Turn {
 
     TurnType returnLastMove();
 
-    void executeTurn(JButton[][] tileBtn, int i, int j);
+    void executeTurn(JButton[][] tileBtn,String image, int i, int j);
 }

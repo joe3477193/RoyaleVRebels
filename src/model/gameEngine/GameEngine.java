@@ -4,6 +4,9 @@ import model.piece.AbtractPiece.PieceInterface;
 import model.player.Player;
 
 import javax.swing.*;
+
+import controller.commandPattern.AbstractTurn;
+
 import java.util.ArrayList;
 
 public interface GameEngine {
@@ -78,7 +81,8 @@ public interface GameEngine {
 
     void setTileIcon(ArrayList<String[]> tileList);
 
-
+    void pushTurnStack(AbstractTurn turn);
+    
     void undoTurn();
 
     int[] getInitTileCoord();

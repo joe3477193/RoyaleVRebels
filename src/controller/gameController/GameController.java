@@ -1,5 +1,6 @@
 package controller.gameController;
 
+import controller.commandPattern.AttackCommand;
 import controller.commandPattern.MoveCommand;
 import controller.commandPattern.SummonCommand;
 import controller.gameActionListeners.*;
@@ -35,8 +36,7 @@ public class GameController {
 
     private GameEngine g;
     private GameFrameView gfv;
-    private MoveCommand move;
-    private SummonCommand summon;
+
 
     public GameController(GameEngine g, GameFrameView gfv) {
 
@@ -46,8 +46,6 @@ public class GameController {
         addActionListeners();
         startTimer();
 
-        move = new MoveCommand(g);
-        summon = new SummonCommand(g);
     }
 
     private void addActionListeners() {
@@ -151,22 +149,28 @@ public class GameController {
 
                     // attempt to place piece
                     else {
-                        tileBtn = tileBtns[i][j];            //TODO Confirm btn needs to be passed to model in summo
+                        tileBtn = tileBtns[i][j];           
                         // attempt to place a summoned piece
                         if (g.getSummonedPiece() != null && !g.getActionPerformed()) {
-
-                            // turn is consumed and run through turn command
-                            summon.executeTurn(tileBtns, i, j);
+                        	// turn is consumed and run through turn command
+                        	SummonCommand sum = new SummonCommand(g);
+                        	sum.executeTurn(tileBtns,gfv.getImage(), i, j);
+                        	g.pushTurnStack(sum);
+                          
+                           
                         }
                         // attempt to place a piece during movement
                         else if (g.isMoving() && !g.getActionPerformed()) {
-
-                            // turn is consumed and run through turn command
-                            move.executeTurn(tileBtns, i, j);
+                        	// turn is consumed and run through turn command
+                        	MoveCommand mc = new MoveCommand(g);
+                        	mc.executeTurn(tileBtns, gfv.getImage(), i, j);                 
+                        	g.pushTurnStack(mc);
                         }
                         // attempt to place a piece during attack
                         else if (g.isAttacking() && !g.getActionPerformed()) {
-
+                        	AttackCommand ac = new AttackCommand(g);
+                        //	ac.executeTurn(tileBtn, image, i, j);
+                        	
                             // TODO: turn is consumed and run through turn command
                             g.placeAttackPiece(i, j);
                         }
