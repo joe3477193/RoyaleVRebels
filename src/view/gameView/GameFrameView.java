@@ -46,7 +46,7 @@ public class GameFrameView extends JFrame {
     private JPanel playerPanel;
     private JPanel deckPanel;
     private JPanel menuPanel;
-    private JLabel playerName, playerType, time;
+    private JLabel playerName, playerType, playerCP, time;
     private String nameOne, typeOne, nameTwo, typeTwo;
     private JButton saveButton;
     private JButton quitButton;
@@ -63,6 +63,7 @@ public class GameFrameView extends JFrame {
     private JButton lastTile;
     private ArrayList<JButton> summonBtns;
     private JLabel statusLabel;
+    private JLabel castleHP;
 
     public GameFrameView() {
 
@@ -160,6 +161,10 @@ public class GameFrameView extends JFrame {
         playerPanel.add(new JLabel("Player Type: "));
         playerPanel.add(playerType);
 
+        playerCP = new JLabel(String.valueOf(playerOne.getCP()));
+        playerPanel.add(new JLabel("Player CP: "));
+        playerPanel.add(playerCP);
+
         tileBtns = new JButton[GameEngineFacade.BOARD_MAX_ROWS][GameEngineFacade.BOARD_MAX_COLS];
 
         deckPanel.setMaximumSize(new Dimension(100, 100));
@@ -181,7 +186,9 @@ public class GameFrameView extends JFrame {
         menuPanel = new JPanel(new BorderLayout());
         saveButton = new JButton("Save Game");
         quitButton = new JButton("Quit Game");
+        castleHP = new JLabel("Castle HP: 500", SwingConstants.CENTER);
         menuPanel.add(saveButton, BorderLayout.EAST);
+        menuPanel.add(castleHP, BorderLayout.CENTER);
         menuPanel.add(quitButton, BorderLayout.WEST);
 
         JPanel topBar = new JPanel(new BorderLayout());
