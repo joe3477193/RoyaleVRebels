@@ -58,13 +58,16 @@ public class GameEngineFacade implements GameEngine {
     private boolean actionPerformed;
     private boolean rebelUndo = false;
     private boolean royaleUndo = false;
-
+    private int rebelUndoRem;
+    private int royaleUndoRem;
     private int boardRowLength;
     private int boardColLength;
 
-    public GameEngineFacade(GameFrameView gfv) {
+    public GameEngineFacade(GameFrameView gfv, int undoMoves) {
         gameInit(gfv);
         actionPerformed = false;
+        rebelUndoRem = undoMoves;
+        royaleUndoRem = undoMoves;
         turn = REBEL_TURN;
     }
 
@@ -680,11 +683,11 @@ public class GameEngineFacade implements GameEngine {
 
     public void undoTurn() {
 
-        if (getTurn() == REBEL_TURN && !rebelUndo) {
-            rebelUndo = true;
+        if (getTurn() == REBEL_TURN && rebelUndoRem != 0) {
+        	rebelUndoRem -=1;
             accessStack();
-        } else if (getTurn() == ROYALE_TURN && !royaleUndo) {
-            royaleUndo = true;
+        } else if (getTurn() == ROYALE_TURN && royaleUndoRem != 0) {
+        	royaleUndoRem -=1;
             accessStack();
         } else {
             gfv.getStatusLabel().setText(STATUS + "You have already used your Undo for this game!");
@@ -697,7 +700,7 @@ public class GameEngineFacade implements GameEngine {
 
         JButton[][] tileBtns = gfv.getTileBtns();
 
-        if (moves.peek().getClass() == MoveCommand.class) {
+        if (moves.peek().getClass() == MoveCommand.class && moves.size() >0) {
             MoveCommand mc = (MoveCommand) moves.pop();
             JButton tileBtn = tileBtns[mc.tooTileRow][mc.tooTileCol];
             getTile(mc.fromTileRow, mc.fromTileCol).setPiece(getPiece(mc.tooTileRow, mc.tooTileCol));
@@ -706,7 +709,7 @@ public class GameEngineFacade implements GameEngine {
             tileBtns[mc.fromTileRow][mc.fromTileCol].setIcon(new ImageIcon(this.getClass().getResource(mc.image)));
             tileBtns[mc.fromTileRow][mc.fromTileCol].setName(gfv.getImage());
 
-        } else {
+        } else if(moves.size()>0) {
             SummonCommand sc = (SummonCommand) moves.pop();
             JButton tileBtnSum = tileBtns[sc.initTileRow][sc.initTileCol];
             getTile(sc.initTileRow, sc.initTileCol).removePiece();
@@ -716,7 +719,7 @@ public class GameEngineFacade implements GameEngine {
         gfv.decolour();
         actionPerformed = false;
         gfv.getAttackBtn().setVisible(true);
-        gfv.getUndoBtn().setVisible(false);
+        
     }
 
     private void resetPiece(int i, int j) {

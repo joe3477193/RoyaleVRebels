@@ -22,6 +22,8 @@ public class EnterNameView {
     private JTextField player_two_name;
     private JButton startBtn = new JButton("Begin Game");
     private JButton returnBtn = new JButton("Return");
+    private String[] undoOptions = new String[] {"0","1","2","3"};
+    JComboBox<String> undoMoves;
 
     public EnterNameView() {
         frame = new JFrame("Register...");
@@ -33,6 +35,8 @@ public class EnterNameView {
         JLabel nameLabelOne = new JLabel("Please enter player one name:");
         player_one_name = new JTextField(NAME_MAX_LENGTH);
         player_one_name.setText("Player One");
+        
+        undoMoves = new JComboBox<>(undoOptions);
 
         JLabel nameLabelTwo = new JLabel("Please enter player two name:");
         player_two_name = new JTextField(NAME_MAX_LENGTH);
@@ -42,6 +46,9 @@ public class EnterNameView {
         infoPanel.add(player_one_name);
         infoPanel.add(nameLabelTwo);
         infoPanel.add(player_two_name);
+        infoPanel.add(new JLabel("Undo's allowed:"));
+        infoPanel.add(undoMoves);
+        
         infoPanel.add(startBtn);
         infoPanel.add(returnBtn);
 
@@ -56,7 +63,7 @@ public class EnterNameView {
     }
 
     private void addController() {
-        ActionListener startController = new StartGameBtnActionListener(frame, player_one_name, player_two_name);
+        ActionListener startController = new StartGameBtnActionListener(frame, player_one_name, player_two_name, undoMoves);
         startBtn.addActionListener(startController);
         ActionListener returnController = new ReturnBtnActionListener(frame);
         returnBtn.addActionListener(returnController);
