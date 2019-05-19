@@ -1,9 +1,10 @@
 package client;
 
-import view.EnterNameView;
+import view.mainView.MainMenuView;
 
 public class Client {
+
     public static void main(String[] args) {
-        new EnterNameView();
+        new MainMenuView();
     }
 }

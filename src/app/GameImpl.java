@@ -1,43 +1,37 @@
 package app;
 
-import controller.GameController;
-import model.board.GameEngine;
-import model.board.GameEngineFacade;
-import model.players.Player;
-import model.players.RebelPlayer;
-import model.players.RoyalePlayer;
-import view.GameFrameView;
+import controller.gameController.GameController;
+import model.gameEngine.GameEngine;
+import model.gameEngine.GameEngineFacade;
+import model.player.Player;
+import model.player.RebelPlayer;
+import model.player.RoyalePlayer;
+import view.gameView.GameFrameView;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GameImpl implements Game{
+public class GameImpl implements Game {
     private Player royale;
     private Player rebel;
     private GameFrameView gfv;
-    private int rows;
-    private int cols;
+    private GameEngine g;
+    private ArrayList<String[]> tileData;
 
-
-    public GameImpl( ArrayList<String> playerNames, int rows, int cols) {
-
-        this.rows = rows;
-        this.cols = cols;
-
+    public GameImpl(ArrayList<String> playerNames) {
         ArrayList<Player> players = new ArrayList<>();
 
         Random r = new Random();
         int turn = r.nextInt(playerNames.size());
 
-        // Randomly assign team for players
-        if(turn == 0) {
+        // randomly assign team for player
+        if (turn == 0) {
             royale = new RoyalePlayer(playerNames.get(turn));
-            rebel =  new RebelPlayer(playerNames.get(turn + 1));
-        }
-        else {
+            rebel = new RebelPlayer(playerNames.get(turn + 1));
+        } else {
             royale = new RoyalePlayer(playerNames.get(turn));
-            rebel =  new RebelPlayer(playerNames.get(turn - 1));
+            rebel = new RebelPlayer(playerNames.get(turn - 1));
         }
 
         players.add(rebel);
@@ -46,7 +40,21 @@ public class GameImpl implements Game{
         for (Player player : players) {
             System.out.println(player.getName());
         }
+    }
 
+    public GameImpl(Player rebel, Player royale, GameEngine g, GameFrameView gfv, ArrayList<String[]> tileData) {
+        this.tileData = tileData;
+        this.gfv = gfv;
+        this.g = g;
+        this.rebel = rebel;
+        this.royale = royale;
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                gfv.assembleBoard(rebel, royale, g);
+                new GameController(g, gfv);
+                g.setTileIcon(tileData);
+            }
+        });
     }
 
     public void initGame() {
@@ -55,14 +63,12 @@ public class GameImpl implements Game{
 
             public void run() {
 
-                GameEngineFacade.BOARD_ROWS = rows;
-                GameEngineFacade.BOARD_COLS = cols;
-                // Instantiate the GUI view for game
-                gfv= new GameFrameView();
+                // instantiate the GUI view for game
+                gfv = new GameFrameView();
 
-                // Instantiate the GameEngineFacade
-                GameEngine g = new GameEngineFacade(gfv);
-                gfv.assembleBoard(rebel,royale, g);
+                // instantiate the GameEngineFacade
+                g = new GameEngineFacade(gfv);
+                gfv.assembleBoard(rebel, royale, g);
                 new GameController(g, gfv);
             }
         });

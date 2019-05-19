@@ -1,7 +1,7 @@
 package app;
 
-public interface Game{
+public interface Game {
 
-	// Instantiate game model and GUI view
-	void initGame();
+    // instantiate game model and GUI view
+    void initGame();
 }
