@@ -859,4 +859,10 @@ public class GameEngineFacade implements GameEngine {
 		return rebel;
 	}
 
+	@Override
+	public void placeAttackPiece(int i, int j) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
