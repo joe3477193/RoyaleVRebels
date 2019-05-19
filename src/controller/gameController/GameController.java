@@ -169,7 +169,8 @@ public class GameController {
                         // attempt to place a piece during attack
                         else if (g.isAttacking() && !g.getActionPerformed()) {
                         	AttackCommand ac = new AttackCommand(g);
-                        	ac.executeTurn(tileBtn, image, i, j);
+                        //	ac.executeTurn(tileBtn, image, i, j);
+                        	
                             // TODO: turn is consumed and run through turn command
                             g.placeAttackPiece(i, j);
                         }
