@@ -279,12 +279,11 @@ public class GameEngineFacade implements GameEngine {
         if(getTurn() == REBEL_TURN) {
         	royale.increaseCP();
         	gfv.updateBar(rebel);
-        }
-        else {
+        } else if (getTurn() == ROYALE_TURN) {
         	rebel.increaseCP();
         	gfv.updateBar(royale);
         }
-        
+
         gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         gfv.getAttackBtn().setVisible(true);
         gfv.getStatusLabel().setText(STATUS + "");
@@ -614,6 +613,15 @@ public class GameEngineFacade implements GameEngine {
             System.out.println(gfv.getImage());
             tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getImage())));
             tileBtn.setName(gfv.getImage());
+
+            if (getTurn() == REBEL_TURN) {
+                rebel.reduceCP(getSummonedPiece().getCp());
+                gfv.updateBar(rebel);
+            } else if (getTurn() == ROYALE_TURN) {
+                royale.reduceCP(getSummonedPiece().getCp());
+                gfv.updateBar(royale);
+            }
+
             removeSummonedPiece();
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
             setActionPerformed();
