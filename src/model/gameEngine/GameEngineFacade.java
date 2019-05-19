@@ -8,6 +8,9 @@ import model.piece.AbtractPiece.PieceInterface;
 import model.piece.decorator.ResetDecorator;
 import model.piece.decorator.SetDefensiveDecorator;
 import model.piece.decorator.SetOffensiveDecorator;
+import model.player.Player;
+import model.player.RebelPlayer;
+import model.player.RoyalePlayer;
 import view.gameView.GameFrameView;
 
 import javax.swing.*;
@@ -47,6 +50,8 @@ public class GameEngineFacade implements GameEngine {
     private GameFrameView gfv;
     private Piece summonedPiece;
     private Piece onBoardPiece;
+    private RoyalePlayer royale;
+    private RebelPlayer rebel;
     private Tile[][] tiles;
     private int turn;
     private int[] turns;
@@ -56,16 +61,16 @@ public class GameEngineFacade implements GameEngine {
     private boolean isMoving;
     private boolean isAttacking;
     private boolean actionPerformed;
-    private boolean rebelUndo = false;
-    private boolean royaleUndo = false;
     private int rebelUndoRem;
     private int royaleUndoRem;
     private int boardRowLength;
     private int boardColLength;
 
-    public GameEngineFacade(GameFrameView gfv, int undoMoves) {
+    public GameEngineFacade(GameFrameView gfv, int undoMoves, RoyalePlayer royale,RebelPlayer rebel ) {
         gameInit(gfv);
         actionPerformed = false;
+        this.royale = royale;
+        this.rebel = rebel;
         rebelUndoRem = undoMoves;
         royaleUndoRem = undoMoves;
         turn = REBEL_TURN;
@@ -271,9 +276,16 @@ public class GameEngineFacade implements GameEngine {
         gfv.decolourEndTurn();
         gfv.decolour();
         cycleTurn();
-        gfv.updateBar(turn);
+        if(getTurn() == REBEL_TURN) {
+        	royale.increaseCP();
+        	gfv.updateBar(rebel);
+        }
+        else {
+        	rebel.increaseCP();
+        	gfv.updateBar(royale);
+        }
+        
         gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-
         gfv.getAttackBtn().setVisible(true);
         gfv.getStatusLabel().setText(STATUS + "");
         depaintAction();
@@ -826,5 +838,17 @@ public class GameEngineFacade implements GameEngine {
             return "Royale";
         }
     }
+
+	@Override
+	public Player returnRoyale() {
+		// TODO Auto-generated method stub
+		return royale;
+	}
+
+	@Override
+	public Player returnRebel() {
+		// TODO Auto-generated method stub
+		return rebel;
+	}
 
 }

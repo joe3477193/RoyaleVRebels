@@ -1,6 +1,7 @@
 package model.gameEngine;
 
 import model.piece.AbtractPiece.PieceInterface;
+import model.player.Player;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -85,5 +86,10 @@ public interface GameEngine {
     String whoseTurn();
 
     void paintSummonRange(String faction, String troopType);
+    
+    Player returnRoyale();
+    
+    Player returnRebel();
+    
 
 }

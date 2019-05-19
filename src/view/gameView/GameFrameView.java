@@ -3,6 +3,7 @@ package view.gameView;
 import model.gameEngine.GameEngine;
 import model.gameEngine.GameEngineFacade;
 import model.player.Player;
+import model.player.RoyalePlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,7 +48,6 @@ public class GameFrameView extends JFrame {
     private JPanel deckPanel;
     private JPanel menuPanel;
     private JLabel playerName, playerType, playerCP, time;
-    private String nameOne, typeOne, nameTwo, typeTwo;
     private JButton saveButton;
     private JButton quitButton;
     private JButton undoTurnBtn;
@@ -59,7 +59,7 @@ public class GameFrameView extends JFrame {
     private JButton[] royaleButton;
     private String[] royaleName;
     private String[] royaleImage;
-    private String currentImage;
+    private String currentImage, nameOne, nameTwo;
     private JButton lastTile;
     private ArrayList<JButton> summonBtns;
     private JLabel statusLabel;
@@ -137,12 +137,12 @@ public class GameFrameView extends JFrame {
         }
     }
 
-    public void assembleBoard(Player playerOne, Player playerTwo, GameEngine g) {
-
-        nameOne = playerOne.getName();
-        typeOne = playerOne.getFaction();
+    public void assembleBoard(GameEngine g) {
+    	
+    	Player playerOne = g.returnRebel();
+    	Player playerTwo = g.returnRoyale();
+    	nameOne= playerOne.getName();
         nameTwo = playerTwo.getName();
-        typeTwo = playerTwo.getFaction();
         time = new JLabel("");
 
         playerPanel = new JPanel(new GridLayout(1, 6, 0, 0));
@@ -210,7 +210,7 @@ public class GameFrameView extends JFrame {
         frame.add(gridPanel, BorderLayout.CENTER);
         frame.add(botPanel, BorderLayout.SOUTH);
 
-        updateBar(g.getTurn());
+        updateBar(playerOne);
     }
 
     private void drawActionBtns() {
@@ -316,19 +316,19 @@ public class GameFrameView extends JFrame {
         endTurnBtn.setBackground(null);
     }
 
-    public void updateBar(int turn) {
-        if (turn == 0) {
-            removeSpawn(royaleButton);
-            loadSpawn(rebelButton);
-            playerName.setText(nameOne);
-            playerType.setText(typeOne);
-        } else {
-            System.out.println(rebelButton[2]);
-            removeSpawn(rebelButton);
+    public void updateBar(Player player) {
+    	
+    	if(player instanceof RoyalePlayer) {
+    		removeSpawn(rebelButton);
             loadSpawn(royaleButton);
-            playerName.setText(nameTwo);
-            playerType.setText(typeTwo);
-        }
+    	}
+    	else {
+    		            removeSpawn(royaleButton);
+            loadSpawn(rebelButton);
+    	}
+        playerName.setText(player.getName());
+        playerType.setText(player.getFaction());
+        playerCP.setText(Integer.toString(player.getCP()));
         playerPanel.repaint();
         deckPanel.repaint();
     }

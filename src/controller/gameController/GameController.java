@@ -188,6 +188,7 @@ public class GameController {
 
     public void endTurn() {
         g.unsetActionPerformed();
+        
         stopTimer();
     }
 
