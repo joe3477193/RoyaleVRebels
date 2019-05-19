@@ -12,11 +12,13 @@ public class StartGameBtnActionListener implements ActionListener {
 
     private JFrame frame;
     private JTextField name1, name2;
+    private JComboBox undoMoves;
 
-    public StartGameBtnActionListener(JFrame frame, JTextField name1, JTextField name2) {
+    public StartGameBtnActionListener(JFrame frame, JTextField name1, JTextField name2, JComboBox<String> undoMoves2) {
         this.frame = frame;
         this.name1 = name1;
         this.name2 = name2;
+        this.undoMoves = undoMoves2;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class StartGameBtnActionListener implements ActionListener {
             Game gameImpl = new GameImpl(playerNames);
 
             // Initialise the game
-            gameImpl.initGame();
+            gameImpl.initGame(Integer.parseInt((String) undoMoves.getSelectedItem()));
 
             // Close Register Frame
             frame.dispose();

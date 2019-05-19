@@ -57,7 +57,7 @@ public class GameImpl implements Game {
         });
     }
 
-    public void initGame() {
+    public void initGame(int undo) {
 
         SwingUtilities.invokeLater(new Runnable() {
 
@@ -67,7 +67,7 @@ public class GameImpl implements Game {
                 gfv = new GameFrameView();
 
                 // instantiate the GameEngineFacade
-                g = new GameEngineFacade(gfv);
+                g = new GameEngineFacade(gfv, undo);
                 gfv.assembleBoard(rebel, royale, g);
                 new GameController(g, gfv);
             }
