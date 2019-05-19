@@ -1,12 +1,13 @@
 package model.player;
 
+import java.util.Random;
+
 public abstract class Player {
 
     private final String faction;
     private int cp;
     private int start_cp;
     private String name;
-    private boolean turn;
 
     public Player(String name, int cp, int start_cp, String faction) {
         this.name = name;
@@ -27,16 +28,19 @@ public abstract class Player {
         return cp;
     }
 
-    public void setCP(int cp) {
-        this.cp = cp;
+    public void reduceCP(int value) {
+        this.cp -= value;
     }
 
     public String getFaction() {
         return faction;
     }
 
+    public void increaseCP() {
+        Random random = new Random();
 
-    public boolean finishedTurn() {
-        return turn;
+        // increaseCP by 1 or 2 randomly
+        int enhancement = random.nextInt(2) + 1;
+        this.cp += enhancement;
     }
 }
