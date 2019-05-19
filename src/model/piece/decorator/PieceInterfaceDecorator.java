@@ -14,6 +14,8 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     private int cp;
     private int initHp;
     private int hp;
+    private int initDefence;
+    private int defence;
     private int initAttackPower;
     private int attackPower;
     private int initMoveSpeed;
@@ -32,6 +34,8 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         cp = piece.getCp();
         initHp = piece.getInitHp();
         hp = piece.getHp();
+        initDefence = piece.getInitDefence();
+        defence = piece.getDefence();
         initAttackPower = piece.getInitAttackPower();
         attackPower = piece.getAttackPower();
         initMoveSpeed = piece.getInitMoveSpeed();
@@ -72,6 +76,18 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         return hp;
     }
 
+    public int getInitDefence() {
+        return initDefence;
+    }
+
+    public int getDefence() {
+        return defence;
+    }
+
+    public void setDefence(int defence) {
+        this.defence = defence;
+    }
+
     public int getInitAttackPower() {
         return initAttackPower;
     }
@@ -106,6 +122,10 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
 
     public int getAttackRange() {
         return attackRange;
+    }
+
+    public void setAttackRange(int attackRange) {
+        this.attackRange = attackRange;
     }
 
     public int getActionRange(String actionType) {
@@ -156,7 +176,13 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     }
 
     public void attackedBy(int attack) {
-        hp -= attack;
+
+        int trueDamage = attack - defence;
+
+        if (trueDamage > 0) {
+            hp -= trueDamage;
+        }
+
         if (hp <= 0) {
             hp = 0;
         }

@@ -292,13 +292,15 @@ public class GameEngineFacade implements GameEngine {
 
         // TODO: SHOULD MAKE A PIECE STATUS PANEL TO SHOW ALL INFO
         if (getTile(i, j).hasPiece()) {
-            gfv.getStatusLabel().setText(String.format(STATUS + " %s: %d HP remaining, %d AP, %d AR, %d MS.", getPiece(i, j).getName(), getPiece(i, j).getHp(),
-                    getPiece(i, j).getAttackPower(), getPiece(i, j).getAttackRange(), getPiece(i, j).getMoveSpeed()));
+            gfv.getStatusLabel().setText(String.format(STATUS + " %s: %d HP remaining, %d AP, %d DF, %d AR, %d MS. (OFFENSIVE %B, DEFENSIVE %B)", getPiece(i, j).getName(), getPiece(i, j).getHp(),
+                    getPiece(i, j).getAttackPower(), getPiece(i, j).getDefence(), getPiece(i, j).getAttackRange(), getPiece(i, j).getMoveSpeed(), getPiece(i, j).isOffensive(), getPiece(i, j).isDefensive()));
         }
 
         System.out.println("TileButton Name: " + tileBtn.getName());
-        System.out.println("Original AP: " + getTile(i, j).getPiece().getAttackPower());
-        System.out.println("Original HP: " + getTile(i, j).getPiece().getHp());
+        System.out.println("AP: " + getTile(i, j).getPiece().getAttackPower());
+        System.out.println("DF: " + getTile(i, j).getPiece().getDefence());
+        System.out.println("AR: " + getTile(i, j).getPiece().getAttackRange());
+        System.out.println("MS: " + getTile(i, j).getPiece().getMoveSpeed());
 
         boolean match = isFactionMatched(i, j);
         if (match && !actionPerformed) {
@@ -658,7 +660,7 @@ public class GameEngineFacade implements GameEngine {
         if (attack(getInitTileCoord()[ROW], getInitTileCoord()[COL], i, j)) {
             PieceInterface piece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
             String message;
-            message = String.format("%d damage dealt! Remaining HP: %d", piece.getAttackPower(),
+            message = String.format("%d true damage dealt! Remaining HP: %d", piece.getAttackPower() - getPiece(i, j).getDefence(),
                     getPiece(i, j).getHp());
             if (getPiece(i, j).isDead()) {
                 message += String.format(", %s is dead!", getPiece(i, j).getName());
@@ -744,18 +746,30 @@ public class GameEngineFacade implements GameEngine {
         if (checkInit(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
             if (isFactionMatched(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
                 PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
-                if (!originalPiece.isOffensive() && !originalPiece.isDefensive()) {
-                    PieceInterface offensivePiece = new SetOffensiveDecorator(originalPiece);
+                if (!originalPiece.isOffensive()) {
+                    PieceInterface resetPiece = new ResetDecorator(originalPiece);
+                    resetPiece.resetMode();
+                    PieceInterface offensivePiece = new SetOffensiveDecorator(resetPiece);
                     offensivePiece.setOffensive();
                     getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(offensivePiece);
 
                     System.out.println("Original AP: " + originalPiece.getAttackPower());
-                    System.out.println("Original HP: " + originalPiece.getHp());
+                    System.out.println("Original DF: " + originalPiece.getDefence());
+                    System.out.println("Original AR: " + originalPiece.getAttackRange());
+                    System.out.println("Original MS: " + originalPiece.getMoveSpeed());
                     System.out.println("--------------------------------------------");
                     System.out.println("Offensive AP: " + offensivePiece.getAttackPower());
-                    System.out.println("Offensive HP: " + offensivePiece.getHp());
+                    System.out.println("Offensive DF: " + offensivePiece.getDefence());
+                    System.out.println("Offensive AR: " + offensivePiece.getAttackRange());
+                    System.out.println("Offensive MS: " + offensivePiece.getMoveSpeed());
                 } else {
-                    System.out.println("This piece has been strengthened already!");
+                    PieceInterface resetPiece = new ResetDecorator(originalPiece);
+                    resetPiece.resetMode();
+                    getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(resetPiece);
+                    System.out.println("Original AP: " + resetPiece.getAttackPower());
+                    System.out.println("Original DF: " + resetPiece.getDefence());
+                    System.out.println("Original AR: " + resetPiece.getAttackRange());
+                    System.out.println("Original MS: " + resetPiece.getMoveSpeed());
                 }
             } else {
                 System.out.println("You cannot strengthen opponent piece!");
@@ -769,18 +783,30 @@ public class GameEngineFacade implements GameEngine {
         if (checkInit(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
             PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
             if (isFactionMatched(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
-                if (!originalPiece.isOffensive() && !originalPiece.isDefensive()) {
-                    PieceInterface defensivePiece = new SetDefensiveDecorator(originalPiece);
+                if (!originalPiece.isDefensive()) {
+                    PieceInterface resetPiece = new ResetDecorator(originalPiece);
+                    resetPiece.resetMode();
+                    PieceInterface defensivePiece = new SetDefensiveDecorator(resetPiece);
                     defensivePiece.setDefensive();
                     getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(defensivePiece);
 
                     System.out.println("Original AP: " + originalPiece.getAttackPower());
-                    System.out.println("Original HP: " + originalPiece.getHp());
+                    System.out.println("Original DF: " + originalPiece.getDefence());
+                    System.out.println("Original AR: " + originalPiece.getAttackRange());
+                    System.out.println("Original MS: " + originalPiece.getMoveSpeed());
                     System.out.println("--------------------------------------------");
                     System.out.println("Defensive AP: " + defensivePiece.getAttackPower());
-                    System.out.println("Defensive HP: " + defensivePiece.getHp());
+                    System.out.println("Defensive DF: " + defensivePiece.getDefence());
+                    System.out.println("Defensive AR: " + defensivePiece.getAttackRange());
+                    System.out.println("Defensive MS: " + defensivePiece.getMoveSpeed());
                 } else {
-                    System.out.println("This piece has been strengthened already!");
+                    PieceInterface resetPiece = new ResetDecorator(originalPiece);
+                    resetPiece.resetMode();
+                    getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(resetPiece);
+                    System.out.println("Original AP: " + resetPiece.getAttackPower());
+                    System.out.println("Original DF: " + resetPiece.getDefence());
+                    System.out.println("Original AR: " + resetPiece.getAttackRange());
+                    System.out.println("Original MS: " + resetPiece.getMoveSpeed());
                 }
             } else {
                 System.out.println("You cannot strengthen opponent piece!");
