@@ -1,7 +1,7 @@
 package model.piece.concretePiece;
 
+import model.piece.abstractType.Obstacle;
 import model.piece.faction.Royale;
-import model.piece.typeInterface.Obstacle;
 
 public class Pitfall extends Royale implements Obstacle {
     public Pitfall() {

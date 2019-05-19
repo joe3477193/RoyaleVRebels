@@ -1,7 +1,7 @@
 package model.piece.concretePiece;
 
+import model.piece.abstractType.Artillery;
 import model.piece.faction.Royale;
-import model.piece.typeInterface.Artillery;
 
 public class Balista extends Royale implements Artillery {
     public Balista() {

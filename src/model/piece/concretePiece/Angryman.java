@@ -1,7 +1,7 @@
 package model.piece.concretePiece;
 
+import model.piece.abstractType.Troop;
 import model.piece.faction.Rebel;
-import model.piece.typeInterface.Troop;
 
 public class Angryman extends Rebel implements Troop {
 

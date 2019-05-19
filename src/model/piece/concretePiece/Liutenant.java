@@ -1,7 +1,7 @@
 package model.piece.concretePiece;
 
+import model.piece.abstractType.Troop;
 import model.piece.faction.Royale;
-import model.piece.typeInterface.Troop;
 
 public class Liutenant extends Royale implements Troop {
     public Liutenant() {

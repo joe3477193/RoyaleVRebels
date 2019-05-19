@@ -1,7 +1,7 @@
 package model.piece.concretePiece;
 
+import model.piece.abstractType.Obstacle;
 import model.piece.faction.Rebel;
-import model.piece.typeInterface.Obstacle;
 
 public class Boulder extends Rebel implements Obstacle {
     public Boulder() {
