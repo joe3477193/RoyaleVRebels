@@ -726,28 +726,28 @@ public class GameEngineFacade implements GameEngine {
 
         JButton[][] tileBtns = gfv.getTileBtns();
         for(int i =0; i<2; i++) {				//Loop occurs as the round is undone as opposed to each players turn
-        	
-            if (moves.peek().getClass() == MoveCommand.class && moves.size() >0) {
-                MoveCommand mc = (MoveCommand) moves.pop();
-                TurnType lm = mc.lastMove;
-                
-                JButton tileBtn = tileBtns[lm.tooRow][lm.tooRow];
-                getTile(lm.fromRow, lm.fromCol).setPiece(getPiece(lm.tooRow, lm.tooCol));
-                getTile(lm.tooRow, lm.tooCol).removePiece();
-                tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
-                tileBtns[lm.fromRow][lm.fromCol].setIcon(new ImageIcon(this.getClass().getResource(lm.image)));
-                tileBtns[lm.fromRow][lm.fromCol].setName(gfv.getImage());
+        	if(moves.size()>0) {
+                if (moves.peek().getClass() == MoveCommand.class) {
+                    MoveCommand mc = (MoveCommand) moves.pop();
+                    TurnType lm = mc.lastMove;
+                    
+                    JButton tileBtn = tileBtns[lm.tooRow][lm.tooRow];
+                    getTile(lm.fromRow, lm.fromCol).setPiece(getPiece(lm.tooRow, lm.tooCol));
+                    getTile(lm.tooRow, lm.tooCol).removePiece();
+                    tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
+                    tileBtns[lm.fromRow][lm.fromCol].setIcon(new ImageIcon(this.getClass().getResource(lm.image)));
+                    tileBtns[lm.fromRow][lm.fromCol].setName(gfv.getImage());
 
-            } else if(moves.size()>0) {
-                SummonCommand sc = (SummonCommand) moves.pop();
-                TurnType lm = sc.lastMove;
-                JButton tileBtnSum = tileBtns[lm.tooRow][lm.tooCol];
-                getTile(lm.tooRow, lm.tooCol).removePiece();
-                tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
+                } else  {
+                    SummonCommand sc = (SummonCommand) moves.pop();
+                    TurnType lm = sc.lastMove;
+                    JButton tileBtnSum = tileBtns[lm.tooRow][lm.tooCol];
+                    getTile(lm.tooRow, lm.tooCol).removePiece();
+                    tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
 
-            }
-        	
-        	
+                }
+        			
+        	}
         }
 
         gfv.decolour();
