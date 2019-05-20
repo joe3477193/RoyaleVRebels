@@ -90,11 +90,10 @@ public interface GameEngine {
     String whoseTurn();
 
     void paintSummonRange(String faction, String troopType);
-    
-    Player returnRoyale();
-    
-    Player returnRebel();
 
     int[] getUndoLimit();
 
+    Player getRebelPlayer();
+
+    Player getRoyalePlayer();
 }

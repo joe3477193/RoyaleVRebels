@@ -59,8 +59,8 @@ public class LoadGameBtnActionListener implements ActionListener {
 
             // "Recover" the game status so player can continue to play the game
             gfv = new GameFrameView();
-            g = new GameEngineFacade(gfv, undoLimit, turn, hasPerformed, tileData);
-            new GameImpl(new RebelPlayer(playerName[0]), new RoyalePlayer(playerName[1]), g, gfv, tileData);
+            g = new GameEngineFacade(gfv, undoLimit, turn, hasPerformed, tileData, new RebelPlayer(playerName[0]), new RoyalePlayer(playerName[1]));
+            new GameImpl(g, gfv, tileData);
             input.close();
 
             frame.dispose();

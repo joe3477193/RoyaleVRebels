@@ -67,7 +67,7 @@ public class GameEngineFacade implements GameEngine {
     private int boardRowLength;
     private int boardColLength;
 
-    public GameEngineFacade(GameFrameView gfv, int undoMoves, RoyalePlayer royale,RebelPlayer rebel ) {
+    public GameEngineFacade(GameFrameView gfv, int undoMoves, RoyalePlayer royale, RebelPlayer rebel ) {
         gameInit(gfv);
         actionPerformed = false;
         this.royale = royale;
@@ -77,10 +77,10 @@ public class GameEngineFacade implements GameEngine {
         turn = REBEL_TURN;
     }
 
-    public GameEngineFacade(GameFrameView gfv, String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList) {
-
+    public GameEngineFacade(GameFrameView gfv, String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList, RebelPlayer rebel, RoyalePlayer royale) {
         gameInit(gfv);
-
+        this.royale= royale;
+        this.rebel= rebel;
         this.actionPerformed = Boolean.parseBoolean(actionPerformed);
         rebelUndoRem= Integer.parseInt(undoLimit[0]);
         royaleUndoRem= Integer.parseInt(undoLimit[1]);
@@ -128,7 +128,7 @@ public class GameEngineFacade implements GameEngine {
             int row = Integer.valueOf(tile[ROW_LOADED]);
             int col = Integer.valueOf(tile[COL_LOADED]);
             String name = tile[NAME_LOADED];
-            gfv.setTileIcon(row, col, IMAGE_PATH + name + ".png");
+            gfv.setTileIcon(row, col, name);
         }
     }
 
@@ -858,18 +858,6 @@ public class GameEngineFacade implements GameEngine {
     }
 
 	@Override
-	public Player returnRoyale() {
-		// TODO Auto-generated method stub
-		return royale;
-	}
-
-	@Override
-	public Player returnRebel() {
-		// TODO Auto-generated method stub
-		return rebel;
-	}
-
-	@Override
 	public void placeAttackPiece(int i, int j) {
 		// TODO Auto-generated method stub
 		
@@ -880,4 +868,13 @@ public class GameEngineFacade implements GameEngine {
         return new int[]{rebelUndoRem, royaleUndoRem};
     }
 
+    @Override
+    public Player getRebelPlayer() {
+        return rebel;
+    }
+
+    @Override
+    public Player getRoyalePlayer() {
+        return royale;
+    }
 }

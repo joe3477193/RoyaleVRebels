@@ -41,7 +41,7 @@ public class GameImpl implements Game {
 
     }
 
-    public GameImpl(Player rebel, Player royale, GameEngine g, GameFrameView gfv, ArrayList<String[]> tileData) {
+    public GameImpl(GameEngine g, GameFrameView gfv, ArrayList<String[]> tileData) {
         this.tileData = tileData;
         this.gfv = gfv;
         this.g = g;
