@@ -63,7 +63,7 @@ public interface GameEngine {
 
     boolean checkAttackInit(int row, int tile);
 
-    void createPiece(String name);
+    void createSummonedPiece(String name);
 
     boolean placeSummonedPiece(JButton tileBtn, int i, int j);
 

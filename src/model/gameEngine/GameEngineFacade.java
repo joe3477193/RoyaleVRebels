@@ -6,6 +6,8 @@ import controller.commandPattern.SummonCommand;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
+import model.piece.PieceCache;
+import model.piece.concretePiece.Angryman;
 import model.piece.decorator.ResetDecorator;
 import model.piece.decorator.SetDefensiveDecorator;
 import model.piece.decorator.SetOffensiveDecorator;
@@ -18,6 +20,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Stack;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
@@ -67,6 +70,8 @@ public class GameEngineFacade implements GameEngine {
     private int boardRowLength;
     private int boardColLength;
 
+
+
     public GameEngineFacade(GameFrameView gfv, int undoMoves, RoyalePlayer royale, RebelPlayer rebel ) {
         gameInit(gfv);
         actionPerformed = false;
@@ -106,34 +111,8 @@ public class GameEngineFacade implements GameEngine {
         onBoardPiece = null;
     }
 
-    public int getOriginalRow() {
-        return ORIGINAL_ROW;
-    }
-
-    public int getOriginalCol() {
-        return ORIGINAL_COL;
-    }
-
-    public int getRebelTurn() {
-        return REBEL_TURN;
-    }
-
-    public int getRoyaleTurn() {
-        return ROYALE_TURN;
-    }
-
-    public void setTileIcon(ArrayList<String[]> tileList) {
-
-        for (String[] tile : tileList) {
-            int row = Integer.valueOf(tile[ROW_LOADED]);
-            int col = Integer.valueOf(tile[COL_LOADED]);
-            String name = tile[NAME_LOADED];
-            gfv.setTileIcon(row, col, name);
-        }
-    }
-
     private void gameInit(GameFrameView gfv) {
-
+        PieceCache.generatePieceMap(gfv.getRebelName(), gfv.getRoyaleName());
         this.gfv = gfv;
 
         tiles = new Tile[BOARD_MAX_ROWS][BOARD_MAX_COLS];
@@ -158,6 +137,32 @@ public class GameEngineFacade implements GameEngine {
         boardColLength= BOARD_MAX_COLS;
 
         // Initialize current turn;
+    }
+
+    public int getOriginalRow() {
+        return ORIGINAL_ROW;
+    }
+
+    public int getOriginalCol() {
+        return ORIGINAL_COL;
+    }
+
+    public int getRebelTurn() {
+        return REBEL_TURN;
+    }
+
+    public int getRoyaleTurn() {
+        return ROYALE_TURN;
+    }
+
+    public void setTileIcon(ArrayList<String[]> tileList) {
+
+        for (String[] tile : tileList) {
+            int row = Integer.valueOf(tile[ROW_LOADED]);
+            int col = Integer.valueOf(tile[COL_LOADED]);
+            String name = tile[NAME_LOADED];
+            gfv.setTileIcon(row, col, name);
+        }
     }
 
     public boolean isMoving() {
@@ -414,6 +419,11 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    @Override
+    public void createSummonedPiece(String name) {
+        summonedPiece= (Piece) PieceCache.clonePiece(name);
+    }
+
     public Piece getSummonedPiece() {
         return summonedPiece;
     }
@@ -544,17 +554,6 @@ public class GameEngineFacade implements GameEngine {
             return true;
         }
         return false;
-    }
-
-    public void createPiece(String name) {
-        try {
-            Class pieceCls = Class.forName("model.piece.concretePiece." + name);
-            this.summonedPiece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
-
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
-
     }
 
     // TODO: MAGIC NUM
@@ -877,4 +876,5 @@ public class GameEngineFacade implements GameEngine {
     public Player getRoyalePlayer() {
         return royale;
     }
+
 }

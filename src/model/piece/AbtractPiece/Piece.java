@@ -1,6 +1,6 @@
 package model.piece.AbtractPiece;
 
-public abstract class Piece implements PieceInterface {
+public abstract class Piece implements PieceInterface, Cloneable {
 
     private boolean isOffensive;
     private boolean isDefensive;
@@ -190,5 +190,19 @@ public abstract class Piece implements PieceInterface {
             return true;
         }
         return false;
+    }
+
+    //source: https://www.tutorialspoint.com/design_pattern/prototype_pattern.htm
+    public Object clone(){
+        Object clone = null;
+
+        try {
+            clone = super.clone();
+
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return clone;
     }
 }
