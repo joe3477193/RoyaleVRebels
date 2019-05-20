@@ -94,6 +94,7 @@ public interface GameEngine {
     Player returnRoyale();
     
     Player returnRebel();
-    
+
+    int[] getUndoLimit();
 
 }

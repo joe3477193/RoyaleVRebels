@@ -280,6 +280,8 @@ public class GameController {
                 output.print(data + "|");
             }
             output.println();
+            int[] undoLimit= g.getUndoLimit();
+            output.println(undoLimit[0] + "|" + undoLimit[1]);
             output.println(g.getTurn());
             output.println(g.getActionPerformed());
 

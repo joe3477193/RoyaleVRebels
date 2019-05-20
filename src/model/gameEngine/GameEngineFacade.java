@@ -39,9 +39,9 @@ public class GameEngineFacade implements GameEngine {
     private static final int COL = 1;
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
-    private static final int ROYALE_SUMMON_TOP_LIMIT= 1;
-    private static final int ROYALE_SUMMON_BOTTOM_LIMIT= 3;
-    private static final int REBEL_SUMMON_TOP_LIMIT= 9;
+    private static final int ROYALE_SUMMON_NORTH_LIMIT = 1;
+    private static final int ROYALE_SUMMON_SOUTH_LIMIT = 3;
+    private static final int REBEL_SUMMON_NORTH_LIMIT = 9;
     private static final int OBSTACLE_EXTRA_SUMMON_LIMIT= 3;
 
     // TODO: Game model shouldn't have gui component such as icons
@@ -77,11 +77,13 @@ public class GameEngineFacade implements GameEngine {
         turn = REBEL_TURN;
     }
 
-    public GameEngineFacade(GameFrameView gfv, String turn, String actionPerformed, ArrayList<String[]> tileList) {
+    public GameEngineFacade(GameFrameView gfv, String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList) {
 
         gameInit(gfv);
 
         this.actionPerformed = Boolean.parseBoolean(actionPerformed);
+        rebelUndoRem= Integer.parseInt(undoLimit[0]);
+        royaleUndoRem= Integer.parseInt(undoLimit[1]);
         this.turn = Integer.parseInt(turn);
         this.gfv = gfv;
 
@@ -566,10 +568,10 @@ public class GameEngineFacade implements GameEngine {
         }
 
         if (piece.getFaction().equals("Royale")) {
-            summonRange= ROYALE_SUMMON_BOTTOM_LIMIT + extraMove;
-            isRowValid = row <= summonRange && row >= ROYALE_SUMMON_TOP_LIMIT;
+            summonRange= ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
+            isRowValid = row <= summonRange && row >= ROYALE_SUMMON_NORTH_LIMIT;
         } else {
-            isRowValid = row >= REBEL_SUMMON_TOP_LIMIT - extraMove;
+            isRowValid = row >= REBEL_SUMMON_NORTH_LIMIT - extraMove;
         }
 
         if (checkMoveTarget(row, tile) && isRowValid) {
@@ -590,11 +592,11 @@ public class GameEngineFacade implements GameEngine {
         }
 
         if(faction.equals("Royale")){
-            start= ROYALE_SUMMON_TOP_LIMIT;
-            finish= ROYALE_SUMMON_BOTTOM_LIMIT + extraMove;
+            start= ROYALE_SUMMON_NORTH_LIMIT;
+            finish= ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
         }
         else{
-            start= REBEL_SUMMON_TOP_LIMIT - extraMove;
+            start= REBEL_SUMMON_NORTH_LIMIT - extraMove;
             finish= boardRowLength - 1;
         }
 
@@ -872,5 +874,10 @@ public class GameEngineFacade implements GameEngine {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+    public int[] getUndoLimit(){
+        return new int[]{rebelUndoRem, royaleUndoRem};
+    }
 
 }
