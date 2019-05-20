@@ -19,7 +19,7 @@ public class Tile implements Serializable {
         return piece;
     }
 
-    void setPiece(PieceInterface piece) {
+    public void setPiece(PieceInterface piece) {
         this.piece = piece;
     }
 
@@ -27,7 +27,7 @@ public class Tile implements Serializable {
         return piece != null;
     }
 
-    void removePiece() {
+    public void removePiece() {
         piece = null;
     }
 

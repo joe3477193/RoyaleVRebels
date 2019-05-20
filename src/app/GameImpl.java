@@ -19,10 +19,14 @@ public class GameImpl implements Game {
     private GameFrameView gfv;
     private GameEngine g;
     private ArrayList<String[]> tileData;
+    private int rows;
+    private int cols;
     
 
-    public GameImpl(ArrayList<String> playerNames) {
-       
+    public GameImpl(ArrayList<String> playerNames, int rows, int cols) {
+
+        this.rows = rows;
+        this.cols = cols;
 
         Random r = new Random();
         int turn = r.nextInt(playerNames.size());
@@ -65,6 +69,8 @@ public class GameImpl implements Game {
 
                 // instantiate the GameEngineFacade
                 g = new GameEngineFacade(gfv, undo,royale,rebel);
+                GameEngineFacade.BOARD_MAX_ROWS = rows;
+                GameEngineFacade.BOARD_MAX_COLS = cols;
                 gfv.assembleBoard(g);
                 new GameController(g, gfv);
             }

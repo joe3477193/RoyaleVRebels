@@ -15,11 +15,14 @@ public class EnterNameView {
     private static final int INFO_PANEL_ROWS = 6;
     private static final int INFO_PANEL_COLS = 1;
     private static final int NAME_MAX_LENGTH = 40;
+    private static final int DIMENSIONS_MAX_LENGTH = 2;
 
 
     private JFrame frame;
     private JTextField player_one_name;
     private JTextField player_two_name;
+    private JTextField board_rows;
+    private JTextField board_cols;
     private JButton startBtn = new JButton("Begin Game");
     private JButton returnBtn = new JButton("Return");
     private String[] undoOptions = new String[] {"0","1","2","3"};
@@ -42,10 +45,22 @@ public class EnterNameView {
         player_two_name = new JTextField(NAME_MAX_LENGTH);
         player_two_name.setText("Player Two");
 
+        JLabel rowsLabel = new JLabel("Please enter number of board rows:");
+        board_rows = new JTextField(DIMENSIONS_MAX_LENGTH);
+        board_rows.setText("13");
+
+        JLabel columnLabel = new JLabel("Please enter number of board columns:");
+        board_cols = new JTextField(DIMENSIONS_MAX_LENGTH);
+        board_cols.setText("15");
+
         infoPanel.add(nameLabelOne);
         infoPanel.add(player_one_name);
         infoPanel.add(nameLabelTwo);
         infoPanel.add(player_two_name);
+        infoPanel.add(rowsLabel);
+        infoPanel.add(board_rows);
+        infoPanel.add(columnLabel);
+        infoPanel.add(board_cols);
         infoPanel.add(new JLabel("Undo's allowed:"));
         infoPanel.add(undoMoves);
         
@@ -63,7 +78,7 @@ public class EnterNameView {
     }
 
     private void addController() {
-        ActionListener startController = new StartGameBtnActionListener(frame, player_one_name, player_two_name, undoMoves);
+        ActionListener startController = new StartGameBtnActionListener(frame, player_one_name, player_two_name, undoMoves, board_rows, board_cols);
         startBtn.addActionListener(startController);
         ActionListener returnController = new ReturnBtnActionListener(frame);
         returnBtn.addActionListener(returnController);
