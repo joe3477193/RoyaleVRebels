@@ -3,8 +3,6 @@ package app;
 import controller.gameController.GameController;
 import model.gameEngine.GameEngine;
 import model.gameEngine.GameEngineFacade;
-import model.piece.faction.Royale;
-import model.player.Player;
 import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
 import view.gameView.GameFrameView;
