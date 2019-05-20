@@ -26,8 +26,8 @@ import static view.gameView.GameFrameView.STATUS;
 
 public class GameEngineFacade implements GameEngine {
 
-    public static int BOARD_MAX_ROWS = 13; // increments in 5
-    public static int BOARD_MAX_COLS = 15; // increments in 4
+    public static int BOARD_MAX_ROWS; // increments in 5
+    public static int BOARD_MAX_COLS; // increments in 4
     private static final int REBEL_TURN = 0;
     private static final int ROYALE_TURN = 1;
     private static final int ROW_LOADED = 0;

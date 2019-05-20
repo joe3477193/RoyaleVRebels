@@ -62,13 +62,14 @@ public class GameImpl implements Game {
 
             public void run() {
 
+                GameEngineFacade.BOARD_MAX_ROWS = rows;
+                GameEngineFacade.BOARD_MAX_COLS = cols;
                 // instantiate the GUI view for game
                 gfv = new GameFrameView();
 
                 // instantiate the GameEngineFacade
                 g = new GameEngineFacade(gfv, undo,royale,rebel);
-                GameEngineFacade.BOARD_MAX_ROWS = rows;
-                GameEngineFacade.BOARD_MAX_COLS = cols;
+
                 gfv.assembleBoard(g);
                 new GameController(g, gfv);
             }
