@@ -139,8 +139,8 @@ public class GameFrameView extends JFrame {
 
     public void assembleBoard(GameEngine g) {
     	
-    	Player playerOne = g.returnRebel();
-    	Player playerTwo = g.returnRoyale();
+    	Player playerOne = g.getRebelPlayer();
+    	Player playerTwo = g.getRoyalePlayer();
     	nameOne= playerOne.getName();
         nameTwo = playerTwo.getName();
         time = new JLabel("");
@@ -403,6 +403,7 @@ public class GameFrameView extends JFrame {
 
     public void setTileIcon(int row, int col, String name) {
         System.out.printf("%d, %d, %s%n", row, col, name);
+        name= IMAGE_PATH + name.toLowerCase() + ".png";
         tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(name)));
         tileBtns[row][col].setName(name);
     }

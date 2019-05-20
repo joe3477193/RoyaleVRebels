@@ -39,9 +39,9 @@ public class GameEngineFacade implements GameEngine {
     private static final int COL = 1;
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
-    private static final int ROYALE_SUMMON_TOP_LIMIT= 1;
-    private static final int ROYALE_SUMMON_BOTTOM_LIMIT= 3;
-    private static final int REBEL_SUMMON_TOP_LIMIT= 9;
+    private static final int ROYALE_SUMMON_NORTH_LIMIT = 1;
+    private static final int ROYALE_SUMMON_SOUTH_LIMIT = 3;
+    private static final int REBEL_SUMMON_NORTH_LIMIT = 9;
     private static final int OBSTACLE_EXTRA_SUMMON_LIMIT= 3;
 
     // TODO: Game model shouldn't have gui component such as icons
@@ -67,7 +67,7 @@ public class GameEngineFacade implements GameEngine {
     private int boardRowLength;
     private int boardColLength;
 
-    public GameEngineFacade(GameFrameView gfv, int undoMoves, RoyalePlayer royale,RebelPlayer rebel ) {
+    public GameEngineFacade(GameFrameView gfv, int undoMoves, RoyalePlayer royale, RebelPlayer rebel ) {
         gameInit(gfv);
         actionPerformed = false;
         this.royale = royale;
@@ -77,11 +77,13 @@ public class GameEngineFacade implements GameEngine {
         turn = REBEL_TURN;
     }
 
-    public GameEngineFacade(GameFrameView gfv, String turn, String actionPerformed, ArrayList<String[]> tileList) {
-
+    public GameEngineFacade(GameFrameView gfv, String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList, RebelPlayer rebel, RoyalePlayer royale) {
         gameInit(gfv);
-
+        this.royale= royale;
+        this.rebel= rebel;
         this.actionPerformed = Boolean.parseBoolean(actionPerformed);
+        rebelUndoRem= Integer.parseInt(undoLimit[0]);
+        royaleUndoRem= Integer.parseInt(undoLimit[1]);
         this.turn = Integer.parseInt(turn);
         this.gfv = gfv;
 
@@ -126,7 +128,7 @@ public class GameEngineFacade implements GameEngine {
             int row = Integer.valueOf(tile[ROW_LOADED]);
             int col = Integer.valueOf(tile[COL_LOADED]);
             String name = tile[NAME_LOADED];
-            gfv.setTileIcon(row, col, IMAGE_PATH + name + ".png");
+            gfv.setTileIcon(row, col, name);
         }
     }
 
@@ -566,10 +568,10 @@ public class GameEngineFacade implements GameEngine {
         }
 
         if (piece.getFaction().equals("Royale")) {
-            summonRange= ROYALE_SUMMON_BOTTOM_LIMIT + extraMove;
-            isRowValid = row <= summonRange && row >= ROYALE_SUMMON_TOP_LIMIT;
+            summonRange= ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
+            isRowValid = row <= summonRange && row >= ROYALE_SUMMON_NORTH_LIMIT;
         } else {
-            isRowValid = row >= REBEL_SUMMON_TOP_LIMIT - extraMove;
+            isRowValid = row >= REBEL_SUMMON_NORTH_LIMIT - extraMove;
         }
 
         if (checkMoveTarget(row, tile) && isRowValid) {
@@ -590,11 +592,11 @@ public class GameEngineFacade implements GameEngine {
         }
 
         if(faction.equals("Royale")){
-            start= ROYALE_SUMMON_TOP_LIMIT;
-            finish= ROYALE_SUMMON_BOTTOM_LIMIT + extraMove;
+            start= ROYALE_SUMMON_NORTH_LIMIT;
+            finish= ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
         }
         else{
-            start= REBEL_SUMMON_TOP_LIMIT - extraMove;
+            start= REBEL_SUMMON_NORTH_LIMIT - extraMove;
             finish= boardRowLength - 1;
         }
 
@@ -856,21 +858,23 @@ public class GameEngineFacade implements GameEngine {
     }
 
 	@Override
-	public Player returnRoyale() {
-		// TODO Auto-generated method stub
-		return royale;
-	}
-
-	@Override
-	public Player returnRebel() {
-		// TODO Auto-generated method stub
-		return rebel;
-	}
-
-	@Override
 	public void placeAttackPiece(int i, int j) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
+    public int[] getUndoLimit(){
+        return new int[]{rebelUndoRem, royaleUndoRem};
+    }
+
+    @Override
+    public Player getRebelPlayer() {
+        return rebel;
+    }
+
+    @Override
+    public Player getRoyalePlayer() {
+        return royale;
+    }
 }
