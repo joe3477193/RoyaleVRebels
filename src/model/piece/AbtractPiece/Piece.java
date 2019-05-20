@@ -11,6 +11,8 @@ public abstract class Piece implements PieceInterface {
     private int cp;
     private int initHp;
     private int hp;
+    private int initDefence;
+    private int defence;
     private int initAttackPower;
     private int attackPower;
     private int initMoveSpeed;
@@ -20,14 +22,16 @@ public abstract class Piece implements PieceInterface {
     private boolean moveable;
     private boolean attackable;
 
-    public Piece(String name, String faction, String type, String code, int cp, int initHp, int attackPower, int moveSpeed, int attackRange, boolean moveable, boolean attackable) {
+    public Piece(String name, String faction, String type, String code, int cp, int hp, int defence, int attackPower, int moveSpeed, int attackRange, boolean moveable, boolean attackable) {
         this.name = name;
         this.faction = faction;
         this.type = type;
         this.code = code;
         this.cp = cp;
-        this.initHp = initHp;
-        this.hp = initHp;
+        this.initHp = hp;
+        this.hp = hp;
+        this.initDefence = defence;
+        this.defence = defence;
         this.initAttackPower = attackPower;
         this.attackPower = attackPower;
         this.initMoveSpeed = moveSpeed;
@@ -68,6 +72,18 @@ public abstract class Piece implements PieceInterface {
         return hp;
     }
 
+    public int getInitDefence() {
+        return initDefence;
+    }
+
+    public int getDefence() {
+        return defence;
+    }
+
+    public void setDefence(int defence) {
+        this.defence = defence;
+    }
+
     public int getInitAttackPower() {
         return initAttackPower;
     }
@@ -102,6 +118,10 @@ public abstract class Piece implements PieceInterface {
 
     public int getAttackRange() {
         return attackRange;
+    }
+
+    public void setAttackRange(int attackRange) {
+        this.attackRange = attackRange;
     }
 
     public int getActionRange(String actionType) {
@@ -152,7 +172,13 @@ public abstract class Piece implements PieceInterface {
     }
 
     public void attackedBy(int attack) {
-        hp -= attack;
+
+        int trueDamage = attack - defence;
+
+        if (trueDamage > 0) {
+            hp -= trueDamage;
+        }
+
         if (hp <= 0) {
             hp = 0;
         }

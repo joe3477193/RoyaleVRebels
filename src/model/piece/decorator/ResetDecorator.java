@@ -10,7 +10,8 @@ public class ResetDecorator extends PieceInterfaceDecorator {
 
     public void resetMode() {
         setAttackPower(piece.getInitAttackPower());
-        setHP(piece.getInitHp());
+        setDefence(piece.getInitDefence());
+        setAttackRange(piece.getInitAttackRange());
         setMoveSpeed(piece.getInitMoveSpeed());
         isOffensive = false;
         isDefensive = false;

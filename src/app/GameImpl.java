@@ -3,6 +3,7 @@ package app;
 import controller.gameController.GameController;
 import model.gameEngine.GameEngine;
 import model.gameEngine.GameEngineFacade;
+import model.piece.faction.Royale;
 import model.player.Player;
 import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
@@ -13,14 +14,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class GameImpl implements Game {
-    private Player royale;
-    private Player rebel;
+    private RoyalePlayer royale;
+    private RebelPlayer rebel;
     private GameFrameView gfv;
     private GameEngine g;
     private ArrayList<String[]> tileData;
+    
 
     public GameImpl(ArrayList<String> playerNames) {
-        ArrayList<Player> players = new ArrayList<>();
+       
 
         Random r = new Random();
         int turn = r.nextInt(playerNames.size());
@@ -34,23 +36,18 @@ public class GameImpl implements Game {
             rebel = new RebelPlayer(playerNames.get(turn - 1));
         }
 
-        players.add(rebel);
-        players.add(royale);
 
-        for (Player player : players) {
-            System.out.println(player.getName());
-        }
+
+
     }
 
     public GameImpl(Player rebel, Player royale, GameEngine g, GameFrameView gfv, ArrayList<String[]> tileData) {
         this.tileData = tileData;
         this.gfv = gfv;
         this.g = g;
-        this.rebel = rebel;
-        this.royale = royale;
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                gfv.assembleBoard(rebel, royale, g);
+                gfv.assembleBoard(g);
                 new GameController(g, gfv);
                 g.setTileIcon(tileData);
             }
@@ -67,8 +64,8 @@ public class GameImpl implements Game {
                 gfv = new GameFrameView();
 
                 // instantiate the GameEngineFacade
-                g = new GameEngineFacade(gfv, undo);
-                gfv.assembleBoard(rebel, royale, g);
+                g = new GameEngineFacade(gfv, undo,royale,rebel);
+                gfv.assembleBoard(g);
                 new GameController(g, gfv);
             }
         });

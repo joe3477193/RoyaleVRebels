@@ -2,17 +2,19 @@ package controller.commandPattern;
 
 public class TurnType {
 
-    private String MoveType;
-    private int fromRow;
-    private int fromCol;
-    private int tooRow;
-    private int tooCol;
+    public String MoveType;
+    public String image;
+    public int fromRow;
+    public int fromCol;
+    public int tooRow;
+    public int tooCol;
 
-    TurnType(String MoveType, int fr, int fc, int tr, int tc) {
+    TurnType(String MoveType,String image, int fr, int fc, int tr, int tc) {
         this.MoveType = MoveType;
-        this.fromRow = fromRow;
-        this.fromCol = fromCol;
-        this.tooRow = tooRow;
-        this.tooCol = tooCol;
+        this.image = image;
+        this.fromRow = fr;
+        this.fromCol = fc;
+        this.tooRow = tr;
+        this.tooCol = tc;
     }
 }

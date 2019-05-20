@@ -16,6 +16,12 @@ public interface PieceInterface {
 
     int getHp();
 
+    int getInitDefence();
+
+    int getDefence();
+
+    void setDefence(int defence);
+
     int getInitAttackPower();
 
     int getAttackPower();
@@ -29,6 +35,8 @@ public interface PieceInterface {
     int getInitAttackRange();
 
     int getAttackRange();
+
+    void setAttackRange(int attackRange);
 
     int getActionRange(String actionType);
 
