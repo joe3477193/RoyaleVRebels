@@ -1,10 +1,12 @@
-package model.piece.decorator;
+package model.piece.decorator.concreteDecorator;
 
 import model.piece.AbtractPiece.PieceInterface;
+import model.piece.abstractType.Artillery;
+import model.piece.decorator.abstractDecorator.PieceInterfaceDecorator;
 
-public class ResetModeDecorator extends PieceInterfaceDecorator {
+public class ResetModeArtilleryDecorator extends PieceInterfaceDecorator implements Artillery {
 
-    public ResetModeDecorator(PieceInterface piece) {
+    public ResetModeArtilleryDecorator(PieceInterface piece) {
         super(piece);
         resetMode();
     }

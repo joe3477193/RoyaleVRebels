@@ -6,7 +6,8 @@ import controller.commandPattern.SummonCommand;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
-import model.piece.decorator.*;
+import model.piece.decorator.concreteDecorator.ResetModeTroopDecorator;
+import model.piece.decorator.concreteDecoratorFactory.*;
 import model.player.Player;
 import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
@@ -24,8 +25,6 @@ import static view.gameView.GameFrameView.STATUS;
 
 public class GameEngineFacade implements GameEngine {
 
-    public static int BOARD_MAX_ROWS; // increments in 5
-    public static int BOARD_MAX_COLS; // increments in 4
     private static final int REBEL_TURN = 0;
     private static final int ROYALE_TURN = 1;
     private static final int ROW_LOADED = 0;
@@ -40,10 +39,11 @@ public class GameEngineFacade implements GameEngine {
     private static final int ROYALE_SUMMON_NORTH_LIMIT = 1;
     private static final int ROYALE_SUMMON_SOUTH_LIMIT = 3;
     private static final int REBEL_SUMMON_NORTH_LIMIT = 9;
-    private static final int OBSTACLE_EXTRA_SUMMON_LIMIT= 3;
-
+    private static final int OBSTACLE_EXTRA_SUMMON_LIMIT = 3;
     // TODO: Game model shouldn't have gui component such as icons
     private static final String IMAGE_PATH = "../../images/";
+    public static int BOARD_MAX_ROWS; // increments in 5
+    public static int BOARD_MAX_COLS; // increments in 4
     // Stack for storing moves
     private static Stack<AbstractTurn> moves;
     private GameFrameView gfv;
@@ -65,7 +65,7 @@ public class GameEngineFacade implements GameEngine {
     private int boardRowLength;
     private int boardColLength;
 
-    public GameEngineFacade(GameFrameView gfv, int undoMoves, RoyalePlayer royale, RebelPlayer rebel ) {
+    public GameEngineFacade(GameFrameView gfv, int undoMoves, RoyalePlayer royale, RebelPlayer rebel) {
         gameInit(gfv);
         actionPerformed = false;
         this.royale = royale;
@@ -77,11 +77,11 @@ public class GameEngineFacade implements GameEngine {
 
     public GameEngineFacade(GameFrameView gfv, String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList, RebelPlayer rebel, RoyalePlayer royale) {
         gameInit(gfv);
-        this.royale= royale;
-        this.rebel= rebel;
+        this.royale = royale;
+        this.rebel = rebel;
         this.actionPerformed = Boolean.parseBoolean(actionPerformed);
-        rebelUndoRem= Integer.parseInt(undoLimit[0]);
-        royaleUndoRem= Integer.parseInt(undoLimit[1]);
+        rebelUndoRem = Integer.parseInt(undoLimit[0]);
+        royaleUndoRem = Integer.parseInt(undoLimit[1]);
         this.turn = Integer.parseInt(turn);
         this.gfv = gfv;
 
@@ -152,8 +152,8 @@ public class GameEngineFacade implements GameEngine {
         isMoving = false;
         isAttacking = false;
 
-        boardRowLength= BOARD_MAX_ROWS;
-        boardColLength= BOARD_MAX_COLS;
+        boardRowLength = BOARD_MAX_ROWS;
+        boardColLength = BOARD_MAX_COLS;
 
         // Initialize current turn;
     }
@@ -277,12 +277,12 @@ public class GameEngineFacade implements GameEngine {
         gfv.decolourEndTurn();
         gfv.decolour();
         cycleTurn();
-        if(getTurn() == REBEL_TURN) {
-        	royale.increaseCP();
-        	gfv.updateBar(rebel);
+        if (getTurn() == REBEL_TURN) {
+            royale.increaseCP();
+            gfv.updateBar(rebel);
         } else if (getTurn() == ROYALE_TURN) {
-        	rebel.increaseCP();
-        	gfv.updateBar(royale);
+            rebel.increaseCP();
+            gfv.updateBar(royale);
         }
 
         gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -304,15 +304,13 @@ public class GameEngineFacade implements GameEngine {
 
         // TODO: SHOULD MAKE A PIECE STATUS PANEL TO SHOW ALL INFO
         if (getTile(i, j).hasPiece()) {
-            gfv.getStatusLabel().setText(String.format(STATUS + " %s: %d HP remaining, %d AP, %d DF, %d AR, %d MS. (OFFENSIVE %B, DEFENSIVE %B)", getPiece(i, j).getName(), getPiece(i, j).getHp(),
+            gfv.getStatusLabel().setText(String.format(STATUS + " %s: %d HP remaining, %s, %d AP, %d DF, %d AR, %d MS. (OFFENSIVE %B, DEFENSIVE %B)", getPiece(i, j).getName(), getPiece(i, j).getHp(), getPiece(i, j).getType(),
                     getPiece(i, j).getAttackPower(), getPiece(i, j).getDefence(), getPiece(i, j).getAttackRange(), getPiece(i, j).getMoveSpeed(), getPiece(i, j).isOffensive(), getPiece(i, j).isDefensive()));
         }
 
         System.out.println("TileButton Name: " + tileBtn.getName());
         System.out.println("AP: " + getTile(i, j).getPiece().getAttackPower());
         System.out.println("DF: " + getTile(i, j).getPiece().getDefence());
-        System.out.println("AR: " + getTile(i, j).getPiece().getAttackRange());
-        System.out.println("MS: " + getTile(i, j).getPiece().getMoveSpeed());
 
         boolean match = isFactionMatched(i, j);
         if (match && !actionPerformed) {
@@ -566,7 +564,7 @@ public class GameEngineFacade implements GameEngine {
         }
 
         if (piece.getFaction().equals("Royale")) {
-            summonRange= ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
+            summonRange = ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
             isRowValid = row <= summonRange && row >= ROYALE_SUMMON_NORTH_LIMIT;
         } else {
             isRowValid = row >= REBEL_SUMMON_NORTH_LIMIT - extraMove;
@@ -580,27 +578,26 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
-    public void paintSummonRange(String faction, String troopType){
+    public void paintSummonRange(String faction, String troopType) {
         int start;
         int finish;
-        int extraMove= 0;
+        int extraMove = 0;
 
-        if(troopType.equals("Obstacle")){
-            extraMove= OBSTACLE_EXTRA_SUMMON_LIMIT;
+        if (troopType.equals("Obstacle")) {
+            extraMove = OBSTACLE_EXTRA_SUMMON_LIMIT;
         }
 
-        if(faction.equals("Royale")){
-            start= ROYALE_SUMMON_NORTH_LIMIT;
-            finish= ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
-        }
-        else{
-            start= REBEL_SUMMON_NORTH_LIMIT - extraMove;
-            finish= boardRowLength - 1;
+        if (faction.equals("Royale")) {
+            start = ROYALE_SUMMON_NORTH_LIMIT;
+            finish = ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
+        } else {
+            start = REBEL_SUMMON_NORTH_LIMIT - extraMove;
+            finish = boardRowLength - 1;
         }
 
-        for(int i=start;i<=finish;i++){
-            for(int j=0;j<boardColLength;j++){
-                if(checkMoveRepaint(i, j)) {
+        for (int i = start; i <= finish; i++) {
+            for (int j = 0; j < boardColLength; j++) {
+                if (checkMoveRepaint(i, j)) {
                     gfv.colourTile(i, j, "summon");
                 }
             }
@@ -635,7 +632,7 @@ public class GameEngineFacade implements GameEngine {
 
         }
     }
-    
+
     public boolean placeMovedPiece(JButton[][] tileBtns, int i, int j) {
         // target tile
         JButton tileBtn = tileBtns[i][j];
@@ -672,13 +669,17 @@ public class GameEngineFacade implements GameEngine {
     private boolean isCastle(int i) {
         return i == ORIGINAL_ROW;
     }
-    
-    public boolean placeAttackPiece(JButton[][] tileBtns,int i, int j) {
-        
+
+    public boolean placeAttackPiece(JButton[][] tileBtns, int i, int j) {
+
         if (attack(getInitTileCoord()[ROW], getInitTileCoord()[COL], i, j)) {
             PieceInterface piece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
             String message;
-            message = String.format("%d true damage dealt! Remaining HP: %d", piece.getAttackPower() - getPiece(i, j).getDefence(),
+            int trueDamage = piece.getAttackPower() - getPiece(i, j).getDefence();
+            if (trueDamage < 0) {
+                trueDamage = 0;
+            }
+            message = String.format("%d true damage dealt! Remaining HP: %d", trueDamage,
                     getPiece(i, j).getHp());
             if (getPiece(i, j).isDead()) {
                 message += String.format(", %s is dead!", getPiece(i, j).getName());
@@ -697,13 +698,13 @@ public class GameEngineFacade implements GameEngine {
             // resetPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
             return true;
         } else {
-        	
+
             gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the attack button again to cancel.");
             return false;
         }
     }
 
-    public void changeButtonViews() {
+    private void changeButtonViews() {
 
         gfv.getAttackBtn().setVisible(false);
         gfv.getUndoBtn().setVisible(true);
@@ -712,31 +713,31 @@ public class GameEngineFacade implements GameEngine {
     public void undoTurn() {
 
         if (getTurn() == REBEL_TURN && rebelUndoRem != 0) {
-        	rebelUndoRem -=1;
+            rebelUndoRem -= 1;
             accessStack();
         } else if (getTurn() == ROYALE_TURN && royaleUndoRem != 0) {
-        	royaleUndoRem -=1;
+            royaleUndoRem -= 1;
             accessStack();
         } else {
             gfv.getStatusLabel().setText(STATUS + "You have already used your Undo for this game!");
         }
 
     }
-    
+
     public void pushTurnStack(AbstractTurn turn) {
-    	moves.push(turn);
+        moves.push(turn);
     }
 
     //Undo stack with all game movements excl attacks for now.
-    public void accessStack() {
+    private void accessStack() {
 
         JButton[][] tileBtns = gfv.getTileBtns();
-        for(int i =0; i<2; i++) {				//Loop occurs as the round is undone as opposed to each players turn
-        	if(moves.size()>0) {
+        for (int i = 0; i < 2; i++) {                //Loop occurs as the round is undone as opposed to each players turn
+            if (moves.size() > 0) {
                 if (moves.peek().getClass() == MoveCommand.class) {
                     MoveCommand mc = (MoveCommand) moves.pop();
                     TurnType lm = mc.lastMove;
-                    
+
                     JButton tileBtn = tileBtns[lm.tooRow][lm.tooRow];
                     getTile(lm.fromRow, lm.fromCol).setPiece(getPiece(lm.tooRow, lm.tooCol));
                     getTile(lm.tooRow, lm.tooCol).removePiece();
@@ -744,7 +745,7 @@ public class GameEngineFacade implements GameEngine {
                     tileBtns[lm.fromRow][lm.fromCol].setIcon(new ImageIcon(this.getClass().getResource(lm.image)));
                     tileBtns[lm.fromRow][lm.fromCol].setName(gfv.getImage());
 
-                } else  {
+                } else {
                     SummonCommand sc = (SummonCommand) moves.pop();
                     TurnType lm = sc.lastMove;
                     JButton tileBtnSum = tileBtns[lm.tooRow][lm.tooCol];
@@ -752,20 +753,20 @@ public class GameEngineFacade implements GameEngine {
                     tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
 
                 }
-        			
-        	}
+
+            }
         }
 
         gfv.decolour();
         actionPerformed = false;
         gfv.getAttackBtn().setVisible(true);
-        
+
     }
 
     private void resetPiece(int i, int j) {
         PieceInterface currentPiece = getPiece(i, j);
         if (currentPiece.isOffensive() || currentPiece.isDefensive()) {
-            PieceInterface originalPiece = new ResetModeDecorator(currentPiece);
+            PieceInterface originalPiece = new ResetModeDecoratorFactory(currentPiece).getFactory();
             getTile(i, j).setPiece(originalPiece);
             System.out.println("Reset!");
             System.out.println(originalPiece.getInitHp());
@@ -780,26 +781,25 @@ public class GameEngineFacade implements GameEngine {
             if (isFactionMatched(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
                 PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
                 if (!originalPiece.isOffensive()) {
-                    PieceInterface resetPiece = new ResetModeDecorator(originalPiece);
-                    PieceInterface offensivePiece = new SetOffensiveDecorator(new AttackPowerBuffDecorator(new DefenceNerfDecorator(new AttackRangeBuffDecorator(new MoveSpeedNerfDecorator(resetPiece)))));
+                    PieceInterface resetPiece = new ResetModeDecoratorFactory(originalPiece).getFactory();
+                    PieceInterface offensivePiece = new AttackPowerBuffDecoratorFactory(new DefenceNerfDecoratorFactory(resetPiece).getFactory()).getFactory();
+                    offensivePiece.isOffensive();
+
                     getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(offensivePiece);
 
                     System.out.println("Original AP: " + originalPiece.getAttackPower());
                     System.out.println("Original DF: " + originalPiece.getDefence());
-                    System.out.println("Original AR: " + originalPiece.getAttackRange());
-                    System.out.println("Original MS: " + originalPiece.getMoveSpeed());
                     System.out.println("--------------------------------------------");
                     System.out.println("Offensive AP: " + offensivePiece.getAttackPower());
                     System.out.println("Offensive DF: " + offensivePiece.getDefence());
-                    System.out.println("Offensive AR: " + offensivePiece.getAttackRange());
-                    System.out.println("Offensive MS: " + offensivePiece.getMoveSpeed());
                 } else {
-                    PieceInterface resetPiece = new ResetModeDecorator(originalPiece);
+                    PieceInterface resetPiece = new ResetModeTroopDecorator(originalPiece);
+                    resetPiece.isOffensive();
+
                     getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(resetPiece);
+
                     System.out.println("Original AP: " + resetPiece.getAttackPower());
                     System.out.println("Original DF: " + resetPiece.getDefence());
-                    System.out.println("Original AR: " + resetPiece.getAttackRange());
-                    System.out.println("Original MS: " + resetPiece.getMoveSpeed());
                 }
             } else {
                 System.out.println("You cannot strengthen opponent piece!");
@@ -814,26 +814,25 @@ public class GameEngineFacade implements GameEngine {
             PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
             if (isFactionMatched(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
                 if (!originalPiece.isDefensive()) {
-                    PieceInterface resetPiece = new ResetModeDecorator(originalPiece);
-                    PieceInterface defensivePiece = new SetDefensiveDecorator(new AttackPowerNerfDecorator(new DefenceBuffDecorator(new AttackRangeNerfDecorator(new MoveSpeedBuffDecorator(resetPiece)))));
+                    PieceInterface resetPiece = new ResetModeDecoratorFactory(originalPiece).getFactory();
+                    PieceInterface defensivePiece = new DefenceBuffDecoratorFactory(new AttackPowerNerfDecoratorFactory(resetPiece).getFactory()).getFactory();
+                    defensivePiece.isDefensive();
+
                     getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(defensivePiece);
 
                     System.out.println("Original AP: " + originalPiece.getAttackPower());
                     System.out.println("Original DF: " + originalPiece.getDefence());
-                    System.out.println("Original AR: " + originalPiece.getAttackRange());
-                    System.out.println("Original MS: " + originalPiece.getMoveSpeed());
                     System.out.println("--------------------------------------------");
                     System.out.println("Defensive AP: " + defensivePiece.getAttackPower());
                     System.out.println("Defensive DF: " + defensivePiece.getDefence());
-                    System.out.println("Defensive AR: " + defensivePiece.getAttackRange());
-                    System.out.println("Defensive MS: " + defensivePiece.getMoveSpeed());
                 } else {
-                    PieceInterface resetPiece = new ResetModeDecorator(originalPiece);
+                    PieceInterface resetPiece = new ResetModeTroopDecorator(originalPiece);
+                    resetPiece.isDefensive();
+
                     getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(resetPiece);
+
                     System.out.println("Original AP: " + resetPiece.getAttackPower());
                     System.out.println("Original DF: " + resetPiece.getDefence());
-                    System.out.println("Original AR: " + resetPiece.getAttackRange());
-                    System.out.println("Original MS: " + resetPiece.getMoveSpeed());
                 }
             } else {
                 System.out.println("You cannot strengthen opponent piece!");
@@ -846,17 +845,17 @@ public class GameEngineFacade implements GameEngine {
         return tiles;
     }
 
-    public String whoseTurn(){
-        if (turn==0)
-                return "Rebel";
-        else{
+    public String whoseTurn() {
+        if (turn == 0)
+            return "Rebel";
+        else {
             return "Royale";
         }
     }
 
 
-	@Override
-    public int[] getUndoLimit(){
+    @Override
+    public int[] getUndoLimit() {
         return new int[]{rebelUndoRem, royaleUndoRem};
     }
 

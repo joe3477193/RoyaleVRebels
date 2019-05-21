@@ -1,6 +1,7 @@
-package model.piece.decorator;
+package model.piece.decorator.uselessDecorator;
 
 import model.piece.AbtractPiece.PieceInterface;
+import model.piece.decorator.abstractDecorator.PieceInterfaceDecorator;
 
 public class MoveSpeedNerfDecorator extends PieceInterfaceDecorator {
 

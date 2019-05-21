@@ -1,4 +1,4 @@
-package model.piece.decorator;
+package model.piece.decorator.abstractDecorator;
 
 import model.piece.AbtractPiece.PieceInterface;
 
@@ -22,10 +22,10 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     private int attackRange;
     private boolean moveable;
     private boolean attackable;
-    boolean isOffensive;
-    boolean isDefensive;
+    protected boolean isOffensive;
+    protected boolean isDefensive;
 
-    PieceInterfaceDecorator(PieceInterface piece) {
+    protected PieceInterfaceDecorator(PieceInterface piece) {
         this.piece = piece;
         name = piece.getName();
         faction = piece.getFaction();
@@ -191,10 +191,20 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     }
 
     public boolean isOffensive() {
+
+        if (attackPower > initAttackPower) {
+            isOffensive = true;
+        }
+
         return isOffensive;
     }
 
     public boolean isDefensive() {
+
+        if (defence > initDefence) {
+            isDefensive = true;
+        }
+
         return isDefensive;
     }
 

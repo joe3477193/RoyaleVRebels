@@ -187,10 +187,20 @@ public abstract class Piece implements PieceInterface {
     }
 
     public boolean isOffensive() {
+
+        if (attackPower > initAttackPower) {
+            isOffensive = true;
+        }
+
         return isOffensive;
     }
 
     public boolean isDefensive() {
+
+        if (defence > initDefence) {
+            isDefensive = true;
+        }
+
         return isDefensive;
     }
 
