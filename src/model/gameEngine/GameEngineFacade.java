@@ -6,9 +6,7 @@ import controller.commandPattern.SummonCommand;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
-import model.piece.decorator.ResetDecorator;
-import model.piece.decorator.SetDefensiveDecorator;
-import model.piece.decorator.SetOffensiveDecorator;
+import model.piece.decorator.*;
 import model.player.Player;
 import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
@@ -653,7 +651,9 @@ public class GameEngineFacade implements GameEngine {
             changeButtonViews();
             tileBtn.setName(gfv.getImage());
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
-            resetPiece(i, j);
+
+            // TODO: we want to keep the piece's buff if player doesn't remove it
+            // resetPiece(i, j);
             return true;
         } else {
             gfv.getStatusLabel().setText(STATUS + "Tile not valid");
@@ -693,7 +693,8 @@ public class GameEngineFacade implements GameEngine {
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
             gfv.getStatusLabel().setText(STATUS + message);
 
-            resetPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
+            // TODO: we want to keep the piece's buff if player doesn't remove it
+            // resetPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
             return true;
         } else {
         	
@@ -764,8 +765,7 @@ public class GameEngineFacade implements GameEngine {
     private void resetPiece(int i, int j) {
         PieceInterface currentPiece = getPiece(i, j);
         if (currentPiece.isOffensive() || currentPiece.isDefensive()) {
-            PieceInterface originalPiece = new ResetDecorator(currentPiece);
-            originalPiece.resetMode();
+            PieceInterface originalPiece = new ResetModeDecorator(currentPiece);
             getTile(i, j).setPiece(originalPiece);
             System.out.println("Reset!");
             System.out.println(originalPiece.getInitHp());
@@ -780,10 +780,8 @@ public class GameEngineFacade implements GameEngine {
             if (isFactionMatched(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
                 PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
                 if (!originalPiece.isOffensive()) {
-                    PieceInterface resetPiece = new ResetDecorator(originalPiece);
-                    resetPiece.resetMode();
-                    PieceInterface offensivePiece = new SetOffensiveDecorator(resetPiece);
-                    offensivePiece.setOffensive();
+                    PieceInterface resetPiece = new ResetModeDecorator(originalPiece);
+                    PieceInterface offensivePiece = new SetOffensiveDecorator(new AttackPowerBuffDecorator(new DefenceNerfDecorator(new AttackRangeBuffDecorator(new MoveSpeedNerfDecorator(resetPiece)))));
                     getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(offensivePiece);
 
                     System.out.println("Original AP: " + originalPiece.getAttackPower());
@@ -796,8 +794,7 @@ public class GameEngineFacade implements GameEngine {
                     System.out.println("Offensive AR: " + offensivePiece.getAttackRange());
                     System.out.println("Offensive MS: " + offensivePiece.getMoveSpeed());
                 } else {
-                    PieceInterface resetPiece = new ResetDecorator(originalPiece);
-                    resetPiece.resetMode();
+                    PieceInterface resetPiece = new ResetModeDecorator(originalPiece);
                     getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(resetPiece);
                     System.out.println("Original AP: " + resetPiece.getAttackPower());
                     System.out.println("Original DF: " + resetPiece.getDefence());
@@ -817,10 +814,8 @@ public class GameEngineFacade implements GameEngine {
             PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
             if (isFactionMatched(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
                 if (!originalPiece.isDefensive()) {
-                    PieceInterface resetPiece = new ResetDecorator(originalPiece);
-                    resetPiece.resetMode();
-                    PieceInterface defensivePiece = new SetDefensiveDecorator(resetPiece);
-                    defensivePiece.setDefensive();
+                    PieceInterface resetPiece = new ResetModeDecorator(originalPiece);
+                    PieceInterface defensivePiece = new SetDefensiveDecorator(new AttackPowerNerfDecorator(new DefenceBuffDecorator(new AttackRangeNerfDecorator(new MoveSpeedBuffDecorator(resetPiece)))));
                     getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(defensivePiece);
 
                     System.out.println("Original AP: " + originalPiece.getAttackPower());
@@ -833,8 +828,7 @@ public class GameEngineFacade implements GameEngine {
                     System.out.println("Defensive AR: " + defensivePiece.getAttackRange());
                     System.out.println("Defensive MS: " + defensivePiece.getMoveSpeed());
                 } else {
-                    PieceInterface resetPiece = new ResetDecorator(originalPiece);
-                    resetPiece.resetMode();
+                    PieceInterface resetPiece = new ResetModeDecorator(originalPiece);
                     getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(resetPiece);
                     System.out.println("Original AP: " + resetPiece.getAttackPower());
                     System.out.println("Original DF: " + resetPiece.getDefence());

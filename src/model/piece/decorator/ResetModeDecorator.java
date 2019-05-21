@@ -2,10 +2,11 @@ package model.piece.decorator;
 
 import model.piece.AbtractPiece.PieceInterface;
 
-public class ResetDecorator extends PieceInterfaceDecorator {
+public class ResetModeDecorator extends PieceInterfaceDecorator {
 
-    public ResetDecorator(PieceInterface piece) {
+    public ResetModeDecorator(PieceInterface piece) {
         super(piece);
+        resetMode();
     }
 
     public void resetMode() {
