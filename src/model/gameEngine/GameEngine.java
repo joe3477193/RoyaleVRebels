@@ -71,7 +71,7 @@ public interface GameEngine {
 
     boolean isWall(int i, int j);
 
-    void placeAttackPiece(int i, int j);
+    boolean placeAttackPiece(JButton[][] tileBtns, int i, int j);
 
     void setOffensive();
 

@@ -637,7 +637,7 @@ public class GameEngineFacade implements GameEngine {
 
         }
     }
-
+    
     public boolean placeMovedPiece(JButton[][] tileBtns, int i, int j) {
         // target tile
         JButton tileBtn = tileBtns[i][j];
@@ -672,8 +672,8 @@ public class GameEngineFacade implements GameEngine {
     private boolean isCastle(int i) {
         return i == ORIGINAL_ROW;
     }
-
-    public void placeAttackPiece(JButton[][] tileBtns,int i, int j) {
+    
+    public boolean placeAttackPiece(JButton[][] tileBtns,int i, int j) {
         
         if (attack(getInitTileCoord()[ROW], getInitTileCoord()[COL], i, j)) {
             PieceInterface piece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
@@ -694,8 +694,11 @@ public class GameEngineFacade implements GameEngine {
             gfv.getStatusLabel().setText(STATUS + message);
 
             resetPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
+            return true;
         } else {
+        	
             gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the attack button again to cancel.");
+            return false;
         }
     }
 
@@ -857,11 +860,6 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
-	@Override
-	public void placeAttackPiece(int i, int j) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
     public int[] getUndoLimit(){
