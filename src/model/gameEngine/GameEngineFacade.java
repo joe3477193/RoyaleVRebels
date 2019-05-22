@@ -6,6 +6,7 @@ import controller.commandPattern.SummonCommand;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
+import model.piece.abstractType.Obstacle;
 import model.piece.decorator.concreteDecorator.ResetModeTroopDecorator;
 import model.piece.decorator.concreteDecoratorFactory.*;
 import model.player.Player;
@@ -775,68 +776,85 @@ public class GameEngineFacade implements GameEngine {
     }
 
     public void setOffensive() {
-        setInit(coordinate[ROW], coordinate[COL]);
-        System.out.println(getInitTileCoord()[ROW] + ", " + getInitTileCoord()[COL]);
-        if (checkInit(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
-            if (isFactionMatched(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
-                PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
-                if (!originalPiece.isOffensive()) {
-                    PieceInterface resetPiece = new ResetModeDecoratorFactory(originalPiece).getFactory();
-                    PieceInterface offensivePiece = new AttackPowerBuffDecoratorFactory(new DefenceNerfDecoratorFactory(resetPiece).getFactory()).getFactory();
-                    offensivePiece.isOffensive();
+        if (coordinate != null) {
+            setInit(coordinate[ROW], coordinate[COL]);
+            System.out.println(getInitTileCoord()[ROW] + ", " + getInitTileCoord()[COL]);
+            if (checkInit(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
+                if (!(getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]) instanceof Obstacle)) {
+                    if (isFactionMatched(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
+                        PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
+                        if (!originalPiece.isOffensive()) {
+                            PieceInterface resetPiece = new ResetModeDecoratorFactory(originalPiece).getFactory();
+                            PieceInterface offensivePiece = new AttackPowerBuffDecoratorFactory(new DefenceNerfDecoratorFactory(resetPiece).getFactory()).getFactory();
+                            offensivePiece.isOffensive();
 
-                    getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(offensivePiece);
+                            getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(offensivePiece);
 
-                    System.out.println("Original AP: " + originalPiece.getAttackPower());
-                    System.out.println("Original DF: " + originalPiece.getDefence());
-                    System.out.println("--------------------------------------------");
-                    System.out.println("Offensive AP: " + offensivePiece.getAttackPower());
-                    System.out.println("Offensive DF: " + offensivePiece.getDefence());
+                            System.out.println("Original AP: " + originalPiece.getAttackPower());
+                            System.out.println("Original DF: " + originalPiece.getDefence());
+                            System.out.println("--------------------------------------------");
+                            System.out.println("Offensive AP: " + offensivePiece.getAttackPower());
+                            System.out.println("Offensive DF: " + offensivePiece.getDefence());
+                        } else {
+                            PieceInterface resetPiece = new ResetModeTroopDecorator(originalPiece);
+                            resetPiece.isOffensive();
+
+                            getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(resetPiece);
+
+                            System.out.println("Original AP: " + resetPiece.getAttackPower());
+                            System.out.println("Original DF: " + resetPiece.getDefence());
+                        }
+                    } else {
+                        System.out.println("You cannot strengthen opponent piece!");
+                    }
                 } else {
-                    PieceInterface resetPiece = new ResetModeTroopDecorator(originalPiece);
-                    resetPiece.isOffensive();
-
-                    getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(resetPiece);
-
-                    System.out.println("Original AP: " + resetPiece.getAttackPower());
-                    System.out.println("Original DF: " + resetPiece.getDefence());
+                    System.out.println("You cannot strengthen obstacles!");
                 }
-            } else {
-                System.out.println("You cannot strengthen opponent piece!");
             }
+        } else {
+            gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }
     }
 
+
     public void setDefensive() {
-        setInit(coordinate[ROW], coordinate[COL]);
-        System.out.println(getInitTileCoord()[ROW] + ", " + getInitTileCoord()[COL]);
-        if (checkInit(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
-            PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
-            if (isFactionMatched(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
-                if (!originalPiece.isDefensive()) {
-                    PieceInterface resetPiece = new ResetModeDecoratorFactory(originalPiece).getFactory();
-                    PieceInterface defensivePiece = new DefenceBuffDecoratorFactory(new AttackPowerNerfDecoratorFactory(resetPiece).getFactory()).getFactory();
-                    defensivePiece.isDefensive();
+        if (coordinate != null) {
+            setInit(coordinate[ROW], coordinate[COL]);
+            System.out.println(getInitTileCoord()[ROW] + ", " + getInitTileCoord()[COL]);
+            if (checkInit(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
+                if (!(getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]) instanceof Obstacle)) {
+                    PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
+                    if (isFactionMatched(getInitTileCoord()[ROW], getInitTileCoord()[COL])) {
+                        if (!originalPiece.isDefensive()) {
+                            PieceInterface resetPiece = new ResetModeDecoratorFactory(originalPiece).getFactory();
+                            PieceInterface defensivePiece = new DefenceBuffDecoratorFactory(new AttackPowerNerfDecoratorFactory(resetPiece).getFactory()).getFactory();
+                            defensivePiece.isDefensive();
 
-                    getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(defensivePiece);
+                            getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(defensivePiece);
 
-                    System.out.println("Original AP: " + originalPiece.getAttackPower());
-                    System.out.println("Original DF: " + originalPiece.getDefence());
-                    System.out.println("--------------------------------------------");
-                    System.out.println("Defensive AP: " + defensivePiece.getAttackPower());
-                    System.out.println("Defensive DF: " + defensivePiece.getDefence());
+                            System.out.println("Original AP: " + originalPiece.getAttackPower());
+                            System.out.println("Original DF: " + originalPiece.getDefence());
+                            System.out.println("--------------------------------------------");
+                            System.out.println("Defensive AP: " + defensivePiece.getAttackPower());
+                            System.out.println("Defensive DF: " + defensivePiece.getDefence());
+                        } else {
+                            PieceInterface resetPiece = new ResetModeTroopDecorator(originalPiece);
+                            resetPiece.isDefensive();
+
+                            getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(resetPiece);
+
+                            System.out.println("Original AP: " + resetPiece.getAttackPower());
+                            System.out.println("Original DF: " + resetPiece.getDefence());
+                        }
+                    } else {
+                        System.out.println("You cannot strengthen opponent piece!");
+                    }
                 } else {
-                    PieceInterface resetPiece = new ResetModeTroopDecorator(originalPiece);
-                    resetPiece.isDefensive();
-
-                    getTile(getInitTileCoord()[ROW], getInitTileCoord()[COL]).setPiece(resetPiece);
-
-                    System.out.println("Original AP: " + resetPiece.getAttackPower());
-                    System.out.println("Original DF: " + resetPiece.getDefence());
+                    System.out.println("You cannot strengthen obstacles!");
                 }
-            } else {
-                System.out.println("You cannot strengthen opponent piece!");
             }
+        } else {
+            gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }
     }
 
