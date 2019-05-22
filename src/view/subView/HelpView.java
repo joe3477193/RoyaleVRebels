@@ -9,9 +9,9 @@ import java.awt.event.WindowEvent;
 
 public class HelpView {
 
-    private static final int ABOUT_VIEW_WIDTH = 300;
-    private static final int ABOUT_VIEW_HEIGHT = 300;
-    private static final int INFO_PANEL_ROWS = 6;
+    private static final int ABOUT_VIEW_WIDTH = 1050;
+    private static final int ABOUT_VIEW_HEIGHT = 500;
+    private static final int INFO_PANEL_ROWS = 8;
     private static final int INFO_PANEL_COLS = 1;
 
     private JFrame frame;
@@ -27,16 +27,21 @@ public class HelpView {
 
         // TODO: put key game rules here later
         JLabel title = new JLabel("Game Rules", SwingConstants.CENTER);
-        JLabel author1 = new JLabel("Rule 1: xxxxxxxxxxxxxxxxx");
-        JLabel author2 = new JLabel("Rule 2: xxxxxxxxxxxxxxxxx");
-        JLabel author3 = new JLabel("Rule 3: xxxxxxxxxxxxxxxxx");
-        JLabel author4 = new JLabel("Rule 4: xxxxxxxxxxxxxxxxx");
+        JLabel author1 = new JLabel("Rule 1: Before the start, players can enter names, create different sized board, and specify the undo level (up to 3 rounds).");
+        JLabel author2 = new JLabel("Rule 2: Players are randomly assigned to Royale and Rebel, Rebel moves first.");
+        JLabel author3 = new JLabel("Rule 3: Rebel needs to destroy Royale's CASTLE within a limit to win the game, while Royale need to defence.");
+        JLabel author4 = new JLabel("Rule 4: In each move, you can either summon a new piece, move an on-board moveable piece or attack an opponent piece.");
+        JLabel author5 = new JLabel("Rule 5: Each move has a time limit of 60 seconds, before performing a move you can select any on-board pieces of your side to be OFFENSIVE or DEFENSIVE, excepts Obstacles.");
+        JLabel author6 = new JLabel("Rule 6: Player can save and quit game at any time, and will be able to continue the game after loading the game.");
+
 
         infoPanel.add(title);
         infoPanel.add(author1);
         infoPanel.add(author2);
         infoPanel.add(author3);
         infoPanel.add(author4);
+        infoPanel.add(author5);
+        infoPanel.add(author6);
         infoPanel.add(returnBtn);
 
         frame.add(infoPanel, BorderLayout.CENTER);
