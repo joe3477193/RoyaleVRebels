@@ -4,6 +4,7 @@ import controller.commandPattern.AttackCommand;
 import controller.commandPattern.MoveCommand;
 import controller.commandPattern.SummonCommand;
 import controller.gameActionListeners.*;
+import controller.gameChangeListeners.HoverTileChangeListener;
 import model.gameEngine.GameEngine;
 import model.gameEngine.Tile;
 import model.piece.AbtractPiece.PieceInterface;
@@ -11,6 +12,7 @@ import view.gameView.GameFrameView;
 import view.mainView.MainMenuView;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.FileWriter;
@@ -45,7 +47,32 @@ public class GameController {
 
         addActionListeners();
         startTimer();
+        addChangeListeners();
+    }
 
+    private void addChangeListeners() {
+
+        HoverTileChangeListener tileListener = new HoverTileChangeListener(this);
+
+        // add ChangeListeners for tileBtns
+        for (JButton[] tileRows : gfv.getTileBtns()) {
+            for (JButton tileBtn : tileRows) {
+                tileBtn.getModel().addChangeListener(tileListener);
+            }
+        }
+
+
+//        // TODO: show piece info on the deck
+//        for (JButton btn : gfv.getSummonBtns()) {
+//            btn.getModel().addChangeListener(new ChangeListener() {
+//                @Override
+//                public void stateChanged(ChangeEvent e) {
+//                    if (btn.getModel().isRollover()) {
+//
+//                    }
+//                }
+//            });
+//        }
     }
 
     private void addActionListeners() {
@@ -149,30 +176,30 @@ public class GameController {
 
                     // attempt to place piece
                     else {
-                        tileBtn = tileBtns[i][j];           
+                        tileBtn = tileBtns[i][j];
                         // attempt to place a summoned piece
                         if (g.getSummonedPiece() != null && !g.getActionPerformed()) {
-                        	// turn is consumed and run through turn command
-                        	SummonCommand sum = new SummonCommand(g);
-                        	sum.executeTurn(tileBtns,gfv.getImage(), i, j);
-                        	g.pushTurnStack(sum);
-                          
-                           
+                            // turn is consumed and run through turn command
+                            SummonCommand sum = new SummonCommand(g);
+                            sum.executeTurn(tileBtns, gfv.getImage(), i, j);
+                            g.pushTurnStack(sum);
+
+
                         }
                         // attempt to place a piece during movement
                         else if (g.isMoving() && !g.getActionPerformed()) {
-                        	// turn is consumed and run through turn command
-                        	MoveCommand mc = new MoveCommand(g);
-                        	mc.executeTurn(tileBtns, gfv.getImage(), i, j);                 
-                        	g.pushTurnStack(mc);
+                            // turn is consumed and run through turn command
+                            MoveCommand mc = new MoveCommand(g);
+                            mc.executeTurn(tileBtns, gfv.getImage(), i, j);
+                            g.pushTurnStack(mc);
                         }
                         // attempt to place a piece during attack
                         else if (g.isAttacking() && !g.getActionPerformed()) {
-                        	AttackCommand ac = new AttackCommand(g);
-                        	ac.executeTurn(tileBtns, gfv.getImage(), i, j);
-                        	
+                            AttackCommand ac = new AttackCommand(g);
+                            ac.executeTurn(tileBtns, gfv.getImage(), i, j);
+
                             // TODO: turn is consumed and run through turn command
-                            
+
                         }
                         // attempt to pick a piece for action && also show piece info
                         else if (g.checkInit(i, j)) {
@@ -192,7 +219,7 @@ public class GameController {
 
     public void endTurn() {
         g.unsetActionPerformed();
-        
+
         stopTimer();
     }
 
@@ -280,7 +307,7 @@ public class GameController {
                 output.print(data + "|");
             }
             output.println();
-            int[] undoLimit= g.getUndoLimit();
+            int[] undoLimit = g.getUndoLimit();
             output.println(undoLimit[0] + "|" + undoLimit[1]);
             output.println(g.getTurn());
             output.println(g.getActionPerformed());
@@ -299,6 +326,32 @@ public class GameController {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void hoverTile(ChangeEvent e) {
+
+        JButton[][] tileBtns = gfv.getTileBtns();
+
+        // show on board piece's info
+        for (int i = g.getOriginalRow(); i < tileBtns.length; i++) {
+            for (int j = g.getOriginalCol(); j < tileBtns[i].length; j++) {
+                Tile tile = g.getTiles()[i][j];
+                JButton btn = gfv.getTileBtns()[i][j];
+
+                // check if the tile has piece, show the piece info
+                if (tile.hasPiece()) {
+                    if (btn.getModel().isRollover()) {
+                        PieceInterface piece = tile.getPiece();
+                        String pieceInfo = "<html>Name: " + piece.getName() + "<br>Faction: " + piece.getFaction()
+                                + "<br>Type: " + piece.getType() + "<br>HP: " + piece.getHp() + "<br>Attack Power: "
+                                + piece.getAttackPower() + "<br>Defence: " + piece.getDefence() + "<br>Attack Range: "
+                                + piece.getAttackRange() + "<br>Move Speed: " + piece.getMoveSpeed() + "<br>OFFENSIVE: "
+                                + piece.isOffensive() + "<br>DEFENSIVE: " + piece.isDefensive() + "</html>";
+                        btn.setToolTipText(pieceInfo);
+                    }
+                }
+            }
         }
     }
 }
