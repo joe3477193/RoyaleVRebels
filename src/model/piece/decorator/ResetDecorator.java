@@ -16,4 +16,6 @@ public class ResetDecorator extends PieceInterfaceDecorator {
         isOffensive = false;
         isDefensive = false;
     }
+
+
 }

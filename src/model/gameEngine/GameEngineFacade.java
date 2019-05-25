@@ -1,8 +1,6 @@
 package model.gameEngine;
 
 import controller.commandPattern.AbstractTurn;
-import controller.commandPattern.MoveCommand;
-import controller.commandPattern.SummonCommand;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
@@ -18,7 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Stack;
+
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
 import static java.lang.Math.abs;
@@ -46,8 +44,7 @@ public class GameEngineFacade implements GameEngine {
 
     // TODO: Game model shouldn't have gui component such as icons
     private static final String IMAGE_PATH = "../../images/";
-    // Stack for storing moves
-    private static Stack<AbstractTurn> moves;
+
     private GameFrameView gfv;
     private Piece summonedPiece;
     private Piece onBoardPiece;
@@ -146,7 +143,7 @@ public class GameEngineFacade implements GameEngine {
 
         initTileCoord = new int[COORDINATE_NUM];
 
-        moves = new Stack<>();
+
 
         // Initialize number of player turns
         turns = new int[]{REBEL_TURN, ROYALE_TURN};
@@ -673,14 +670,20 @@ public class GameEngineFacade implements GameEngine {
         return i == ORIGINAL_ROW;
     }
     
-    public boolean placeAttackPiece(JButton[][] tileBtns,int i, int j) {
-        
+    public TurnType placeAttackPiece(JButton[][] tileBtns,int i, int j) {
+        //initrow/initcol -trow/tcol
+    	
         if (attack(getInitTileCoord()[ROW], getInitTileCoord()[COL], i, j)) {
+        	boolean death;
+        	System.out.print(gfv.getImage());
             PieceInterface piece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
             String message;
-            message = String.format("%d true damage dealt! Remaining HP: %d", piece.getAttackPower() - getPiece(i, j).getDefence(),
+            int trueDmg = piece.getAttackPower() - getPiece(i, j).getDefence();
+            String pName = tileBtns[i][j].getName();
+            message = String.format("%d true damage dealt! Remaining HP: %d", trueDmg,
                     getPiece(i, j).getHp());
-            if (getPiece(i, j).isDead()) {
+            death = getPiece(i, j).isDead();
+            if (death) {
                 message += String.format(", %s is dead!", getPiece(i, j).getName());
                 getTile(i, j).removePiece();
                 tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(IMAGE_PATH + "grass.png")));
@@ -694,11 +697,11 @@ public class GameEngineFacade implements GameEngine {
             gfv.getStatusLabel().setText(STATUS + message);
 
             resetPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
-            return true;
+            return new TurnType("Attack", pName, getInitTileCoord()[ROW], getInitTileCoord()[COL], i, j, trueDmg, death);
         } else {
         	
             gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the attack button again to cancel.");
-            return false;
+            return null;
         }
     }
 
@@ -708,58 +711,60 @@ public class GameEngineFacade implements GameEngine {
         gfv.getUndoBtn().setVisible(true);
     }
 
-    public void undoTurn() {
-
-        if (getTurn() == REBEL_TURN && rebelUndoRem != 0) {
-        	rebelUndoRem -=1;
-            accessStack();
-        } else if (getTurn() == ROYALE_TURN && royaleUndoRem != 0) {
-        	royaleUndoRem -=1;
-            accessStack();
-        } else {
-            gfv.getStatusLabel().setText(STATUS + "You have already used your Undo for this game!");
-        }
-
+    public boolean checkUndoRem() {
+    	
+    	if(getTurn() == REBEL_TURN && rebelUndoRem != 0) {
+    		rebelUndoRem -=1;
+    		return true;
+    	}
+    	else if(getTurn() == ROYALE_TURN && royaleUndoRem != 0) {
+    		royaleUndoRem -= 1;
+    		return true;
+    	}
+    	else
+    		gfv.getStatusLabel().setText(STATUS+ "You have already used up your undo limit for the game!");
+    	return false;
     }
     
-    public void pushTurnStack(AbstractTurn turn) {
-    	moves.push(turn);
-    }
-
-    //Undo stack with all game movements excl attacks for now.
-    public void accessStack() {
-
-        JButton[][] tileBtns = gfv.getTileBtns();
-        for(int i =0; i<2; i++) {				//Loop occurs as the round is undone as opposed to each players turn
-        	if(moves.size()>0) {
-                if (moves.peek().getClass() == MoveCommand.class) {
-                    MoveCommand mc = (MoveCommand) moves.pop();
-                    TurnType lm = mc.lastMove;
-                    
-                    JButton tileBtn = tileBtns[lm.tooRow][lm.tooRow];
-                    getTile(lm.fromRow, lm.fromCol).setPiece(getPiece(lm.tooRow, lm.tooCol));
-                    getTile(lm.tooRow, lm.tooCol).removePiece();
-                    tileBtn.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
-                    tileBtns[lm.fromRow][lm.fromCol].setIcon(new ImageIcon(this.getClass().getResource(lm.image)));
-                    tileBtns[lm.fromRow][lm.fromCol].setName(gfv.getImage());
-
-                } else  {
-                    SummonCommand sc = (SummonCommand) moves.pop();
-                    TurnType lm = sc.lastMove;
-                    JButton tileBtnSum = tileBtns[lm.tooRow][lm.tooCol];
-                    getTile(lm.tooRow, lm.tooCol).removePiece();
-                    tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
-
-                }
-        			
-        	}
-        }
-
+    public void undoTurn(TurnType tt) {
+    	JButton[][] tileBtns = gfv.getTileBtns();
+    	TurnType lm = tt;
+    	
+    	switch(lm.MoveType) {
+    	
+    	case "Move":
+            getTile(lm.fromRow, lm.fromCol).setPiece(getPiece(lm.tooRow, lm.tooCol));
+            getTile(lm.tooRow, lm.tooCol).removePiece();
+            tileBtns[lm.tooRow][lm.tooCol].setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
+            tileBtns[lm.fromRow][lm.fromCol].setIcon(new ImageIcon(this.getClass().getResource(lm.image)));
+            tileBtns[lm.fromRow][lm.fromCol].setName(gfv.getImage());
+            break;
+            
+    	case "Summon":
+            JButton tileBtnSum = tileBtns[lm.tooRow][lm.tooCol];
+            getTile(lm.tooRow, lm.tooCol).removePiece();
+            tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
+            break;
+    	
+    	case "Attack":
+    		System.out.print(tt.death);
+    		if(tt.death == true) {
+    			
+                tileBtns[tt.tooRow][tt.tooCol].setIcon(new ImageIcon(this.getClass().getResource(tt.image)));
+                tileBtns[tt.tooRow][tt.tooCol].setName(tt.image);
+    		}
+    		else {
+    			getTile(tt.tooRow, tt.tooRow).getPiece().addHP(tt.damageDealt);
+    		}
+    		break;
+    	}
+    	
         gfv.decolour();
         actionPerformed = false;
         gfv.getAttackBtn().setVisible(true);
-        
     }
+    
+
 
     private void resetPiece(int i, int j) {
         PieceInterface currentPiece = getPiece(i, j);

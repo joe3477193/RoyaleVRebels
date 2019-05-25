@@ -156,6 +156,11 @@ public abstract class Piece implements PieceInterface {
             this.hp = hp;
         }
     }
+    
+    public void addHP(int hp) {
+    	
+    	this.hp += hp;
+    }
 
     public void resetMode() {
     }

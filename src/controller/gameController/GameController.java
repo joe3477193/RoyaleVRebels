@@ -1,8 +1,6 @@
 package controller.gameController;
 
-import controller.commandPattern.AttackCommand;
-import controller.commandPattern.MoveCommand;
-import controller.commandPattern.SummonCommand;
+import controller.commandPattern.CommandMonitor;
 import controller.gameActionListeners.*;
 import model.gameEngine.GameEngine;
 import model.gameEngine.Tile;
@@ -33,7 +31,7 @@ public class GameController {
     private static final int ORIGINAL_COL = 0;
 
     private Timer timer;
-
+    private CommandMonitor cm;
     private GameEngine g;
     private GameFrameView gfv;
 
@@ -42,7 +40,8 @@ public class GameController {
 
         this.g = g;
         this.gfv = gfv;
-
+        
+        cm = new CommandMonitor(g);
         addActionListeners();
         startTimer();
 
@@ -153,26 +152,20 @@ public class GameController {
                         // attempt to place a summoned piece
                         if (g.getSummonedPiece() != null && !g.getActionPerformed()) {
                         	// turn is consumed and run through turn command
-                        	SummonCommand sum = new SummonCommand(g);
-                        	sum.executeTurn(tileBtns,gfv.getImage(), i, j);
-                        	g.pushTurnStack(sum);
-                          
+                        	cm.executeTurn("Summon", tileBtns,gfv.getImage(), i, j);                          
                            
                         }
                         // attempt to place a piece during movement
                         else if (g.isMoving() && !g.getActionPerformed()) {
                         	// turn is consumed and run through turn command
-                        	MoveCommand mc = new MoveCommand(g);
-                        	mc.executeTurn(tileBtns, gfv.getImage(), i, j);                 
-                        	g.pushTurnStack(mc);
+                        	cm.executeTurn("Move", tileBtns, gfv.getImage(), i, j);
+
                         }
                         // attempt to place a piece during attack
                         else if (g.isAttacking() && !g.getActionPerformed()) {
-                        	AttackCommand ac = new AttackCommand(g);
-                        	ac.executeTurn(tileBtns, gfv.getImage(), i, j);
                         	
-                            // TODO: turn is consumed and run through turn command
-                            
+                        	cm.executeTurn("Attack", tileBtns, gfv.getImage(), i, j);
+            
                         }
                         // attempt to pick a piece for action && also show piece info
                         else if (g.checkInit(i, j)) {
@@ -264,7 +257,7 @@ public class GameController {
     }
 
     public void undoTurn() {
-        g.undoTurn();
+        cm.undoTurn();
     }
 
     public void quitGame() {
