@@ -134,7 +134,7 @@ public class GameController {
 
                 // click on the same piece on the deck, i.e. cancel summon
                 if (gfv.getFrame().getCursor().getName().equals(name[i])) {
-                    gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    gfv.resetCursor();
                     g.removeSummonedPiece();
                     gfv.removeImage();
                 }
@@ -295,7 +295,7 @@ public class GameController {
     }
 
     public void quitGame() {
-        gfv.getFrame().dispose();
+        gfv.disposeFrame();
         new MainMenuView();
     }
 

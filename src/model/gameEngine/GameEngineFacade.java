@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Stack;
 
-import static java.awt.Cursor.DEFAULT_CURSOR;
 import static java.lang.Math.abs;
 import static view.gameView.GameFrameView.STATUS;
 
@@ -172,8 +171,8 @@ public class GameEngineFacade implements GameEngine {
     // reset the attacking mode and resets the colour of the tiles + cursor
     public void resetAttacking() {
         isAttacking = false;
+        gfv.resetCursor();
         gfv.decolour();
-        gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         depaintAction();
     }
 
@@ -205,7 +204,7 @@ public class GameEngineFacade implements GameEngine {
         isMoving = false;
         gfv.decolour();
         depaintAction();
-        gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        gfv.resetCursor();
     }
 
     //enter the moving mode
@@ -290,7 +289,7 @@ public class GameEngineFacade implements GameEngine {
             gfv.updateBar(royale);
         }
 
-        gfv.getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        gfv.resetCursor();
         gfv.getAttackBtn().setVisible(true);
         gfv.getStatusLabel().setText(STATUS + "");
         depaintAction();
@@ -614,7 +613,7 @@ public class GameEngineFacade implements GameEngine {
             }
 
             removeSummonedPiece();
-            gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
+            gfv.resetCursor();
             setActionPerformed();
             changeButtonViews();
             depaintAction();
@@ -640,7 +639,7 @@ public class GameEngineFacade implements GameEngine {
             setActionPerformed();
             changeButtonViews();
             tileBtn.setName(gfv.getImage());
-            gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
+            gfv.resetCursor();
 
             // TODO: we want to keep the piece's buff if player doesn't remove it
             // resetPiece(i, j);
@@ -659,7 +658,7 @@ public class GameEngineFacade implements GameEngine {
     }
 
     // TODO: MAGIC NUM
-    private boolean isCastle(int i) {
+    public boolean isCastle(int i) {
         return i == ORIGINAL_ROW;
     }
 
@@ -684,7 +683,7 @@ public class GameEngineFacade implements GameEngine {
             setActionPerformed();
 
             gfv.getAttackBtn().setVisible(false);
-            gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
+            gfv.resetCursor();
             gfv.getStatusLabel().setText(STATUS + message);
 
             // TODO: we want to keep the piece's buff if player doesn't remove it

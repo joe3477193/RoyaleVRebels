@@ -65,6 +65,8 @@ public class GameFrameView extends JFrame {
     private JLabel statusLabel;
     private JLabel castleHP;
 
+    private GameEngine g;
+
     public GameFrameView() {
 
         frame = new JFrame("Royals vs Rebels");
@@ -138,6 +140,7 @@ public class GameFrameView extends JFrame {
     }
 
     public void assembleBoard(GameEngine g) {
+        this.g = g;
     	
     	Player playerOne = g.getRebelPlayer();
     	Player playerTwo = g.getRoyalePlayer();
@@ -236,9 +239,9 @@ public class GameFrameView extends JFrame {
         for (int i = 0; i < GameEngineFacade.BOARD_MAX_ROWS; i++) {
             for (int j = 0; j < GameEngineFacade.BOARD_MAX_COLS; j++) {
                 tileBtns[i][j] = new JButton();
-
-                if ((i % 5 <= 2) && j % 4 == 3)
+                if (g.isWall(i, j)) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
+                }
                 else if (i == 0 && j % 2 != 0) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
                 } else if (i == 0 && j % 4 == 0) {
@@ -407,6 +410,16 @@ public class GameFrameView extends JFrame {
         tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(name)));
         tileBtns[row][col].setName(name);
     }
+
+    public void disposeFrame(){
+        getFrame().dispose();
+    }
+
+    public void resetCursor(){
+        getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }
+
+
 }
 
 

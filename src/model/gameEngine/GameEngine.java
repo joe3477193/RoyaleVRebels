@@ -96,4 +96,6 @@ public interface GameEngine {
     Player getRebelPlayer();
 
     Player getRoyalePlayer();
+
+    boolean isCastle(int i);
 }
