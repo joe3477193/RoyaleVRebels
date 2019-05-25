@@ -295,36 +295,6 @@ public class GameController {
         new MainMenuView();
     }
 
-    public void saveGame() {
-
-        try {
-            PrintWriter output = new PrintWriter(new FileWriter("savegame.dat"));
-            for (String data : gfv.getPlayerData()) {
-                output.print(data + "|");
-            }
-            output.println();
-            int[] undoLimit = g.getUndoLimit();
-            output.println(undoLimit[0] + "|" + undoLimit[1]);
-            output.println(g.getTurn());
-            output.println(g.getActionPerformed());
-
-            for (Tile[] tileRow : g.getTiles()) {
-                for (Tile tile : tileRow) {
-                    if (tile.hasPiece()) {
-                        PieceInterface piece = tile.getPiece();
-                        output.printf("%d|%d|%s|%d|%n", tile.getRow(), tile.getCol(), piece.getName(), piece.getHp());
-                    }
-                }
-            }
-
-            output.close();
-            System.out.println("Game has been successfully saved.");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void hoverTile(ChangeEvent e) {
 
         JButton[][] tileBtns = gfv.getTileBtns();
@@ -348,6 +318,12 @@ public class GameController {
                     }
                 }
             }
+        }
+    }
+
+    public void saveGame(){
+        if(g.saveGame()){
+            System.out.println("Game has been successfully saved.");
         }
     }
 }

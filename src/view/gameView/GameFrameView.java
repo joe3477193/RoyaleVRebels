@@ -220,6 +220,10 @@ public class GameFrameView extends JFrame {
         frame.add(botPanel, BorderLayout.SOUTH);
 
         updateBar(playerOne);
+
+        if(g.getActionPerformed()){
+            colourEndTurn();
+        }
     }
 
     private void drawActionBtns() {
@@ -445,6 +449,10 @@ public class GameFrameView extends JFrame {
 
     public void setTileName(int i, int j, String name){
         tileBtns[i][j].setName(name);
+    }
+
+    public String getImagePath(String name){
+        return IMAGE_PATH+name+".png";
     }
 }
 

@@ -15,7 +15,9 @@ import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
 import view.gameView.GameFrameView;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -40,7 +42,6 @@ public class GameEngineFacade implements GameEngine {
     private static final int REBEL_SUMMON_NORTH_LIMIT = 9;
     private static final int OBSTACLE_EXTRA_SUMMON_LIMIT = 3;
     // TODO: Game model shouldn't have gui component such as icons
-    private static final String IMAGE_PATH = "../../images/";
     public static int BOARD_MAX_ROWS; // increments in 5
     public static int BOARD_MAX_COLS; // increments in 4
     // Stack for storing moves
@@ -72,35 +73,6 @@ public class GameEngineFacade implements GameEngine {
         rebelUndoRem = undoMoves;
         royaleUndoRem = undoMoves;
         turn = REBEL_TURN;
-    }
-
-    public GameEngineFacade(GameFrameView gfv, String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList, RebelPlayer rebel, RoyalePlayer royale) {
-        gameInit(gfv);
-        this.royale = royale;
-        this.rebel = rebel;
-        this.actionPerformed = Boolean.parseBoolean(actionPerformed);
-        rebelUndoRem = Integer.parseInt(undoLimit[0]);
-        royaleUndoRem = Integer.parseInt(undoLimit[1]);
-        this.turn = Integer.parseInt(turn);
-        this.gfv = gfv;
-
-        for (String[] tile : tileList) {
-            int row = Integer.valueOf(tile[ROW_LOADED]);
-            int col = Integer.valueOf(tile[COL_LOADED]);
-            String name = tile[NAME_LOADED];
-            int hp = Integer.valueOf(tile[HP_LOADED]);
-            try {
-                Class pieceCls = Class.forName("model.piece.concretePiece." + name);
-                onBoardPiece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
-
-            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
-                ex.printStackTrace();
-            }
-            onBoardPiece.setHP(hp);
-            tiles[row][col].setPiece(onBoardPiece);
-        }
-
-        onBoardPiece = null;
     }
 
     private void gameInit(GameFrameView gfv) {
@@ -153,7 +125,7 @@ public class GameEngineFacade implements GameEngine {
             int row = Integer.valueOf(tile[ROW_LOADED]);
             int col = Integer.valueOf(tile[COL_LOADED]);
             String name = tile[NAME_LOADED];
-            gfv.setTileIcon(row, col, name);
+            gfv.setTileIcon(row, col, gfv.getImagePath(name));
         }
     }
 
@@ -864,6 +836,55 @@ public class GameEngineFacade implements GameEngine {
     @Override
     public Player getRoyalePlayer() {
         return royale;
+    }
+
+    public boolean saveGame() {
+
+        try {
+            PrintWriter output = new PrintWriter(new FileWriter("gamedata.save"));
+            output.println(BOARD_MAX_ROWS+"|"+BOARD_MAX_COLS);
+            for (String data : gfv.getPlayerData()) {
+                output.print(data + "|");
+            }
+            output.println();
+            int[] undoLimit = getUndoLimit();
+            output.println(undoLimit[0] + "|" + undoLimit[1]);
+            output.println(getTurn());
+            output.println(getActionPerformed());
+
+            for (Tile[] tileRow : getTiles()) {
+                for (Tile tile : tileRow) {
+                    if (tile.hasPiece()) {
+                        PieceInterface piece = tile.getPiece();
+                        output.printf("%d|%d|%s|%d|%n", tile.getRow(), tile.getCol(), piece.getName(), piece.getHp());
+                    }
+                }
+            }
+
+            output.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void loadGame(String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList){
+        this.actionPerformed = Boolean.parseBoolean(actionPerformed);
+        rebelUndoRem = Integer.parseInt(undoLimit[0]);
+        royaleUndoRem = Integer.parseInt(undoLimit[1]);
+        this.turn = Integer.parseInt(turn);
+
+        for (String[] tile : tileList) {
+            int row = Integer.valueOf(tile[ROW_LOADED]);
+            int col = Integer.valueOf(tile[COL_LOADED]);
+            String name = tile[NAME_LOADED];
+            int hp = Integer.valueOf(tile[HP_LOADED]);
+            onBoardPiece = PieceCache.clonePiece(name);
+            onBoardPiece.setHP(hp);
+            tiles[row][col].setPiece(onBoardPiece);
+        }
+        onBoardPiece = null;
     }
 
 }

@@ -98,4 +98,8 @@ public interface GameEngine {
     boolean isCastle(int i);
 
     Tile getTile(int row, int col);
+
+    boolean saveGame();
+
+    void loadGame(String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList);
 }

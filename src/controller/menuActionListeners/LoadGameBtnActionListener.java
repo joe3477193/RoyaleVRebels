@@ -33,7 +33,10 @@ public class LoadGameBtnActionListener implements ActionListener {
         // Load the game status from saved file
         // TODO: Need to save more details of the pieces on board, e,g, hp, ap, ar, ms
         try {
-            BufferedReader input = new BufferedReader(new FileReader("savegame.dat"));
+            BufferedReader input = new BufferedReader(new FileReader("gamedata.save"));
+
+            //load boardsize
+            String[] boardSize = input.readLine().split("\\|");
 
             // Load players' names
             String[] playerName = input.readLine().split("\\|");
@@ -59,15 +62,18 @@ public class LoadGameBtnActionListener implements ActionListener {
 
             // "Recover" the game status so player can continue to play the game
             gfv = new GameFrameView();
-            g = new GameEngineFacade(gfv, undoLimit, turn, hasPerformed, tileData, new RebelPlayer(playerName[0]), new RoyalePlayer(playerName[1]));
+            GameEngineFacade.BOARD_MAX_ROWS= Integer.parseInt(boardSize[0]);
+            GameEngineFacade.BOARD_MAX_COLS= Integer.parseInt(boardSize[1]);
+            g= new GameEngineFacade(gfv, 0, new RoyalePlayer(playerName[1]), new RebelPlayer(playerName[0]));
+            g.loadGame(undoLimit, turn, hasPerformed, tileData);
             new GameImpl(g, gfv, tileData);
             input.close();
-
             frame.dispose();
         } catch (FileNotFoundException fileNotFoundException) {
             System.out.println("File not found");
         } catch (IOException iOException) {
             System.out.println("Error initializing stream");
         }
+
     }
 }
