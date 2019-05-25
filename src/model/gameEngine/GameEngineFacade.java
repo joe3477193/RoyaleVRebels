@@ -417,7 +417,7 @@ public class GameEngineFacade implements GameEngine {
 
     @Override
     public void createSummonedPiece(String name) {
-        summonedPiece= (Piece) PieceCache.clonePiece(name);
+        summonedPiece= PieceCache.clonePiece(name);
     }
 
     public Piece getSummonedPiece() {
