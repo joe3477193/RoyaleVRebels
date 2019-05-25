@@ -142,7 +142,7 @@ public class GameController {
                 // click on a different piece on the deck when the player has not moved any piece, i.e. change summon
                 else if (!g.getActionPerformed()) {
                     gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), name[i]));
-                    g.createPiece(name[i]);
+                    g.createSummonedPiece(name[i]);
                     gfv.setImage(image[i]);
                     g.paintSummonRange(g.whoseTurn(), name[i]);
                 } else {

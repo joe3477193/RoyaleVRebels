@@ -9,6 +9,11 @@ import model.piece.AbtractPiece.PieceInterface;
 import model.piece.abstractType.Obstacle;
 import model.piece.decorator.concreteDecorator.ResetModeTroopDecorator;
 import model.piece.decorator.concreteDecoratorFactory.*;
+import model.piece.PieceCache;
+import model.piece.concretePiece.Angryman;
+import model.piece.decorator.ResetDecorator;
+import model.piece.decorator.SetDefensiveDecorator;
+import model.piece.decorator.SetOffensiveDecorator;
 import model.player.Player;
 import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
@@ -18,6 +23,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Stack;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
@@ -66,7 +72,7 @@ public class GameEngineFacade implements GameEngine {
     private int boardRowLength;
     private int boardColLength;
 
-    public GameEngineFacade(GameFrameView gfv, int undoMoves, RoyalePlayer royale, RebelPlayer rebel) {
+    public GameEngineFacade(GameFrameView gfv, int undoMoves, RoyalePlayer royale, RebelPlayer rebel ) {
         gameInit(gfv);
         actionPerformed = false;
         this.royale = royale;
@@ -105,34 +111,8 @@ public class GameEngineFacade implements GameEngine {
         onBoardPiece = null;
     }
 
-    public int getOriginalRow() {
-        return ORIGINAL_ROW;
-    }
-
-    public int getOriginalCol() {
-        return ORIGINAL_COL;
-    }
-
-    public int getRebelTurn() {
-        return REBEL_TURN;
-    }
-
-    public int getRoyaleTurn() {
-        return ROYALE_TURN;
-    }
-
-    public void setTileIcon(ArrayList<String[]> tileList) {
-
-        for (String[] tile : tileList) {
-            int row = Integer.valueOf(tile[ROW_LOADED]);
-            int col = Integer.valueOf(tile[COL_LOADED]);
-            String name = tile[NAME_LOADED];
-            gfv.setTileIcon(row, col, name);
-        }
-    }
-
     private void gameInit(GameFrameView gfv) {
-
+        PieceCache.generatePieceMap(gfv.getRebelName(), gfv.getRoyaleName());
         this.gfv = gfv;
 
         tiles = new Tile[BOARD_MAX_ROWS][BOARD_MAX_COLS];
@@ -157,6 +137,32 @@ public class GameEngineFacade implements GameEngine {
         boardColLength = BOARD_MAX_COLS;
 
         // Initialize current turn;
+    }
+
+    public int getOriginalRow() {
+        return ORIGINAL_ROW;
+    }
+
+    public int getOriginalCol() {
+        return ORIGINAL_COL;
+    }
+
+    public int getRebelTurn() {
+        return REBEL_TURN;
+    }
+
+    public int getRoyaleTurn() {
+        return ROYALE_TURN;
+    }
+
+    public void setTileIcon(ArrayList<String[]> tileList) {
+
+        for (String[] tile : tileList) {
+            int row = Integer.valueOf(tile[ROW_LOADED]);
+            int col = Integer.valueOf(tile[COL_LOADED]);
+            String name = tile[NAME_LOADED];
+            gfv.setTileIcon(row, col, name);
+        }
     }
 
     public boolean isMoving() {
@@ -234,7 +240,9 @@ public class GameEngineFacade implements GameEngine {
             for (int j = -radius; j <= radius; j++) {
                 if (checkMoveRepaint(row + i, col + j) &&
                         piece.isActionValid(abs(row - abs(row + i)), abs(col - abs(col + j)), actionType)) {
-                    gfv.colourTile(row + i, col + j, actionType);
+                    if(!(actionType.equals("moveSpeed") && checkAcross(row, col, row + i, col + j))){
+                        gfv.colourTile(row + i, col + j, actionType);
+                    }
                 }
             }
         }
@@ -411,6 +419,11 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    @Override
+    public void createSummonedPiece(String name) {
+        summonedPiece= (Piece) PieceCache.clonePiece(name);
+    }
+
     public Piece getSummonedPiece() {
         return summonedPiece;
     }
@@ -419,10 +432,9 @@ public class GameEngineFacade implements GameEngine {
         summonedPiece = null;
     }
 
-    private Tile getTile(int row, int col) {
+    private Tile getTile(int row, int col){
         return tiles[row][col];
     }
-
     // Gets a piece from a tile
     private PieceInterface getPiece(int row, int tile) {
         return getTile(row, tile).getPiece();
@@ -464,18 +476,6 @@ public class GameEngineFacade implements GameEngine {
 
         PieceInterface piece = getPiece(inRow, inTile);
 
-        /*for(int i= -rowDiff; i<=rowDiff;i++){
-            if(i!=inRow && (isWall(inRow+i,inTile) || getTile(inRow+i, inTile).hasPiece())){
-                return false;
-            }
-        }
-        for (int i= -tileDiff;i>=tileDiff;i++){
-            if(i!=inTile && (isWall(inRow,inTile+i) || getTile(inRow, inTile+i).hasPiece())){
-                return false;
-            }
-
-
-        }*/
         return piece.isActionValid(rowDiff, tileDiff, type);
     }
 
@@ -500,12 +500,15 @@ public class GameEngineFacade implements GameEngine {
         if (inTile == tgTile) {
             Tile initTile = getTile(inRow, inTile);
             for (int i = 1; i < Math.abs(inRow - tgRow) + 1; i++) {
-                if (tgRow < inRow) {
+                if (tgRow < inRow && inRow - i >= 0) {
                     currTile = getTile(inRow - i, inTile);
-                } else {
+                } else if (inRow + i < boardRowLength){
                     currTile = getTile(inRow + i, inTile);
                 }
-                if (currTile.hasPiece()) {
+                if(currTile==null){
+                    continue;
+                }
+                else if (currTile.hasPiece()) {
                     if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {
                         return true;
                     }
@@ -516,12 +519,16 @@ public class GameEngineFacade implements GameEngine {
         } else if (inRow == tgRow) {
             Tile initTile = getTile(inRow, inTile);
             for (int j = 1; j < Math.abs(inTile - tgTile) + 1; j++) {
-                if (tgTile < inTile) {
+                if (tgTile < inTile && inTile - j >= 0) {
                     currTile = getTile(inRow, inTile - j);
-                } else {
+                }
+                else if(inTile + j < boardColLength){
                     currTile = getTile(inRow, inTile + j);
                 }
-                if (currTile.hasPiece()) {
+                if(currTile==null){
+                    continue;
+                }
+                else if (currTile.hasPiece()) {
                     if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {
                         return true;
                     }
@@ -541,17 +548,6 @@ public class GameEngineFacade implements GameEngine {
             return true;
         }
         return false;
-    }
-
-    public void createPiece(String name) {
-        try {
-            Class pieceCls = Class.forName("model.piece.concretePiece." + name);
-            this.summonedPiece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
-
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
-
     }
 
     // TODO: MAGIC NUM
@@ -886,4 +882,5 @@ public class GameEngineFacade implements GameEngine {
     public Player getRoyalePlayer() {
         return royale;
     }
+
 }
