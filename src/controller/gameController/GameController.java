@@ -165,10 +165,8 @@ public class GameController {
         // no piece is chosen in the gameEngine
         g.resetCoordinates();
 
-        for (int i = g.getOriginalRow(); i < tileBtns.length; i++) {
-            for (int j = g.getOriginalCol(); j < tileBtns[i].length; j++) {
-                if (e.getSource() == tileBtns[i][j]) {
-
+        int i= gfv.findButtonCoordinates(e)[0];
+        int j= gfv.findButtonCoordinates(e)[1];
                     // click a brick wall
                     if (g.isWall(i, j)) {
                         gfv.getStatusLabel().setText(STATUS + "Please do not click a brick wall.");
@@ -204,16 +202,14 @@ public class GameController {
                         // attempt to pick a piece for action && also show piece info
                         else if (g.checkInit(i, j)) {
                             gfv.getStatusLabel().setText(STATUS);
-                            g.clickTile(tileBtn, i, j);
+                            g.clickTile(i, j);
                         }
 
                         // attempt to click on an empty tile
                         else {
                             gfv.getStatusLabel().setText(STATUS);
                         }
-                    }
-                }
-            }
+
         }
     }
 

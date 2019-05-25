@@ -6,7 +6,9 @@ import model.player.Player;
 import model.player.RoyalePlayer;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class GameFrameView extends JFrame {
@@ -36,6 +38,10 @@ public class GameFrameView extends JFrame {
     private static final String CASTLE_IMAGE = IMAGE_PATH + "castle.jpg";
     private static final String CLWALL_IMAGE = IMAGE_PATH + "cwall.jpg";
     private static final String CRWALL_IMAGE = IMAGE_PATH + "crwall.jpg";
+    private static final String TARGET_RED = IMAGE_PATH + "target.png";
+
+    private static final int ORIGINAL_ROW = 0;
+    private static final int ORIGINAL_COL = 0;
 
     private static JButton[][] tileBtns;
 
@@ -276,7 +282,7 @@ public class GameFrameView extends JFrame {
 
     public void colourTile(int i, int j, String actionType) {
         try {
-            String name = getGrass();
+            String name = GRASS_IMAGE;
             if (actionType.equals("moveSpeed")) {
                 name = BLUE_GRASS_IMAGE;
             } else if (actionType.equals("attackRange")) {
@@ -406,7 +412,6 @@ public class GameFrameView extends JFrame {
 
     public void setTileIcon(int row, int col, String name) {
         System.out.printf("%d, %d, %s%n", row, col, name);
-        name= IMAGE_PATH + name.toLowerCase() + ".png";
         tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(name)));
         tileBtns[row][col].setName(name);
     }
@@ -415,11 +420,32 @@ public class GameFrameView extends JFrame {
         getFrame().dispose();
     }
 
+    public void setCursor(String name){
+        Image icon = new ImageIcon(this.getClass().getResource(name)).getImage();
+        getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), "name"));
+    }
+
     public void resetCursor(){
         getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
+    public int[] findButtonCoordinates(ActionEvent e){
+        Object source= e.getSource();
+        JButton tile=  (JButton) source;
+        return new int[]{(int)tile.getClientProperty("row"), (int)tile.getClientProperty("column")};
+    }
 
+    public String getTargetRed() {
+        return TARGET_RED;
+    }
+
+    public JButton getTile(int i, int j){
+        return tileBtns[i][j];
+    }
+
+    public void setTileName(int i, int j, String name){
+        tileBtns[i][j].setName(name);
+    }
 }
 
 

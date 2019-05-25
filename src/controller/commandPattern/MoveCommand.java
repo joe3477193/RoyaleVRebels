@@ -17,7 +17,7 @@ public class MoveCommand extends AbstractTurn {
     @Override
     public void executeTurn(JButton[][] tileBtns, String image, int i, int j) {
 
-        boolean temp = g.placeMovedPiece(tileBtns, i, j);
+        boolean temp = g.placeMovedPiece(i, j);
 
         if (temp) {
 
