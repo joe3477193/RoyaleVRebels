@@ -10,10 +10,6 @@ import model.piece.abstractType.Obstacle;
 import model.piece.decorator.concreteDecorator.ResetModeTroopDecorator;
 import model.piece.decorator.concreteDecoratorFactory.*;
 import model.piece.PieceCache;
-import model.piece.concretePiece.Angryman;
-import model.piece.decorator.ResetDecorator;
-import model.piece.decorator.SetDefensiveDecorator;
-import model.piece.decorator.SetOffensiveDecorator;
 import model.player.Player;
 import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
@@ -496,7 +492,7 @@ public class GameEngineFacade implements GameEngine {
     }
 
     private boolean checkAcross(int inRow, int inTile, int tgRow, int tgTile) {
-        Tile currTile;
+        Tile currTile= null;
         if (inTile == tgTile) {
             Tile initTile = getTile(inRow, inTile);
             for (int i = 1; i < Math.abs(inRow - tgRow) + 1; i++) {
