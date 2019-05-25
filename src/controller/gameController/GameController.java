@@ -4,15 +4,16 @@ import controller.commandPattern.AttackCommand;
 import controller.commandPattern.MoveCommand;
 import controller.commandPattern.SummonCommand;
 import controller.gameActionListeners.*;
+import controller.gameChangeListeners.HoverDeckChangeListener;
 import controller.gameChangeListeners.HoverTileChangeListener;
 import model.gameEngine.GameEngine;
 import model.gameEngine.Tile;
 import model.piece.AbtractPiece.PieceInterface;
+import model.piece.PieceCache;
 import view.gameView.GameFrameView;
 import view.mainView.MainMenuView;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.FileWriter;
@@ -53,12 +54,17 @@ public class GameController {
     private void addChangeListeners() {
 
         HoverTileChangeListener tileListener = new HoverTileChangeListener(this);
+        HoverDeckChangeListener deckListener = new HoverDeckChangeListener(this);
 
         // add ChangeListeners for tileBtns
         for (JButton[] tileRows : gfv.getTileBtns()) {
             for (JButton tileBtn : tileRows) {
                 tileBtn.getModel().addChangeListener(tileListener);
             }
+        }
+
+        for (JButton deckPiece : gfv.getSummonBtns()) {
+            deckPiece.getModel().addChangeListener(deckListener);
         }
 
 
@@ -295,7 +301,63 @@ public class GameController {
         new MainMenuView();
     }
 
-    public void hoverTile(ChangeEvent e) {
+    public void saveGame() {
+
+        try {
+            PrintWriter output = new PrintWriter(new FileWriter("savegame.dat"));
+            for (String data : gfv.getPlayerData()) {
+                output.print(data + "|");
+            }
+            output.println();
+            int[] undoLimit = g.getUndoLimit();
+            output.println(undoLimit[0] + "|" + undoLimit[1]);
+            output.println(g.getTurn());
+            output.println(g.getActionPerformed());
+
+            for (Tile[] tileRow : g.getTiles()) {
+                for (Tile tile : tileRow) {
+                    if (tile.hasPiece()) {
+                        PieceInterface piece = tile.getPiece();
+                        output.printf("%d|%d|%s|%d|%n", tile.getRow(), tile.getCol(), piece.getName(), piece.getHp());
+                    }
+                }
+            }
+
+            output.close();
+            System.out.println("Game has been successfully saved.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void hoverDeck() {
+
+        String[] pieceNames;
+        JButton[] summonBtns;
+
+        if (g.getTurn() == g.getRebelTurn()) {
+            pieceNames = gfv.getRebelName();
+            summonBtns = gfv.getRebelButton();
+        } else {
+            pieceNames = gfv.getRoyaleName();
+            summonBtns = gfv.getRoyaleButton();
+        }
+
+        for (int i = 0; i < summonBtns.length; i++) {
+            PieceInterface deckPiece = PieceCache.getPiece(pieceNames[i]);
+            if (summonBtns[i].getModel().isRollover()) {
+                String pieceInfo = "<html>Name: " + deckPiece.getName() + "<br>Faction: " + deckPiece.getFaction()
+                        + "<br>Type: " + deckPiece.getType() + "<br>HP: " + deckPiece.getHp() + "<br>Attack Power: "
+                        + deckPiece.getAttackPower() + "<br>Defence: " + deckPiece.getDefence() + "<br>Attack Range: "
+                        + deckPiece.getAttackRange() + "<br>Move Speed: " + deckPiece.getMoveSpeed() + "<br>OFFENSIVE: "
+                        + deckPiece.isOffensive() + "<br>DEFENSIVE: " + deckPiece.isDefensive() + "</html>";
+                summonBtns[i].setToolTipText(pieceInfo);
+            }
+        }
+    }
+
+    public void hoverTile() {
 
         JButton[][] tileBtns = gfv.getTileBtns();
 

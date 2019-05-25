@@ -14,6 +14,10 @@ public class PieceCache {
         return (Piece) cachedPiece.clone();
     }
 
+    public static Piece getPiece(String name) {
+        return pieceMap.get(name);
+    }
+
     public static void generatePieceMap(String[] rebel, String[] royale){
         for(String name:rebel){
             pieceMap.put(name, createPiece(name));
