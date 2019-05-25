@@ -1,9 +1,8 @@
 package model.gameEngine;
 
+import controller.commandPattern.AbstractTurn;
 import model.piece.AbtractPiece.PieceInterface;
 import model.player.Player;
-
-import controller.commandPattern.AbstractTurn;
 
 import java.util.ArrayList;
 
@@ -29,7 +28,7 @@ public interface GameEngine {
 
     void setMoving();
 
-    boolean getActionPerformed();
+    boolean getHasPerformed();
 
     void unsetActionPerformed();
 
@@ -102,4 +101,6 @@ public interface GameEngine {
     boolean saveGame();
 
     void loadGame(String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList);
+
+    void changeAttackTarget(Tile tile, int i, int j);
 }

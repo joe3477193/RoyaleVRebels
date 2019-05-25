@@ -6,10 +6,10 @@ import model.player.Player;
 import model.player.RoyalePlayer;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.EventObject;
 
 public class GameFrameView extends JFrame {
 
@@ -20,7 +20,7 @@ public class GameFrameView extends JFrame {
     private static final String WALL_IMAGE = IMAGE_PATH + "wall.jpg";
     private static final String RED_GRASS_IMAGE = IMAGE_PATH + "red_grass.png";
     private static final String BLUE_GRASS_IMAGE = IMAGE_PATH + "blue_grass.png";
-    private static final String PINK_GRASS_IMAGE= IMAGE_PATH + "pink_grass.png";
+    private static final String PINK_GRASS_IMAGE = IMAGE_PATH + "pink_grass.png";
     private static final String RO_ONE_IMAGE = IMAGE_PATH + "general.png";
     private static final String RO_TWO_IMAGE = IMAGE_PATH + "liutenant.png";
     private static final String RO_THREE_IMAGE = IMAGE_PATH + "infantry.png";
@@ -39,6 +39,7 @@ public class GameFrameView extends JFrame {
     private static final String CLWALL_IMAGE = IMAGE_PATH + "cwall.jpg";
     private static final String CRWALL_IMAGE = IMAGE_PATH + "crwall.jpg";
     private static final String TARGET_RED = IMAGE_PATH + "target.png";
+    private static final String TARGET_GREEN = IMAGE_PATH + "target_green.png";
 
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
@@ -147,10 +148,10 @@ public class GameFrameView extends JFrame {
 
     public void assembleBoard(GameEngine g) {
         this.g = g;
-    	
-    	Player playerOne = g.getRebelPlayer();
-    	Player playerTwo = g.getRoyalePlayer();
-    	nameOne= playerOne.getName();
+
+        Player playerOne = g.getRebelPlayer();
+        Player playerTwo = g.getRoyalePlayer();
+        nameOne = playerOne.getName();
         nameTwo = playerTwo.getName();
         time = new JLabel("");
 
@@ -221,7 +222,7 @@ public class GameFrameView extends JFrame {
 
         updateBar(playerOne);
 
-        if(g.getActionPerformed()){
+        if (g.getHasPerformed()) {
             colourEndTurn();
         }
     }
@@ -251,8 +252,7 @@ public class GameFrameView extends JFrame {
                 tileBtns[i][j] = new JButton();
                 if (g.isWall(i, j)) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
-                }
-                else if (i == 0 && j % 2 != 0) {
+                } else if (i == 0 && j % 2 != 0) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
                 } else if (i == 0 && j % 4 == 0) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
@@ -291,8 +291,7 @@ public class GameFrameView extends JFrame {
                 name = BLUE_GRASS_IMAGE;
             } else if (actionType.equals("attackRange")) {
                 name = RED_GRASS_IMAGE;
-            }
-            else if(actionType.equals("summon")){
+            } else if (actionType.equals("summon")) {
                 name = PINK_GRASS_IMAGE;
             }
             tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(name)));
@@ -330,15 +329,14 @@ public class GameFrameView extends JFrame {
     }
 
     public void updateBar(Player player) {
-    	
-    	if(player instanceof RoyalePlayer) {
-    		removeSpawn(rebelButton);
+
+        if (player instanceof RoyalePlayer) {
+            removeSpawn(rebelButton);
             loadSpawn(royaleButton);
-    	}
-    	else {
-    		            removeSpawn(royaleButton);
+        } else {
+            removeSpawn(royaleButton);
             loadSpawn(rebelButton);
-    	}
+        }
         playerName.setText(player.getName());
         playerType.setText(player.getFaction());
         playerCP.setText(Integer.toString(player.getCP()));
@@ -415,44 +413,57 @@ public class GameFrameView extends JFrame {
     }
 
     public void setTileIcon(int row, int col, String name) {
-        System.out.printf("%d, %d, %s%n", row, col, name);
         tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(name)));
         tileBtns[row][col].setName(name);
     }
 
-    public void disposeFrame(){
+    public void disposeFrame() {
         getFrame().dispose();
     }
 
-    public void setCursor(String name){
+    public void setCursor(String name) {
         Image icon = new ImageIcon(this.getClass().getResource(name)).getImage();
         getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), "name"));
     }
 
-    public void resetCursor(){
+    public void resetCursor() {
         getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
-    public int[] findButtonCoordinates(ActionEvent e){
-        Object source= e.getSource();
-        JButton tile=  (JButton) source;
-        return new int[]{(int)tile.getClientProperty("row"), (int)tile.getClientProperty("column")};
+    public int[] findButtonCoordinates(EventObject e) {
+        Object source = e.getSource();
+
+        if (e instanceof ActionEvent) {
+
+            JButton tile = (JButton) source;
+            return new int[]{(int) tile.getClientProperty("row"), (int) tile.getClientProperty("column")};
+//        } else {
+//            TODO: MODEL CAN'T HAVE PROPERTY
+//            ButtonModel tileModel = (ButtonModel) source;
+//            return new int[]{(int) tileModel.}
+//        }
+        }
+        return null;
     }
 
     public String getTargetRed() {
         return TARGET_RED;
     }
 
-    public JButton getTile(int i, int j){
+    public String getTargetGreen() {
+        return TARGET_GREEN;
+    }
+
+    public JButton getTile(int i, int j) {
         return tileBtns[i][j];
     }
 
-    public void setTileName(int i, int j, String name){
+    public void setTileName(int i, int j, String name) {
         tileBtns[i][j].setName(name);
     }
 
-    public String getImagePath(String name){
-        return IMAGE_PATH+name+".png";
+    public String getImagePath(String name) {
+        return IMAGE_PATH + name + ".png";
     }
 }
 

@@ -16,10 +16,12 @@ public class GameImpl implements Game {
     private RebelPlayer rebel;
     private GameFrameView gfv;
     private GameEngine g;
+
+    // TODO: DO WE STILL NEED THIS???
     private ArrayList<String[]> tileData;
     private int rows;
     private int cols;
-    
+
 
     public GameImpl(ArrayList<String> playerNames, int rows, int cols) {
 
@@ -29,18 +31,14 @@ public class GameImpl implements Game {
         Random r = new Random();
         int turn = r.nextInt(playerNames.size());
 
-        // randomly assign team for player
-        if (turn == 0) {
+        // Randomly assign team for player
+        if (turn == GameEngineFacade.REBEL_TURN) {
             royale = new RoyalePlayer(playerNames.get(turn));
             rebel = new RebelPlayer(playerNames.get(turn + 1));
         } else {
             royale = new RoyalePlayer(playerNames.get(turn));
             rebel = new RebelPlayer(playerNames.get(turn - 1));
         }
-
-
-
-
     }
 
     public GameImpl(GameEngine g, GameFrameView gfv, ArrayList<String[]> tileData) {
@@ -64,11 +62,12 @@ public class GameImpl implements Game {
 
                 GameEngineFacade.BOARD_MAX_ROWS = rows;
                 GameEngineFacade.BOARD_MAX_COLS = cols;
-                // instantiate the GUI view for game
+
+                // Instantiate the GUI view for game
                 gfv = new GameFrameView();
 
-                // instantiate the GameEngineFacade
-                g = new GameEngineFacade(gfv, undo,royale,rebel);
+                // Instantiate the GameEngineFacade
+                g = new GameEngineFacade(gfv, undo, royale, rebel);
 
                 gfv.assembleBoard(g);
                 new GameController(g, gfv);

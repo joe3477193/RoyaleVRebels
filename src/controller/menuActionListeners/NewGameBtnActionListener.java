@@ -18,6 +18,8 @@ public class NewGameBtnActionListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         new EnterNameView();
+
+        // Close Main Menu View
         frame.dispose();
     }
 }
