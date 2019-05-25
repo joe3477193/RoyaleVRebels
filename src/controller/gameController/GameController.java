@@ -327,32 +327,6 @@ public class GameController {
         }
     }
 
-    public void hoverDeck() {
-
-        String[] pieceNames;
-        JButton[] summonBtns;
-
-        if (g.getTurn() == g.getRebelTurn()) {
-            pieceNames = gfv.getRebelName();
-            summonBtns = gfv.getRebelButton();
-        } else {
-            pieceNames = gfv.getRoyaleName();
-            summonBtns = gfv.getRoyaleButton();
-        }
-
-        for (int i = 0; i < summonBtns.length; i++) {
-            PieceInterface deckPiece = PieceCache.getPiece(pieceNames[i]);
-            if (summonBtns[i].getModel().isRollover()) {
-                String pieceInfo = "<html>Name: " + deckPiece.getName() + "<br>Faction: " + deckPiece.getFaction()
-                        + "<br>Type: " + deckPiece.getType() + "<br>HP: " + deckPiece.getHp() + "<br>Attack Power: "
-                        + deckPiece.getAttackPower() + "<br>Defence: " + deckPiece.getDefence() + "<br>Attack Range: "
-                        + deckPiece.getAttackRange() + "<br>Move Speed: " + deckPiece.getMoveSpeed() + "<br>OFFENSIVE: "
-                        + deckPiece.isOffensive() + "<br>DEFENSIVE: " + deckPiece.isDefensive() + "</html>";
-                summonBtns[i].setToolTipText(pieceInfo);
-            }
-        }
-    }
-
     public void hoverTile() {
 
         JButton[][] tileBtns = gfv.getTileBtns();
