@@ -694,7 +694,6 @@ public class GameEngineFacade implements GameEngine {
             gfv.resetCursor();
             gfv.getStatusLabel().setText(STATUS + message);
 
-            resetPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
             return new TurnType("Attack", pName, getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], i, j, trueDamage, death, prevHp,p);
         } else {
 
@@ -765,17 +764,6 @@ public class GameEngineFacade implements GameEngine {
         hasPerformed = false;
         gfv.getAttackBtn().setVisible(true);
 
-    }
-
-    private void resetPiece(int i, int j) {
-        PieceInterface currentPiece = getPiece(i, j);
-        if (currentPiece.isOffensive() || currentPiece.isDefensive()) {
-            PieceInterface originalPiece = new ResetModeDecoratorFactory(currentPiece).getFactory();
-            ((PieceTile)getTile(i, j)).setPiece(originalPiece);
-            System.out.println("Reset!");
-            System.out.println(originalPiece.getInitHp());
-            System.out.println(originalPiece.getInitAttackPower());
-        }
     }
 
     public void setOffensive() {
