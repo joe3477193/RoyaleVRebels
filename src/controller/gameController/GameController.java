@@ -3,8 +3,8 @@ package controller.gameController;
 
 import controller.commandPattern.CommandMonitor;
 import controller.gameActionListeners.*;
-import controller.gameChangeListeners.HoverDeckChangeListener;
-import controller.gameChangeListeners.HoverTileChangeListener;
+import controller.gameMouseAdapters.HoverDeckMouseAdapter;
+import controller.gameMouseAdapters.HoverTileMouseAdapter;
 import model.gameEngine.GameEngine;
 import model.gameEngine.PieceTile;
 import model.gameEngine.TileInterface;
@@ -16,6 +16,7 @@ import view.mainView.MainMenuView;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.time.Duration;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,6 +32,7 @@ public class GameController {
     private static final int ORIGINAL_BTN_INDEX = 0;
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
+    private static final int DECK_LENGTH = 7;
 
     private Timer timer;
 
@@ -45,37 +47,25 @@ public class GameController {
         cm = new CommandMonitor(g);
         addActionListeners();
         startTimer();
-        addChangeListeners();
+        addMouseAdapters();
     }
 
-    private void addChangeListeners() {
+    private void addMouseAdapters() {
 
-        HoverTileChangeListener tileListener = new HoverTileChangeListener(this);
-        HoverDeckChangeListener deckListener = new HoverDeckChangeListener(this);
+        HoverTileMouseAdapter tileListener = new HoverTileMouseAdapter(this);
+        HoverDeckMouseAdapter deckListener = new HoverDeckMouseAdapter(this);
 
-        // add ChangeListeners for tileBtns
+        // add MouseAdapters for tileBtns
         for (JButton[] tileRows : gfv.getTileBtns()) {
             for (JButton tileBtn : tileRows) {
-                tileBtn.getModel().addChangeListener(tileListener);
+                tileBtn.addMouseListener(tileListener);
             }
         }
 
-        for (JButton deckPiece : gfv.getSummonBtns()) {
-            deckPiece.getModel().addChangeListener(deckListener);
+        // add MouseAdapters for deckBtns
+        for (JButton deckBtns : gfv.getSummonBtns()) {
+            deckBtns.addMouseListener(deckListener);
         }
-
-
-//        // TODO: show piece info on the deck
-//        for (JButton btn : gfv.getSummonBtns()) {
-//            btn.getModel().addChangeListener(new ChangeListener() {
-//                @Override
-//                public void stateChanged(ChangeEvent e) {
-//                    if (btn.getModel().isRollover()) {
-//
-//                    }
-//                }
-//            });
-//        }
     }
 
     private void addActionListeners() {
@@ -182,29 +172,29 @@ public class GameController {
 
         // attempt to place piece
         else {
-            tileBtn = tileBtns[i][j];           
+            tileBtn = tileBtns[i][j];
             // attempt to place a summoned piece
             if (g.getSummonedPiece() != null && !g.getHasPerformed()) {
                 // turn is consumed and run through turn command
-                cm.executeTurn("Summon",gfv.getImage(), i, j,g.getSummonedPiece());
-                
+                cm.executeTurn("Summon", gfv.getImage(), i, j, g.getSummonedPiece());
+
             }
             // attempt to place a piece during movement
             else if (g.isMoving() && !g.getHasPerformed()) {
                 // turn is consumed and run through turn command
-                cm.executeTurn("Move", gfv.getImage(), i, j,g.getSummonedPiece());
+                cm.executeTurn("Move", gfv.getImage(), i, j, g.getSummonedPiece());
 
             }
             // attempt to place a piece during attack
             else if (g.isAttacking() && !g.getHasPerformed()) {
-                
-                cm.executeTurn("Attack", gfv.getImage(), i, j,g.getSummonedPiece());
+
+                cm.executeTurn("Attack", gfv.getImage(), i, j, g.getSummonedPiece());
 
             }
             // attempt to pick a piece for action && also show piece info
             else if (g.isPieceTile(i, j)) {
                 gfv.getStatusLabel().setText(STATUS);
-                g.clickTile( i, j);
+                g.clickTile(i, j);
             }
 
             // attempt to click on an empty tile
@@ -212,7 +202,7 @@ public class GameController {
                 gfv.getStatusLabel().setText(STATUS);
             }
         }
-        
+
     }
 
     public void endTurn() {
@@ -297,60 +287,51 @@ public class GameController {
         new MainMenuView();
     }
 
-    public void hoverDeck() {
+    public void hoverDeck(MouseEvent e) {
 
         String[] pieceNames;
-        JButton[] summonBtns;
 
         if (g.getTurn() == g.getRebelTurn()) {
             pieceNames = gfv.getRebelName();
-            summonBtns = gfv.getRebelButton();
         } else {
             pieceNames = gfv.getRoyaleName();
-            summonBtns = gfv.getRoyaleButton();
         }
 
-        for (int i = 0; i < summonBtns.length; i++) {
-            PieceInterface deckPiece = PieceCache.getPiece(pieceNames[i]);
-            if (summonBtns[i].getModel().isRollover()) {
-                String pieceInfo = "<html>Name: " + deckPiece.getName() + "<br>Faction: " + deckPiece.getFaction()
-                        + "<br>Type: " + deckPiece.getType() + "<br>HP: " + deckPiece.getHp() + "<br>Attack Power: "
-                        + deckPiece.getAttackPower() + "<br>Defence: " + deckPiece.getDefence() + "<br>Attack Range: "
-                        + deckPiece.getAttackRange() + "<br>Move Speed: " + deckPiece.getMoveSpeed() + "<br>OFFENSIVE: "
-                        + deckPiece.isOffensive() + "<br>DEFENSIVE: " + deckPiece.isDefensive() + "</html>";
-                summonBtns[i].setToolTipText(pieceInfo);
-            }
-        }
+        int i = gfv.findButtonIndex(e) % DECK_LENGTH;
+
+        PieceInterface deckPiece = PieceCache.getPiece(pieceNames[i]);
+
+        String pieceInfo = "<html>Name: " + deckPiece.getName() + "<br>Faction: " + deckPiece.getFaction()
+                + "<br>Type: " + deckPiece.getType() + "<br>HP: " + deckPiece.getHp() + "<br>Attack Power: "
+                + deckPiece.getAttackPower() + "<br>Defence: " + deckPiece.getDefence() + "<br>Attack Range: "
+                + deckPiece.getAttackRange() + "<br>Move Speed: " + deckPiece.getMoveSpeed() + "<br>OFFENSIVE: "
+                + deckPiece.isOffensive() + "<br>DEFENSIVE: " + deckPiece.isDefensive() + "</html>";
+        gfv.showPieceInfo(e, pieceInfo);
     }
 
-    public void hoverTile() {
-
-        JButton[][] tileBtns = gfv.getTileBtns();
+    public void hoverTile(MouseEvent e) {
 
         // show on board piece's info
-        for (int i = g.getOriginalRow(); i < tileBtns.length; i++) {
-            for (int j = g.getOriginalCol(); j < tileBtns[i].length; j++) {
-                TileInterface tile = g.getTiles()[i][j];
-                JButton btn = gfv.getTileBtns()[i][j];
+        int i = gfv.findButtonCoordinates(e)[0];
+        int j = gfv.findButtonCoordinates(e)[1];
 
-                // TODO: UNIMPLEMENTED
-                // Change attack target color if is attacking
-                // g.changeAttackTarget(tile, i, j);
+        TileInterface tile = g.getTiles()[i][j];
 
-                // check if the tile has piece, show the piece info
-                if (tile instanceof PieceTile) {
-                    if (btn.getModel().isRollover()) {
-                        PieceInterface piece = ((PieceTile)tile).getPiece();
+        // TODO: UNIMPLEMENTED
+        // Change attack target color if is attacking
+        // g.changeAttackTarget(tile, i, j);
 
-                        String pieceInfo = "<html>Name: " + piece.getName() + "<br>Faction: " + piece.getFaction()
-                                + "<br>Type: " + piece.getType() + "<br>HP: " + piece.getHp() + "<br>Attack Power: "
-                                + piece.getAttackPower() + "<br>Defence: " + piece.getDefence() + "<br>Attack Range: "
-                                + piece.getAttackRange() + "<br>Move Speed: " + piece.getMoveSpeed() + "<br>OFFENSIVE: "
-                                + piece.isOffensive() + "<br>DEFENSIVE: " + piece.isDefensive() + "</html>";
-                        btn.setToolTipText(pieceInfo);
-                    }
-                }
-            }
+        // check if the tile has piece, show the piece info
+        if (tile instanceof PieceTile) {
+
+            PieceInterface piece = ((PieceTile) tile).getPiece();
+
+            String pieceInfo = "<html>Name: " + piece.getName() + "<br>Faction: " + piece.getFaction()
+                    + "<br>Type: " + piece.getType() + "<br>HP: " + piece.getHp() + "<br>Attack Power: "
+                    + piece.getAttackPower() + "<br>Defence: " + piece.getDefence() + "<br>Attack Range: "
+                    + piece.getAttackRange() + "<br>Move Speed: " + piece.getMoveSpeed() + "<br>OFFENSIVE: "
+                    + piece.isOffensive() + "<br>DEFENSIVE: " + piece.isDefensive() + "</html>";
+            gfv.showPieceInfo(e, pieceInfo);
         }
     }
 

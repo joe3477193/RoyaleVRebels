@@ -1,6 +1,5 @@
 package model.gameEngine;
 
-import controller.commandPattern.AbstractTurn;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
@@ -8,7 +7,6 @@ import model.piece.PieceCache;
 import model.piece.abstractType.Obstacle;
 import model.piece.decorator.concreteDecorator.ResetModeTroopDecorator;
 import model.piece.decorator.concreteDecoratorFactory.*;
-import model.piece.faction.Royale;
 import model.player.Player;
 import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
@@ -17,9 +15,7 @@ import view.gameView.GameFrameView;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Stack;
 
 import static java.lang.Math.abs;
 import static view.gameView.GameFrameView.STATUS;
@@ -595,11 +591,20 @@ public class GameEngineFacade implements GameEngine {
             gfv.setTileName(i, j, gfv.getImage());
 
             if (getTurn() == REBEL_TURN) {
-                rebel.reduceCP(getSummonedPiece().getCp());
-                gfv.updateBar(rebel);
+                if (rebel.reduceCP(getSummonedPiece().getCp())) {
+                    gfv.updateBar(rebel);
+                } else {
+                    System.out.print("Not enough CP!");
+                    return false;
+                }
             } else if (getTurn() == ROYALE_TURN) {
-                royale.reduceCP(getSummonedPiece().getCp());
-                gfv.updateBar(royale);
+                if (royale.reduceCP(getSummonedPiece().getCp())) {
+                    gfv.updateBar(royale);
+                } else {
+                    System.out.print("Not enough CP!");
+                    return false;
+                }
+
             }
 
             removeSummonedPiece();

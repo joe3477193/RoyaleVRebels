@@ -7,7 +7,6 @@ import model.player.RoyalePlayer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.EventObject;
 
@@ -103,6 +102,7 @@ public class GameFrameView extends JFrame {
         JButton[] button = new JButton[BUTTON_LENGTH];
         for (int i = 0; i < BUTTON_LENGTH; i++) {
             button[i] = new JButton(new ImageIcon(this.getClass().getResource(image[i])));
+            button[i].putClientProperty("index", i);
             button[i].setName(name[i]);
             summonBtns.add(button[i]);
         }
@@ -431,19 +431,20 @@ public class GameFrameView extends JFrame {
     }
 
     public int[] findButtonCoordinates(EventObject e) {
+        return new int[]{(int) getSource(e).getClientProperty("row"), (int) getSource(e).getClientProperty("column")};
+    }
+
+    public int findButtonIndex(EventObject e) {
+        return (int) getSource(e).getClientProperty("index");
+    }
+
+    public void showPieceInfo(EventObject e, String pieceInfo) {
+        getSource(e).setToolTipText(pieceInfo);
+    }
+
+    public JButton getSource(EventObject e) {
         Object source = e.getSource();
-
-        if (e instanceof ActionEvent) {
-
-            JButton tile = (JButton) source;
-            return new int[]{(int) tile.getClientProperty("row"), (int) tile.getClientProperty("column")};
-//        } else {
-//            TODO: MODEL CAN'T HAVE PROPERTY
-//            ButtonModel tileModel = (ButtonModel) source;
-//            return new int[]{(int) tileModel.}
-//        }
-        }
-        return null;
+        return (JButton) source;
     }
 
     public String getTargetRed() {

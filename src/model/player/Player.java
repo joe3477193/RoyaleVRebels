@@ -28,8 +28,9 @@ public abstract class Player {
         return cp;
     }
 
-    public void reduceCP(int value) {
+    public boolean reduceCP(int value) {
         this.cp -= value;
+        return cp >= 0;
     }
 
     public String getFaction() {
