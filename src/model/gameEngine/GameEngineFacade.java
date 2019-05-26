@@ -10,7 +10,6 @@ import model.piece.PieceCache;
 import model.piece.abstractType.Obstacle;
 import model.piece.decorator.concreteDecorator.ResetModeTroopDecorator;
 import model.piece.decorator.concreteDecoratorFactory.*;
-import model.piece.faction.Rebel;
 import model.piece.faction.Royale;
 import model.player.Player;
 import model.player.RebelPlayer;
@@ -526,19 +525,16 @@ public class GameEngineFacade implements GameEngine {
 
         if (coordinate != null) {
             setInit(coordinate[ROW_INDEX], coordinate[COL_INDEX]);
-            System.out.println(getInitTileCoord()[ROW_INDEX] + ", " + getInitTileCoord()[COL_INDEX]);
             if (checkInit(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX])) {
                 if (!(getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]) instanceof Obstacle)) {
                     if (isFactionMatched(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX])) {
                         PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
                         if (!originalPiece.isOffensive()) {
-
                             PieceInterface resetPiece = new ResetModeDecoratorFactory(originalPiece).getFactory();
                             PieceInterface offensivePiece = new AttackPowerBuffDecoratorFactory(new DefenceNerfDecoratorFactory(resetPiece).getFactory()).getFactory();
                             offensivePiece.isOffensive();
                             getTile(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]).setPiece(offensivePiece);
                         } else {
-
                             PieceInterface resetPiece = new ResetModeTroopDecorator(originalPiece);
                             resetPiece.isOffensive();
                             getTile(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]).setPiece(resetPiece);
@@ -570,7 +566,7 @@ public class GameEngineFacade implements GameEngine {
     // Check if the player and the piece on action is in the same team
     private boolean isFactionMatched(int i, int j) {
 
-        return turn == REBEL_TURN && getPiece(i, j) instanceof Rebel || turn == ROYALE_TURN && getPiece(i, j) instanceof Royale;
+        return turn == REBEL_TURN && getPiece(i, j).getFaction().equals("Rebel") || turn == ROYALE_TURN && getPiece(i, j).getFaction().equals("Royale");
     }
 
     public void setDefensive() {
