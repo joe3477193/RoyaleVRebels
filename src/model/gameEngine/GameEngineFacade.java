@@ -496,7 +496,7 @@ public class GameEngineFacade implements GameEngine {
                     if (!((PieceTile)currTile).getPiece().getFaction().equals(((PieceTile)initTile).getPiece().getFaction())) {
                         return true;
                     }
-                } else if (isWallTile(currTile.getRow(), currTile.getCol())) {
+                } else if (currTile instanceof WallTile) {
                     return true;
                 }
             }
@@ -515,7 +515,7 @@ public class GameEngineFacade implements GameEngine {
                     if (!((PieceTile)currTile).getPiece().getFaction().equals(((PieceTile)initTile).getPiece().getFaction())) {
                         return true;
                     }
-                } else if (isWallTile(currTile.getRow(), currTile.getCol())) {
+                } else if (currTile instanceof WallTile) {
                     return true;
                 }
             }
