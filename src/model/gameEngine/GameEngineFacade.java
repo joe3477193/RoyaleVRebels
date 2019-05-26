@@ -26,6 +26,10 @@ import static view.gameView.GameFrameView.STATUS;
 
 public class GameEngineFacade implements GameEngine {
 
+    // TODO: Game model shouldn't have gui component such as icons???
+    public static int BOARD_MAX_ROWS; // increments in 5
+    public static int BOARD_MAX_COLS; // increments in 4
+
     public static final int REBEL_TURN = 0;
     public static final int ROW_INDEX = 0;
     public static final int COL_INDEX = 1;
@@ -39,12 +43,10 @@ public class GameEngineFacade implements GameEngine {
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
     private static final int ROYALE_SUMMON_NORTH_LIMIT = 1;
-    private static final int ROYALE_SUMMON_SOUTH_LIMIT = 2;
-    private static final int REBEL_SUMMON_NORTH_LIMIT =10;
     private static final int OBSTACLE_EXTRA_SUMMON_LIMIT = 3;
-    // TODO: Game model shouldn't have gui component such as icons???
-    public static int BOARD_MAX_ROWS; // increments in 5
-    public static int BOARD_MAX_COLS; // increments in 4
+    private static final int ROYALE_SUMMON_SOUTH_LIMIT = OBSTACLE_EXTRA_SUMMON_LIMIT;
+    private static final int REBEL_SUMMON_NORTH_LIMIT = 10;
+
     // Stack for storing moves
     private GameFrameView gfv;
     private Piece summonedPiece;
