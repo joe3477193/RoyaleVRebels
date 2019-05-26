@@ -1,6 +1,6 @@
 package model.gameEngine;
 
-import controller.commandPattern.AbstractTurn;
+
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
@@ -679,6 +679,7 @@ public class GameEngineFacade implements GameEngine {
             PieceInterface piece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
             String message;
             int trueDmg = piece.getAttackPower() - getPiece(i, j).getDefence();
+            int prevHp = getPiece(i, j).getHp();
             String pName = tileBtns[i][j].getName();
             message = String.format("%d true damage dealt! Remaining HP: %d", trueDmg,
                     getPiece(i, j).getHp());
@@ -695,9 +696,10 @@ public class GameEngineFacade implements GameEngine {
             gfv.getAttackBtn().setVisible(false);
             gfv.getFrame().setCursor(new Cursor(DEFAULT_CURSOR));
             gfv.getStatusLabel().setText(STATUS + message);
+            
 
             resetPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
-            return new TurnType("Attack", pName, getInitTileCoord()[ROW], getInitTileCoord()[COL], i, j, trueDmg, death);
+            return new TurnType("Attack", pName, getInitTileCoord()[ROW], getInitTileCoord()[COL], i, j, trueDmg, death, prevHp);
         } else {
         	
             gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the attack button again to cancel.");
@@ -752,9 +754,10 @@ public class GameEngineFacade implements GameEngine {
     			
                 tileBtns[tt.tooRow][tt.tooCol].setIcon(new ImageIcon(this.getClass().getResource(tt.image)));
                 tileBtns[tt.tooRow][tt.tooCol].setName(tt.image);
+                getPiece(tt.tooRow,tt.tooCol).setHP(tt.prevHp);
     		}
     		else {
-    			getTile(tt.tooRow, tt.tooRow).getPiece().addHP(tt.damageDealt);
+    			getPiece(tt.tooRow, tt.tooCol).addHP(tt.damageDealt);
     		}
     		break;
     	}

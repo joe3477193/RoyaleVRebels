@@ -26,7 +26,7 @@ public class CommandMonitor extends AbstractTurn {
 		case "Summon":
 			boolean sumBool = g.placeSummonedPiece(tileBtns[i][j], i, j);
 	        if (sumBool) {
-	            moves.add(new TurnType("Summon",image, 0,0,i,j,0,false ));
+	            moves.add(new TurnType("Summon",image, 0,0,i,j,0,false,0 ));
 	        }
 	        break;
 	        
@@ -34,7 +34,7 @@ public class CommandMonitor extends AbstractTurn {
 			boolean movBool = g.placeMovedPiece(tileBtns, i, j);
 	        if (movBool) {
 	            // last move reference for Abstract class as per command pattern
-	            moves.add(new TurnType("Move", image, g.getInitTileCoord()[0], g.getInitTileCoord()[1], i, j,0,false));
+	            moves.add(new TurnType("Move", image, g.getInitTileCoord()[0], g.getInitTileCoord()[1], i, j,0,false,0));
 	        }
 		    break;
 		    
