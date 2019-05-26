@@ -2,7 +2,8 @@ package model.piece.AbtractPiece;
 
 public interface PieceInterface {
 
-    String getName();
+
+	String getName();
 
     String getFaction();
 
@@ -79,5 +80,9 @@ public interface PieceInterface {
     void attackedBy(int attack);
 
     boolean isDead();
+    
+    void addHP( int hp);
+
+
 }
 

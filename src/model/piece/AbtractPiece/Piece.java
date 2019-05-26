@@ -203,6 +203,11 @@ public abstract class Piece implements PieceInterface, Cloneable {
 
         return isDefensive;
     }
+    
+    public void addHP(int hp) {
+    	
+    	this.hp += hp;
+    }
 
     public void resetMode() {
 

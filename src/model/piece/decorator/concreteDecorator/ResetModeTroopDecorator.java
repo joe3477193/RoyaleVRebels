@@ -19,4 +19,6 @@ public class ResetModeTroopDecorator extends PieceInterfaceDecorator implements 
         isOffensive = false;
         isDefensive = false;
     }
+
+
 }
