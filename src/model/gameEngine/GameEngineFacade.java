@@ -86,7 +86,7 @@ public class GameEngineFacade implements GameEngine {
         for (int i = ORIGINAL_ROW; i < BOARD_MAX_ROWS; i++) {
             for (int j = ORIGINAL_COL; j < BOARD_MAX_COLS; j++) {
                 //creates new wall tile
-                if ((i % 5 <= 2) && j % 4 == 3) {
+                if ((i % 5 <= 3) && j % 4 == 3) {
                     setTile(i,j,"WallTile");
                 }
                 //creates new castle tile
