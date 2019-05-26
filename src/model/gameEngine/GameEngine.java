@@ -1,11 +1,8 @@
 package model.gameEngine;
 
+import controller.commandPattern.AbstractTurn;
 import model.piece.AbtractPiece.PieceInterface;
 import model.player.Player;
-
-import javax.swing.*;
-
-import controller.commandPattern.AbstractTurn;
 
 import java.util.ArrayList;
 
@@ -31,13 +28,13 @@ public interface GameEngine {
 
     void setMoving();
 
-    boolean getActionPerformed();
+    boolean getHasPerformed();
 
     void unsetActionPerformed();
 
     int[] getCoordinates();
 
-    void clickTile(JButton tileBtn, int i, int j);
+    void clickTile(int i, int j);
 
     void resetCoordinates();
 
@@ -63,15 +60,15 @@ public interface GameEngine {
 
     boolean checkAttackInit(int row, int tile);
 
-    void createPiece(String name);
+    void createSummonedPiece(String name);
 
-    boolean placeSummonedPiece(JButton tileBtn, int i, int j);
+    boolean placeSummonedPiece(int i, int j);
 
-    boolean placeMovedPiece(JButton[][] tileBtns, int i, int j);
+    boolean placeMovedPiece(int i, int j);
 
     boolean isWall(int i, int j);
 
-    void placeAttackPiece(int i, int j);
+    boolean placeAttackPiece(int i, int j);
 
     void setOffensive();
 
@@ -96,4 +93,14 @@ public interface GameEngine {
     Player getRebelPlayer();
 
     Player getRoyalePlayer();
+
+    boolean isCastle(int i, int j);
+
+    TileInterface getTile(int row, int col);
+
+    boolean saveGame();
+
+    void loadGame(String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList);
+
+    void changeAttackTarget(TileInterface tile, int i, int j);
 }

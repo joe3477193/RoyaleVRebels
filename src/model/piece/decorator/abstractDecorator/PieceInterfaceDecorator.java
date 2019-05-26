@@ -1,12 +1,10 @@
-package model.piece.decorator;
+package model.piece.decorator.abstractDecorator;
 
 import model.piece.AbtractPiece.PieceInterface;
 
 public abstract class PieceInterfaceDecorator implements PieceInterface {
 
     protected PieceInterface piece;
-    boolean isOffensive;
-    boolean isDefensive;
     private String name;
     private String faction;
     private String type;
@@ -24,8 +22,10 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     private int attackRange;
     private boolean moveable;
     private boolean attackable;
+    protected boolean isOffensive;
+    protected boolean isDefensive;
 
-    public PieceInterfaceDecorator(PieceInterface piece) {
+    protected PieceInterfaceDecorator(PieceInterface piece) {
         this.piece = piece;
         name = piece.getName();
         faction = piece.getFaction();
@@ -76,6 +76,14 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         return hp;
     }
 
+    public void setHP(int hp) {
+        if (hp < 0) {
+            this.hp = 0;
+        } else {
+            this.hp = hp;
+        }
+    }
+
     public int getInitDefence() {
         return initDefence;
     }
@@ -85,7 +93,17 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     }
 
     public void setDefence(int defence) {
-        this.defence = defence;
+        if (defence < 0) {
+            this.defence = 0;
+        } else {
+            this.defence = defence;
+        }
+    }
+
+    public void buffDefence() {
+    }
+
+    public void nerfDefence() {
     }
 
     public int getInitAttackPower() {
@@ -104,6 +122,12 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         }
     }
 
+    public void buffAttackPower() {
+    }
+
+    public void nerfAttackPower() {
+    }
+
     public int getInitMoveSpeed() {
         return initMoveSpeed;
     }
@@ -112,8 +136,18 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         return moveSpeed;
     }
 
-    public void setMoveSpeed(int speed) {
-        moveSpeed = speed;
+    public void setMoveSpeed(int moveSpeed) {
+        if (moveSpeed < 0) {
+            this.moveSpeed = 0;
+        } else {
+            this.moveSpeed = moveSpeed;
+        }
+    }
+
+    public void buffMoveSpeed() {
+    }
+
+    public void nerfMoveSpeed() {
     }
 
     public int getInitAttackRange() {
@@ -125,7 +159,17 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     }
 
     public void setAttackRange(int attackRange) {
-        this.attackRange = attackRange;
+        if (attackRange < 0) {
+            this.attackRange = 0;
+        } else {
+            this.attackRange = attackRange;
+        }
+    }
+
+    public void buffAttackRange() {
+    }
+
+    public void nerfAttackRange() {
     }
 
     public int getActionRange(String actionType) {
@@ -133,8 +177,9 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
             return moveSpeed;
         } else if (actionType.equals("attackRange")) {
             return attackRange;
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     public boolean isMoveable() {
@@ -146,37 +191,45 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     }
 
     public boolean isOffensive() {
+
+        if (attackPower > initAttackPower) {
+            isOffensive = true;
+        }
+
         return isOffensive;
     }
 
     public boolean isDefensive() {
+
+        if (defence > initDefence) {
+            isDefensive = true;
+        }
+
         return isDefensive;
     }
 
-    public void setHP(int hp) {
-        if (hp < 0) {
-            this.hp = 0;
-        } else {
-            this.hp = hp;
-        }
-    }
-
     public void resetMode() {
+
     }
 
     public void setOffensive() {
+
     }
 
     public void setDefensive() {
+
     }
 
-    public boolean isActionValid(int rowdiff, int tilediff, String actionType) {
+    // check if action of movement or attack is allowed
+    public boolean isActionValid(int rowDiff, int colDiff, String actionType) {
         int range = getActionRange(actionType);
-        return rowdiff == 0 && range >= tilediff || tilediff == 0 && range >= rowdiff;
+        return rowDiff == 0 && range >= colDiff || colDiff == 0 && range >= rowDiff;
     }
 
+    // damage dealt on the piece from another piece
     public void attackedBy(int attack) {
 
+        // true damage = attacking piece's attack power - attacked piece's defence
         int trueDamage = attack - defence;
 
         if (trueDamage > 0) {
@@ -188,7 +241,9 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         }
     }
 
+    // check if the piece is dead, remove the piece on the board
     public boolean isDead() {
+
         if (hp <= 0) {
             hp = 0;
             return true;

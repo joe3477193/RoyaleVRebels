@@ -16,9 +16,12 @@ public class AttackCommand extends AbstractTurn {
     
 	@Override
 	public void executeTurn(JButton[][] tileBtn, String image, int i, int j) {
-		// TODO Auto-generated method stub
 		
+		boolean temp = g.placeAttackPiece(i, j);
 		
+		if(temp) {
+			 this.lastMove = new TurnType("Attack", image, g.getInitTileCoord()[0], g.getInitTileCoord()[1], i, j);
+		}
 	}
 	
 	

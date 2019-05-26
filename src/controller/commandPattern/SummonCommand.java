@@ -16,7 +16,7 @@ public class SummonCommand extends AbstractTurn {
     @Override
     public void executeTurn(JButton[][] tileBtn,String image, int i, int j) {
     	
-    	boolean temp = g.placeSummonedPiece(tileBtn[i][j], i, j);
+    	boolean temp = g.placeSummonedPiece(i, j);
     	
         if (temp) {
             this.lastMove = new TurnType("Summon",image, 0,0,i,j );

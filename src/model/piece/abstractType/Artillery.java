@@ -6,7 +6,4 @@ import model.piece.abstractType.property.UnMoveable;
 public interface Artillery extends UnMoveable, Attackable {
 
     String type = "Artillery";
-
-//    boolean moveable = false;
-//    boolean attackable = true;
 }

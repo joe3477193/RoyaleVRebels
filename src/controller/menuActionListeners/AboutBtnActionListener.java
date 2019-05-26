@@ -18,6 +18,8 @@ public class AboutBtnActionListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         new AboutView();
+
+        // Close Main Menu View
         frame.dispose();
     }
 }

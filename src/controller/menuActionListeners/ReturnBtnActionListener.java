@@ -18,6 +18,8 @@ public class ReturnBtnActionListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         new MainMenuView();
+
+        // Close current View
         frame.dispose();
     }
 }
