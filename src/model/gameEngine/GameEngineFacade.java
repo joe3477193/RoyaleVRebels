@@ -1,8 +1,6 @@
 package model.gameEngine;
 
 import controller.commandPattern.AbstractTurn;
-import controller.commandPattern.MoveCommand;
-import controller.commandPattern.SummonCommand;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
@@ -688,37 +686,33 @@ public class GameEngineFacade implements GameEngine {
     }
     
     public void undoTurn(TurnType tt) {
-    	JButton[][] tileBtns = gfv.getTileBtns();
-
+    
     	
     	switch(tt.MoveType) {
     	
     	case "Move":
             getTile(tt.fromRow, tt.fromCol).setPiece(getPiece(tt.tooRow, tt.tooCol));
             getTile(tt.tooRow, tt.tooCol).removePiece();
-            tileBtns[tt.tooRow][tt.tooCol].setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
-            tileBtns[tt.fromRow][tt.fromCol].setIcon(new ImageIcon(this.getClass().getResource(tt.image)));
-            tileBtns[tt.fromRow][tt.fromCol].setName(tt.image);
+            gfv.setTileIcon(tt.tooRow, tt.tooCol, gfv.getGrass());
+            gfv.setTileIcon(tt.fromRow, tt.fromCol, tt.image);
+            gfv.setTileName(tt.fromRow, tt.fromCol, tt.image);
+            
             break;
             
-    	case "Summon":
-            JButton tileBtnSum = tileBtns[tt.tooRow][tt.tooCol];
+    	case "Summon":     
             getTile(tt.tooRow, tt.tooCol).removePiece();
-            tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
+            gfv.setTileIcon(tt.tooRow, tt.tooCol, gfv.getGrass());
             break;
     	
     	case "Attack":
-    		System.out.print(tt.death);
     		if(tt.death) {
-    			
-                tileBtns[tt.tooRow][tt.tooCol].setIcon(new ImageIcon(this.getClass().getResource(tt.image)));
-                tileBtns[tt.tooRow][tt.tooCol].setName(tt.image);
+                gfv.setTileIcon(tt.tooRow, tt.tooCol, tt.image);
+                gfv.setTileName(tt.tooRow, tt.tooCol, tt.image);
                 getTile(tt.tooRow,tt.tooCol).setPiece(tt.p);
-                
                 getPiece(tt.tooRow,tt.tooCol).setHP(tt.prevHp);
     		}
     		else {
-    			getPiece(tt.tooRow, tt.tooCol).addHP(tt.damageDealt);
+    			getPiece(tt.tooRow, tt.tooCol).setHP(getPiece(tt.tooRow,tt.tooCol).getHp() + tt.damageDealt);
     		}
     		break;
     	}

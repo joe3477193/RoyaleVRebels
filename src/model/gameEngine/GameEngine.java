@@ -102,4 +102,8 @@ public interface GameEngine {
     void changeAttackTarget(Tile tile, int i, int j);
     
     PieceInterface getPiece(int row, int tile);
+    
+    boolean checkUndoRem();
+    
+    void undoTurn(TurnType tt);
 }

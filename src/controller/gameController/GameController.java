@@ -1,8 +1,7 @@
 package controller.gameController;
 
-import controller.commandPattern.AttackCommand;
-import controller.commandPattern.MoveCommand;
-import controller.commandPattern.SummonCommand;
+
+import controller.commandPattern.CommandMonitor;
 import controller.gameActionListeners.*;
 import controller.gameChangeListeners.HoverDeckChangeListener;
 import controller.gameChangeListeners.HoverTileChangeListener;
@@ -36,13 +35,13 @@ public class GameController {
 
     private GameEngine g;
     private GameFrameView gfv;
-
+    private CommandMonitor cm;
 
     public GameController(GameEngine g, GameFrameView gfv) {
 
         this.g = g;
         this.gfv = gfv;
-
+        cm = new CommandMonitor(g);
         addActionListeners();
         startTimer();
         addChangeListeners();
@@ -183,46 +182,34 @@ public class GameController {
         else {
             tileBtn = tileBtns[i][j];           
             // attempt to place a summoned piece
-            if (g.getSummonedPiece() != null && !g.getActionPerformed()) {
+            if (g.getSummonedPiece() != null && !g.getHasPerformed()) {
                 // turn is consumed and run through turn command
-                cm.executeTurn("Summon", tileBtns,gfv.getImage(), i, j,g.getPiece(i, j));                          
+                cm.executeTurn("Summon",gfv.getImage(), i, j,g.getPiece(i, j));                          
                 
             }
             // attempt to place a piece during movement
-            else if (g.isMoving() && !g.getActionPerformed()) {
+            else if (g.isMoving() && !g.getHasPerformed()) {
                 // turn is consumed and run through turn command
-                cm.executeTurn("Move", tileBtns, gfv.getImage(), i, j,g.getPiece(i, j));
+                cm.executeTurn("Move", gfv.getImage(), i, j,g.getPiece(i, j));
 
             }
             // attempt to place a piece during attack
-            else if (g.isAttacking() && !g.getActionPerformed()) {
+            else if (g.isAttacking() && !g.getHasPerformed()) {
                 
-                cm.executeTurn("Attack", tileBtns, gfv.getImage(), i, j,g.getPiece(i, j));
+                cm.executeTurn("Attack", gfv.getImage(), i, j,g.getPiece(i, j));
 
             }
             // attempt to pick a piece for action && also show piece info
             else if (g.checkInit(i, j)) {
                 gfv.getStatusLabel().setText(STATUS);
-                g.clickTile(tileBtn, i, j);
+                g.clickTile( i, j);
             }
 
             // attempt to click on an empty tile
             else {
                 gfv.getStatusLabel().setText(STATUS);
             }
-
-            }
-            // attempt to pick a piece for action && also show piece info
-            else if (g.checkInit(i, j)) {
-                gfv.getStatusLabel().setText(STATUS);
-                g.clickTile(i, j);
-            }
-
-            // attempt to click on an empty tile
-            else {
-                gfv.getStatusLabel().setText(STATUS);
-            }
-
+        }
         
     }
 
@@ -300,7 +287,7 @@ public class GameController {
     }
 
     public void undoTurn() {
-        g.undoTurn();
+        cm.undoTurn();
     }
 
     public void quitGame() {
