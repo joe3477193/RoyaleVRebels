@@ -152,19 +152,19 @@ public class GameController {
                         // attempt to place a summoned piece
                         if (g.getSummonedPiece() != null && !g.getActionPerformed()) {
                         	// turn is consumed and run through turn command
-                        	cm.executeTurn("Summon", tileBtns,gfv.getImage(), i, j);                          
+                        	cm.executeTurn("Summon", tileBtns,gfv.getImage(), i, j,g.getPiece(i, j));                          
                            
                         }
                         // attempt to place a piece during movement
                         else if (g.isMoving() && !g.getActionPerformed()) {
                         	// turn is consumed and run through turn command
-                        	cm.executeTurn("Move", tileBtns, gfv.getImage(), i, j);
+                        	cm.executeTurn("Move", tileBtns, gfv.getImage(), i, j,g.getPiece(i, j));
 
                         }
                         // attempt to place a piece during attack
                         else if (g.isAttacking() && !g.getActionPerformed()) {
                         	
-                        	cm.executeTurn("Attack", tileBtns, gfv.getImage(), i, j);
+                        	cm.executeTurn("Attack", tileBtns, gfv.getImage(), i, j,g.getPiece(i, j));
             
                         }
                         // attempt to pick a piece for action && also show piece info

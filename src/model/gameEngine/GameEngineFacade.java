@@ -424,7 +424,7 @@ public class GameEngineFacade implements GameEngine {
     }
 
     // Gets a piece from a tile
-    private PieceInterface getPiece(int row, int tile) {
+    public PieceInterface getPiece(int row, int tile) {
         return getTile(row, tile).getPiece();
     }
 
@@ -675,6 +675,7 @@ public class GameEngineFacade implements GameEngine {
     	
         if (attack(getInitTileCoord()[ROW], getInitTileCoord()[COL], i, j)) {
         	boolean death;
+        	PieceInterface p = null;
         	System.out.print(gfv.getImage());
             PieceInterface piece = getPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
             String message;
@@ -685,6 +686,7 @@ public class GameEngineFacade implements GameEngine {
                     getPiece(i, j).getHp());
             death = getPiece(i, j).isDead();
             if (death) {
+            	p = getTile(i, j).getPiece();
                 message += String.format(", %s is dead!", getPiece(i, j).getName());
                 getTile(i, j).removePiece();
                 tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(IMAGE_PATH + "grass.png")));
@@ -699,7 +701,7 @@ public class GameEngineFacade implements GameEngine {
             
 
             resetPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
-            return new TurnType("Attack", pName, getInitTileCoord()[ROW], getInitTileCoord()[COL], i, j, trueDmg, death, prevHp);
+            return new TurnType("Attack", pName, getInitTileCoord()[ROW], getInitTileCoord()[COL], i, j, trueDmg, death, prevHp,p);
         } else {
         	
             gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the attack button again to cancel.");
@@ -730,30 +732,32 @@ public class GameEngineFacade implements GameEngine {
     
     public void undoTurn(TurnType tt) {
     	JButton[][] tileBtns = gfv.getTileBtns();
-    	TurnType lm = tt;
+
     	
-    	switch(lm.MoveType) {
+    	switch(tt.MoveType) {
     	
     	case "Move":
-            getTile(lm.fromRow, lm.fromCol).setPiece(getPiece(lm.tooRow, lm.tooCol));
-            getTile(lm.tooRow, lm.tooCol).removePiece();
-            tileBtns[lm.tooRow][lm.tooCol].setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
-            tileBtns[lm.fromRow][lm.fromCol].setIcon(new ImageIcon(this.getClass().getResource(lm.image)));
-            tileBtns[lm.fromRow][lm.fromCol].setName(gfv.getImage());
+            getTile(tt.fromRow, tt.fromCol).setPiece(getPiece(tt.tooRow, tt.tooCol));
+            getTile(tt.tooRow, tt.tooCol).removePiece();
+            tileBtns[tt.tooRow][tt.tooCol].setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
+            tileBtns[tt.fromRow][tt.fromCol].setIcon(new ImageIcon(this.getClass().getResource(tt.image)));
+            tileBtns[tt.fromRow][tt.fromCol].setName(tt.image);
             break;
             
     	case "Summon":
-            JButton tileBtnSum = tileBtns[lm.tooRow][lm.tooCol];
-            getTile(lm.tooRow, lm.tooCol).removePiece();
+            JButton tileBtnSum = tileBtns[tt.tooRow][tt.tooCol];
+            getTile(tt.tooRow, tt.tooCol).removePiece();
             tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
             break;
     	
     	case "Attack":
     		System.out.print(tt.death);
-    		if(tt.death == true) {
+    		if(tt.death) {
     			
                 tileBtns[tt.tooRow][tt.tooCol].setIcon(new ImageIcon(this.getClass().getResource(tt.image)));
                 tileBtns[tt.tooRow][tt.tooCol].setName(tt.image);
+                getTile(tt.tooRow,tt.tooCol).setPiece(tt.p);
+                
                 getPiece(tt.tooRow,tt.tooCol).setHP(tt.prevHp);
     		}
     		else {

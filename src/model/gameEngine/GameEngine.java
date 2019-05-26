@@ -97,4 +97,6 @@ public interface GameEngine {
     Player getRebelPlayer();
 
     Player getRoyalePlayer();
+    
+    PieceInterface getPiece(int row, int tile);
 }
