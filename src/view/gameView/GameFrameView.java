@@ -14,6 +14,8 @@ import java.util.EventObject;
 public class GameFrameView extends JFrame {
 
     public static final String STATUS = "Game status:  ";
+    private static final int ORIGINAL_ROW = 0;
+    private static final int ORIGINAL_COL = 0;
     private static final int BUTTON_LENGTH = 7;
     private static final String IMAGE_PATH = "../../images/";
     private static final String GRASS_IMAGE = IMAGE_PATH + "grass.png";
@@ -40,10 +42,6 @@ public class GameFrameView extends JFrame {
     private static final String CRWALL_IMAGE = IMAGE_PATH + "crwall.jpg";
     private static final String TARGET_RED = IMAGE_PATH + "target.png";
     private static final String TARGET_GREEN = IMAGE_PATH + "target_green.png";
-
-    private static final int ORIGINAL_ROW = 0;
-    private static final int ORIGINAL_COL = 0;
-
     private static JButton[][] tileBtns;
 
     private JButton offensiveBtn;
@@ -83,70 +81,48 @@ public class GameFrameView extends JFrame {
         frame.setVisible(true);
 
         rebelButton = new JButton[BUTTON_LENGTH];
-        rebelImage = new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE,
-                RE_SIX_IMAGE, RE_SEVEN_IMAGE
-        };
-        rebelName = new String[]{"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Archer", "Boulder"
-        };
+        rebelImage = new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE, RE_SIX_IMAGE, RE_SEVEN_IMAGE};
+        rebelName = new String[]{"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Archer", "Boulder"};
 
         royaleButton = new JButton[BUTTON_LENGTH];
-        royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Catapult", "Pitfall"
-        };
-        royaleImage = new String[]{RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
-                RO_SIX_IMAGE, RO_SEVEN_IMAGE
-        };
+        royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Catapult", "Pitfall"};
+        royaleImage = new String[]{RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE, RO_SIX_IMAGE, RO_SEVEN_IMAGE};
         summonBtns = new ArrayList<>();
         statusLabel = new JLabel(STATUS);
     }
 
-    private JButton[] createSpawn(String[] name, String[] image) {
-        JButton[] button = new JButton[BUTTON_LENGTH];
-        for (int i = 0; i < BUTTON_LENGTH; i++) {
-            button[i] = new JButton(new ImageIcon(this.getClass().getResource(image[i])));
-            button[i].setName(name[i]);
-            summonBtns.add(button[i]);
-        }
-        return button;
-    }
-
-
     public JButton getOffensiveBtn() {
+
         return offensiveBtn;
     }
 
     public JButton getDefensiveBtn() {
+
         return defensiveBtn;
     }
 
     public JButton getEndTurnBtn() {
+
         return endTurnBtn;
     }
 
     public JButton getAttackBtn() {
+
         return attackBtn;
     }
 
     public JButton getUndoBtn() {
+
         return undoTurnBtn;
     }
 
     public JLabel getStatusLabel() {
+
         return statusLabel;
     }
 
-    private void loadSpawn(JButton[] button) {
-        for (JButton icon : button) {
-            deckPanel.add(icon);
-        }
-    }
-
-    private void removeSpawn(JButton[] button) {
-        for (JButton icon : button) {
-            deckPanel.remove(icon);
-        }
-    }
-
     public void assembleBoard(GameEngine g) {
+
         this.g = g;
 
         Player playerOne = g.getRebelPlayer();
@@ -175,7 +151,7 @@ public class GameFrameView extends JFrame {
         playerPanel.add(new JLabel("Player CP: "));
         playerPanel.add(playerCP);
 
-        tileBtns = new JButton[GameEngineFacade.BOARD_MAX_ROWS][GameEngineFacade.BOARD_MAX_COLS];
+        tileBtns = new JButton[GameEngineFacade.BOARD_ROW_LENGTH][GameEngineFacade.BOARD_COL_LENGTH];
 
         deckPanel.setMaximumSize(new Dimension(100, 100));
 
@@ -212,7 +188,6 @@ public class GameFrameView extends JFrame {
         botPanel.add(actionPanel, BorderLayout.SOUTH);
         botPanel.add(statusPanel, BorderLayout.NORTH);
 
-
         frame.revalidate();
         frame.repaint();
 
@@ -220,14 +195,56 @@ public class GameFrameView extends JFrame {
         frame.add(gridPanel, BorderLayout.CENTER);
         frame.add(botPanel, BorderLayout.SOUTH);
 
-        updateBar(playerOne);
+        updatePlayerInfo(playerOne);
 
         if (g.getHasPerformed()) {
             colourEndTurn();
         }
     }
 
+    private JButton[] createSpawn(String[] name, String[] image) {
+
+        JButton[] button = new JButton[BUTTON_LENGTH];
+        for (int i = 0; i < BUTTON_LENGTH; i++) {
+            button[i] = new JButton(new ImageIcon(this.getClass().getResource(image[i])));
+            button[i].setName(name[i]);
+            summonBtns.add(button[i]);
+        }
+        return button;
+    }
+
+    private void loadSpawn(JButton[] button) {
+
+        for (JButton icon : button) {
+            deckPanel.add(icon);
+        }
+    }
+
+    private void genGrid() {
+
+        for (int i = 0; i < GameEngineFacade.BOARD_ROW_LENGTH; i++) {
+            for (int j = 0; j < GameEngineFacade.BOARD_COL_LENGTH; j++) {
+                tileBtns[i][j] = new JButton();
+                if (g.isWall(i, j)) {
+                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
+                } else if (i == 0 && j % 2 != 0) {
+                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
+                } else if (i == 0 && j % 4 == 0) {
+                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
+                } else if (i == 0 && j % 4 == 2) {
+                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CRWALL_IMAGE)));
+                } else tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+
+                tileBtns[i][j].putClientProperty("row", i);
+                tileBtns[i][j].putClientProperty("column", j);
+
+                gridPanel.add(tileBtns[i][j]);
+            }
+        }
+    }
+
     private void drawActionBtns() {
+
         attackBtn = new JButton("Attack");
         actionPanel.add(attackBtn);
 
@@ -246,89 +263,7 @@ public class GameFrameView extends JFrame {
 
     }
 
-    private void genGrid() {
-        for (int i = 0; i < GameEngineFacade.BOARD_MAX_ROWS; i++) {
-            for (int j = 0; j < GameEngineFacade.BOARD_MAX_COLS; j++) {
-                tileBtns[i][j] = new JButton();
-                if (g.isWall(i, j)) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
-                } else if (i == 0 && j % 2 != 0) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
-                } else if (i == 0 && j % 4 == 0) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
-                } else if (i == 0 && j % 4 == 2) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CRWALL_IMAGE)));
-                } else
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
-
-                tileBtns[i][j].putClientProperty("row", i);
-                tileBtns[i][j].putClientProperty("column", j);
-
-                gridPanel.add(tileBtns[i][j]);
-            }
-        }
-    }
-
-
-    public void colourAttack() {
-        attackBtn.setBackground((Color.green));
-    }
-
-    public void colourRedAttack() {
-        attackBtn.setBackground((Color.RED));
-    }
-
-
-    public void colourTile(JButton tile) {
-        tile.setBackground(Color.blue);
-        lastTile = tile;
-    }
-
-    public void colourTile(int i, int j, String actionType) {
-        try {
-            String name = GRASS_IMAGE;
-            if (actionType.equals("moveSpeed")) {
-                name = BLUE_GRASS_IMAGE;
-            } else if (actionType.equals("attackRange")) {
-                name = RED_GRASS_IMAGE;
-            } else if (actionType.equals("summon")) {
-                name = PINK_GRASS_IMAGE;
-            }
-            tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(name)));
-        } catch (RuntimeException ignored) {
-        }
-    }
-
-    private void colourRedTile(JButton tile) {
-        tile.setBackground(Color.red);
-        lastTile = tile;
-    }
-
-    public void colourRed(JButton tile) {
-        colourRedTile(tile);
-        colourRedAttack();
-
-    }
-
-    public void colourEndTurn() {
-        endTurnBtn.setBackground(Color.green);
-    }
-
-    public void decolour() {
-        if (lastTile != null) {
-            lastTile.setBorder(null);
-            lastTile.setBackground(null);
-            lastTile = null;
-        }
-
-        attackBtn.setBackground(null);
-    }
-
-    public void decolourEndTurn() {
-        endTurnBtn.setBackground(null);
-    }
-
-    public void updateBar(Player player) {
+    public void updatePlayerInfo(Player player) {
 
         if (player instanceof RoyalePlayer) {
             removeSpawn(rebelButton);
@@ -344,93 +279,193 @@ public class GameFrameView extends JFrame {
         deckPanel.repaint();
     }
 
+    public void colourEndTurn() {
+
+        endTurnBtn.setBackground(Color.green);
+    }
+
+    private void removeSpawn(JButton[] button) {
+
+        for (JButton icon : button) {
+            deckPanel.remove(icon);
+        }
+    }
+
+    public void colourAttack() {
+
+        attackBtn.setBackground((Color.green));
+    }
+
+    public void colourTile(JButton tile) {
+
+        tile.setBackground(Color.blue);
+        lastTile = tile;
+    }
+
+    public void colourTile(int i, int j, String actionType) {
+
+        try {
+            String name = GRASS_IMAGE;
+            if (actionType.equals("move")) {
+                name = BLUE_GRASS_IMAGE;
+            } else if (actionType.equals("attack")) {
+                name = RED_GRASS_IMAGE;
+            } else if (actionType.equals("summon")) {
+                name = PINK_GRASS_IMAGE;
+            }
+            tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(name)));
+        } catch (RuntimeException ignored) {
+        }
+    }
+
+    public void colourRed(JButton tile) {
+
+        colourRedTile(tile);
+        colourRedAttack();
+
+    }
+
+    private void colourRedTile(JButton tile) {
+
+        tile.setBackground(Color.red);
+        lastTile = tile;
+    }
+
+    public void colourRedAttack() {
+
+        attackBtn.setBackground((Color.RED));
+    }
+
+    public void decolour() {
+
+        if (lastTile != null) {
+            lastTile.setBorder(null);
+            lastTile.setBackground(null);
+            lastTile = null;
+        }
+
+        attackBtn.setBackground(null);
+    }
+
+    public void decolourEndTurn() {
+
+        endTurnBtn.setBackground(null);
+    }
+
+    public void updateStatus(String statusMsg) {
+
+        statusLabel.setText(STATUS + statusMsg);
+    }
+
     public JButton[][] getTileBtns() {
+
         return tileBtns;
     }
 
-    public JFrame getFrame() {
-        return frame;
-    }
-
     public String getImage() {
+
         return currentImage;
     }
 
     public void setImage(String image) {
+
         currentImage = image;
     }
 
     public void removeImage() {
+
         currentImage = null;
     }
 
     public JButton[] getRebelButton() {
+
         return rebelButton;
     }
 
     public String[] getRebelName() {
+
         return rebelName;
     }
 
     public String[] getRebelImage() {
+
         return rebelImage;
     }
 
     public JButton[] getRoyaleButton() {
+
         return royaleButton;
     }
 
     public String[] getRoyaleName() {
+
         return royaleName;
     }
 
     public String[] getRoyaleImage() {
+
         return royaleImage;
     }
 
     public String getGrass() {
+
         return GRASS_IMAGE;
     }
 
     public ArrayList<JButton> getSummonBtns() {
+
         return summonBtns;
     }
 
     public void setTime(String text) {
+
         time.setText(text);
     }
 
     public JButton getSaveButton() {
+
         return saveButton;
     }
 
     public JButton getQuitButton() {
+
         return quitButton;
     }
 
     public String[] getPlayerData() {
+
         return new String[]{nameOne, nameTwo};
     }
 
     public void setTileIcon(int row, int col, String name) {
+
         tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(name)));
         tileBtns[row][col].setName(name);
     }
 
     public void disposeFrame() {
+
         getFrame().dispose();
     }
 
+    public JFrame getFrame() {
+
+        return frame;
+    }
+
     public void setCursor(String name) {
+
         Image icon = new ImageIcon(this.getClass().getResource(name)).getImage();
         getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), "name"));
     }
 
     public void resetCursor() {
+
         getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
     public int[] findButtonCoordinates(EventObject e) {
+
         Object source = e.getSource();
 
         if (e instanceof ActionEvent) {
@@ -447,22 +482,27 @@ public class GameFrameView extends JFrame {
     }
 
     public String getTargetRed() {
+
         return TARGET_RED;
     }
 
     public String getTargetGreen() {
+
         return TARGET_GREEN;
     }
 
     public JButton getTile(int i, int j) {
+
         return tileBtns[i][j];
     }
 
     public void setTileName(int i, int j, String name) {
+
         tileBtns[i][j].setName(name);
     }
 
     public String getImagePath(String name) {
+
         return IMAGE_PATH + name + ".png";
     }
 }

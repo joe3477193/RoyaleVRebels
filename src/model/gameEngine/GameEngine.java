@@ -84,11 +84,9 @@ public interface GameEngine {
 
     int[] getInitTileCoord();
 
-    String whoseTurn();
+    void paintSummonRange(int turn, String pieceName);
 
-    void paintSummonRange(String faction, String troopType);
-
-    int[] getUndoLimit();
+    int[] getUndoLevel();
 
     Player getRebelPlayer();
 

@@ -38,7 +38,7 @@ public class EnterNameView {
     private JTextField board_cols;
     private JButton startBtn = new JButton(START_GAME);
     private JButton returnBtn = new JButton(RETURN);
-    private String[] undoOptions = new String[]{"0", "1", "2", "3"};
+    private String[] undoLevels = new String[]{"0", "1", "2", "3"};
 
     public EnterNameView() {
         frame = new JFrame(FRAME_TITLE);
@@ -64,7 +64,7 @@ public class EnterNameView {
         board_cols.setText(DEFAULT_BOARD_COLS);
 
         JLabel undoLabel = new JLabel(UNDO_LEVEL_CONFIG);
-        undoMoves = new JComboBox<>(undoOptions);
+        undoMoves = new JComboBox<>(undoLevels);
 
         infoPanel.add(playerOneNameLabel);
         infoPanel.add(player_one_name);

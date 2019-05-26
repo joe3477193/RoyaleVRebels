@@ -60,8 +60,8 @@ public class GameImpl implements Game {
 
             public void run() {
 
-                GameEngineFacade.BOARD_MAX_ROWS = rows;
-                GameEngineFacade.BOARD_MAX_COLS = cols;
+                GameEngineFacade.BOARD_ROW_LENGTH = rows;
+                GameEngineFacade.BOARD_COL_LENGTH = cols;
 
                 // Instantiate the GUI view for game
                 gfv = new GameFrameView();

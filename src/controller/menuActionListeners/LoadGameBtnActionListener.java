@@ -72,8 +72,8 @@ public class LoadGameBtnActionListener implements ActionListener {
 
             // "Recover" the game status so player can continue to play the game
             gfv = new GameFrameView();
-            GameEngineFacade.BOARD_MAX_ROWS = Integer.parseInt(boardSize[GameEngineFacade.ROW_INDEX]);
-            GameEngineFacade.BOARD_MAX_COLS = Integer.parseInt(boardSize[GameEngineFacade.COL_INDEX]);
+            GameEngineFacade.BOARD_ROW_LENGTH = Integer.parseInt(boardSize[GameEngineFacade.ROW_INDEX]);
+            GameEngineFacade.BOARD_COL_LENGTH = Integer.parseInt(boardSize[GameEngineFacade.COL_INDEX]);
             g = new GameEngineFacade(gfv, DEFAULT_UNDO_LEVEL, new RoyalePlayer(playerName[ROYALE_PLAYER_INDEX]), new RebelPlayer(playerName[REBEL_PLAYER_INDEX]));
             g.loadGame(undoLevel, turn, hasPerformed, tileData);
 

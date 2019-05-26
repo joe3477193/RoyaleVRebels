@@ -173,9 +173,10 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     }
 
     public int getActionRange(String actionType) {
-        if (actionType.equals("moveSpeed")) {
+
+        if (actionType.equals("move")) {
             return moveSpeed;
-        } else if (actionType.equals("attackRange")) {
+        } else if (actionType.equals("attack")) {
             return attackRange;
         } else {
             return 0;

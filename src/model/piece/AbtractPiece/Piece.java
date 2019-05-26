@@ -169,9 +169,10 @@ public abstract class Piece implements PieceInterface, Cloneable {
     }
 
     public int getActionRange(String actionType) {
-        if (actionType.equals("moveSpeed")) {
+
+        if (actionType.equals("move")) {
             return moveSpeed;
-        } else if (actionType.equals("attackRange")) {
+        } else if (actionType.equals("attack")) {
             return attackRange;
         } else {
             return 0;
