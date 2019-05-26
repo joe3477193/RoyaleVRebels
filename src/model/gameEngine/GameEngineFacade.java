@@ -730,6 +730,8 @@ public class GameEngineFacade implements GameEngine {
     	switch(tt.MoveType) {
 
     	case "Move":
+            // ((PieceTile)getTile(tt.fromRow, tt.fromCol)).setPiece(getPiece(tt.tooRow, tt.tooCol));
+            setTile(tt.fromRow, tt.fromCol, "PieceTile");
             ((PieceTile)getTile(tt.fromRow, tt.fromCol)).setPiece(getPiece(tt.tooRow, tt.tooCol));
             //getTile(tt.tooRow, tt.tooCol).removePiece();
             setTile(tt.tooRow, tt.tooCol, "GrassTile");
@@ -749,6 +751,7 @@ public class GameEngineFacade implements GameEngine {
     		if(tt.death) {
                 gfv.setTileIcon(tt.tooRow, tt.tooCol, tt.image);
                 gfv.setTileName(tt.tooRow, tt.tooCol, tt.image);
+                setTile(tt.tooRow, tt.tooCol, "PieceTile");
                 ((PieceTile)getTile(tt.tooRow,tt.tooCol)).setPiece(tt.p);
                 getPiece(tt.tooRow,tt.tooCol).setHP(tt.prevHp);
     		}
