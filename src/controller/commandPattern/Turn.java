@@ -8,7 +8,7 @@ public interface Turn {
 
     TurnType returnLastMove();
 
-    void executeTurn(String type, JButton[][] tileBtn,String image, int i, int j, PieceInterface p);
+    void executeTurn(String type,String image, int i, int j, PieceInterface p);
     
     void undoTurn();
 }

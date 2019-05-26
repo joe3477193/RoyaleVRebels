@@ -1,6 +1,7 @@
 package model.gameEngine;
 
 import controller.commandPattern.AbstractTurn;
+import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.PieceInterface;
 import model.player.Player;
 
@@ -68,7 +69,7 @@ public interface GameEngine {
 
     boolean isWall(int i, int j);
 
-    boolean placeAttackPiece(int i, int j);
+    TurnType placeAttackPiece(int i, int j);
 
     void setOffensive();
 
@@ -77,10 +78,6 @@ public interface GameEngine {
     Tile[][] getTiles();
 
     void setTileIcon(ArrayList<String[]> tileList);
-
-    void pushTurnStack(AbstractTurn turn);
-    
-    void undoTurn();
 
     int[] getInitTileCoord();
 

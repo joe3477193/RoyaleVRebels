@@ -47,7 +47,6 @@ public class GameEngineFacade implements GameEngine {
     public static int BOARD_MAX_ROWS; // increments in 5
     public static int BOARD_MAX_COLS; // increments in 4
     // Stack for storing moves
-    private static Stack<AbstractTurn> moves;
     private GameFrameView gfv;
     private Piece summonedPiece;
     private Piece onBoardPiece;
@@ -91,7 +90,7 @@ public class GameEngineFacade implements GameEngine {
 
         initTileCoord = new int[COORDINATE_NUM];
 
-        moves = new Stack<>();
+
 
         // Initialize number of player turns
         turns = new int[]{REBEL_TURN, ROYALE_TURN};
@@ -624,7 +623,7 @@ public class GameEngineFacade implements GameEngine {
         return i == ORIGINAL_ROW;
     }
 
-    public TurnType placeAttackPiece(JButton[][] tileBtns,int i, int j) {
+    public TurnType placeAttackPiece(int i, int j) {
         //initrow/initcol -trow/tcol
     	
         if (attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], i, j)) {
@@ -654,12 +653,12 @@ public class GameEngineFacade implements GameEngine {
             gfv.resetCursor();
             gfv.getStatusLabel().setText(STATUS + message);
 
-            resetPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
-            return new TurnType("Attack", pName, getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], i, j, trueDmg, death, prevHp,p);
+            resetPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
+            return new TurnType("Attack", pName, getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], i, j, trueDamage, death, prevHp,p);
         } else {
 
             gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the attack button again to cancel.");
-            return false;
+            return null;
         }
     }
 
@@ -921,4 +920,6 @@ public class GameEngineFacade implements GameEngine {
 //            }
 //        }
     }
+
+
 }
