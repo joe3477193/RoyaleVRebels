@@ -181,29 +181,35 @@ public class GameController {
 
         // attempt to place piece
         else {
-            tileBtn = tileBtns[i][j];
+            tileBtn = tileBtns[i][j];           
             // attempt to place a summoned piece
-            if (g.getSummonedPiece() != null && !g.getHasPerformed()) {
+            if (g.getSummonedPiece() != null && !g.getActionPerformed()) {
                 // turn is consumed and run through turn command
-                SummonCommand sum = new SummonCommand(g);
-                sum.executeTurn(tileBtns, gfv.getImage(), i, j);
-                g.pushTurnStack(sum);
-
-
+                cm.executeTurn("Summon", tileBtns,gfv.getImage(), i, j,g.getPiece(i, j));                          
+                
             }
             // attempt to place a piece during movement
-            else if (g.isMoving() && !g.getHasPerformed()) {
+            else if (g.isMoving() && !g.getActionPerformed()) {
                 // turn is consumed and run through turn command
-                MoveCommand mc = new MoveCommand(g);
-                mc.executeTurn(tileBtns, gfv.getImage(), i, j);
-                g.pushTurnStack(mc);
+                cm.executeTurn("Move", tileBtns, gfv.getImage(), i, j,g.getPiece(i, j));
+
             }
             // attempt to place a piece during attack
-            else if (g.isAttacking() && !g.getHasPerformed()) {
-                AttackCommand ac = new AttackCommand(g);
-                ac.executeTurn(tileBtns, gfv.getImage(), i, j);
+            else if (g.isAttacking() && !g.getActionPerformed()) {
+                
+                cm.executeTurn("Attack", tileBtns, gfv.getImage(), i, j,g.getPiece(i, j));
 
-                // TODO: turn is consumed and run through turn command
+            }
+            // attempt to pick a piece for action && also show piece info
+            else if (g.checkInit(i, j)) {
+                gfv.getStatusLabel().setText(STATUS);
+                g.clickTile(tileBtn, i, j);
+            }
+
+            // attempt to click on an empty tile
+            else {
+                gfv.getStatusLabel().setText(STATUS);
+            }
 
             }
             // attempt to pick a piece for action && also show piece info
@@ -217,7 +223,7 @@ public class GameController {
                 gfv.getStatusLabel().setText(STATUS);
             }
 
-        }
+        
     }
 
     public void endTurn() {

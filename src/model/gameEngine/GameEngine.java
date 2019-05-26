@@ -103,4 +103,6 @@ public interface GameEngine {
     void loadGame(String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList);
 
     void changeAttackTarget(Tile tile, int i, int j);
+    
+    PieceInterface getPiece(int row, int tile);
 }

@@ -399,7 +399,7 @@ public class GameEngineFacade implements GameEngine {
     }
 
     // Gets a piece from a tile
-    private PieceInterface getPiece(int row, int tile) {
+    public PieceInterface getPiece(int row, int tile) {
         return getTile(row, tile).getPiece();
     }
 
@@ -624,9 +624,13 @@ public class GameEngineFacade implements GameEngine {
         return i == ORIGINAL_ROW;
     }
 
-    public boolean placeAttackPiece(int i, int j) {
-
+    public TurnType placeAttackPiece(JButton[][] tileBtns,int i, int j) {
+        //initrow/initcol -trow/tcol
+    	
         if (attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], i, j)) {
+        	boolean death;
+        	PieceInterface p = null;
+        	System.out.print(gfv.getImage());
             PieceInterface piece = getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
             String message;
             int trueDamage = piece.getAttackPower() - getPiece(i, j).getDefence();
@@ -635,7 +639,9 @@ public class GameEngineFacade implements GameEngine {
             }
             message = String.format("%d true damage dealt! Remaining HP: %d", trueDamage,
                     getPiece(i, j).getHp());
-            if (getPiece(i, j).isDead()) {
+            death = getPiece(i, j).isDead();
+            if (death) {
+            	p = getTile(i, j).getPiece();
                 message += String.format(", %s is dead!", getPiece(i, j).getName());
                 getTile(i, j).removePiece();
                 gfv.setTileIcon(i, j, gfv.getGrass());
@@ -648,9 +654,8 @@ public class GameEngineFacade implements GameEngine {
             gfv.resetCursor();
             gfv.getStatusLabel().setText(STATUS + message);
 
-            // TODO: we want to keep the piece's buff if player doesn't remove it
-            // resetPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
-            return true;
+            resetPiece(getInitTileCoord()[ROW], getInitTileCoord()[COL]);
+            return new TurnType("Attack", pName, getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], i, j, trueDmg, death, prevHp,p);
         } else {
 
             gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the attack button again to cancel.");
@@ -664,51 +669,57 @@ public class GameEngineFacade implements GameEngine {
         gfv.getUndoBtn().setVisible(true);
     }
 
-    public void undoTurn() {
-
-        if (getTurn() == REBEL_TURN && rebelUndoRem != 0) {
-            rebelUndoRem -= 1;
-            accessStack();
-        } else if (getTurn() == ROYALE_TURN && royaleUndoRem != 0) {
-            royaleUndoRem -= 1;
-            accessStack();
-        } else {
-            gfv.getStatusLabel().setText(STATUS + "You have already used your Undo for this game!");
-        }
-
+    public boolean checkUndoRem() {
+    	
+    	if(getTurn() == REBEL_TURN && rebelUndoRem != 0) {
+    		rebelUndoRem -=1;
+    		return true;
+    	}
+    	else if(getTurn() == ROYALE_TURN && royaleUndoRem != 0) {
+    		royaleUndoRem -= 1;
+    		return true;
+    	}
+    	else
+    		gfv.getStatusLabel().setText(STATUS+ "You have already used up your undo limit for the game!");
+    	return false;
     }
+    
+    public void undoTurn(TurnType tt) {
+    	JButton[][] tileBtns = gfv.getTileBtns();
 
-    public void pushTurnStack(AbstractTurn turn) {
-        moves.push(turn);
-    }
-
-    //Undo stack with all game movements excl attacks for now.
-    private void accessStack() {
-        for (int i = 0; i < 2; i++) {                //Loop occurs as the round is undone as opposed to each players turn
-            if (moves.size() > 0) {
-                if (moves.peek().getClass() == MoveCommand.class) {
-                    MoveCommand mc = (MoveCommand) moves.pop();
-                    TurnType lm = mc.lastMove;
-                    int row = lm.tooRow;
-                    int col = lm.tooCol;
-                    getTile(lm.fromRow, lm.fromCol).setPiece(getPiece(lm.tooRow, lm.tooCol));
-                    getTile(lm.tooRow, lm.tooCol).removePiece();
-                    gfv.setTileIcon(row, col, gfv.getGrass());
-                    gfv.setTileIcon(lm.fromRow, lm.fromCol, lm.image);
-                    gfv.setTileName(lm.fromRow, lm.fromCol, gfv.getImage());
-
-                } else {
-                    SummonCommand sc = (SummonCommand) moves.pop();
-                    TurnType lm = sc.lastMove;
-                    int row = lm.tooRow;
-                    int col = lm.tooCol;
-                    getTile(lm.tooRow, lm.tooCol).removePiece();
-                    gfv.setTileIcon(row, col, gfv.getGrass());
-                }
-
-            }
-        }
-
+    	
+    	switch(tt.MoveType) {
+    	
+    	case "Move":
+            getTile(tt.fromRow, tt.fromCol).setPiece(getPiece(tt.tooRow, tt.tooCol));
+            getTile(tt.tooRow, tt.tooCol).removePiece();
+            tileBtns[tt.tooRow][tt.tooCol].setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
+            tileBtns[tt.fromRow][tt.fromCol].setIcon(new ImageIcon(this.getClass().getResource(tt.image)));
+            tileBtns[tt.fromRow][tt.fromCol].setName(tt.image);
+            break;
+            
+    	case "Summon":
+            JButton tileBtnSum = tileBtns[tt.tooRow][tt.tooCol];
+            getTile(tt.tooRow, tt.tooCol).removePiece();
+            tileBtnSum.setIcon(new ImageIcon(this.getClass().getResource(gfv.getGrass())));
+            break;
+    	
+    	case "Attack":
+    		System.out.print(tt.death);
+    		if(tt.death) {
+    			
+                tileBtns[tt.tooRow][tt.tooCol].setIcon(new ImageIcon(this.getClass().getResource(tt.image)));
+                tileBtns[tt.tooRow][tt.tooCol].setName(tt.image);
+                getTile(tt.tooRow,tt.tooCol).setPiece(tt.p);
+                
+                getPiece(tt.tooRow,tt.tooCol).setHP(tt.prevHp);
+    		}
+    		else {
+    			getPiece(tt.tooRow, tt.tooCol).addHP(tt.damageDealt);
+    		}
+    		break;
+    	}
+    	
         gfv.decolour();
         hasPerformed = false;
         gfv.getAttackBtn().setVisible(true);
