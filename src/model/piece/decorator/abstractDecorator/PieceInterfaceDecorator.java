@@ -250,8 +250,4 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         }
         return false;
     }
-    
-    public void addHP(int hp) {
-    	this.hp += hp;
-    }
 }
