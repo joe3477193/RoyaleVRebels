@@ -5,7 +5,8 @@ import controller.commandPattern.MoveCommand;
 import controller.commandPattern.SummonCommand;
 import controller.gameActionListeners.*;
 import model.gameEngine.GameEngine;
-import model.gameEngine.Tile;
+import model.gameEngine.PieceTile;
+import model.gameEngine.TileInterface;
 import model.piece.AbtractPiece.PieceInterface;
 import view.gameView.GameFrameView;
 import view.mainView.MainMenuView;
@@ -75,6 +76,7 @@ public class GameController {
         gfv.getUndoBtn().addActionListener(new UndoBtnActionListener(this));
     }
 
+    // clicking on a piece to summon
     public void summonButton(ActionEvent e) {
 
         JButton source = (JButton) e.getSource();
@@ -168,6 +170,7 @@ public class GameController {
                         }
                         // attempt to place a piece during attack
                         else if (g.isAttacking() && !g.getActionPerformed()) {
+                            System.out.println("test");
                         	AttackCommand ac = new AttackCommand(g);
                         //	ac.executeTurn(tileBtn, image, i, j);
                         	
@@ -285,10 +288,19 @@ public class GameController {
             output.println(g.getTurn());
             output.println(g.getActionPerformed());
 
-            for (Tile[] tileRow : g.getTiles()) {
-                for (Tile tile : tileRow) {
+            /*for (PieceTile[] tileRow : g.getTiles()) {
+                for (PieceTile tile : tileRow) {
                     if (tile.hasPiece()) {
                         PieceInterface piece = tile.getPiece();
+                        output.printf("%d|%d|%s|%d|%n", tile.getRow(), tile.getCol(), piece.getName(), piece.getHp());
+                    }
+                }
+            }*/
+
+            for (TileInterface[] tileRow : g.getTiles()) {
+                for (TileInterface tile : tileRow) {
+                    if (tile instanceof PieceTile) {
+                        PieceInterface piece = ((PieceTile)tile).getPiece();
                         output.printf("%d|%d|%s|%d|%n", tile.getRow(), tile.getCol(), piece.getName(), piece.getHp());
                     }
                 }
