@@ -86,7 +86,7 @@ public interface GameEngine {
 
     String whoseTurn();
 
-    void paintSummonRange(String faction, String troopType);
+    void paintSummonRange(String troop);
 
     int[] getUndoLimit();
 

@@ -10,6 +10,7 @@ import model.piece.PieceCache;
 import model.piece.abstractType.Obstacle;
 import model.piece.decorator.concreteDecorator.ResetModeTroopDecorator;
 import model.piece.decorator.concreteDecoratorFactory.*;
+import model.piece.faction.Royale;
 import model.player.Player;
 import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
@@ -39,8 +40,8 @@ public class GameEngineFacade implements GameEngine {
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
     private static final int ROYALE_SUMMON_NORTH_LIMIT = 1;
-    private static final int ROYALE_SUMMON_SOUTH_LIMIT = 3;
-    private static final int REBEL_SUMMON_NORTH_LIMIT = 9;
+    private static final int ROYALE_SUMMON_SOUTH_LIMIT = 2;
+    private static final int REBEL_SUMMON_NORTH_LIMIT =10;
     private static final int OBSTACLE_EXTRA_SUMMON_LIMIT = 3;
     // TODO: Game model shouldn't have gui component such as icons???
     public static int BOARD_MAX_ROWS; // increments in 5
@@ -534,16 +535,16 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
-    public void paintSummonRange(String faction, String troopType) {
+    public void paintSummonRange(String troop) {
         int start;
         int finish;
         int extraMove = 0;
 
-        if (troopType.equals("Obstacle")) {
+        if (PieceCache.getPiece(troop) instanceof Obstacle) {
             extraMove = OBSTACLE_EXTRA_SUMMON_LIMIT;
         }
 
-        if (faction.equals("Royale")) {
+        if (turn==ROYALE_TURN) {
             start = ROYALE_SUMMON_NORTH_LIMIT;
             finish = ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
         } else {

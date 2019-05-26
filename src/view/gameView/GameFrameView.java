@@ -77,7 +77,7 @@ public class GameFrameView extends JFrame {
     public GameFrameView() {
 
         frame = new JFrame("Royals vs Rebels");
-        frame.setResizable(false);
+        frame.setResizable(true);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);

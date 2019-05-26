@@ -149,7 +149,7 @@ public class GameController {
                     gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), name[i]));
                     g.createSummonedPiece(name[i]);
                     gfv.setImage(image[i]);
-                    g.paintSummonRange(g.whoseTurn(), name[i]);
+                    g.paintSummonRange(name[i]);
                 } else {
 
                     // TODO: JCOMPONENTS IN CONTROLLER
