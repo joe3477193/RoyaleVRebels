@@ -79,5 +79,6 @@ public interface PieceInterface {
     void attackedBy(int attack);
 
     boolean isDead();
+    
 }
 

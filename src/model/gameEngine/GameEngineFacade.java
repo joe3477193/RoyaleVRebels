@@ -1,8 +1,6 @@
 package model.gameEngine;
 
 import controller.commandPattern.AbstractTurn;
-import controller.commandPattern.MoveCommand;
-import controller.commandPattern.SummonCommand;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
@@ -10,6 +8,7 @@ import model.piece.PieceCache;
 import model.piece.abstractType.Obstacle;
 import model.piece.decorator.concreteDecorator.ResetModeTroopDecorator;
 import model.piece.decorator.concreteDecoratorFactory.*;
+import model.piece.faction.Royale;
 import model.player.Player;
 import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
@@ -40,14 +39,13 @@ public class GameEngineFacade implements GameEngine {
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
     private static final int ROYALE_SUMMON_NORTH_LIMIT = 1;
-    private static final int ROYALE_SUMMON_SOUTH_LIMIT = 3;
-    private static final int REBEL_SUMMON_NORTH_LIMIT = 9;
+    private static final int ROYALE_SUMMON_SOUTH_LIMIT = 2;
+    private static final int REBEL_SUMMON_NORTH_LIMIT =10;
     private static final int OBSTACLE_EXTRA_SUMMON_LIMIT = 3;
     // TODO: Game model shouldn't have gui component such as icons???
     public static int BOARD_MAX_ROWS; // increments in 5
     public static int BOARD_MAX_COLS; // increments in 4
     // Stack for storing moves
-    private static Stack<AbstractTurn> moves;
     private GameFrameView gfv;
     private Piece summonedPiece;
     private Piece onBoardPiece;
@@ -102,7 +100,7 @@ public class GameEngineFacade implements GameEngine {
 
         initTileCoord = new int[COORDINATE_NUM];
 
-        moves = new Stack<>();
+
 
         // Initialize number of player turns
         turns = new int[]{REBEL_TURN, ROYALE_TURN};
@@ -226,7 +224,7 @@ public class GameEngineFacade implements GameEngine {
     private void depaintAction() {
         for (int i = ORIGINAL_ROW; i < BOARD_MAX_ROWS; i++) {
             for (int j = ORIGINAL_COL; j < BOARD_MAX_COLS; j++) {
-                if (!isWall(i, j) && isGrassTile(i,j) && !isCastle(i,j)) {
+                if (!isWallTile(i, j) && isGrassTile(i,j) && !isCastleTile(i,j)) {
                     gfv.setTileIcon(i, j, gfv.getGrass());
                 }
             }
@@ -236,7 +234,7 @@ public class GameEngineFacade implements GameEngine {
     // check if a certain tile should be repainted with the paintMovAttack
     private boolean checkMoveRepaint(int i, int j) {
         try {
-            return !isWall(i, j) && isGrassTile(i,j) && !isCastle(i,j);
+            return !isWallTile(i, j) && isGrassTile(i,j) && !isCastleTile(i,j);
         } catch (RuntimeException e) {
             return true;
         }
@@ -420,7 +418,7 @@ public class GameEngineFacade implements GameEngine {
     }
 
     // Gets a piece from a tile
-    private PieceInterface getPiece(int row, int tile) {
+    public PieceInterface getPiece(int row, int tile) {
         return ((PieceTile)getTile(row, tile)).getPiece();
 
     }
@@ -443,14 +441,13 @@ public class GameEngineFacade implements GameEngine {
 
     // Check if piece can move from current tile to target tile
     private boolean checkMoveTarget(int row, int tile) {
-        return getTile(row,tile) instanceof GrassTile && !isCastle(row, tile);
+        return getTile(row,tile) instanceof GrassTile && !isCastleTile(row, tile);
     }
 
     // Check if piece can attack target from current tile
     private boolean checkAttackTarget(PieceInterface piece, int tgRow, int tgTile) {
         TileInterface space = getTile(tgRow, tgTile);
         String inFaction = piece.getFaction();
-
         String outFaction = ((PieceTile)space).getPiece().getFaction();
         return space instanceof PieceTile && !(inFaction.equals(outFaction));
     }
@@ -474,7 +471,7 @@ public class GameEngineFacade implements GameEngine {
             if (checkAcross(inRow, inTile, tgRow, tgTile)) {
                 return false;
             }
-            //new stuff
+
             setTile(tgRow,tgTile,"PieceTile");
             ((PieceTile)getTile(tgRow, tgTile)).setPiece(getPiece(inRow, inTile));
             setTile(inRow,inTile,"GrassTile");
@@ -501,7 +498,7 @@ public class GameEngineFacade implements GameEngine {
                     if (!((PieceTile)currTile).getPiece().getFaction().equals(((PieceTile)initTile).getPiece().getFaction())) {
                         return true;
                     }
-                } else if (isWall(currTile.getRow(), currTile.getCol())) {
+                } else if (isWallTile(currTile.getRow(), currTile.getCol())) {
                     return true;
                 }
             }
@@ -520,7 +517,7 @@ public class GameEngineFacade implements GameEngine {
                     if (!((PieceTile)currTile).getPiece().getFaction().equals(((PieceTile)initTile).getPiece().getFaction())) {
                         return true;
                     }
-                } else if (isWall(currTile.getRow(), currTile.getCol())) {
+                } else if (isWallTile(currTile.getRow(), currTile.getCol())) {
                     return true;
                 }
             }
@@ -537,17 +534,6 @@ public class GameEngineFacade implements GameEngine {
         }
         return false;
     }
-
-    /*public void createPiece(String name) {
-        try {
-            Class pieceCls = Class.forName("model.piece.concretePiece." + name);
-            this.summonedPiece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
-
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
-
-    }*/
 
     // TODO: MAGIC NUM
     private boolean checkSummonValid(Piece piece, int row, int tile) {
@@ -575,16 +561,16 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
-    public void paintSummonRange(String faction, String troopType) {
+    public void paintSummonRange(String troop) {
         int start;
         int finish;
         int extraMove = 0;
 
-        if (troopType.equals("Obstacle")) {
+        if (PieceCache.getPiece(troop) instanceof Obstacle) {
             extraMove = OBSTACLE_EXTRA_SUMMON_LIMIT;
         }
 
-        if (faction.equals("Royale")) {
+        if (turn==ROYALE_TURN) {
             start = ROYALE_SUMMON_NORTH_LIMIT;
             finish = ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
         } else {
@@ -604,7 +590,6 @@ public class GameEngineFacade implements GameEngine {
     public boolean placeSummonedPiece(int i, int j) {
         if (checkSummonValid(getSummonedPiece(), i, j)) {
 
-            // TODO: Game model shouldn't have gui component such as icons
             System.out.println(gfv.getImage());
             gfv.setTileIcon(i, j, gfv.getImage());
             gfv.setTileName(i, j, gfv.getImage());
@@ -654,11 +639,11 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
-    public boolean isWall(int i, int j) {
+    public boolean isWallTile(int i, int j) {
         return getTile(i,j) instanceof WallTile;
     }
 
-    public boolean isCastle(int i, int j) {
+    public boolean isCastleTile(int i, int j) {
         return getTile(i,j) instanceof CastleTile;
     }
 
@@ -670,18 +655,28 @@ public class GameEngineFacade implements GameEngine {
         return getTile(i,j) instanceof PieceTile;
     }
 
-    public boolean placeAttackPiece(int i, int j) {
+    public TurnType placeAttackPiece(int i, int j) {
+        //initrow/initcol -trow/tcol
 
         if (attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], i, j)) {
+        	boolean death;
+        	PieceInterface p = null;
+        	System.out.print(gfv.getImage());
             PieceInterface piece = getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
             String message;
+            int prevHp = getPiece(i, j).getHp();
+
+            String pName = gfv.getTile(i, j).getName();
+
             int trueDamage = piece.getAttackPower() - getPiece(i, j).getDefence();
             if (trueDamage < 0) {
                 trueDamage = 0;
             }
             message = String.format("%d true damage dealt! Remaining HP: %d", trueDamage,
                     getPiece(i, j).getHp());
-            if (getPiece(i, j).isDead()) {
+            death = getPiece(i, j).isDead();
+            if (death) {
+            	p = ((PieceTile)getTile(i, j)).getPiece();
                 message += String.format(", %s is dead!", getPiece(i, j).getName());
                 setTile(i,j,"GrassTile");
                 gfv.setTileIcon(i, j, gfv.getGrass());
@@ -694,13 +689,12 @@ public class GameEngineFacade implements GameEngine {
             gfv.resetCursor();
             gfv.getStatusLabel().setText(STATUS + message);
 
-            // TODO: we want to keep the piece's buff if player doesn't remove it
-            // resetPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
-            return true;
+            resetPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
+            return new TurnType("Attack", pName, getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], i, j, trueDamage, death, prevHp,p);
         } else {
 
             gfv.getStatusLabel().setText(STATUS + "Tile not valid, press the attack button again to cancel.");
-            return false;
+            return null;
         }
     }
 
@@ -710,51 +704,54 @@ public class GameEngineFacade implements GameEngine {
         gfv.getUndoBtn().setVisible(true);
     }
 
-    public void undoTurn() {
+    public boolean checkUndoRem() {
 
-        if (getTurn() == REBEL_TURN && rebelUndoRem != 0) {
-            rebelUndoRem -= 1;
-            accessStack();
-        } else if (getTurn() == ROYALE_TURN && royaleUndoRem != 0) {
-            royaleUndoRem -= 1;
-            accessStack();
-        } else {
-            gfv.getStatusLabel().setText(STATUS + "You have already used your Undo for this game!");
-        }
-
+    	if(getTurn() == REBEL_TURN && rebelUndoRem != 0) {
+    		rebelUndoRem -=1;
+    		return true;
+    	}
+    	else if(getTurn() == ROYALE_TURN && royaleUndoRem != 0) {
+    		royaleUndoRem -= 1;
+    		return true;
+    	}
+    	else
+    		gfv.getStatusLabel().setText(STATUS+ "You have already used up your undo limit for the game!");
+    	return false;
     }
 
-    public void pushTurnStack(AbstractTurn turn) {
-        moves.push(turn);
-    }
+    public void undoTurn(TurnType tt) {
 
-    //Undo stack with all game movements excl attacks for now.
-    private void accessStack() {
-        for (int i = 0; i < 2; i++) {                //Loop occurs as the round is undone as opposed to each players turn
-            if (moves.size() > 0) {
-                if (moves.peek().getClass() == MoveCommand.class) {
-                    MoveCommand mc = (MoveCommand) moves.pop();
-                    TurnType lm = mc.lastMove;
 
-                    int row = lm.tooRow;
-                    int col = lm.tooCol;
-                    ((PieceTile)getTile(lm.fromRow, lm.fromCol)).setPiece(getPiece(lm.tooRow, lm.tooCol));
-                    setTile(lm.tooRow,lm.tooCol,"GrassTile");
-                    gfv.setTileIcon(row, col, gfv.getGrass());
-                    gfv.setTileIcon(lm.fromRow, lm.fromCol, lm.image);
-                    gfv.setTileName(lm.fromRow, lm.fromCol, gfv.getImage());
+    	switch(tt.MoveType) {
 
-                } else {
-                    SummonCommand sc = (SummonCommand) moves.pop();
-                    TurnType lm = sc.lastMove;
-                    int row = lm.tooRow;
-                    int col = lm.tooCol;
-                    setTile(lm.tooRow,lm.tooCol,"GrassTile");
-                    gfv.setTileIcon(row, col, gfv.getGrass());
-                }
+    	case "Move":
+            ((PieceTile)getTile(tt.fromRow, tt.fromCol)).setPiece(getPiece(tt.tooRow, tt.tooCol));
+            //getTile(tt.tooRow, tt.tooCol).removePiece();
+            setTile(tt.tooRow, tt.tooCol, "GrassTile");
+            gfv.setTileIcon(tt.tooRow, tt.tooCol, gfv.getGrass());
+            gfv.setTileIcon(tt.fromRow, tt.fromCol, tt.image);
+            gfv.setTileName(tt.fromRow, tt.fromCol, tt.image);
 
-            }
-        }
+            break;
+
+    	case "Summon":
+            //getTile(tt.tooRow, tt.tooCol).removePiece();
+            setTile(tt.tooRow, tt.tooCol, "GrassTile");
+            gfv.setTileIcon(tt.tooRow, tt.tooCol, gfv.getGrass());
+            break;
+
+    	case "Attack":
+    		if(tt.death) {
+                gfv.setTileIcon(tt.tooRow, tt.tooCol, tt.image);
+                gfv.setTileName(tt.tooRow, tt.tooCol, tt.image);
+                ((PieceTile)getTile(tt.tooRow,tt.tooCol)).setPiece(tt.p);
+                getPiece(tt.tooRow,tt.tooCol).setHP(tt.prevHp);
+    		}
+    		else {
+    			getPiece(tt.tooRow, tt.tooCol).setHP(getPiece(tt.tooRow,tt.tooCol).getHp() + tt.damageDealt);
+    		}
+    		break;
+    	}
 
         gfv.decolour();
         hasPerformed = false;
@@ -957,4 +954,6 @@ public class GameEngineFacade implements GameEngine {
 //            }
 //        }
     }
+
+
 }

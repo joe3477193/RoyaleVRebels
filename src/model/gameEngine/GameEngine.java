@@ -1,6 +1,7 @@
 package model.gameEngine;
 
 import controller.commandPattern.AbstractTurn;
+import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.PieceInterface;
 import model.player.Player;
 
@@ -66,9 +67,9 @@ public interface GameEngine {
 
     boolean placeMovedPiece(int i, int j);
 
-    boolean isWall(int i, int j);
+    boolean isWallTile(int i, int j);
 
-    boolean placeAttackPiece(int i, int j);
+    TurnType placeAttackPiece(int i, int j);
 
     void setOffensive();
 
@@ -78,15 +79,11 @@ public interface GameEngine {
 
     void setTileIcon(ArrayList<String[]> tileList);
 
-    void pushTurnStack(AbstractTurn turn);
-    
-    void undoTurn();
-
     int[] getInitTileCoord();
 
     String whoseTurn();
 
-    void paintSummonRange(String faction, String troopType);
+    void paintSummonRange(String troop);
 
     int[] getUndoLimit();
 
@@ -94,7 +91,7 @@ public interface GameEngine {
 
     Player getRoyalePlayer();
 
-    boolean isCastle(int i, int j);
+    boolean isCastleTile(int i, int j);
 
     TileInterface getTile(int row, int col);
 
@@ -103,4 +100,10 @@ public interface GameEngine {
     void loadGame(String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList);
 
     void changeAttackTarget(TileInterface tile, int i, int j);
+
+    PieceInterface getPiece(int row, int tile);
+
+    boolean checkUndoRem();
+
+    void undoTurn(TurnType tt);
 }

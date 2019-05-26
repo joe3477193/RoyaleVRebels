@@ -77,7 +77,7 @@ public class GameFrameView extends JFrame {
     public GameFrameView() {
 
         frame = new JFrame("Royals vs Rebels");
-        frame.setResizable(false);
+        frame.setResizable(true);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -250,7 +250,7 @@ public class GameFrameView extends JFrame {
         for (int i = 0; i < GameEngineFacade.BOARD_MAX_ROWS; i++) {
             for (int j = 0; j < GameEngineFacade.BOARD_MAX_COLS; j++) {
                 tileBtns[i][j] = new JButton();
-                if (g.isWall(i, j)) {
+                if (g.isWallTile(i, j)) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
                 } else if (i == 0 && j % 2 != 0) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));

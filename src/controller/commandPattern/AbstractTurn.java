@@ -1,11 +1,12 @@
 package controller.commandPattern;
 
+import java.util.Stack;
 
 public abstract class AbstractTurn implements Turn {
 
-    public TurnType lastMove;
+    public Stack<TurnType> moves;
 
     public TurnType returnLastMove() {
-        return lastMove;
+        return moves.pop();
     }
 }
