@@ -69,6 +69,8 @@ public interface GameEngine {
 
     boolean isWallTile(int i, int j);
 
+    boolean isPieceTile(int i, int j);
+
     TurnType placeAttackPiece(int i, int j);
 
     void setOffensive();

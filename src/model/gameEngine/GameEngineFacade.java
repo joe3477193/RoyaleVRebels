@@ -431,12 +431,12 @@ public class GameEngineFacade implements GameEngine {
 
     // Check if piece in current tile can move
     public boolean checkMoveInit(int row, int tile) {
-        return checkInit(row, tile) && ((PieceTile)getTile(row, tile)).getPiece().isMoveable();
+        return isPieceTile(row, tile) && ((PieceTile)getTile(row, tile)).getPiece().isMoveable();
     }
 
     // Check if piece in current tile can attack
     public boolean checkAttackInit(int row, int tile) {
-        return checkInit(row, tile) && ((PieceTile)getTile(row, tile)).getPiece().isAttackable();
+        return isPieceTile(row, tile) && ((PieceTile)getTile(row, tile)).getPiece().isAttackable();
     }
 
     // Check if piece can move from current tile to target tile
@@ -527,7 +527,7 @@ public class GameEngineFacade implements GameEngine {
 
     // Check if piece hasAttacked target piece
     private boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
-        if (checkInit(tgRow, tgTile) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) &&
+        if (isPieceTile(tgRow, tgTile) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) &&
                 isMovRangeValid(inRow, inTile, tgRow, tgTile, "attackRange")) {
             getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttackPower());
             return true;
@@ -774,7 +774,7 @@ public class GameEngineFacade implements GameEngine {
         if (coordinate != null) {
             setInit(coordinate[ROW_INDEX], coordinate[COL_INDEX]);
             System.out.println(getInitTileCoord()[ROW_INDEX] + ", " + getInitTileCoord()[COL_INDEX]);
-            if (checkInit(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX])) {
+            if (isPieceTile(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX])) {
                 if (!(getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]) instanceof Obstacle)) {
                     if (isFactionMatched(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX])) {
                         PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
@@ -816,7 +816,7 @@ public class GameEngineFacade implements GameEngine {
         if (coordinate != null) {
             setInit(coordinate[ROW_INDEX], coordinate[COL_INDEX]);
             System.out.println(getInitTileCoord()[ROW_INDEX] + ", " + getInitTileCoord()[COL_INDEX]);
-            if (checkInit(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX])) {
+            if (isPieceTile(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX])) {
                 if (!(getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]) instanceof Obstacle)) {
                     PieceInterface originalPiece = getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
                     if (isFactionMatched(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX])) {
