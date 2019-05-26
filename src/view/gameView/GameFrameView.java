@@ -463,7 +463,7 @@ public class GameFrameView extends JFrame {
     }
 
     public String getImagePath(String name) {
-        return IMAGE_PATH + name + ".png";
+        return IMAGE_PATH + name.toLowerCase() + ".png";
     }
 }
 

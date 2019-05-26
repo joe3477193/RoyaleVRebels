@@ -926,7 +926,9 @@ public class GameEngineFacade implements GameEngine {
             int hp = Integer.valueOf(tile[HP_LOADED]);
             onBoardPiece = PieceCache.clonePiece(name);
             onBoardPiece.setHP(hp);
-            ((PieceTile)tiles[row][col]).setPiece(onBoardPiece);
+            PieceTile pieceTile= new PieceTile(row, col);
+            pieceTile.setPiece(onBoardPiece);
+            tiles[row][col]= pieceTile;
         }
         onBoardPiece = null;
     }
