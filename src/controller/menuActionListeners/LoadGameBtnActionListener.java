@@ -45,6 +45,9 @@ public class LoadGameBtnActionListener implements ActionListener {
         try {
             BufferedReader input = new BufferedReader(new FileReader(GameEngineFacade.FULL_SAVE_FILE_NAME));
 
+            //Load castle hp
+            String castleHp= input.readLine();
+
             //Load board size
             String[] boardSize = input.readLine().split(REGEX);
 
@@ -74,7 +77,7 @@ public class LoadGameBtnActionListener implements ActionListener {
             GameEngineFacade.BOARD_ROW_LENGTH = Integer.parseInt(boardSize[GameEngineFacade.ROW_INDEX]);
             GameEngineFacade.BOARD_COL_LENGTH = Integer.parseInt(boardSize[GameEngineFacade.COL_INDEX]);
             g = new GameEngineFacade(gfv, DEFAULT_UNDO_LEVEL, new RoyalePlayer(playerName[ROYALE_PLAYER_INDEX]), new RebelPlayer(playerName[REBEL_PLAYER_INDEX]));
-            g.loadGame(undoLevel, turn, hasPerformed, tileData);
+            g.loadGame(castleHp, undoLevel, turn, hasPerformed, tileData);
 
             // For adding Controller using existed Game model
             new GameImpl(g, gfv, tileData);

@@ -199,7 +199,7 @@ public class GameFrameView extends JFrame {
         menuPanel = new JPanel(new BorderLayout());
         saveButton = new JButton("Save Game");
         quitButton = new JButton("Quit Game");
-        castleHP = new JLabel("Castle HP: 500", SwingConstants.CENTER);
+        castleHP = new JLabel("Castle HP: "+g.getCastleHp(), SwingConstants.CENTER);
         menuPanel.add(saveButton, BorderLayout.EAST);
         menuPanel.add(castleHP, BorderLayout.CENTER);
         menuPanel.add(quitButton, BorderLayout.WEST);
@@ -474,8 +474,8 @@ public class GameFrameView extends JFrame {
         return IMAGE_PATH + name.toLowerCase() + ".png";
     }
 
-    public void updateCastleHp(int hp){
-        castleHP.setText("Castle HP: " + hp);
+    public void updateCastleHp(){
+        castleHP.setText("Castle HP: " + g.getCastleHp());
         revalidate();
     }
 

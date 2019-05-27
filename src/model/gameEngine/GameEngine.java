@@ -94,7 +94,7 @@ public interface GameEngine {
 
     boolean saveGame();
 
-    void loadGame(String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList);
+    void loadGame(String castleHp, String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList);
 
     void changeAttackTarget(TileInterface tile, int i, int j);
 
@@ -103,4 +103,6 @@ public interface GameEngine {
     boolean checkUndoRemain();
 
     void undoTurn(TurnType tt);
+
+    int getCastleHp();
 }

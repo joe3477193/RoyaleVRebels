@@ -64,6 +64,9 @@ public class GameEngineFacade implements GameEngine {
     private static final String UNDO_USED = "You have already used your Undo for this game!";
     private static final String OUTPUT_FORMAT = "%d|%d|%s|%d|%n";
 
+    private static final int CASTLE_TILE_ROW= 0;
+    private static final int CASTLE_TILE_COL= 0;
+
     private static final String SUMMON_TYPE = "summon";
     private static final String MOVEMENT_TYPE = "move";
     private static final String ATTACK_TYPE = "attack";
@@ -634,7 +637,7 @@ public class GameEngineFacade implements GameEngine {
             death = getPiece(i, j).isDead();
 
             if (getTile(i,j) instanceof CastleTile){
-                gfv.updateCastleHp(p.getHp());
+                gfv.updateCastleHp();
                 if(death){
                     gfv.gameOver(rebel.getName());
                     gfv.disposeFrame();
@@ -893,6 +896,7 @@ public class GameEngineFacade implements GameEngine {
 
         try {
             PrintWriter output = new PrintWriter(new FileWriter(FULL_SAVE_FILE_NAME));
+            output.println(getCastleHp());
             output.println(BOARD_ROW_LENGTH + SEPARATOR + BOARD_COL_LENGTH);
             for (String data : gfv.getPlayerData()) {
                 output.print(data + SEPARATOR);
@@ -920,7 +924,8 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
-    public void loadGame(String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList) {
+    public void loadGame(String castleHp, String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList) {
+        tiles[CASTLE_TILE_ROW][CASTLE_TILE_COL].getPiece().setHP(Integer.parseInt(castleHp));
         this.hasPerformed = Boolean.parseBoolean(actionPerformed);
         rebelUndoRemain = Integer.parseInt(undoLimit[REBEL_TURN]);
         royaleUndoRemain = Integer.parseInt(undoLimit[ROYALE_TURN]);
@@ -1006,5 +1011,9 @@ public class GameEngineFacade implements GameEngine {
                 }
             }
         }
+    }
+
+    public int getCastleHp(){
+        return tiles[CASTLE_TILE_ROW][CASTLE_TILE_COL].getPiece().getHp();
     }
 }
