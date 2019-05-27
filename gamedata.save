@@ -3,7 +3,5 @@
 Player One|Player Two|
 0|0
 0
-false
-11|1|Scoundrel|30|true|false
-11|5|Mobster|40|true|false
-11|9|Angryman|150|true|false
+true
+6|1|Leader|60|true|false

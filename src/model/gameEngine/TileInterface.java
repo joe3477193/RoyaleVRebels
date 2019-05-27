@@ -1,7 +1,6 @@
 package model.gameEngine;
 
 import model.piece.AbtractPiece.PieceInterface;
-import view.gameView.GameFrameView;
 
 public interface TileInterface {
 
@@ -10,5 +9,4 @@ public interface TileInterface {
     int getCol();
 
     PieceInterface getPiece();
-
 }

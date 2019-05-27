@@ -11,8 +11,8 @@ public class CommandMonitor extends AbstractTurn {
 
     
     public CommandMonitor(GameEngine g) {
-    	
-    	moves = new Stack<TurnType>();
+
+		moves = new Stack<>();
     	this.g =g;
     }
 	

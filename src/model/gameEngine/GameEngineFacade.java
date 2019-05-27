@@ -5,7 +5,6 @@ import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
 import model.piece.PieceCache;
 import model.piece.abstractType.Obstacle;
-import model.piece.concretePiece.Castle;
 import model.piece.decorator.concreteDecorator.ResetModeTroopDecorator;
 import model.piece.decorator.concreteDecoratorFactory.*;
 import model.piece.faction.Royale;
@@ -150,10 +149,6 @@ public class GameEngineFacade implements GameEngine {
 
     public int getRebelTurn() {
         return REBEL_TURN;
-    }
-
-    public int getRoyaleTurn() {
-        return ROYALE_TURN;
     }
 
     public boolean isMoving() {
@@ -311,11 +306,11 @@ public class GameEngineFacade implements GameEngine {
         return coordinate != null;
     }
 
-    public int getRow() {
+    public int getRowIndex() {
         return ROW_INDEX;
     }
 
-    public int getCol() {
+    public int getColIndex() {
         return COL_INDEX;
     }
 
@@ -361,12 +356,12 @@ public class GameEngineFacade implements GameEngine {
 
     // Check if piece in current tile can move
     public boolean checkOnBoardPieceMoveable(int row, int tile) {
-        return isPieceTile(row, tile) && ((PieceTile) getTile(row, tile)).getPiece().isMoveable();
+        return isPieceTile(row, tile) && getTile(row, tile).getPiece().isMoveable();
     }
 
     // Check if piece in current tile can attack
     public boolean checkOnBoardPieceAttackable(int row, int tile) {
-        return isPieceTile(row, tile) && ((PieceTile) getTile(row, tile)).getPiece().isAttackable();
+        return isPieceTile(row, tile) && getTile(row, tile).getPiece().isAttackable();
     }
 
     // Check if piece can move from current tile to target tile
@@ -430,7 +425,7 @@ public class GameEngineFacade implements GameEngine {
                 if (currTile == null) {
                     continue;
                 } else if (currTile instanceof PieceTile) {
-                    if (!((PieceTile) currTile).getPiece().getFaction().equals(((PieceTile) initTile).getPiece().getFaction())) {
+                    if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {
                         return true;
                     }
                 } else if (currTile instanceof WallTile) {
@@ -448,7 +443,7 @@ public class GameEngineFacade implements GameEngine {
                 if (currTile == null) {
                     continue;
                 } else if (currTile instanceof PieceTile) {
-                    if (!((PieceTile) currTile).getPiece().getFaction().equals(((PieceTile) initTile).getPiece().getFaction())) {
+                    if (!currTile.getPiece().getFaction().equals(initTile.getPiece().getFaction())) {
                         return true;
                     }
                 } else if (currTile instanceof WallTile) {
@@ -926,9 +921,9 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
-    public void loadGame(String castleHp, String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList) {
+    public void loadGame(String castleHp, String[] undoLimit, String turn, String hasPerformed, ArrayList<String[]> tileList) {
         tiles[CASTLE_TILE_ROW][CASTLE_TILE_COL].getPiece().setHP(Integer.parseInt(castleHp));
-        this.hasPerformed = Boolean.parseBoolean(actionPerformed);
+        this.hasPerformed = Boolean.parseBoolean(hasPerformed);
         rebelUndoRemain = Integer.parseInt(undoLimit[REBEL_TURN]);
         royaleUndoRemain = Integer.parseInt(undoLimit[ROYALE_TURN]);
         this.turn = Integer.parseInt(turn);
@@ -971,7 +966,7 @@ public class GameEngineFacade implements GameEngine {
    // public void changeAttackTarget(TileInterface tile, int i, int j)
 
 //        if (isAttacking) {
-//            if (tile.hasPiece() && tile.getRow() == i && tile.getCol() == j) {
+//            if (tile.hasPiece() && tile.getRowIndex() == i && tile.getColIndex() == j) {
 //                if (!isFactionMatched(i, j)) {
 //                    System.out.println(initTileCoord[0] + ", " + initTileCoord[1]);
 //                    System.out.println(i + ", " + j);
@@ -985,7 +980,7 @@ public class GameEngineFacade implements GameEngine {
 //                } else {
 //                    //gfv.setCursor(gfv.getTargetRed());
 //                }
-//            } else if (!tile.hasPiece() && tile.getRow() == i && tile.getCol() == j) {
+//            } else if (!tile.hasPiece() && tile.getRowIndex() == i && tile.getColIndex() == j) {
 //                gfv.setCursor(gfv.getTargetRed());
 //            }
 //        }

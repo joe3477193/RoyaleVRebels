@@ -17,8 +17,6 @@ public class GameImpl implements Game {
     private GameFrameView gfv;
     private GameEngine g;
 
-    // TODO: DO WE STILL NEED THIS???
-    private ArrayList<String[]> tileData;
     private int rows;
     private int cols;
 
@@ -42,9 +40,10 @@ public class GameImpl implements Game {
     }
 
     public GameImpl(GameEngine g, GameFrameView gfv, ArrayList<String[]> tileData) {
-        this.tileData = tileData;
+
         this.gfv = gfv;
         this.g = g;
+
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 gfv.assembleBoard(g);
@@ -54,7 +53,7 @@ public class GameImpl implements Game {
         });
     }
 
-    public void initGame(int undo) {
+    public void initGame(int undoMoves) {
 
         SwingUtilities.invokeLater(new Runnable() {
 
@@ -67,7 +66,7 @@ public class GameImpl implements Game {
                 gfv = new GameFrameView();
 
                 // Instantiate the GameEngineFacade
-                g = new GameEngineFacade(gfv, undo, royale, rebel);
+                g = new GameEngineFacade(gfv, undoMoves, royale, rebel);
 
                 gfv.assembleBoard(g);
                 new GameController(g, gfv);

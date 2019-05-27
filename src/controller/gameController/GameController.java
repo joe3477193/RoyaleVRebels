@@ -212,7 +212,7 @@ public class GameController {
         }
 
         // Trigger attack for a piece
-        else if (g.hasCoordinates() && g.checkOnBoardPieceAttackable(g.getCoordinates()[g.getRow()], g.getCoordinates()[g.getCol()]) && !g.getPerformed()) {
+        else if (g.hasCoordinates() && g.checkOnBoardPieceAttackable(g.getCoordinates()[g.getRowIndex()], g.getCoordinates()[g.getColIndex()]) && !g.getPerformed()) {
             g.resetMoving();
             g.setAttacking();
         }
@@ -308,7 +308,7 @@ public class GameController {
         // check if the tile has piece, show the piece info
         if (tile instanceof PieceTile) {
 
-            PieceInterface piece = ((PieceTile) tile).getPiece();
+            PieceInterface piece = tile.getPiece();
 
             String pieceInfo = "<html>Name: " + piece.getName() + "<br>Faction: " + piece.getFaction()
                     + "<br>Type: " + piece.getType() + "<br>HP: " + piece.getHp() + "<br>Attack Power: "

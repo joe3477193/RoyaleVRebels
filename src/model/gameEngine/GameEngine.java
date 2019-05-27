@@ -8,13 +8,7 @@ import java.util.ArrayList;
 
 public interface GameEngine {
 
-    int getOriginalRow();
-
-    int getOriginalCol();
-
     int getRebelTurn();
-
-    int getRoyaleTurn();
 
     boolean isMoving();
 
@@ -40,9 +34,9 @@ public interface GameEngine {
 
     boolean hasCoordinates();
 
-    int getRow();
+    int getRowIndex();
 
-    int getCol();
+    int getColIndex();
 
     int getMaxRows();
 
@@ -64,9 +58,13 @@ public interface GameEngine {
 
     boolean placeMovedPiece(int i, int j);
 
+    boolean isCastleTile(int i, int j);
+
     boolean isWallTile(int i, int j);
 
     boolean isPieceTile(int i, int j);
+
+    boolean isGrassTile(int i, int j);
 
     TurnType placeAttackPiece(int i, int j);
 
@@ -88,13 +86,11 @@ public interface GameEngine {
 
     Player getRoyalePlayer();
 
-    boolean isCastleTile(int i, int j);
-
     TileInterface getTile(int row, int col);
 
     boolean saveGame();
 
-    void loadGame(String castleHp, String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList);
+    void loadGame(String castleHp, String[] undoLimit, String turn, String hasPerformed, ArrayList<String[]> tileList);
 
     //void changeAttackTarget(TileInterface tile, int i, int j);
 
