@@ -4,7 +4,5 @@ out/
 .idea/workspace.xml
 *.xml
 src/images/backup/
-*.obj
-*.dat
-*.txt
+*.save
 
