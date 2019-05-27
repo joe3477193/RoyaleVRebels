@@ -13,6 +13,8 @@ import java.util.EventObject;
 public class GameFrameView extends JFrame {
 
     public static final String STATUS = "Game status:  ";
+    private static final int ORIGINAL_ROW = 0;
+    private static final int ORIGINAL_COL = 0;
     private static final int BUTTON_LENGTH = 7;
     private static final String IMAGE_PATH = "../../images/";
     private static final String GRASS_IMAGE = IMAGE_PATH + "grass.png";
@@ -39,10 +41,6 @@ public class GameFrameView extends JFrame {
     private static final String CRWALL_IMAGE = IMAGE_PATH + "crwall.jpg";
     private static final String TARGET_RED = IMAGE_PATH + "target.png";
     private static final String TARGET_GREEN = IMAGE_PATH + "target_green.png";
-
-    private static final int ORIGINAL_ROW = 0;
-    private static final int ORIGINAL_COL = 0;
-
     private static JButton[][] tileBtns;
 
     private JButton offensiveBtn;
@@ -82,18 +80,12 @@ public class GameFrameView extends JFrame {
         frame.setVisible(true);
 
         rebelButton = new JButton[BUTTON_LENGTH];
-        rebelImage = new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE,
-                RE_SIX_IMAGE, RE_SEVEN_IMAGE
-        };
-        rebelName = new String[]{"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Archer", "Boulder"
-        };
+        rebelImage = new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE, RE_SIX_IMAGE, RE_SEVEN_IMAGE};
+        rebelName = new String[]{"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Archer", "Boulder"};
 
         royaleButton = new JButton[BUTTON_LENGTH];
-        royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Catapult", "Pitfall"
-        };
-        royaleImage = new String[]{RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE,
-                RO_SIX_IMAGE, RO_SEVEN_IMAGE
-        };
+        royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Catapult", "Pitfall"};
+        royaleImage = new String[]{RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE, RO_SIX_IMAGE, RO_SEVEN_IMAGE};
         summonBtns = new ArrayList<>();
         statusLabel = new JLabel(STATUS);
     }
@@ -175,7 +167,7 @@ public class GameFrameView extends JFrame {
         playerPanel.add(new JLabel("Player CP: "));
         playerPanel.add(playerCP);
 
-        tileBtns = new JButton[GameEngineFacade.BOARD_MAX_ROWS][GameEngineFacade.BOARD_MAX_COLS];
+        tileBtns = new JButton[GameEngineFacade.BOARD_ROW_LENGTH][GameEngineFacade.BOARD_COL_LENGTH];
 
         deckPanel.setMaximumSize(new Dimension(100, 100));
 
@@ -212,7 +204,6 @@ public class GameFrameView extends JFrame {
         botPanel.add(actionPanel, BorderLayout.SOUTH);
         botPanel.add(statusPanel, BorderLayout.NORTH);
 
-
         frame.revalidate();
         frame.repaint();
 
@@ -220,11 +211,27 @@ public class GameFrameView extends JFrame {
         frame.add(gridPanel, BorderLayout.CENTER);
         frame.add(botPanel, BorderLayout.SOUTH);
 
-        updateBar(playerOne);
+        updatePlayerInfo(playerOne);
 
         if (g.getHasPerformed()) {
             colourEndTurn();
         }
+    }
+
+    public void updatePlayerInfo(Player player) {
+
+        if (player instanceof RoyalePlayer) {
+            removeSpawn(rebelButton);
+            loadSpawn(royaleButton);
+        } else {
+            removeSpawn(royaleButton);
+            loadSpawn(rebelButton);
+        }
+        playerName.setText(player.getName());
+        playerType.setText(player.getFaction());
+        playerCP.setText(Integer.toString(player.getCP()));
+        playerPanel.repaint();
+        deckPanel.repaint();
     }
 
     private void drawActionBtns() {
@@ -247,8 +254,9 @@ public class GameFrameView extends JFrame {
     }
 
     private void genGrid() {
-        for (int i = 0; i < GameEngineFacade.BOARD_MAX_ROWS; i++) {
-            for (int j = 0; j < GameEngineFacade.BOARD_MAX_COLS; j++) {
+
+        for (int i = 0; i < GameEngineFacade.BOARD_ROW_LENGTH; i++) {
+            for (int j = 0; j < GameEngineFacade.BOARD_COL_LENGTH; j++) {
                 tileBtns[i][j] = new JButton();
                 if (g.isWallTile(i, j)) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
@@ -258,8 +266,7 @@ public class GameFrameView extends JFrame {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
                 } else if (i == 0 && j % 4 == 2) {
                     tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CRWALL_IMAGE)));
-                } else
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+                } else tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
 
                 tileBtns[i][j].putClientProperty("row", i);
                 tileBtns[i][j].putClientProperty("column", j);
@@ -287,9 +294,9 @@ public class GameFrameView extends JFrame {
     public void colourTile(int i, int j, String actionType) {
         try {
             String name = GRASS_IMAGE;
-            if (actionType.equals("moveSpeed")) {
+            if (actionType.equals("move")) {
                 name = BLUE_GRASS_IMAGE;
-            } else if (actionType.equals("attackRange")) {
+            } else if (actionType.equals("attack")) {
                 name = RED_GRASS_IMAGE;
             } else if (actionType.equals("summon")) {
                 name = PINK_GRASS_IMAGE;
@@ -328,28 +335,13 @@ public class GameFrameView extends JFrame {
         endTurnBtn.setBackground(null);
     }
 
-    public void updateBar(Player player) {
+    public void updateStatus(String statusMsg) {
 
-        if (player instanceof RoyalePlayer) {
-            removeSpawn(rebelButton);
-            loadSpawn(royaleButton);
-        } else {
-            removeSpawn(royaleButton);
-            loadSpawn(rebelButton);
-        }
-        playerName.setText(player.getName());
-        playerType.setText(player.getFaction());
-        playerCP.setText(Integer.toString(player.getCP()));
-        playerPanel.repaint();
-        deckPanel.repaint();
+        statusLabel.setText(STATUS + statusMsg);
     }
 
     public JButton[][] getTileBtns() {
         return tileBtns;
-    }
-
-    public JFrame getFrame() {
-        return frame;
     }
 
     public String getImage() {
@@ -417,17 +409,21 @@ public class GameFrameView extends JFrame {
         tileBtns[row][col].setName(name);
     }
 
+    public JFrame getFrame() {
+        return frame;
+    }
+
     public void disposeFrame() {
-        getFrame().dispose();
+        frame.dispose();
     }
 
     public void setCursor(String name) {
         Image icon = new ImageIcon(this.getClass().getResource(name)).getImage();
-        getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), "name"));
+        frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), "name"));
     }
 
     public void resetCursor() {
-        getFrame().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
     public int[] findButtonCoordinates(EventObject e) {

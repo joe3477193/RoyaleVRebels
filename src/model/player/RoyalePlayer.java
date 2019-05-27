@@ -3,6 +3,7 @@ package model.player;
 public class RoyalePlayer extends Player {
 
     public RoyalePlayer(String name) {
-        super(name, 40, 40, "ROYALE");
+
+        super(name, ROYALE_INT_CP, ROYALE_INT_CP, "ROYALE");
     }
 }

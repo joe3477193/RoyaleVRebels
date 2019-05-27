@@ -4,6 +4,9 @@ import java.util.Random;
 
 public abstract class Player {
 
+    static final int REBEL_INIT_CP = 40;
+    static final int ROYALE_INT_CP = 40;
+
     private final String faction;
     private int cp;
     private int start_cp;

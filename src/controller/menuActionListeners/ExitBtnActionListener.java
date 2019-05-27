@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 
 public class ExitBtnActionListener implements ActionListener {
 
+    private static final int EXIT_SUCCESS = 0;
+
     private JFrame frame;
 
     public ExitBtnActionListener(JFrame frame) {
@@ -19,6 +21,6 @@ public class ExitBtnActionListener implements ActionListener {
         frame.dispose();
 
         // Quit the application
-        System.exit(0);
+        System.exit(EXIT_SUCCESS);
     }
 }

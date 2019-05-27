@@ -1,11 +1,9 @@
 package controller.commandPattern;
 
-import java.util.Stack;
-
-import javax.swing.JButton;
-
 import model.gameEngine.GameEngine;
 import model.piece.AbtractPiece.PieceInterface;
+
+import java.util.Stack;
 
 public class CommandMonitor extends AbstractTurn {
 
@@ -50,7 +48,7 @@ public class CommandMonitor extends AbstractTurn {
 
 	@Override
 	public void undoTurn() {
-		if(moves.size()>1 && g.checkUndoRem()) {
+        if (moves.size() > 1 && g.checkUndoRemain()) {
 			for(int i =0; i<2; i++) {
 				g.undoTurn(returnLastMove());
 			}

@@ -202,7 +202,6 @@ public class GameController {
                 gfv.getStatusLabel().setText(STATUS);
             }
         }
-
     }
 
     public void endTurn() {

@@ -1,6 +1,5 @@
 package model.gameEngine;
 
-import controller.commandPattern.AbstractTurn;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.PieceInterface;
 import model.player.Player;
@@ -83,11 +82,9 @@ public interface GameEngine {
 
     int[] getInitTileCoord();
 
-    String whoseTurn();
-
     void paintSummonRange(String troop);
 
-    int[] getUndoLimit();
+    int[] getUndoLevel();
 
     Player getRebelPlayer();
 
@@ -105,7 +102,7 @@ public interface GameEngine {
 
     PieceInterface getPiece(int row, int tile);
 
-    boolean checkUndoRem();
+    boolean checkUndoRemain();
 
     void undoTurn(TurnType tt);
 }
