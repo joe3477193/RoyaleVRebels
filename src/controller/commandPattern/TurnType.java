@@ -1,6 +1,5 @@
 package controller.commandPattern;
 
-import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
 
 public class TurnType {
@@ -16,7 +15,7 @@ public class TurnType {
     public int prevHp;
     public PieceInterface p;
 
-    public TurnType(String MoveType,String image, int fr, int fc, int tr, int tc, int dmg, boolean killed, int prevHp, PieceInterface p) {
+    public TurnType(String MoveType, String image, int fr, int fc, int tr, int tc, int dmg, boolean killed, int prevHp, PieceInterface p) {
         this.MoveType = MoveType;
         this.image = image;
         this.fromRow = fr;

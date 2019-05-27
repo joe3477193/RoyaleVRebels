@@ -16,9 +16,7 @@ public class AboutBtnActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         new AboutView();
-
         // Close Main Menu View
         frame.dispose();
     }

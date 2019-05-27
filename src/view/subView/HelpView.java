@@ -32,9 +32,7 @@ public class HelpView {
         frame = new JFrame(FRAME_TITLE);
         frame.setSize(new Dimension(ABOUT_VIEW_WIDTH, ABOUT_VIEW_HEIGHT));
         frame.setLocationRelativeTo(null);
-
         JPanel infoPanel = new JPanel(new GridLayout(INFO_PANEL_ROWS, INFO_PANEL_COLS));
-
         // TODO: put key game rules here later, e.g. (HOW REBEL WINS??? TIME LIMIT OR MOVES LIMIT OR CP LIMIT???)
         JLabel title = new JLabel(GAME_RULES, SwingConstants.CENTER);
         JLabel gameRule1 = new JLabel(GAME_RULE_ONE);
@@ -43,7 +41,6 @@ public class HelpView {
         JLabel gameRule4 = new JLabel(GAME_RULE_FOUR);
         JLabel gameRule5 = new JLabel(GAME_RULE_FIVE);
         JLabel gameRule6 = new JLabel(GAME_RULE_SIX);
-
         infoPanel.add(title);
         infoPanel.add(gameRule1);
         infoPanel.add(gameRule2);
@@ -52,14 +49,12 @@ public class HelpView {
         infoPanel.add(gameRule5);
         infoPanel.add(gameRule6);
         infoPanel.add(returnBtn);
-
         frame.add(infoPanel, BorderLayout.CENTER);
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
         addController();
     }
 

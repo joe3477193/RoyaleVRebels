@@ -5,6 +5,8 @@ import model.piece.AbtractPiece.PieceInterface;
 public abstract class PieceInterfaceDecorator implements PieceInterface {
 
     protected PieceInterface piece;
+    protected boolean isOffensive;
+    protected boolean isDefensive;
     private String name;
     private String faction;
     private String type;
@@ -22,8 +24,6 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     private int attackRange;
     private boolean moveable;
     private boolean attackable;
-    protected boolean isOffensive;
-    protected boolean isDefensive;
 
     protected PieceInterfaceDecorator(PieceInterface piece) {
         this.piece = piece;
@@ -83,7 +83,7 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
             this.hp = hp;
         }
     }
-    
+
     public int getInitDefence() {
         return initDefence;
     }
@@ -173,7 +173,6 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     }
 
     public int getActionRange(String actionType) {
-
         if (actionType.equals("move")) {
             return moveSpeed;
         } else if (actionType.equals("attack")) {
@@ -192,33 +191,26 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     }
 
     public boolean isOffensive() {
-
         if (attackPower > initAttackPower) {
             isOffensive = true;
         }
-
         return isOffensive;
     }
 
     public boolean isDefensive() {
-
         if (defence > initDefence) {
             isDefensive = true;
         }
-
         return isDefensive;
     }
 
     public void resetMode() {
-
     }
 
     public void setOffensive() {
-
     }
 
     public void setDefensive() {
-
     }
 
     // check if action of movement or attack is allowed
@@ -229,14 +221,11 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
 
     // damage dealt on the piece from another piece
     public void attackedBy(int attack) {
-
         // true damage = attacking piece's attack power - attacked piece's defence
         int trueDamage = attack - defence;
-
         if (trueDamage > 0) {
             hp -= trueDamage;
         }
-
         if (hp <= 0) {
             hp = 0;
         }
@@ -244,7 +233,6 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
 
     // check if the piece is dead, remove the piece on the board
     public boolean isDead() {
-
         if (hp <= 0) {
             hp = 0;
             return true;

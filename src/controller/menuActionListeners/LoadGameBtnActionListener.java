@@ -28,7 +28,6 @@ public class LoadGameBtnActionListener implements ActionListener {
     private static final String FNFE_TITLE = "FileNotFound";
     private static final String IOE_TITLE = "IOE";
 
-
     private JFrame frame;
 
     public LoadGameBtnActionListener(JFrame frame) {
@@ -37,54 +36,40 @@ public class LoadGameBtnActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         GameEngine g;
         GameFrameView gfv;
-
         // Load the game status from saved file
         try {
             BufferedReader input = new BufferedReader(new FileReader(GameEngineFacade.FULL_SAVE_FILE_NAME));
-
             //Load castle hp
-            String castleHp= input.readLine();
-
+            String castleHp = input.readLine();
             //Load board size
             String[] boardSize = input.readLine().split(REGEX);
-
             // Load players' names
             String[] playerName = input.readLine().split(REGEX);
-
             //Load undo level
             String[] undoLevel = input.readLine().split(REGEX);
-
             // Load current turn
             String turn = input.readLine();
-
             // Load hasPerformed
             String hasPerformed = input.readLine();
-
             // Load pieces' status, e.g. hp
             ArrayList<String[]> tileData = new ArrayList<>();
             String line;
-
             while ((line = input.readLine()) != null) {
                 String[] data = line.split(REGEX);
                 tileData.add(data);
             }
-
             // "Recover" the game status so player can continue to play the game
             gfv = new GameFrameView();
             GameEngineFacade.BOARD_ROW_LENGTH = Integer.parseInt(boardSize[GameEngineFacade.ROW_INDEX]);
             GameEngineFacade.BOARD_COL_LENGTH = Integer.parseInt(boardSize[GameEngineFacade.COL_INDEX]);
             g = new GameEngineFacade(gfv, DEFAULT_UNDO_LEVEL, new RoyalePlayer(playerName[ROYALE_PLAYER_INDEX]), new RebelPlayer(playerName[REBEL_PLAYER_INDEX]));
             g.loadGame(castleHp, undoLevel, turn, hasPerformed, tileData);
-
             // For adding Controller using existed Game model
             new GameImpl(g, gfv, tileData);
-
             // Close file stream
             input.close();
-
             // Close Main Menu View
             frame.dispose();
         } catch (FileNotFoundException fileNotFoundException) {
@@ -92,6 +77,5 @@ public class LoadGameBtnActionListener implements ActionListener {
         } catch (IOException iOException) {
             JOptionPane.showMessageDialog(frame, IOEXCEPTION_MSG, IOE_TITLE, JOptionPane.ERROR_MESSAGE);
         }
-
     }
 }

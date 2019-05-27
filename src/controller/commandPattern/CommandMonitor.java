@@ -7,54 +7,43 @@ import java.util.Stack;
 
 public class CommandMonitor extends AbstractTurn {
 
-	private GameEngine g;
+    private GameEngine g;
 
-    
     public CommandMonitor(GameEngine g) {
-
-		moves = new Stack<>();
-    	this.g =g;
+        moves = new Stack<>();
+        this.g = g;
     }
-	
-	
-	@Override
-	public void executeTurn(String type, String image, int i, int j, PieceInterface p) {
 
-		switch(type){
-			
-		case "Summon":
-			boolean sumBool = g.placeSummonedPiece( i, j);
-	        if (sumBool) {
-	            moves.add(new TurnType("Summon",image, 0,0,i,j,0,false,0,p ));
-	        }
-	        break;
-	        
-		case "Move":
-			boolean movBool = g.placeMovedPiece(i, j);
-	        if (movBool) {
-	            // last move reference for Abstract class as per command pattern
-	            moves.add(new TurnType("Move", image, g.getInitTileCoord()[0], g.getInitTileCoord()[1], i, j,0,false,0,p));
-	        }
-		    break;
-		    
-		case "Attack":
-			TurnType tt = g.placeAttackPiece(i, j);
-			if(tt != null) {
-				moves.add(tt);
-			}
-		}
-				
-	}
+    @Override
+    public void executeTurn(String type, String image, int i, int j, PieceInterface p) {
+        switch (type) {
+            case "Summon":
+                boolean sumBool = g.placeSummonedPiece(i, j);
+                if (sumBool) {
+                    moves.add(new TurnType("Summon", image, 0, 0, i, j, 0, false, 0, p));
+                }
+                break;
+            case "Move":
+                boolean movBool = g.placeMovedPiece(i, j);
+                if (movBool) {
+                    // last move reference for Abstract class as per command pattern
+                    moves.add(new TurnType("Move", image, g.getInitTileCoord()[0], g.getInitTileCoord()[1], i, j, 0, false, 0, p));
+                }
+                break;
+            case "Attack":
+                TurnType tt = g.placeAttackPiece(i, j);
+                if (tt != null) {
+                    moves.add(tt);
+                }
+        }
+    }
 
-	@Override
-	public void undoTurn() {
+    @Override
+    public void undoTurn() {
         if (moves.size() > 1 && g.checkUndoRemain()) {
-			for(int i =0; i<2; i++) {
-				g.undoTurn(returnLastMove());
-			}
-		}
-	}
-	
-	
-
+            for (int i = 0; i < 2; i++) {
+                g.undoTurn(returnLastMove());
+            }
+        }
+    }
 }

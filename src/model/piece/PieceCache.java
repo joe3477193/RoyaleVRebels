@@ -7,7 +7,7 @@ import java.util.Hashtable;
 
 public class PieceCache {
 
-    private static Hashtable<String, Piece> pieceMap= new Hashtable<String, Piece>();
+    private static Hashtable<String, Piece> pieceMap = new Hashtable<>();
 
     public static Piece clonePiece(String name) {
         Piece cachedPiece = pieceMap.get(name);
@@ -18,20 +18,20 @@ public class PieceCache {
         return pieceMap.get(name);
     }
 
-    public static void generatePieceMap(String[] rebel, String[] royale){
-        for(String name:rebel){
+    public static void generatePieceMap(String[] rebel, String[] royale) {
+        for (String name : rebel) {
             pieceMap.put(name, createPiece(name));
         }
-        for(String name:royale){
+        for (String name : royale) {
             pieceMap.put(name, createPiece(name));
         }
     }
 
-    private static Piece createPiece(String name){
-        Piece piece= null;
+    private static Piece createPiece(String name) {
+        Piece piece = null;
         try {
             Class pieceCls = Class.forName("model.piece.concretePiece." + name);
-            piece= (Piece) pieceCls.getDeclaredConstructor().newInstance();
+            piece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
             ex.printStackTrace();
         }

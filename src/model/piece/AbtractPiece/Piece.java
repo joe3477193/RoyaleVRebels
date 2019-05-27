@@ -169,7 +169,6 @@ public abstract class Piece implements PieceInterface, Cloneable {
     }
 
     public int getActionRange(String actionType) {
-
         if (actionType.equals("move")) {
             return moveSpeed;
         } else if (actionType.equals("attack")) {
@@ -188,33 +187,26 @@ public abstract class Piece implements PieceInterface, Cloneable {
     }
 
     public boolean isOffensive() {
-
         if (attackPower > initAttackPower) {
             isOffensive = true;
         }
-
         return isOffensive;
     }
 
     public boolean isDefensive() {
-
         if (defence > initDefence) {
             isDefensive = true;
         }
-
         return isDefensive;
     }
 
     public void resetMode() {
-
     }
 
     public void setOffensive() {
-
     }
 
     public void setDefensive() {
-
     }
 
     // check if action of movement or attack is allowed
@@ -225,14 +217,11 @@ public abstract class Piece implements PieceInterface, Cloneable {
 
     // damage dealt on the piece from another piece
     public void attackedBy(int attack) {
-
         // true damage = attacking piece's attack power - attacked piece's defence
         int trueDamage = attack - defence;
-
         if (trueDamage > 0) {
             hp -= trueDamage;
         }
-
         if (hp <= 0) {
             hp = 0;
         }
@@ -240,7 +229,6 @@ public abstract class Piece implements PieceInterface, Cloneable {
 
     // check if the piece is dead, remove the piece on the board
     public boolean isDead() {
-
         if (hp <= 0) {
             hp = 0;
             return true;
@@ -249,20 +237,17 @@ public abstract class Piece implements PieceInterface, Cloneable {
     }
 
     //source: https://www.tutorialspoint.com/design_pattern/prototype_pattern.htm
-    public Object clone(){
+    public Object clone() {
         Object clone = null;
-
         try {
             clone = super.clone();
-
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
-
         return clone;
     }
-    
+
     public void addHP(int hp) {
-    	this.hp += hp;
+        this.hp += hp;
     }
 }

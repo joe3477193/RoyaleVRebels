@@ -31,24 +31,18 @@ public class StartGameBtnActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         if (name1.getText().length() >= NAME_MIN_LENGTH && name2.getText().length() >= NAME_MIN_LENGTH) {
-
             ArrayList<String> playerNames = new ArrayList<>();
             playerNames.add(name1.getText());
             playerNames.add(name2.getText());
-
             int rowsInt = Integer.parseInt(rows.getText());
             int colsInt = Integer.parseInt(cols.getText());
-
             // Instantiate the GameImpl so player can start to play the game
             Game gameImpl = new GameImpl(playerNames, rowsInt, colsInt);
-
             // Initialise the game
             if (undoMoves.getSelectedItem() != null) {
                 gameImpl.initGame(Integer.parseInt((String) undoMoves.getSelectedItem()));
             }
-
             // Close Enter Name View
             frame.dispose();
         } else {

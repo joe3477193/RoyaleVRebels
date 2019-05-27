@@ -42,7 +42,6 @@ public abstract class Player {
 
     public void increaseCP() {
         Random random = new Random();
-
         // increaseCP by 1 or 2 randomly
         int enhancement = random.nextInt(2) + 1;
         this.cp += enhancement;

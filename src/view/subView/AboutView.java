@@ -29,29 +29,24 @@ public class AboutView {
         frame = new JFrame(FRAME_TITLE);
         frame.setSize(new Dimension(ABOUT_VIEW_WIDTH, ABOUT_VIEW_HEIGHT));
         frame.setLocationRelativeTo(null);
-
         JPanel infoPanel = new JPanel(new GridLayout(INFO_PANEL_ROWS, INFO_PANEL_COLS));
-
         JLabel title = new JLabel(ABOUT, SwingConstants.CENTER);
         JLabel authorName1 = new JLabel(AUTHOR_NAME_ONE);
         JLabel authorName2 = new JLabel(AUTHOR_NAME_TWO);
         JLabel authorName3 = new JLabel(AUTHOR_NAME_THREE);
         JLabel authorName4 = new JLabel(AUTHOR_NAME_FOUR);
-
         infoPanel.add(title);
         infoPanel.add(authorName1);
         infoPanel.add(authorName2);
         infoPanel.add(authorName3);
         infoPanel.add(authorName4);
         infoPanel.add(returnBtn);
-
         frame.add(infoPanel, BorderLayout.CENTER);
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
         addController();
     }
 

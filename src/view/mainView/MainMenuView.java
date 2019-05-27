@@ -29,29 +29,23 @@ public class MainMenuView {
     private JButton quitBtn = new JButton(QUIT_GAME);
 
     public MainMenuView() {
-
         frame = new JFrame(FRAME_TITLE);
         frame.setSize(new Dimension(MAIN_MENU_VIEW_WIDTH, MAIN_MENU_VIEW_HEIGHT));
         frame.setLocationRelativeTo(null);
-
         JLabel title = new JLabel(GAME_NAME, SwingConstants.CENTER);
-
         JPanel infoPanel = new JPanel(new GridLayout(INFO_PANEL_ROWS, INFO_PANEL_COLS));
-
         infoPanel.add(title);
         infoPanel.add(newGameBtn);
         infoPanel.add(loadGameBtn);
         infoPanel.add(helpBtn);
         infoPanel.add(aboutBtn);
         infoPanel.add(quitBtn);
-
         frame.add(infoPanel, BorderLayout.CENTER);
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
         addController();
     }
 

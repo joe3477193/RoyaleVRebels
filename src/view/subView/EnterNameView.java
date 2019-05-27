@@ -44,28 +44,21 @@ public class EnterNameView {
         frame = new JFrame(FRAME_TITLE);
         frame.setSize(new Dimension(ENTER_NAME_VIEW_WIDTH, ENTER_NAME_VIEW_HEIGHT));
         frame.setLocationRelativeTo(null);
-
         JPanel infoPanel = new JPanel(new GridLayout(INFO_PANEL_ROWS, INFO_PANEL_COLS));
-
         JLabel playerOneNameLabel = new JLabel(ENTER_PLAYER_ONE_NAME);
         player_one_name = new JTextField(NAME_MAX_LENGTH);
         player_one_name.setText(DEFAULT_PLAYER_ONE_NAME);
-
         JLabel playerTwoNameLabel = new JLabel(ENTER_PLAYER_TWO_NAME);
         player_two_name = new JTextField(NAME_MAX_LENGTH);
         player_two_name.setText(DEFAULT_PLAYER_TWO_NAME);
-
         JLabel rowsLabel = new JLabel(ENTER_BOARD_ROWS);
         board_rows = new JTextField(DIMENSIONS_MAX_LENGTH);
         board_rows.setText(DEFAULT_BOARD_ROWS);
-
         JLabel colsLabel = new JLabel(ENTER_BOARD_COLS);
         board_cols = new JTextField(DIMENSIONS_MAX_LENGTH);
         board_cols.setText(DEFAULT_BOARD_COLS);
-
         JLabel undoLabel = new JLabel(UNDO_LEVEL_CONFIG);
         undoMoves = new JComboBox<>(undoLevels);
-
         infoPanel.add(playerOneNameLabel);
         infoPanel.add(player_one_name);
         infoPanel.add(playerTwoNameLabel);
@@ -78,14 +71,12 @@ public class EnterNameView {
         infoPanel.add(undoMoves);
         infoPanel.add(startBtn);
         infoPanel.add(returnBtn);
-
         frame.add(infoPanel, BorderLayout.CENTER);
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
         addController();
     }
 
