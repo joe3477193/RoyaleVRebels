@@ -101,5 +101,5 @@ public interface GameEngine {
 
     int getCastleHp();
 
-    void changeAttackTarget(TileInterface tile, int i, int j);
+    void changeAttackIconColor(TileInterface tile, int i, int j);
 }

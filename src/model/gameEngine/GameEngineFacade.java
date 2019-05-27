@@ -910,7 +910,7 @@ public class GameEngineFacade implements GameEngine {
         return tiles[CASTLE_TILE_ROW][CASTLE_TILE_COL].getPiece().getHp();
     }
 
-    public void changeAttackTarget(TileInterface tile, int i, int j) {
+    public void changeAttackIconColor(TileInterface tile, int i, int j) {
         if (isPieceTile(i, j) || isCastleTile(i, j)) {
             if (!isFactionMatched(i, j)) {
                 if (isMovRangeValid(initTileCoord[0], initTileCoord[1], i, j, ATTACK_TYPE)) {

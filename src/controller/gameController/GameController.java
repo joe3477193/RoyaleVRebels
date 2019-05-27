@@ -112,7 +112,10 @@ public class GameController {
         for (int i = 0; i < button.length; i++) {
             if (gfv.getSource(e) == button[i]) {
                 Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
+                // TODO: can't cancel summon because the cursor is without name of the piece
                 // click on the same piece on the deck, i.e. cancel summon
+                System.out.println(gfv.getCursor().getName());
+                System.out.println(name[i]);
                 if (gfv.getCursor().getName().equals(name[i])) {
                     gfv.resetCursor();
                     g.removeSummonedPiece();
@@ -261,7 +264,7 @@ public class GameController {
         // TODO: UNIMPLEMENTED
         if (g.isAttacking()) {
             // Change attack target color if is attacking
-            g.changeAttackTarget(tile, i, j);
+            g.changeAttackIconColor(tile, i, j);
         }
         // check if the tile has piece, show the piece info
         if (tile instanceof PieceTile) {
