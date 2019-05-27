@@ -96,7 +96,7 @@ public interface GameEngine {
 
     void loadGame(String castleHp, String[] undoLimit, String turn, String actionPerformed, ArrayList<String[]> tileList);
 
-    void changeAttackTarget(TileInterface tile, int i, int j);
+    //void changeAttackTarget(TileInterface tile, int i, int j);
 
     PieceInterface getPiece(int row, int tile);
 

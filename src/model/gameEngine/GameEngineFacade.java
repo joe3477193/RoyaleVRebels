@@ -34,6 +34,8 @@ public class GameEngineFacade implements GameEngine {
     private static final int COL_INDEX_LOADED = 1;
     private static final int IMG_NAME_INDEX_LOADED = 2;
     private static final int HP_INDEX_LOADED = 3;
+    private static final int OFFENSIVE_INDEX_LOADED= 4;
+    private static final int DEFENSIVE_INDEX_LOADED= 5;
     private static final int COORDINATE_LENGTH = 2;
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
@@ -910,8 +912,8 @@ public class GameEngineFacade implements GameEngine {
             for (TileInterface[] tileRow : getTiles()) {
                 for (TileInterface tile : tileRow) {
                     if (tile instanceof PieceTile) {
-                        PieceInterface piece = ((PieceTile) tile).getPiece();
-                        output.printf("%d|%d|%s|%d|%n", tile.getRow(), tile.getCol(), piece.getName(), piece.getHp());
+                        PieceInterface piece = tile.getPiece();
+                        output.printf("%d|%d|%s|%d|%b|%b%n", tile.getRow(), tile.getCol(), piece.getName(), piece.getHp(), piece.isOffensive(), piece.isDefensive());
                     }
                 }
             }
@@ -938,17 +940,35 @@ public class GameEngineFacade implements GameEngine {
             int col = Integer.valueOf(tile[COL_INDEX_LOADED]);
             String imageName = tile[IMG_NAME_INDEX_LOADED];
             int hp = Integer.valueOf(tile[HP_INDEX_LOADED]);
+            boolean isOffensive= Boolean.parseBoolean(tile[OFFENSIVE_INDEX_LOADED]);
+            boolean isDefensive= Boolean.parseBoolean(tile[DEFENSIVE_INDEX_LOADED]);
+
+
             onBoardPiece = PieceCache.clonePiece(imageName);
             onBoardPiece.setHP(hp);
             PieceTile pieceTile = new PieceTile(row, col);
             pieceTile.setPiece(onBoardPiece);
             tiles[row][col] = pieceTile;
+
+            if (isDefensive) {
+                PieceInterface resetPiece = new ResetModeDecoratorFactory(onBoardPiece).getFactory();
+                PieceInterface defensivePiece = new DefenceBuffDecoratorFactory(new AttackPowerNerfDecoratorFactory(resetPiece).getFactory()).getFactory();
+                defensivePiece.isDefensive();
+
+                ((PieceTile)tiles[row][col]).setPiece(defensivePiece);
+            }
+            else if (isOffensive){
+                PieceInterface resetPiece = new ResetModeDecoratorFactory(onBoardPiece).getFactory();
+                PieceInterface offensivePiece = new AttackPowerBuffDecoratorFactory(new DefenceNerfDecoratorFactory(resetPiece).getFactory()).getFactory();
+                offensivePiece.isOffensive();
+
+                ((PieceTile)tiles[row][col]).setPiece(offensivePiece);
         }
         onBoardPiece = null;
     }
 
 
-    public void changeAttackTarget(TileInterface tile, int i, int j) {
+   // public void changeAttackTarget(TileInterface tile, int i, int j)
 
 //        if (isAttacking) {
 //            if (tile.hasPiece() && tile.getRow() == i && tile.getCol() == j) {
