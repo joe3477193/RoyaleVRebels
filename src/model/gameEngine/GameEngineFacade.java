@@ -244,7 +244,6 @@ public class GameEngineFacade implements GameEngine {
 
     public void clickTile(int row, int col) {
 
-        System.out.print("sdfsxccxcvxcv");
         coordinate[ROW_INDEX] = row;
         coordinate[COL_INDEX] = col;
 
@@ -260,7 +259,7 @@ public class GameEngineFacade implements GameEngine {
         }
 
         boolean match = isFactionMatched(row, col);
-        System.out.print(match);
+
         if (match && !hasPerformed) {
 
             gfv.setImage(gfv.getTile(row, col).getName());
@@ -281,7 +280,7 @@ public class GameEngineFacade implements GameEngine {
                 gfv.updateStatus(HAS_PERFORMED);
             } else {
                 resetAttacking();
-                gfv.updateStatus(INVALID_TILE + "sdfsdf");
+                gfv.updateStatus(INVALID_TILE);
             }
 
             if (checkOnBoardPieceAttackable(row, col)) {

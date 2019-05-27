@@ -32,9 +32,9 @@ public class GameController {
     private static final String HAS_PERFORMED = "You have already perform an action this turn.";
     private static final String CLICK_BRICK_WALL = "Please do not click a brick wall.";
     private static final String TIME_REMAIN = "Time Remaining: ";
-    private static final String SUMMON = "summon";
-    private static final String MOVEMENT = "move";
-    private static final String ATTACK = "attack";
+    private static final String SUMMON = "Summon";
+    private static final String MOVEMENT = "Move";
+    private static final String ATTACK = "Attack";
     private static final String GAME_SAVED = "Game has been successfully saved.";
 
     private Timer timer;
