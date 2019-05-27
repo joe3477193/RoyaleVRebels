@@ -467,6 +467,7 @@ public class GameEngineFacade implements GameEngine {
         boolean isRowValid;
         int extraMove = DEFAULT_EXTRA_MOVE;
         int summonRange;
+        int cp;
 
         if (piece instanceof Obstacle) {
             extraMove = OBSTACLE_EXTRA_SUMMON_LIMIT;
@@ -475,11 +476,13 @@ public class GameEngineFacade implements GameEngine {
         if (piece instanceof Royale) {
             summonRange = ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
             isRowValid = row <= summonRange && row >= ROYALE_SUMMON_NORTH_LIMIT;
+            cp= royale.getCP();
         } else {
             isRowValid = row >= REBEL_SUMMON_NORTH_LIMIT - extraMove;
+            cp= rebel.getCP();
         }
 
-        if (checkMoveTarget(row, tile) && isRowValid) {
+        if (cp >= piece.getCp() && checkMoveTarget(row, tile) && isRowValid) {
             setTile(row, tile, "PieceTile");
             ((PieceTile) tiles[row][tile]).setPiece(piece);
             return true;
