@@ -21,18 +21,21 @@ import java.time.Duration;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static view.gameView.GameFrameView.STATUS;
-
 public class GameController {
 
     private static final int TIME_LIMIT = 60;
     private static final int TIME_DELAY = 0;
     private static final int TIME_PERIOD = 1000;
     private static final int TIME_OUT = -1;
-    private static final int ORIGINAL_BTN_INDEX = 0;
-    private static final int ORIGINAL_ROW = 0;
-    private static final int ORIGINAL_COL = 0;
     private static final int DECK_LENGTH = 7;
+
+    private static final String HAS_PERFORMED = "You have already perform an action this turn.";
+    private static final String CLICK_BRICK_WALL = "Please do not click a brick wall.";
+    private static final String TIME_REMAIN = "Time Remaining: ";
+    private static final String SUMMON = "summon";
+    private static final String MOVEMENT = "move";
+    private static final String ATTACK = "attack";
+    private static final String GAME_SAVED = "Game has been successfully saved.";
 
     private Timer timer;
 
@@ -98,8 +101,7 @@ public class GameController {
     // clicking on a piece to summon
     public void summonButton(ActionEvent e) {
 
-        JButton source = (JButton) e.getSource();
-        Cursor cursor = gfv.getFrame().getCursor();
+        Cursor cursor = gfv.getCursor();
 
         JButton[] button;
         String[] name;
@@ -109,7 +111,7 @@ public class GameController {
         g.resetMoving();
         g.resetAttacking();
 
-        gfv.getFrame().setCursor(cursor);
+        gfv.setCursor(cursor);
 
         // check if it is rebel's turn
         if (g.getTurn() == g.getRebelTurn()) {
@@ -122,38 +124,33 @@ public class GameController {
             image = gfv.getRoyaleImage();
         }
 
-        for (int i = ORIGINAL_BTN_INDEX; i < button.length; i++) {
-            if (source == button[i]) {
+        for (int i = 0; i < button.length; i++) {
+            if (gfv.getSource(e) == button[i]) {
+
                 Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
 
                 // click on the same piece on the deck, i.e. cancel summon
-                if (gfv.getFrame().getCursor().getName().equals(name[i])) {
+                if (gfv.getCursor().getName().equals(name[i])) {
                     gfv.resetCursor();
                     g.removeSummonedPiece();
                     gfv.removeImage();
                 }
 
                 // click on a different piece on the deck when the player has not moved any piece, i.e. change summon
-                else if (!g.getHasPerformed()) {
+                else if (!g.getPerformed()) {
 
-                    // TODO: JCOMPONENTS IN CONTROLLER
-                    gfv.getFrame().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), name[i]));
+                    gfv.setCursor(icon, name[i]);
                     g.createSummonedPiece(name[i]);
                     gfv.setImage(image[i]);
                     g.paintSummonRange(name[i]);
                 } else {
-
-                    // TODO: JCOMPONENTS IN CONTROLLER
-                    gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
+                    gfv.updateStatus(HAS_PERFORMED);
                 }
             }
         }
     }
 
     public void clickTile(ActionEvent e) {
-        JButton[][] tileBtns;
-        tileBtns = gfv.getTileBtns();
-        JButton tileBtn;
 
         // check if tile is clicked when a piece is not moving nor attacking
         if (!g.isMoving() && !g.isAttacking()) {
@@ -163,74 +160,61 @@ public class GameController {
         // no piece is chosen in the gameEngine
         g.resetCoordinates();
 
-        int i = gfv.findButtonCoordinates(e)[0];
-        int j = gfv.findButtonCoordinates(e)[1];
+        int row = gfv.findButtonCoordinates(e)[GameFrameView.ROW_PROPERTY_INDEX];
+        int col = gfv.findButtonCoordinates(e)[GameFrameView.COL_PROPERTY_INDEX];
         // click a brick wall
-        if (g.isWallTile(i, j)) {
-            gfv.getStatusLabel().setText(STATUS + "Please do not click a brick wall.");
+        if (g.isWallTile(row, col)) {
+            gfv.updateStatus(CLICK_BRICK_WALL);
         }
 
         // attempt to place piece
         else {
-            tileBtn = tileBtns[i][j];
+
             // attempt to place a summoned piece
-            if (g.getSummonedPiece() != null && !g.getHasPerformed()) {
-                // turn is consumed and run through turn command
-                cm.executeTurn("Summon", gfv.getImage(), i, j, g.getSummonedPiece());
-
+            if (g.getSummonedPiece() != null && !g.getPerformed()) {
+                cm.executeTurn(SUMMON, gfv.getImage(), row, col, g.getSummonedPiece());
             }
+
             // attempt to place a piece during movement
-            else if (g.isMoving() && !g.getHasPerformed()) {
-                // turn is consumed and run through turn command
-                cm.executeTurn("Move", gfv.getImage(), i, j, g.getSummonedPiece());
-
+            else if (g.isMoving() && !g.getPerformed()) {
+                cm.executeTurn(MOVEMENT, gfv.getImage(), row, col, g.getSummonedPiece());
             }
+
             // attempt to place a piece during attack
-            else if (g.isAttacking() && !g.getHasPerformed()) {
-
-                cm.executeTurn("Attack", gfv.getImage(), i, j, g.getSummonedPiece());
-
+            else if (g.isAttacking() && !g.getPerformed()) {
+                cm.executeTurn(ATTACK, gfv.getImage(), row, col, g.getSummonedPiece());
             }
             // attempt to pick a piece for action && also show piece info
-            else if (g.isPieceTile(i, j)) {
-                gfv.getStatusLabel().setText(STATUS);
-                g.clickTile(i, j);
+            else if (g.isPieceTile(row, col)) {
+                gfv.updateStatus("");
+                g.clickTile(row, col);
             }
 
             // attempt to click on an empty tile
             else {
-                gfv.getStatusLabel().setText(STATUS);
+                gfv.updateStatus("");
             }
         }
     }
 
     public void endTurn() {
-        g.unsetActionPerformed();
+        g.unsetPerformed();
 
         stopTimer();
     }
 
     public void attack() {
 
-        // cancel attack, i.e. click attack button twice
-        if (g.isAttacking() && !g.getHasPerformed()) {
+        // Cancel attack, i.e. click attack button twice
+        if (g.isAttacking() && !g.getPerformed()) {
             g.resetAttacking();
             gfv.colourAttack();
-
         }
 
-        // trigger attack for a piece
-        else if (g.hasCoordinates() && g.checkAttackInit(g.getCoordinates()[g.getRow()], g.getCoordinates()[g.getCol()]) && !g.getHasPerformed()) {
+        // Trigger attack for a piece
+        else if (g.hasCoordinates() && g.checkOnBoardPieceAttackable(g.getCoordinates()[g.getRow()], g.getCoordinates()[g.getCol()]) && !g.getPerformed()) {
             g.resetMoving();
             g.setAttacking();
-        }
-
-        // check if player has performed action already
-        else if (g.getHasPerformed()) {
-            gfv.getStatusLabel().setText(STATUS + "You have already perform an action this turn.");
-        } else {
-            g.resetMoving();
-            gfv.getStatusLabel().setText(STATUS + "You have not chosen a valid tile.");
         }
     }
 
@@ -244,7 +228,7 @@ public class GameController {
             @Override
             public void run() {
                 Duration duration = Duration.ofSeconds(second--);
-                gfv.setTime("Time Remaining: " + duration.toMinutesPart() + ":" + duration.toSecondsPart());
+                gfv.updateTime(TIME_REMAIN + duration.toMinutesPart() + ":" + duration.toSecondsPart());
                 if (second == TIME_OUT) {
                     endTurn();
                 }
@@ -296,6 +280,7 @@ public class GameController {
             pieceNames = gfv.getRoyaleName();
         }
 
+        // For Rebel, i varies from 0 to 6, while i varies from 7 - 13 for Royale
         int i = gfv.findButtonIndex(e) % DECK_LENGTH;
 
         PieceInterface deckPiece = PieceCache.getPiece(pieceNames[i]);
@@ -311,8 +296,8 @@ public class GameController {
     public void hoverTile(MouseEvent e) {
 
         // show on board piece's info
-        int i = gfv.findButtonCoordinates(e)[0];
-        int j = gfv.findButtonCoordinates(e)[1];
+        int i = gfv.findButtonCoordinates(e)[GameFrameView.ROW_PROPERTY_INDEX];
+        int j = gfv.findButtonCoordinates(e)[GameFrameView.COL_PROPERTY_INDEX];
 
         TileInterface tile = g.getTiles()[i][j];
 
@@ -336,7 +321,7 @@ public class GameController {
 
     public void saveGame() {
         if (g.saveGame()) {
-            System.out.println("Game has been successfully saved.");
+            gfv.updateStatus(GAME_SAVED);
         }
     }
 }

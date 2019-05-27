@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 
 public class PieceCache {
-    //source: https://www.tutorialspoint.com/design_pattern/prototype_pattern.htm
+
     private static Hashtable<String, Piece> pieceMap= new Hashtable<String, Piece>();
 
     public static Piece clonePiece(String name) {

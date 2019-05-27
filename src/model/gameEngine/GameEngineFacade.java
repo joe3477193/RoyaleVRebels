@@ -210,13 +210,13 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
-    public boolean getHasPerformed() {
+    public boolean getPerformed() {
         return hasPerformed;
     }
 
     //called when the end turn button is clicked and changes the turn, including repainting the GUI
     //with appropriate player and game info
-    public void unsetActionPerformed() {
+    public void unsetPerformed() {
         hasPerformed = false;
         gfv.decolourEndTurn();
         gfv.decolour();
@@ -244,6 +244,7 @@ public class GameEngineFacade implements GameEngine {
 
     public void clickTile(int row, int col) {
 
+        System.out.print("sdfsxccxcvxcv");
         coordinate[ROW_INDEX] = row;
         coordinate[COL_INDEX] = col;
 
@@ -251,21 +252,22 @@ public class GameEngineFacade implements GameEngine {
 
         if (isPieceTile(row, col)) {
             gfv.updateStatus(getPiece(row, col).getName() + PIECE_SELECTED);
+
+            PieceTile tile = (PieceTile) getTile(row, col);
+            System.out.println("TileButton Name: " + gfv.getTile(row, col).getName());
+            System.out.println("AP: " + tile.getPiece().getAttackPower());
+            System.out.println("DF: " + tile.getPiece().getDefence());
         }
 
-        PieceTile tile = (PieceTile) getTile(row, col);
-        System.out.println("TileButton Name: " + gfv.getTile(row, col).getName());
-        System.out.println("AP: " + tile.getPiece().getAttackPower());
-        System.out.println("DF: " + tile.getPiece().getDefence());
-
         boolean match = isFactionMatched(row, col);
+        System.out.print(match);
         if (match && !hasPerformed) {
 
             gfv.setImage(gfv.getTile(row, col).getName());
             gfv.colourTile(gfv.getTile(row, col));
 
             // Response for movement when a tile is clicked
-            if (!isMoving() && hasCoordinates() && checkMoveInit(getCoordinates()[ROW_INDEX], getCoordinates()[COL_INDEX])) {
+            if (!isMoving() && hasCoordinates() && checkOnBoardPieceMoveable(getCoordinates()[ROW_INDEX], getCoordinates()[COL_INDEX])) {
 
                 // Trigger movement for a piece
                 resetAttacking();
@@ -282,7 +284,7 @@ public class GameEngineFacade implements GameEngine {
                 gfv.updateStatus(INVALID_TILE + "sdfsdf");
             }
 
-            if (checkAttackInit(row, col)) {
+            if (checkOnBoardPieceAttackable(row, col)) {
                 gfv.colourAttack();
             } else {
                 gfv.colourRedAttack();
@@ -351,19 +353,13 @@ public class GameEngineFacade implements GameEngine {
 
     }
 
-
-    // Check if piece has been initialized successfully in current tile
-    public boolean checkInit(int row, int tile) {
-        return getTile(row, tile) instanceof PieceTile;
-    }
-
     // Check if piece in current tile can move
-    public boolean checkMoveInit(int row, int tile) {
+    public boolean checkOnBoardPieceMoveable(int row, int tile) {
         return isPieceTile(row, tile) && ((PieceTile) getTile(row, tile)).getPiece().isMoveable();
     }
 
     // Check if piece in current tile can attack
-    public boolean checkAttackInit(int row, int tile) {
+    public boolean checkOnBoardPieceAttackable(int row, int tile) {
         return isPieceTile(row, tile) && ((PieceTile) getTile(row, tile)).getPiece().isAttackable();
     }
 
@@ -891,7 +887,7 @@ public class GameEngineFacade implements GameEngine {
             int[] undoLimit = getUndoLevel();
             output.println(undoLimit[REBEL_TURN] + SEPARATOR + undoLimit[ROYALE_TURN]);
             output.println(getTurn());
-            output.println(getHasPerformed());
+            output.println(getPerformed());
 
             for (TileInterface[] tileRow : getTiles()) {
                 for (TileInterface tile : tileRow) {

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class StartGameBtnActionListener implements ActionListener {
 
+    private static final int NAME_MIN_LENGTH = 1;
+
     private static final String ERROR_TITLE = "Input error";
     private static final String EMPTY_PLAYER_NAME_ERROR = "Please make sure both names are entered.";
 
@@ -30,7 +32,7 @@ public class StartGameBtnActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (name1.getText().length() > 0 && name2.getText().length() > 0) {
+        if (name1.getText().length() >= NAME_MIN_LENGTH && name2.getText().length() >= NAME_MIN_LENGTH) {
 
             ArrayList<String> playerNames = new ArrayList<>();
             playerNames.add(name1.getText());

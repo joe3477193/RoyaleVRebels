@@ -61,7 +61,6 @@ public class LoadGameBtnActionListener implements ActionListener {
             String hasPerformed = input.readLine();
 
             // Load pieces' status, e.g. hp
-            // TODO: ???
             ArrayList<String[]> tileData = new ArrayList<>();
             String line;
 

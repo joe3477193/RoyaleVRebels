@@ -13,6 +13,8 @@ import java.util.EventObject;
 public class GameFrameView extends JFrame {
 
     public static final String STATUS = "Game status:  ";
+    public static final int ROW_PROPERTY_INDEX = 0;
+    public static final int COL_PROPERTY_INDEX = 1;
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
     private static final int BUTTON_LENGTH = 7;
@@ -101,6 +103,15 @@ public class GameFrameView extends JFrame {
         return button;
     }
 
+    @Override
+    public Cursor getCursor() {
+        return frame.getCursor();
+    }
+
+    public void setCursor(Image icon, String cursorName) {
+
+        frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), cursorName));
+    }
 
     public JButton getOffensiveBtn() {
         return offensiveBtn;
@@ -213,7 +224,7 @@ public class GameFrameView extends JFrame {
 
         updatePlayerInfo(playerOne);
 
-        if (g.getHasPerformed()) {
+        if (g.getPerformed()) {
             colourEndTurn();
         }
     }
@@ -388,7 +399,7 @@ public class GameFrameView extends JFrame {
         return summonBtns;
     }
 
-    public void setTime(String text) {
+    public void updateTime(String text) {
         time.setText(text);
     }
 

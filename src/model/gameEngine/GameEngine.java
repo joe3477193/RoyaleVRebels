@@ -28,9 +28,9 @@ public interface GameEngine {
 
     void setMoving();
 
-    boolean getHasPerformed();
+    boolean getPerformed();
 
-    void unsetActionPerformed();
+    void unsetPerformed();
 
     int[] getCoordinates();
 
@@ -54,11 +54,9 @@ public interface GameEngine {
 
     void removeSummonedPiece();
 
-    boolean checkInit(int row, int tile);
+    boolean checkOnBoardPieceMoveable(int row, int tile);
 
-    boolean checkMoveInit(int row, int tile);
-
-    boolean checkAttackInit(int row, int tile);
+    boolean checkOnBoardPieceAttackable(int row, int tile);
 
     void createSummonedPiece(String name);
 
