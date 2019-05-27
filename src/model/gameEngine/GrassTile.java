@@ -1,9 +1,8 @@
 package model.gameEngine;
 
-import java.io.Serializable;
+import model.piece.AbtractPiece.PieceInterface;
 
-public class GrassTile implements Serializable, TileInterface {
-    private static final long serialVersionUID = 3L;
+public class GrassTile implements TileInterface {
 
     private int row, col;
 
@@ -24,5 +23,9 @@ public class GrassTile implements Serializable, TileInterface {
 
     public void setCol(int col) {
         this.col = col;
+    }
+
+    public PieceInterface getPiece(){
+        return null;
     }
 }

@@ -2,10 +2,7 @@ package model.gameEngine;
 
 import model.piece.AbtractPiece.PieceInterface;
 
-import java.io.Serializable;
-
-public class PieceTile implements Serializable, TileInterface {
-    private static final long serialVersionUID = 3L;
+public class PieceTile implements TileInterface {
 
     private PieceInterface piece;
     private int row, col;

@@ -473,6 +473,16 @@ public class GameFrameView extends JFrame {
     public String getImagePath(String name) {
         return IMAGE_PATH + name.toLowerCase() + ".png";
     }
+
+    public void updateCastleHp(int hp){
+        castleHP.setText("Castle HP: " + hp);
+        revalidate();
+    }
+
+    public void gameOver(String name){
+        JOptionPane.showMessageDialog(frame, "Player " + name + " won!\n Press OK to go back to the main menu.", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+    }
+
 }
 
 

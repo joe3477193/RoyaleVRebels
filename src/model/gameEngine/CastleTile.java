@@ -1,13 +1,15 @@
 package model.gameEngine;
 
-import java.io.Serializable;
+import model.piece.AbtractPiece.PieceInterface;
+import model.piece.concretePiece.Castle;
 
-public class CastleTile implements Serializable, TileInterface {
-    private static final long serialVersionUID = 3L;
+public class CastleTile implements TileInterface {
 
     private int row, col;
+    private PieceInterface piece;
 
     public CastleTile () {
+        piece= new Castle();
     }
 
     public int getRow() {
@@ -24,5 +26,9 @@ public class CastleTile implements Serializable, TileInterface {
 
     public void setCol(int col) {
         this.col = col;
+    }
+
+    public PieceInterface getPiece(){
+        return piece;
     }
 }

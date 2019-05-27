@@ -5,6 +5,7 @@ import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
 import model.piece.PieceCache;
 import model.piece.abstractType.Obstacle;
+import model.piece.concretePiece.Castle;
 import model.piece.decorator.concreteDecorator.ResetModeTroopDecorator;
 import model.piece.decorator.concreteDecoratorFactory.*;
 import model.piece.faction.Royale;
@@ -12,6 +13,7 @@ import model.player.Player;
 import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
 import view.gameView.GameFrameView;
+import view.mainView.MainMenuView;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -348,7 +350,7 @@ public class GameEngineFacade implements GameEngine {
 
     // Gets a piece from a tile
     public PieceInterface getPiece(int row, int tile) {
-        return ((PieceTile) getTile(row, tile)).getPiece();
+        return getTile(row, tile).getPiece();
 
     }
 
@@ -371,8 +373,8 @@ public class GameEngineFacade implements GameEngine {
     private boolean checkAttackTarget(PieceInterface piece, int tgRow, int tgTile) {
         TileInterface space = getTile(tgRow, tgTile);
         String inFaction = piece.getFaction();
-        String outFaction = ((PieceTile) space).getPiece().getFaction();
-        return space instanceof PieceTile && !(inFaction.equals(outFaction));
+        String outFaction = space.getPiece().getFaction();
+        return (space instanceof PieceTile || space instanceof CastleTile)&& !(inFaction.equals(outFaction));
     }
 
     @Override
@@ -454,7 +456,7 @@ public class GameEngineFacade implements GameEngine {
 
     // Check if piece hasAttacked target piece
     private boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
-        if (isPieceTile(tgRow, tgTile) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) &&
+        if ((isPieceTile(tgRow, tgTile) || isCastleTile(tgRow, tgTile)) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) &&
                 isMovRangeValid(inRow, inTile, tgRow, tgTile, "attack")) {
             getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttackPower());
             return true;
@@ -615,7 +617,7 @@ public class GameEngineFacade implements GameEngine {
 
         if (attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], i, j)) {
             boolean death;
-            PieceInterface p = null;
+            PieceInterface p = getTile(i, j).getPiece();
             System.out.print(gfv.getImage());
             PieceInterface piece = getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
             String statusMsg;
@@ -630,11 +632,21 @@ public class GameEngineFacade implements GameEngine {
             statusMsg = trueDamage + TRUE_DAMAGE_DEALT + REMAINING_HP + getPiece(i, j).getHp();
 
             death = getPiece(i, j).isDead();
-            if (death) {
-                p = ((PieceTile) getTile(i, j)).getPiece();
-                statusMsg += INFER + getPiece(i, j).getName() + IS_DEAD;
-                setTile(i, j, "GrassTile");
-                gfv.setTileIcon(i, j, gfv.getGrass());
+
+            if (getTile(i,j) instanceof CastleTile){
+                gfv.updateCastleHp(p.getHp());
+                if(death){
+                    gfv.gameOver(rebel.getName());
+                    gfv.disposeFrame();
+                    new MainMenuView();
+                }
+            }
+            else{
+                if (death) {
+                    statusMsg += INFER + p.getName() + IS_DEAD;
+                    setTile(i, j, "GrassTile");
+                    gfv.setTileIcon(i, j, gfv.getGrass());
+                }
             }
             gfv.decolour();
             resetAttacking();
