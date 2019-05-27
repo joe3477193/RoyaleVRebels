@@ -83,7 +83,7 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
             this.hp = hp;
         }
     }
-
+    
     public int getInitDefence() {
         return initDefence;
     }
