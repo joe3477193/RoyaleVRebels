@@ -1,4 +1,4 @@
-package model.gameEngine;
+package model.tile;
 
 import model.piece.AbtractPiece.PieceInterface;
 
@@ -17,7 +17,7 @@ public class PieceTile implements TileInterface {
         return piece;
     }
 
-    void setPiece(PieceInterface piece) {
+    public void setPiece(PieceInterface piece) {
         this.piece = piece;
     }
 

@@ -11,6 +11,7 @@ import model.piece.faction.Royale;
 import model.player.Player;
 import model.player.RebelPlayer;
 import model.player.RoyalePlayer;
+import model.tile.*;
 import view.gameView.GameFrameView;
 import view.mainView.MainMenuView;
 

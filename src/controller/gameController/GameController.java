@@ -5,10 +5,10 @@ import controller.gameActionListeners.*;
 import controller.gameMouseAdapters.HoverDeckMouseAdapter;
 import controller.gameMouseAdapters.HoverTileMouseAdapter;
 import model.gameEngine.GameEngine;
-import model.gameEngine.PieceTile;
-import model.gameEngine.TileInterface;
 import model.piece.AbtractPiece.PieceInterface;
 import model.piece.PieceCache;
+import model.tile.PieceTile;
+import model.tile.TileInterface;
 import view.gameView.GameFrameView;
 import view.mainView.MainMenuView;
 

@@ -1,12 +1,12 @@
-package model.gameEngine;
+package model.tile;
 
 import java.util.HashMap;
 
-class TileFactory {
+public class TileFactory {
 
     private static HashMap<String, TileInterface> tiles = new HashMap<>();
 
-    static TileInterface getTile(String type) {
+    public static TileInterface getTile(String type) {
         TileInterface tile = tiles.get(type);
         if (tiles.containsKey(type)) {
             return tile;

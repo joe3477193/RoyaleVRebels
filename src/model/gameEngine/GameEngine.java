@@ -3,6 +3,7 @@ package model.gameEngine;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.PieceInterface;
 import model.player.Player;
+import model.tile.TileInterface;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package model.gameEngine;
+package model.tile;
 
 import model.piece.AbtractPiece.PieceInterface;
 

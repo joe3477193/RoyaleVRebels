@@ -1,12 +1,15 @@
-package model.gameEngine;
+package model.tile;
 
 import model.piece.AbtractPiece.PieceInterface;
+import model.piece.concretePiece.Castle;
 
-public class WallTile implements TileInterface {
+public class CastleTile implements TileInterface {
 
     private int row, col;
+    private PieceInterface piece;
 
-    WallTile() {
+    CastleTile() {
+        piece = new Castle();
     }
 
     public int getRow() {
@@ -26,6 +29,6 @@ public class WallTile implements TileInterface {
     }
 
     public PieceInterface getPiece() {
-        return null;
+        return piece;
     }
 }
