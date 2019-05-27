@@ -4,5 +4,4 @@ import model.piece.abstractType.property.Attackable;
 import model.piece.abstractType.property.Moveable;
 
 public interface Troop extends Moveable, Attackable {
-    String type = "Troop";
 }

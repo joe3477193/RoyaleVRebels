@@ -257,7 +257,7 @@ public class GameEngineFacade implements GameEngine {
         // TODO: SHOULD MAKE A PIECE STATUS PANEL TO SHOW ALL INFO
 
         if (isPieceTile(row, col)) {
-            gfv.updateStatus(getPiece(row, col).getName() + PIECE_SELECTED);
+            gfv.updateStatus(getPiece(row, col).getClass().getName() + PIECE_SELECTED);
 
             PieceTile tile = (PieceTile) getTile(row, col);
             System.out.println("TileButton Name: " + gfv.getTile(row, col).getName());
@@ -377,8 +377,8 @@ public class GameEngineFacade implements GameEngine {
     // Check if piece can attack target from current tile
     private boolean checkAttackTarget(PieceInterface piece, int tgRow, int tgTile) {
         TileInterface space = getTile(tgRow, tgTile);
-        String inFaction = piece.getFaction();
-        String outFaction = space.getPiece().getFaction();
+        String inFaction = piece.getClass().getSuperclass().getName();
+        String outFaction = space.getPiece().getClass().getSuperclass().getName();
         return (space instanceof PieceTile || space instanceof CastleTile)&& !(inFaction.equals(outFaction));
     }
 
@@ -430,7 +430,7 @@ public class GameEngineFacade implements GameEngine {
                 if (currTile == null) {
                     continue;
                 } else if (currTile instanceof PieceTile) {
-                    if (!((PieceTile) currTile).getPiece().getFaction().equals(((PieceTile) initTile).getPiece().getFaction())) {
+                    if (!((PieceTile) currTile).getPiece().getClass().getSuperclass().getName().equals(((PieceTile) initTile).getPiece().getClass().getSuperclass().getName())) {
                         return true;
                     }
                 } else if (currTile instanceof WallTile) {
@@ -448,7 +448,7 @@ public class GameEngineFacade implements GameEngine {
                 if (currTile == null) {
                     continue;
                 } else if (currTile instanceof PieceTile) {
-                    if (!((PieceTile) currTile).getPiece().getFaction().equals(((PieceTile) initTile).getPiece().getFaction())) {
+                    if (!((PieceTile) currTile).getPiece().getClass().getSuperclass().getName().equals(((PieceTile) initTile).getPiece().getClass().getSuperclass().getName())) {
                         return true;
                     }
                 } else if (currTile instanceof WallTile) {
@@ -648,7 +648,7 @@ public class GameEngineFacade implements GameEngine {
             }
             else{
                 if (death) {
-                    statusMsg += INFER + p.getName() + IS_DEAD;
+                    statusMsg += INFER + p.getClass().getName() + IS_DEAD;
                     setTile(i, j, "GrassTile");
                     gfv.setTileIcon(i, j, gfv.getGrass());
                 }
@@ -779,7 +779,7 @@ public class GameEngineFacade implements GameEngine {
     // Check if the player and the piece on action is in the same team
     private boolean isFactionMatched(int i, int j) {
 
-        return turn == REBEL_TURN && getPiece(i, j).getFaction().equals("Rebel") || turn == ROYALE_TURN && getPiece(i, j).getFaction().equals("Royale");
+        return turn == REBEL_TURN && getPiece(i, j).getClass().getSuperclass().getName().equals("Rebel") || turn == ROYALE_TURN && getPiece(i, j).getClass().getSuperclass().getName().equals("Royale");
     }
 
     public void setDefensive() {
@@ -913,7 +913,7 @@ public class GameEngineFacade implements GameEngine {
                 for (TileInterface tile : tileRow) {
                     if (tile instanceof PieceTile) {
                         PieceInterface piece = tile.getPiece();
-                        output.printf("%d|%d|%s|%d|%b|%b%n", tile.getRow(), tile.getCol(), piece.getName(), piece.getHp(), piece.isOffensive(), piece.isDefensive());
+                        output.printf("%d|%d|%s|%d|%b|%b%n", tile.getRow(), tile.getCol(), piece.getClass().getName(), piece.getHp(), piece.isOffensive(), piece.isDefensive());
                     }
                 }
             }

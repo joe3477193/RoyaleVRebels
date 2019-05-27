@@ -2,10 +2,6 @@ package model.piece.AbtractPiece;
 
 public abstract class Piece implements PieceInterface, Cloneable {
 
-    private String name;
-    private String faction;
-    private String type;
-    private String code;
     private int cp;
     private int initHp;
     private int hp;
@@ -22,11 +18,7 @@ public abstract class Piece implements PieceInterface, Cloneable {
     private boolean isOffensive;
     private boolean isDefensive;
 
-    public Piece(String name, String faction, String type, String code, int cp, int hp, int defence, int attackPower, int moveSpeed, int attackRange, boolean moveable, boolean attackable) {
-        this.name = name;
-        this.faction = faction;
-        this.type = type;
-        this.code = code;
+    public Piece(int cp, int hp, int defence, int attackPower, int moveSpeed, int attackRange, boolean moveable, boolean attackable) {
         this.cp = cp;
         this.initHp = hp;
         this.hp = hp;
@@ -42,22 +34,6 @@ public abstract class Piece implements PieceInterface, Cloneable {
         this.attackable = attackable;
         this.isOffensive = false;
         this.isDefensive = false;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getFaction() {
-        return faction;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getCode() {
-        return code;
     }
 
     public int getCp() {

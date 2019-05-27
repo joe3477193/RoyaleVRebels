@@ -5,6 +5,6 @@ import model.piece.faction.Royale;
 
 public class Pitfall extends Royale implements Obstacle {
     public Pitfall() {
-        super("Pitfall", type, "PF", 15, 1050, 10, 0, 0, 0, moveable, attackable);
+        super(15, 1050, 10, 0, 0, 0, moveable, attackable);
     }
 }

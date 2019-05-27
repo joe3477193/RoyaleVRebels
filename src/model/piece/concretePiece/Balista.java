@@ -5,6 +5,6 @@ import model.piece.faction.Royale;
 
 public class Balista extends Royale implements Artillery {
     public Balista() {
-        super("Balista", type, "BA", 8, 40, 10, 20, 0, 7, moveable, attackable);
+        super(8, 40, 10, 20, 0, 7, moveable, attackable);
     }
 }

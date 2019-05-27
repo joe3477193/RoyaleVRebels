@@ -5,6 +5,6 @@ import model.piece.faction.Royale;
 
 public class Infantry extends Royale implements Troop {
     public Infantry() {
-        super("Infantry", type, "IF", 3, 20, 10, 20, 3, 3, moveable, attackable);
+        super(3, 20, 10, 20, 3, 3, moveable, attackable);
     }
 }

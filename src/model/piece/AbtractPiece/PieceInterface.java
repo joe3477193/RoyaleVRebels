@@ -2,14 +2,6 @@ package model.piece.AbtractPiece;
 
 public interface PieceInterface {
 
-    String getName();
-
-    String getFaction();
-
-    String getType();
-
-    String getCode();
-
     int getCp();
 
     int getInitHp();

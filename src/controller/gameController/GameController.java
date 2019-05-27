@@ -285,8 +285,8 @@ public class GameController {
 
         PieceInterface deckPiece = PieceCache.getPiece(pieceNames[i]);
 
-        String pieceInfo = "<html>Name: " + deckPiece.getName() + "<br>Faction: " + deckPiece.getFaction()
-                + "<br>Type: " + deckPiece.getType() + "<br>HP: " + deckPiece.getHp() + "<br>Attack Power: "
+        String pieceInfo = "<html>Name: " + deckPiece.getClass().getName() + "<br>Faction: " + deckPiece.getClass().getSuperclass().getName()
+                + "<br>Type: " + deckPiece.getClass().getInterfaces().toString() + "<br>HP: " + deckPiece.getHp() + "<br>Attack Power: "
                 + deckPiece.getAttackPower() + "<br>Defence: " + deckPiece.getDefence() + "<br>Attack Range: "
                 + deckPiece.getAttackRange() + "<br>Move Speed: " + deckPiece.getMoveSpeed() + "<br>OFFENSIVE: "
                 + deckPiece.isOffensive() + "<br>DEFENSIVE: " + deckPiece.isDefensive() + "</html>";
@@ -310,8 +310,8 @@ public class GameController {
 
             PieceInterface piece = ((PieceTile) tile).getPiece();
 
-            String pieceInfo = "<html>Name: " + piece.getName() + "<br>Faction: " + piece.getFaction()
-                    + "<br>Type: " + piece.getType() + "<br>HP: " + piece.getHp() + "<br>Attack Power: "
+            String pieceInfo = "<html>Name: " + piece.getClass().getName() + "<br>Faction: " + piece.getClass().getSuperclass().getName()
+                    + "<br>Type: " + piece.getClass().getInterfaces().toString() + "<br>HP: " + piece.getHp() + "<br>Attack Power: "
                     + piece.getAttackPower() + "<br>Defence: " + piece.getDefence() + "<br>Attack Range: "
                     + piece.getAttackRange() + "<br>Move Speed: " + piece.getMoveSpeed() + "<br>OFFENSIVE: "
                     + piece.isOffensive() + "<br>DEFENSIVE: " + piece.isDefensive() + "</html>";
