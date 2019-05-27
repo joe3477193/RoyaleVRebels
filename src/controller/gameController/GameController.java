@@ -259,8 +259,10 @@ public class GameController {
         int j = gfv.findButtonCoordinates(e)[GameFrameView.COL_PROPERTY_INDEX];
         TileInterface tile = g.getTiles()[i][j];
         // TODO: UNIMPLEMENTED
-        // Change attack target color if is attacking
-        // g.changeAttackTarget(tile, i, j);
+        if (g.isAttacking()) {
+            // Change attack target color if is attacking
+            g.changeAttackTarget(tile, i, j);
+        }
         // check if the tile has piece, show the piece info
         if (tile instanceof PieceTile) {
             PieceInterface piece = tile.getPiece();

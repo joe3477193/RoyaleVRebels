@@ -866,26 +866,6 @@ public class GameEngineFacade implements GameEngine {
                 ((PieceTile) tiles[row][col]).setPiece(offensivePiece);
             }
         }
-        // public void changeAttackTarget(TileInterface tile, int i, int j)
-//        if (isAttacking) {
-//            if (tile.hasPiece() && tile.getRowIndex() == i && tile.getColIndex() == j) {
-//                if (!isFactionMatched(i, j)) {
-//                    System.out.println(initTileCoord[0] + ", " + initTileCoord[1]);
-//                    System.out.println(i + ", " + j);
-//                    if (isMovRangeValid(initTileCoord[0], initTileCoord[1], i, j, "attackRange")) {
-//                        System.out.print("Green");
-//                        gfv.setCursor(gfv.getTargetGreen());
-//                    } else {
-//                        System.out.print("red1");
-//                        gfv.setCursor(gfv.getTargetRed());
-//                    }
-//                } else {
-//                    //gfv.setCursor(gfv.getTargetRed());
-//                }
-//            } else if (!tile.hasPiece() && tile.getRowIndex() == i && tile.getColIndex() == j) {
-//                gfv.setCursor(gfv.getTargetRed());
-//            }
-//        }
     }
 
     // want to change colour for showing movement and attack range on tiles
@@ -928,5 +908,21 @@ public class GameEngineFacade implements GameEngine {
 
     public int getCastleHp() {
         return tiles[CASTLE_TILE_ROW][CASTLE_TILE_COL].getPiece().getHp();
+    }
+
+    public void changeAttackTarget(TileInterface tile, int i, int j) {
+        if (isPieceTile(i, j) || isCastleTile(i, j)) {
+            if (!isFactionMatched(i, j)) {
+                if (isMovRangeValid(initTileCoord[0], initTileCoord[1], i, j, ATTACK_TYPE)) {
+                    gfv.setCursor(gfv.getTargetGreen());
+                } else {
+                    gfv.setCursor(gfv.getTargetRed());
+                }
+            } else {
+                gfv.setCursor(gfv.getTargetRed());
+            }
+        } else {
+            gfv.setCursor(gfv.getTargetRed());
+        }
     }
 }
