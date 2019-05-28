@@ -92,6 +92,7 @@ public class GameController {
     // clicking on a piece to summon
     public void summonButton(ActionEvent e) {
         Cursor cursor = gfv.getCursor();
+        String cursorName= gfv.getCursor().getName();
         JButton[] button;
         String[] name;
         String[] image;
@@ -116,7 +117,7 @@ public class GameController {
                 // click on the same piece on the deck, i.e. cancel summon
                 System.out.println(gfv.getCursor().getName());
                 System.out.println(name[i]);
-                if (gfv.getCursor().getName().equals(name[i])) {
+                if (cursorName.equals(name[i])) {
                     gfv.resetCursor();
                     g.removeSummonedPiece();
                     gfv.removeImage();
