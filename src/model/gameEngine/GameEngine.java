@@ -102,4 +102,8 @@ public interface GameEngine {
     int getCastleHp();
 
     void changeAttackIconColor(TileInterface tile, int i, int j);
+
+    boolean checkWin();
+
+    void gameOver(String name);
 }

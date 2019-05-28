@@ -177,6 +177,9 @@ public class GameController {
     public void endTurn() {
         g.unsetPerformed();
         stopTimer();
+        if (g.checkWin()) {
+            g.gameOver(g.getRoyalePlayer().getName());
+        }
     }
 
     public void attack() {
@@ -249,7 +252,7 @@ public class GameController {
         // For Rebel, i varies from 0 to 6, while i varies from 7 - 13 for Royale
         int i = gfv.findButtonIndex(e) % DECK_LENGTH;
         PieceInterface deckPiece = PieceCache.getPiece(pieceNames[i]);
-        String pieceInfo = "<html>Name: " + deckPiece.getName() + "<br>Faction: " + deckPiece.getFaction() + "<br>Type: " + deckPiece.getType() + "<br>HP: " + deckPiece.getHp() + "<br>Attack Power: " + deckPiece.getAttackPower() + "<br>Defence: " + deckPiece.getDefence() + "<br>Attack Range: " + deckPiece.getAttackRange() + "<br>Move Speed: " + deckPiece.getMoveSpeed() + "<br>OFFENSIVE: " + deckPiece.isOffensive() + "<br>DEFENSIVE: " + deckPiece.isDefensive() + "</html>";
+        String pieceInfo = "<html>Name: " + deckPiece.getName() + "<br>CP consumed: " + deckPiece.getCp() + "<br>Faction: " + deckPiece.getFaction() + "<br>Type: " + deckPiece.getType() + "<br>HP: " + deckPiece.getHp() + "<br>Attack Power: " + deckPiece.getAttackPower() + "<br>Defence: " + deckPiece.getDefence() + "<br>Attack Range: " + deckPiece.getAttackRange() + "<br>Move Speed: " + deckPiece.getMoveSpeed() + "<br>OFFENSIVE: " + deckPiece.isOffensive() + "<br>DEFENSIVE: " + deckPiece.isDefensive() + "</html>";
         gfv.showPieceInfo(e, pieceInfo);
     }
 
