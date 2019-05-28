@@ -63,6 +63,7 @@ public class GameEngineFacade implements GameEngine {
     private static final String CANNOT_STRENGTHEN_OPPONENT_PIECE = "You cannot strengthen opponent piece!";
     private static final String CANNOT_STRENGTHEN_OBSTACLE = "You cannot strengthen opponent piece!";
     private static final String CANNOT_STRENGTHEN_CASTLE = "You cannot strengthen CASTLES!";
+    // TODO: Undolevel of 0 need to show diff status msg
     private static final String UNDO_USED = "You have already used your Undo for this game!";
     private static final String OUTPUT_FORMAT = "%d|%d|%s|%d|%n";
 
@@ -131,14 +132,6 @@ public class GameEngineFacade implements GameEngine {
         isAttacking = false;
         boardRowLength = BOARD_ROW_LENGTH;
         boardColLength = BOARD_COL_LENGTH;
-    }
-
-    public int getOriginalRow() {
-        return ORIGINAL_ROW;
-    }
-
-    public int getOriginalCol() {
-        return ORIGINAL_COL;
     }
 
     public int getRebelTurn() {
@@ -467,11 +460,11 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
-    public void paintSummonRange(String troop) {
+    public void paintSummonRange(String pieceName) {
         int start;
         int finish;
         int extraMove = 0;
-        if (PieceCache.getPiece(troop) instanceof Obstacle) {
+        if (PieceCache.getPiece(pieceName) instanceof Obstacle) {
             extraMove = OBSTACLE_EXTRA_SUMMON_LIMIT;
         }
         if (turn == ROYALE_TURN) {
@@ -755,29 +748,6 @@ public class GameEngineFacade implements GameEngine {
 
     public int[] getInitTileCoord() {
         return initTileCoord;
-    }
-
-    public void paintSummonRange(int turn, String pieceName) {
-        int startRow;
-        int finishRow;
-        int extraMove = DEFAULT_EXTRA_MOVE;
-        if (PieceCache.getPiece(pieceName) instanceof Obstacle) {
-            extraMove = OBSTACLE_EXTRA_SUMMON_LIMIT;
-        }
-        if (PieceCache.getPiece(pieceName) instanceof Royale) {
-            startRow = ROYALE_SUMMON_NORTH_LIMIT;
-            finishRow = ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
-        } else {
-            startRow = REBEL_SUMMON_NORTH_LIMIT - extraMove;
-            finishRow = boardRowLength - 1;
-        }
-        for (int row = startRow; row <= finishRow; row++) {
-            for (int col = 0; col < boardColLength; col++) {
-                if (checkMoveRepaint(row, col)) {
-                    gfv.colourTile(row, col, SUMMON_TYPE);
-                }
-            }
-        }
     }
 
     // check if a certain tile should be repainted with the paintMovAttack
