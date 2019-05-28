@@ -424,8 +424,7 @@ public class GameEngineFacade implements GameEngine {
 
     // Check if piece hasAttacked target piece
     private boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
-        if ((isPieceTile(tgRow, tgTile) || isCastleTile(tgRow, tgTile)) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) &&
-                isMovRangeValid(inRow, inTile, tgRow, tgTile, "attack")) {
+        if ((isPieceTile(tgRow, tgTile) || isCastleTile(tgRow, tgTile)) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) && isMovRangeValid(inRow, inTile, tgRow, tgTile, "attack")) {
             getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttackPower());
             return true;
         }
@@ -619,8 +618,7 @@ public class GameEngineFacade implements GameEngine {
         } else if (getTurn() == ROYALE_TURN && royaleUndoRemain != 0) {
             royaleUndoRemain--;
             return true;
-        } else
-            gfv.updateStatus(UNDO_USED);
+        } else gfv.updateStatus(UNDO_USED);
         return false;
     }
 

@@ -12,9 +12,9 @@ import java.util.EventObject;
 
 public class GameFrameView extends JFrame {
 
-    private static final String STATUS = "Game status:  ";
     public static final int ROW_PROPERTY_INDEX = 0;
     public static final int COL_PROPERTY_INDEX = 1;
+    private static final String STATUS = "Game status:  ";
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
     private static final int BUTTON_LENGTH = 7;

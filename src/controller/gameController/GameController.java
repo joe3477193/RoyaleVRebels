@@ -248,11 +248,7 @@ public class GameController {
         // For Rebel, i varies from 0 to 6, while i varies from 7 - 13 for Royale
         int i = gfv.findButtonIndex(e) % DECK_LENGTH;
         PieceInterface deckPiece = PieceCache.getPiece(pieceNames[i]);
-        String pieceInfo = "<html>Name: " + deckPiece.getName() + "<br>Faction: " + deckPiece.getFaction()
-                + "<br>Type: " + deckPiece.getType() + "<br>HP: " + deckPiece.getHp() + "<br>Attack Power: "
-                + deckPiece.getAttackPower() + "<br>Defence: " + deckPiece.getDefence() + "<br>Attack Range: "
-                + deckPiece.getAttackRange() + "<br>Move Speed: " + deckPiece.getMoveSpeed() + "<br>OFFENSIVE: "
-                + deckPiece.isOffensive() + "<br>DEFENSIVE: " + deckPiece.isDefensive() + "</html>";
+        String pieceInfo = "<html>Name: " + deckPiece.getName() + "<br>Faction: " + deckPiece.getFaction() + "<br>Type: " + deckPiece.getType() + "<br>HP: " + deckPiece.getHp() + "<br>Attack Power: " + deckPiece.getAttackPower() + "<br>Defence: " + deckPiece.getDefence() + "<br>Attack Range: " + deckPiece.getAttackRange() + "<br>Move Speed: " + deckPiece.getMoveSpeed() + "<br>OFFENSIVE: " + deckPiece.isOffensive() + "<br>DEFENSIVE: " + deckPiece.isDefensive() + "</html>";
         gfv.showPieceInfo(e, pieceInfo);
     }
 
@@ -269,11 +265,7 @@ public class GameController {
         // check if the tile has piece, show the piece info
         if (tile instanceof PieceTile) {
             PieceInterface piece = tile.getPiece();
-            String pieceInfo = "<html>Name: " + piece.getName() + "<br>Faction: " + piece.getFaction()
-                    + "<br>Type: " + piece.getType() + "<br>HP: " + piece.getHp() + "<br>Attack Power: "
-                    + piece.getAttackPower() + "<br>Defence: " + piece.getDefence() + "<br>Attack Range: "
-                    + piece.getAttackRange() + "<br>Move Speed: " + piece.getMoveSpeed() + "<br>OFFENSIVE: "
-                    + piece.isOffensive() + "<br>DEFENSIVE: " + piece.isDefensive() + "</html>";
+            String pieceInfo = "<html>Name: " + piece.getName() + "<br>Faction: " + piece.getFaction() + "<br>Type: " + piece.getType() + "<br>HP: " + piece.getHp() + "<br>Attack Power: " + piece.getAttackPower() + "<br>Defence: " + piece.getDefence() + "<br>Attack Range: " + piece.getAttackRange() + "<br>Move Speed: " + piece.getMoveSpeed() + "<br>OFFENSIVE: " + piece.isOffensive() + "<br>DEFENSIVE: " + piece.isDefensive() + "</html>";
             gfv.showPieceInfo(e, pieceInfo);
         }
     }
