@@ -642,7 +642,7 @@ public class GameEngineFacade implements GameEngine {
     private void depaintAction() {
         for (int i = ORIGINAL_ROW; i < BOARD_ROW_LENGTH; i++) {
             for (int j = ORIGINAL_COL; j < BOARD_COL_LENGTH; j++) {
-                if (!isWallTile(i, j) && isGrassTile(i, j) && !isCastleTile(i, j)) {
+                if (isGrassTile(i, j) && !isPieceTile(i, j)) {
                     gfv.setTileIcon(i, j, gfv.getGrass());
                 }
             }
