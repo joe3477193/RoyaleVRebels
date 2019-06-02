@@ -25,9 +25,12 @@ public abstract class Player {
         return cp;
     }
 
-    public boolean reduceCP(int value) {
-        this.cp -= value;
-        return cp >= 0;
+    public void reduceCP(int value) {
+         cp -= value;
+    }
+
+    public boolean isEnoughCP(int value){
+        return cp - value > 0;
     }
 
     public String getFaction() {

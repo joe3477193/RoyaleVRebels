@@ -70,9 +70,9 @@ public class GameEngineFacade implements GameEngine {
     private static final String WALL_TILE = "WallTile";
     private static final String CASTLE_TILE = "CastleTile";
     private static final String GRASS_TILE = "GrassTile";
-    private static final String NOT_ENOUGH_CP = "You CP is not enough to summon this piece!";
     private static final String REBEL = "Rebel";
     private static final String ROYALE = "Royale";
+    private static final String SUMMON_SUCCESS = "You have successfully summoned a piece!";
 
     private static final int CASTLE_TILE_ROW = 0;
     private static final int CASTLE_TILE_COL = 0;
@@ -344,24 +344,10 @@ public class GameEngineFacade implements GameEngine {
         if (checkSummonValid(getSummonedPiece(), row, col)) {
             gfv.setTileIcon(row, col, gfv.getImage());
             gfv.setTileName(row, col, gfv.getImage());
-            if (getTurn() == REBEL_TURN) {
-                if (rebel.reduceCP(getSummonedPiece().getCp())) {
-                    gfv.updatePlayerInfo(rebel);
-                }
-                else {
-                    gfv.updateStatus(NOT_ENOUGH_CP);
-                    return false;
-                }
-            }
-            else if (getTurn() == ROYALE_TURN) {
-                if (royale.reduceCP(getSummonedPiece().getCp())) {
-                    gfv.updatePlayerInfo(royale);
-                }
-                else {
-                    gfv.updateStatus(NOT_ENOUGH_CP);
-                    return false;
-                }
-            }
+            Player player= getCurrentPlayer();
+            player.reduceCP(getSummonedPiece().getCp());
+            gfv.updatePlayerInfo(player);
+            gfv.updateStatus(SUMMON_SUCCESS);
             removeSummonedPiece();
             gfv.resetCursor();
             setPerformed();
@@ -545,20 +531,17 @@ public class GameEngineFacade implements GameEngine {
         boolean isRowValid;
         int extraMove = DEFAULT_EXTRA_MOVE;
         int summonRange;
-        int cp;
         if (piece instanceof Obstacle) {
             extraMove = OBSTACLE_EXTRA_SUMMON_LIMIT;
         }
         if (piece instanceof Royale) {
             summonRange = ROYALE_SUMMON_SOUTH_LIMIT + extraMove;
             isRowValid = row <= summonRange && row >= ROYALE_SUMMON_NORTH_LIMIT;
-            cp = royale.getCP();
         }
         else {
             isRowValid = row >= REBEL_SUMMON_NORTH_LIMIT - extraMove;
-            cp = rebel.getCP();
         }
-        if (cp >= piece.getCp() && checkMoveTarget(row, tile) && isRowValid) {
+        if (checkMoveTarget(row, tile) && isRowValid) {
             setTile(row, tile, PIECE_TILE);
             ((PieceTile) tiles[row][tile]).setPiece(piece);
             return true;
@@ -957,6 +940,15 @@ public class GameEngineFacade implements GameEngine {
                     return;
                 }
             }
+        }
+    }
+
+    public Player getCurrentPlayer(){
+        if (turn==REBEL_TURN){
+            return rebel;
+        }
+        else{
+            return royale;
         }
     }
 }
