@@ -4,9 +4,9 @@ import java.util.Stack;
 
 public abstract class AbstractTurn implements Turn {
 
-    public Stack<TurnType> moves;
+    public Stack<CommandInterface> moves;
 
-    public TurnType returnLastMove() {
+    public CommandInterface returnLastMove() {
         return moves.pop();
     }
 }

@@ -2,8 +2,7 @@ package model.piece.AbtractPiece;
 
 public interface PieceInterface {
 
-
-	String getName();
+    String getName();
 
     String getFaction();
 
@@ -17,11 +16,17 @@ public interface PieceInterface {
 
     int getHp();
 
+    void setHP(int hp);
+
     int getInitDefence();
 
     int getDefence();
 
     void setDefence(int defence);
+
+    void buffDefence();
+
+    void nerfDefence();
 
     int getInitAttackPower();
 
@@ -29,15 +34,29 @@ public interface PieceInterface {
 
     void setAttackPower(int attackPower);
 
+    void buffAttackPower();
+
+    void nerfAttackPower();
+
     int getInitMoveSpeed();
 
     int getMoveSpeed();
+
+    void setMoveSpeed(int moveSpeed);
+
+    void buffMoveSpeed();
+
+    void nerfMoveSpeed();
 
     int getInitAttackRange();
 
     int getAttackRange();
 
     void setAttackRange(int attackRange);
+
+    void buffAttackRange();
+
+    void nerfAttackRange();
 
     int getActionRange(String actionType);
 
@@ -49,22 +68,16 @@ public interface PieceInterface {
 
     boolean isDefensive();
 
-    void setHP(int hp);
-
     void resetMode();
 
     void setOffensive();
 
     void setDefensive();
 
-    boolean isActionValid(int rowdiff, int tilediff, String actionType);
+    boolean isActionValid(int rowDiff, int colDiff, String actionType);
 
     void attackedBy(int attack);
 
     boolean isDead();
-    
-    void addHP( int hp);
-
-
 }
 

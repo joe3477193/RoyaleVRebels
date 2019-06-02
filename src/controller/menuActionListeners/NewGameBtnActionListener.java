@@ -16,8 +16,8 @@ public class NewGameBtnActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         new EnterNameView();
+        // Close Main Menu View
         frame.dispose();
     }
 }

@@ -1,24 +1,16 @@
 package model.gameEngine;
 
+import controller.commandPattern.CommandInterface;
+import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.PieceInterface;
 import model.player.Player;
-
-import javax.swing.*;
-
-import controller.commandPattern.AbstractTurn;
-import controller.commandPattern.TurnType;
+import model.tile.TileInterface;
 
 import java.util.ArrayList;
 
 public interface GameEngine {
 
-    int getOriginalRow();
-
-    int getOriginalCol();
-
     int getRebelTurn();
-
-    int getRoyaleTurn();
 
     boolean isMoving();
 
@@ -32,21 +24,21 @@ public interface GameEngine {
 
     void setMoving();
 
-    boolean getActionPerformed();
+    boolean getPerformed();
 
-    void unsetActionPerformed();
+    void unsetPerformed();
 
     int[] getCoordinates();
 
-    void clickTile(JButton tileBtn, int i, int j);
+    void clickTile(int i, int j);
 
     void resetCoordinates();
 
     boolean hasCoordinates();
 
-    int getRow();
+    int getRowIndex();
 
-    int getCol();
+    int getColIndex();
 
     int getMaxRows();
 
@@ -58,45 +50,63 @@ public interface GameEngine {
 
     void removeSummonedPiece();
 
-    boolean checkInit(int row, int tile);
+    boolean checkOnBoardPieceMoveable(int row, int tile);
 
-    boolean checkMoveInit(int row, int tile);
+    boolean checkOnBoardPieceAttackable(int row, int tile);
 
-    boolean checkAttackInit(int row, int tile);
+    void createSummonedPiece(String name);
 
-    void createPiece(String name);
+    boolean placeSummonedPiece(int i, int j);
 
-    boolean placeSummonedPiece(JButton tileBtn, int i, int j);
+    boolean placeMovedPiece(int i, int j);
 
-    boolean placeMovedPiece(JButton[][] tileBtns, int i, int j);
+    boolean isCastleTile(int i, int j);
 
-    boolean isWall(int i, int j);
+    boolean isWallTile(int i, int j);
 
-    TurnType placeAttackPiece(JButton[][] tileBtns, int i, int j);
+    boolean isPieceTile(int i, int j);
+
+    boolean isGrassTile(int i, int j);
+
+    TurnType placeAttackPiece(int i, int j);
 
     void setOffensive();
 
     void setDefensive();
 
-    Tile[][] getTiles();
+    TileInterface[][] getTiles();
 
     void setTileIcon(ArrayList<String[]> tileList);
 
-    void undoTurn(TurnType tt);
-    
-    boolean checkUndoRem();
-
     int[] getInitTileCoord();
 
-    String whoseTurn();
+    void paintSummonRange(String troop);
 
-    void paintSummonRange(String faction, String troopType);
-
-    int[] getUndoLimit();
+    int[] getUndoLevel();
 
     Player getRebelPlayer();
 
     Player getRoyalePlayer();
-    
+
+    TileInterface getTile(int row, int col);
+
+    boolean saveGame();
+
+    void loadGame(String castleHp, String[] undoLimit, String turn, String hasPerformed, ArrayList<String[]> tileList);
+
     PieceInterface getPiece(int row, int tile);
+
+    boolean checkUndoRemain();
+
+    void undoTurn(CommandInterface cI);
+
+    int getCastleHp();
+
+    void changeAttackIconColor(TileInterface tile, int i, int j);
+
+    boolean checkWin();
+    
+    void notifyUndoRule();
+
+    void gameOver(String name);
 }

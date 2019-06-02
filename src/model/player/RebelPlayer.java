@@ -2,7 +2,8 @@ package model.player;
 
 public class RebelPlayer extends Player {
 
+    // TODO: IS FACTION USED?
     public RebelPlayer(String name) {
-        super(name, 40, 40, "REBEL");
+        super(name, REBEL_INIT_CP, REBEL_INIT_CP, "REBEL");
     }
 }

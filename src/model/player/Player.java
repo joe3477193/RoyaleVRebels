@@ -1,8 +1,9 @@
 package model.player;
 
-import java.util.Random;
-
 public abstract class Player {
+
+    static final int REBEL_INIT_CP = 10;
+    static final int ROYALE_INT_CP = 50;
 
     private final String faction;
     private int cp;
@@ -28,19 +29,20 @@ public abstract class Player {
         return cp;
     }
 
-    public void reduceCP(int value) {
+    public boolean reduceCP(int value) {
         this.cp -= value;
+        return cp >= 0;
     }
 
     public String getFaction() {
         return faction;
     }
 
+    // Forbid increasing CP
     public void increaseCP() {
-        Random random = new Random();
-
-        // increaseCP by 1 or 2 randomly
-        int enhancement = random.nextInt(2) + 1;
-        this.cp += enhancement;
+//        Random random = new Random();
+//        // increaseCP by 1 or 2 randomly
+//        int enhancement = random.nextInt(2) + 1;
+//        this.cp += enhancement;
     }
 }
