@@ -1,10 +1,8 @@
 package controller.commandPattern;
 
-
-
 public interface Turn {
 
-	CommandInterface returnLastMove();
+    CommandInterface returnLastMove();
 
     void executeTurn(CommandInterface cI);
 

@@ -25,40 +25,40 @@ public class TurnType {
         this.prevHp = prevHp;
         this.p = p;
     }
-    
+
     public String returnImage() {
-    	return image;
+        return image;
     }
-    
+
     public int fromRow() {
-    	return fromRow;
+        return fromRow;
     }
-    
+
     public int fromCol() {
-    	return fromCol;
+        return fromCol;
     }
-    
+
     public int tooRow() {
-    	return tooRow;
+        return tooRow;
     }
-    
+
     public int tooCol() {
-    	return tooCol;
+        return tooCol;
     }
-    
+
     public int damageDealt() {
-    	return damageDealt;
+        return damageDealt;
     }
-    
+
     public int prevHp() {
-    	return prevHp;
+        return prevHp;
     }
-    
+
     public boolean death() {
-    	return death;
+        return death;
     }
-    
+
     public PieceInterface returnPiece() {
-    	return p;
+        return p;
     }
 }
