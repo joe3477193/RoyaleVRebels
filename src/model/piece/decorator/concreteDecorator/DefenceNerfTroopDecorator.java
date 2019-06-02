@@ -6,6 +6,8 @@ import model.piece.decorator.abstractDecorator.PieceInterfaceDecorator;
 
 public class DefenceNerfTroopDecorator extends PieceInterfaceDecorator implements Troop {
 
+    private static final int NERF_TROOP_DEFENCE = 5;
+
     public DefenceNerfTroopDecorator(PieceInterface piece) {
         super(piece);
         nerfDefence();
@@ -13,6 +15,6 @@ public class DefenceNerfTroopDecorator extends PieceInterfaceDecorator implement
 
     @Override
     public void nerfDefence() {
-        setDefence(piece.getDefence() - 5);
+        setDefence(piece.getDefence() - NERF_TROOP_DEFENCE);
     }
 }

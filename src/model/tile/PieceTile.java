@@ -10,7 +10,6 @@ public class PieceTile implements TileInterface {
     public PieceTile(int row, int col) {
         this.row = row;
         this.col = col;
-        System.out.printf("PieceTile created at row %d , column %d", row, col);
     }
 
     public PieceInterface getPiece() {

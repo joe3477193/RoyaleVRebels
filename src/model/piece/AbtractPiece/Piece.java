@@ -2,6 +2,9 @@ package model.piece.AbtractPiece;
 
 public abstract class Piece implements PieceInterface, Cloneable {
 
+    private static final String MOVE_TYPE = "move";
+    private static final String ATTACK_TYPE = "attack";
+
     private String name;
     private String faction;
     private String code;
@@ -69,7 +72,8 @@ public abstract class Piece implements PieceInterface, Cloneable {
     public void setHP(int hp) {
         if (hp < 0) {
             this.hp = 0;
-        } else {
+        }
+        else {
             this.hp = hp;
         }
     }
@@ -85,7 +89,8 @@ public abstract class Piece implements PieceInterface, Cloneable {
     public void setDefence(int defence) {
         if (defence < 0) {
             this.defence = 0;
-        } else {
+        }
+        else {
             this.defence = defence;
         }
     }
@@ -107,7 +112,8 @@ public abstract class Piece implements PieceInterface, Cloneable {
     public void setAttackPower(int attackPower) {
         if (attackPower < 0) {
             this.attackPower = 0;
-        } else {
+        }
+        else {
             this.attackPower = attackPower;
         }
     }
@@ -129,7 +135,8 @@ public abstract class Piece implements PieceInterface, Cloneable {
     public void setMoveSpeed(int moveSpeed) {
         if (moveSpeed < 0) {
             this.moveSpeed = 0;
-        } else {
+        }
+        else {
             this.moveSpeed = moveSpeed;
         }
     }
@@ -151,7 +158,8 @@ public abstract class Piece implements PieceInterface, Cloneable {
     public void setAttackRange(int attackRange) {
         if (attackRange < 0) {
             this.attackRange = 0;
-        } else {
+        }
+        else {
             this.attackRange = attackRange;
         }
     }
@@ -163,11 +171,13 @@ public abstract class Piece implements PieceInterface, Cloneable {
     }
 
     public int getActionRange(String actionType) {
-        if (actionType.equals("move")) {
+        if (actionType.equals(MOVE_TYPE)) {
             return moveSpeed;
-        } else if (actionType.equals("attack")) {
+        }
+        else if (actionType.equals(ATTACK_TYPE)) {
             return attackRange;
-        } else {
+        }
+        else {
             return 0;
         }
     }
@@ -230,7 +240,6 @@ public abstract class Piece implements PieceInterface, Cloneable {
         return false;
     }
 
-    //source: https://www.tutorialspoint.com/design_pattern/prototype_pattern.htm
     public Object clone() {
         Object clone = null;
         try {

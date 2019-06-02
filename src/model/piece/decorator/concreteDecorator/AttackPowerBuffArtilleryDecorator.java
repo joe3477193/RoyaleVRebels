@@ -6,6 +6,8 @@ import model.piece.decorator.abstractDecorator.PieceInterfaceDecorator;
 
 public class AttackPowerBuffArtilleryDecorator extends PieceInterfaceDecorator implements Artillery {
 
+    private static final int BUFF_ARTILLERY_AP = 50;
+
     public AttackPowerBuffArtilleryDecorator(PieceInterface piece) {
         super(piece);
         buffAttackPower();
@@ -13,6 +15,6 @@ public class AttackPowerBuffArtilleryDecorator extends PieceInterfaceDecorator i
 
     @Override
     public void buffAttackPower() {
-        setAttackPower(piece.getAttackPower() + 50);
+        setAttackPower(piece.getAttackPower() + BUFF_ARTILLERY_AP);
     }
 }

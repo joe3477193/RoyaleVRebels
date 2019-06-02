@@ -7,6 +7,8 @@ import java.util.Hashtable;
 
 public class PieceCache {
 
+    private static final String PIECE_PATH = "model.piece.concretePiece.";
+
     private static Hashtable<String, Piece> pieceMap = new Hashtable<>();
 
     public static Piece clonePiece(String name) {
@@ -30,7 +32,7 @@ public class PieceCache {
     private static Piece createPiece(String name) {
         Piece piece = null;
         try {
-            Class pieceCls = Class.forName("model.piece.concretePiece." + name);
+            Class pieceCls = Class.forName(PIECE_PATH + name);
             piece = (Piece) pieceCls.getDeclaredConstructor().newInstance();
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ex) {
             ex.printStackTrace();

@@ -6,6 +6,8 @@ import model.piece.decorator.abstractDecorator.PieceInterfaceDecorator;
 
 public class DefenceBuffTroopDecorator extends PieceInterfaceDecorator implements Troop {
 
+    private static final int BUFF_TROOP_DEFENCE = 20;
+
     public DefenceBuffTroopDecorator(PieceInterface piece) {
         super(piece);
         buffDefence();
@@ -13,6 +15,6 @@ public class DefenceBuffTroopDecorator extends PieceInterfaceDecorator implement
 
     @Override
     public void buffDefence() {
-        setDefence(piece.getDefence() + 30);
+        setDefence(piece.getDefence() + BUFF_TROOP_DEFENCE);
     }
 }

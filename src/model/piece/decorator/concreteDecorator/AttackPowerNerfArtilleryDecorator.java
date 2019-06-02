@@ -6,6 +6,8 @@ import model.piece.decorator.abstractDecorator.PieceInterfaceDecorator;
 
 public class AttackPowerNerfArtilleryDecorator extends PieceInterfaceDecorator implements Artillery {
 
+    private static final int NERF_ARTILLERY_AP = 40;
+
     public AttackPowerNerfArtilleryDecorator(PieceInterface piece) {
         super(piece);
         nerfAttackPower();
@@ -13,6 +15,6 @@ public class AttackPowerNerfArtilleryDecorator extends PieceInterfaceDecorator i
 
     @Override
     public void nerfAttackPower() {
-        setAttackPower(piece.getAttackPower() - 40);
+        setAttackPower(piece.getAttackPower() - NERF_ARTILLERY_AP);
     }
 }

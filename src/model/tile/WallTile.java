@@ -6,8 +6,7 @@ public class WallTile implements TileInterface {
 
     private int row, col;
 
-    WallTile() {
-    }
+    WallTile() {}
 
     public int getRow() {
         return row;

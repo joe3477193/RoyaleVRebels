@@ -4,6 +4,9 @@ import model.piece.AbtractPiece.PieceInterface;
 
 public abstract class PieceInterfaceDecorator implements PieceInterface {
 
+    private static final String MOVE_TYPE = "move";
+    private static final String ATTACK_TYPE = "attack";
+
     protected PieceInterface piece;
     protected boolean isOffensive;
     protected boolean isDefensive;
@@ -73,7 +76,8 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     public void setHP(int hp) {
         if (hp < 0) {
             this.hp = 0;
-        } else {
+        }
+        else {
             this.hp = hp;
         }
     }
@@ -89,7 +93,8 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     public void setDefence(int defence) {
         if (defence < 0) {
             this.defence = 0;
-        } else {
+        }
+        else {
             this.defence = defence;
         }
     }
@@ -111,7 +116,8 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     public void setAttackPower(int attackPower) {
         if (attackPower < 0) {
             this.attackPower = 0;
-        } else {
+        }
+        else {
             this.attackPower = attackPower;
         }
     }
@@ -133,7 +139,8 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     public void setMoveSpeed(int moveSpeed) {
         if (moveSpeed < 0) {
             this.moveSpeed = 0;
-        } else {
+        }
+        else {
             this.moveSpeed = moveSpeed;
         }
     }
@@ -155,7 +162,8 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     public void setAttackRange(int attackRange) {
         if (attackRange < 0) {
             this.attackRange = 0;
-        } else {
+        }
+        else {
             this.attackRange = attackRange;
         }
     }
@@ -167,11 +175,13 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     }
 
     public int getActionRange(String actionType) {
-        if (actionType.equals("move")) {
+        if (actionType.equals(MOVE_TYPE)) {
             return moveSpeed;
-        } else if (actionType.equals("attack")) {
+        }
+        else if (actionType.equals(ATTACK_TYPE)) {
             return attackRange;
-        } else {
+        }
+        else {
             return 0;
         }
     }
