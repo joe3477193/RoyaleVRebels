@@ -105,9 +105,8 @@ public interface GameEngine {
     void changeAttackIconColor(TileInterface tile, int i, int j);
 
     boolean checkWin();
-    
+
     void notifyUndoRule();
-    
 
     void gameOver(String name);
 }
