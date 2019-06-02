@@ -56,10 +56,6 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         return faction;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public String getCode() {
         return code;
     }

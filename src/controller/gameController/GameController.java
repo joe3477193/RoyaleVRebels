@@ -34,13 +34,9 @@ public class GameController {
     private static final String HAS_PERFORMED = "You have already perform an action this turn.";
     private static final String CLICK_BRICK_WALL = "Please do not click a brick wall.";
     private static final String TIME_REMAIN = "Time Remaining: ";
-    private static final String SUMMON = "Summon";
-    private static final String MOVEMENT = "Move";
-    private static final String ATTACK = "Attack";
     private static final String GAME_SAVED = "Game has been successfully saved.";
-    private static final String DECK_PIECE_INFO = "<html>Name: %s<br>CP consumed: %d<br>Faction: %s<br>Type: %s<br>HP: %d<br>Attack Power: %d<br>Defence: %d<br>Attack Range: %d<br>Move Speed: %d<br>OFFENSIVE: %b<br>DEFENSIVE: %b</html>";
-    private static final String ONBOARD_PIECE_INFO = "<html>Name: %s<br>Faction: %s<br>Type: %s<br>HP: %d<br>Attack Power: %d<br>Defence: %d<br>Attack Range: %d<br>Move Speed: %d<br>OFFENSIVE: %b<br>DEFENSIVE: %b</html>";
-
+    private static final String DECK_PIECE_INFO = "<html>Name: %s<br>CP consumed: %d<br>Faction: %s<br>HP: %d<br>Attack Power: %d<br>Defence: %d<br>Attack Range: %d<br>Move Speed: %d<br>OFFENSIVE: %b<br>DEFENSIVE: %b</html>";
+    private static final String ONBOARD_PIECE_INFO = "<html>Name: %s<br>Faction: %s<br>HP: %d<br>Attack Power: %d<br>Defence: %d<br>Attack Range: %d<br>Move Speed: %d<br>OFFENSIVE: %b<br>DEFENSIVE: %b</html>";
     private Timer timer;
 
     private GameEngine g;
@@ -258,10 +254,10 @@ public class GameController {
         } else {
             pieceNames = gfv.getRoyaleName();
         }
-        // For Rebel, i varies from 0 to 6, while i varies from 7 - 13 for Royale
+        // for Rebel, i varies from 0 to 6, while i varies from 7 - 13 for Royale
         int i = gfv.findButtonIndex(e) % DECK_LENGTH;
         PieceInterface deckPiece = PieceCache.getPiece(pieceNames[i]);
-        String pieceInfo = String.format(DECK_PIECE_INFO, deckPiece.getName(), deckPiece.getCp(), deckPiece.getFaction(), deckPiece.getType(), deckPiece.getHp(), deckPiece.getAttackPower(), deckPiece.getDefence(), deckPiece.getAttackRange(), deckPiece.getMoveSpeed(), deckPiece.isOffensive(), deckPiece.isDefensive());
+        String pieceInfo = String.format(DECK_PIECE_INFO, deckPiece.getName(), deckPiece.getCp(), deckPiece.getFaction(), deckPiece.getHp(), deckPiece.getAttackPower(), deckPiece.getDefence(), deckPiece.getAttackRange(), deckPiece.getMoveSpeed(), deckPiece.isOffensive(), deckPiece.isDefensive());
         gfv.showPieceInfo(e, pieceInfo);
     }
 
@@ -270,15 +266,14 @@ public class GameController {
         int i = gfv.findButtonCoordinates(e)[GameFrameView.ROW_PROPERTY_INDEX];
         int j = gfv.findButtonCoordinates(e)[GameFrameView.COL_PROPERTY_INDEX];
         TileInterface tile = g.getTiles()[i][j];
-        // TODO: UNIMPLEMENTED
         if (g.isAttacking()) {
-            // Change attack target color if is attacking
+            // change attack target color if is attacking
             g.changeAttackIconColor(tile, i, j);
         }
         // check if the tile has piece, show the piece info
         if (tile instanceof PieceTile) {
             PieceInterface piece = tile.getPiece();
-            String pieceInfo = String.format(ONBOARD_PIECE_INFO, piece.getName(), piece.getFaction(), piece.getType(), piece.getHp(), piece.getAttackPower(), piece.getDefence(), piece.getAttackRange(), piece.getMoveSpeed(), piece.isOffensive(), piece.isDefensive());
+            String pieceInfo = String.format(ONBOARD_PIECE_INFO, piece.getName(), piece.getFaction(), piece.getHp(), piece.getAttackPower(), piece.getDefence(), piece.getAttackRange(), piece.getMoveSpeed(), piece.isOffensive(), piece.isDefensive());
             gfv.showPieceInfo(e, pieceInfo);
         }
     }
