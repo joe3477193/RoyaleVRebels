@@ -16,9 +16,9 @@ public class ExitBtnActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Close Main Menu View
+        // close Main Menu View
         frame.dispose();
-        // Quit the application
+        // quit the application
         System.exit(EXIT_SUCCESS);
     }
 }

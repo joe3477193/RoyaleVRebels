@@ -225,7 +225,8 @@ public class GameFrameView extends JFrame {
         tileBtns = new JButton[GameEngineFacade.BOARD_ROW_LENGTH][GameEngineFacade.BOARD_COL_LENGTH];
         deckPanel.setMaximumSize(new Dimension(DECK_MAX_WIDTH, DECK_MAX_HEIGHT));
         frame.setSize(FRAME_DEFAULT_WIDTH, FRAME_DEFAULT_HEIGHT);
-        frame.setLocationRelativeTo(null); // show gui in the middle of screen
+        // show gui in the middle of screen
+        frame.setLocationRelativeTo(null);
         rebelButton = createSpawn(rebelName, rebelImage);
         royaleButton = createSpawn(royaleName, royaleImage);
         // rebel goes first

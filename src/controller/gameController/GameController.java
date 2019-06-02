@@ -31,6 +31,8 @@ public class GameController {
     private static final int TIME_OUT = -1;
     private static final int DECK_LENGTH = 7;
 
+    private static final String SUMMON_MESSAGE= "Summoning Piece ";
+    private static final String NOT_ENOUGH_CP = "Your CP is not enough to summon ";
     private static final String HAS_PERFORMED = "You have already perform an action this turn.";
     private static final String CLICK_BRICK_WALL = "Please do not click a brick wall.";
     private static final String TIME_REMAIN = "Time Remaining: ";
@@ -123,10 +125,16 @@ public class GameController {
                 }
                 // click on a different piece on the deck when the player has not moved any piece, i.e. change summon
                 else if (!g.getPerformed()) {
-                    gfv.setCursor(icon, name[i]);
-                    g.createSummonedPiece(name[i]);
-                    gfv.setImage(image[i]);
-                    g.paintSummonRange(name[i]);
+                    if(g.getCurrentPlayer().isEnoughCP(PieceCache.getPiece(name[i]).getCp())) {
+                        gfv.updateStatus(SUMMON_MESSAGE + name[i]);
+                        gfv.setCursor(icon, name[i]);
+                        g.createSummonedPiece(name[i]);
+                        gfv.setImage(image[i]);
+                        g.paintSummonRange(name[i]);
+                    }
+                    else{
+                        gfv.updateStatus(NOT_ENOUGH_CP + name[i]);
+                    }
                 }
                 else {
                     gfv.updateStatus(HAS_PERFORMED);
@@ -159,13 +167,11 @@ public class GameController {
             else if (g.isMoving() && !g.getPerformed()) {
                 MoveCommand mc = new MoveCommand(g, row, col, gfv.getImage());
                 cm.executeTurn(mc);
-                //cm.executeTurn(MOVEMENT, gfv.getImage(), row, col, g.getSummonedPiece());
             }
             // attempt to place a piece during attack
             else if (g.isAttacking() && !g.getPerformed()) {
                 AttackCommand ac = new AttackCommand(g, row, col);
                 cm.executeTurn(ac);
-                //cm.executeTurn(ATTACK, gfv.getImage(), row, col, g.getSummonedPiece());
             }
             // attempt to pick a piece for action && also show piece info
             else if (g.isPieceTile(row, col)) {
@@ -188,12 +194,12 @@ public class GameController {
     }
 
     public void attack() {
-        // Cancel attack, i.e. click attack button twice
+        // cancel attack, i.e. click attack button twice
         if (g.isAttacking() && !g.getPerformed()) {
             g.resetAttacking();
             gfv.colourAttack();
         }
-        // Trigger attack for a piece
+        // trigger attack for a piece
         else if (g.hasCoordinates() && g.checkOnBoardPieceAttackable(g.getCoordinates()[g.getRowIndex()], g.getCoordinates()[g.getColIndex()]) && !g.getPerformed()) {
             g.resetMoving();
             g.setAttacking();

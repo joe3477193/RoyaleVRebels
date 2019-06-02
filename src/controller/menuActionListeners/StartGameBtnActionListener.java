@@ -37,13 +37,13 @@ public class StartGameBtnActionListener implements ActionListener {
             playerNames.add(name2.getText());
             int rowsInt = Integer.parseInt(rows.getText());
             int colsInt = Integer.parseInt(cols.getText());
-            // Instantiate the GameImpl so player can start to play the game
+            // instantiate the GameImpl so player can start to play the game
             Game gameImpl = new GameImpl(playerNames, rowsInt, colsInt);
-            // Initialise the game
+            // initialise the game
             if (undoMoves.getSelectedItem() != null) {
                 gameImpl.initGame(Integer.parseInt((String) undoMoves.getSelectedItem()));
             }
-            // Close Enter Name View
+            // close Enter Name View
             frame.dispose();
         }
         else {
