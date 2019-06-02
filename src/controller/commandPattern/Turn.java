@@ -6,7 +6,7 @@ public interface Turn {
 
     TurnType returnLastMove();
 
-    void executeTurn(String type, String image, int row, int col, PieceInterface pieceInterface);
+    void executeTurn(String type, String image, int i, int j, PieceInterface p);
 
     void undoTurn();
 }

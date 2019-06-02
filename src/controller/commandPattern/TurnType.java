@@ -11,20 +11,20 @@ public class TurnType {
     public int tooRow;
     public int tooCol;
     public int damageDealt;
-    public boolean isKilled;
+    public boolean death;
     public int prevHp;
-    public PieceInterface pieceInterface;
+    public PieceInterface p;
 
-    public TurnType(String MoveType, String image, int frowRow, int fromCol, int tooRow, int tooCol, int damageDealt, boolean isKilled, int prevHp, PieceInterface pieceInterface) {
+    public TurnType(String MoveType, String image, int fr, int fc, int tr, int tc, int dmg, boolean killed, int prevHp, PieceInterface p) {
         this.MoveType = MoveType;
         this.image = image;
-        this.fromRow = frowRow;
-        this.fromCol = fromCol;
-        this.tooRow = tooRow;
-        this.tooCol = tooCol;
-        this.damageDealt = damageDealt;
-        this.isKilled = isKilled;
+        this.fromRow = fr;
+        this.fromCol = fc;
+        this.tooRow = tr;
+        this.tooCol = tc;
+        this.damageDealt = dmg;
+        this.death = killed;
         this.prevHp = prevHp;
-        this.pieceInterface = pieceInterface;
+        this.p = p;
     }
 }

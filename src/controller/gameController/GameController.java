@@ -35,6 +35,8 @@ public class GameController {
     private static final String MOVEMENT = "Move";
     private static final String ATTACK = "Attack";
     private static final String GAME_SAVED = "Game has been successfully saved.";
+    private static final String DECK_PIECE_INFO = "<html>Name: %s<br>CP consumed: %d<br>Faction: %s<br>Type: %s<br>HP: %d<br>Attack Power: %d<br>Defence: %d<br>Attack Range: %d<br>Move Speed: %d<br>OFFENSIVE: %b<br>DEFENSIVE: %b</html>";
+    private static final String ONBOARD_PIECE_INFO = "<html>Name: %s<br>Faction: %s<br>Type: %s<br>HP: %d<br>Attack Power: %d<br>Defence: %d<br>Attack Range: %d<br>Move Speed: %d<br>OFFENSIVE: %b<br>DEFENSIVE: %b</html>";
 
     private Timer timer;
 
@@ -92,7 +94,7 @@ public class GameController {
     // clicking on a piece to summon
     public void summonButton(ActionEvent e) {
         Cursor cursor = gfv.getCursor();
-        String cursorName= gfv.getCursor().getName();
+        String cursorName = gfv.getCursor().getName();
         JButton[] button;
         String[] name;
         String[] image;
@@ -113,7 +115,6 @@ public class GameController {
         for (int i = 0; i < button.length; i++) {
             if (gfv.getSource(e) == button[i]) {
                 Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
-                // TODO: can't cancel summon because the cursor is without name of the piece
                 // click on the same piece on the deck, i.e. cancel summon
                 System.out.println(gfv.getCursor().getName());
                 System.out.println(name[i]);
@@ -252,7 +253,7 @@ public class GameController {
         // For Rebel, i varies from 0 to 6, while i varies from 7 - 13 for Royale
         int i = gfv.findButtonIndex(e) % DECK_LENGTH;
         PieceInterface deckPiece = PieceCache.getPiece(pieceNames[i]);
-        String pieceInfo = "<html>Name: " + deckPiece.getName() + "<br>CP consumed: " + deckPiece.getCp() + "<br>Faction: " + deckPiece.getFaction() + "<br>Type: " + deckPiece.getType() + "<br>HP: " + deckPiece.getHp() + "<br>Attack Power: " + deckPiece.getAttackPower() + "<br>Defence: " + deckPiece.getDefence() + "<br>Attack Range: " + deckPiece.getAttackRange() + "<br>Move Speed: " + deckPiece.getMoveSpeed() + "<br>OFFENSIVE: " + deckPiece.isOffensive() + "<br>DEFENSIVE: " + deckPiece.isDefensive() + "</html>";
+        String pieceInfo = String.format(DECK_PIECE_INFO, deckPiece.getName(), deckPiece.getCp(), deckPiece.getFaction(), deckPiece.getType(), deckPiece.getHp(), deckPiece.getAttackPower(), deckPiece.getDefence(), deckPiece.getAttackRange(), deckPiece.getMoveSpeed(), deckPiece.isOffensive(), deckPiece.isDefensive());
         gfv.showPieceInfo(e, pieceInfo);
     }
 
@@ -269,7 +270,7 @@ public class GameController {
         // check if the tile has piece, show the piece info
         if (tile instanceof PieceTile) {
             PieceInterface piece = tile.getPiece();
-            String pieceInfo = "<html>Name: " + piece.getName() + "<br>Faction: " + piece.getFaction() + "<br>Type: " + piece.getType() + "<br>HP: " + piece.getHp() + "<br>Attack Power: " + piece.getAttackPower() + "<br>Defence: " + piece.getDefence() + "<br>Attack Range: " + piece.getAttackRange() + "<br>Move Speed: " + piece.getMoveSpeed() + "<br>OFFENSIVE: " + piece.isOffensive() + "<br>DEFENSIVE: " + piece.isDefensive() + "</html>";
+            String pieceInfo = String.format(ONBOARD_PIECE_INFO, piece.getName(), piece.getFaction(), piece.getType(), piece.getHp(), piece.getAttackPower(), piece.getDefence(), piece.getAttackRange(), piece.getMoveSpeed(), piece.isOffensive(), piece.isDefensive());
             gfv.showPieceInfo(e, pieceInfo);
         }
     }
