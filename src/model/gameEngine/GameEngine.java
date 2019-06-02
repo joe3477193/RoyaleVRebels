@@ -109,4 +109,6 @@ public interface GameEngine {
     void notifyUndoRule();
 
     void gameOver(String name);
+
+    Player getCurrentPlayer();
 }
