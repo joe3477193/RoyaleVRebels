@@ -176,6 +176,8 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         return attackable;
     }
 
+    public void resetMode() {}
+
     // check if the piece is offensive or not
     public boolean isOffensive() {
         if (attackPower > initAttackPower) {
