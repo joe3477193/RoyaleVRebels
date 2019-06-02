@@ -264,12 +264,12 @@ public class GameController {
 
     public void hoverTile(MouseEvent e) {
         // show on board piece's info
-        int i = gfv.findButtonCoordinates(e)[GameFrameView.ROW_PROPERTY_INDEX];
-        int j = gfv.findButtonCoordinates(e)[GameFrameView.COL_PROPERTY_INDEX];
-        TileInterface tile = g.getTiles()[i][j];
+        int row = gfv.findButtonCoordinates(e)[GameFrameView.ROW_PROPERTY_INDEX];
+        int col = gfv.findButtonCoordinates(e)[GameFrameView.COL_PROPERTY_INDEX];
+        TileInterface tile = g.getTiles()[row][col];
         if (g.isAttacking()) {
             // change attack target color if is attacking
-            g.changeAttackIconColor(tile, i, j);
+            g.changeAttackIconColor(tile, row, col);
         }
         // check if the tile has piece, show the piece info
         if (tile instanceof PieceTile) {
