@@ -6,8 +6,6 @@ public interface PieceInterface {
 
     String getFaction();
 
-    String getCode();
-
     int getCp();
 
     int getInitHp();

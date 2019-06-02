@@ -7,7 +7,6 @@ public abstract class Piece implements PieceInterface, Cloneable {
 
     private String name;
     private String faction;
-    private String code;
     private int cp;
     private int initHp;
     private int hp;
@@ -24,10 +23,9 @@ public abstract class Piece implements PieceInterface, Cloneable {
     private boolean isOffensive;
     private boolean isDefensive;
 
-    public Piece(String name, String faction, String code, int cp, int hp, int defence, int attackPower, int moveSpeed, int attackRange, boolean moveable, boolean attackable) {
+    public Piece(String name, String faction, int cp, int hp, int defence, int attackPower, int moveSpeed, int attackRange, boolean moveable, boolean attackable) {
         this.name = name;
         this.faction = faction;
-        this.code = code;
         this.cp = cp;
         this.initHp = hp;
         this.hp = hp;
@@ -51,10 +49,6 @@ public abstract class Piece implements PieceInterface, Cloneable {
 
     public String getFaction() {
         return faction;
-    }
-
-    public String getCode() {
-        return code;
     }
 
     public int getCp() {
@@ -141,12 +135,6 @@ public abstract class Piece implements PieceInterface, Cloneable {
         }
     }
 
-    public void buffMoveSpeed() {
-    }
-
-    public void nerfMoveSpeed() {
-    }
-
     public int getInitAttackRange() {
         return initAttackRange;
     }
@@ -162,12 +150,6 @@ public abstract class Piece implements PieceInterface, Cloneable {
         else {
             this.attackRange = attackRange;
         }
-    }
-
-    public void buffAttackRange() {
-    }
-
-    public void nerfAttackRange() {
     }
 
     public int getActionRange(String actionType) {
@@ -205,12 +187,6 @@ public abstract class Piece implements PieceInterface, Cloneable {
     }
 
     public void resetMode() {
-    }
-
-    public void setOffensive() {
-    }
-
-    public void setDefensive() {
     }
 
     // check if action of movement or attack is allowed

@@ -12,7 +12,6 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     protected boolean isDefensive;
     private String name;
     private String faction;
-    private String code;
     private int cp;
     private int initHp;
     private int hp;
@@ -31,7 +30,6 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         this.piece = piece;
         name = piece.getName();
         faction = piece.getFaction();
-        code = piece.getCode();
         cp = piece.getCp();
         initHp = piece.getInitHp();
         hp = piece.getHp();
@@ -55,10 +53,6 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
 
     public String getFaction() {
         return faction;
-    }
-
-    public String getCode() {
-        return code;
     }
 
     public int getCp() {
