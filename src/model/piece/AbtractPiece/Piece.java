@@ -4,7 +4,6 @@ public abstract class Piece implements PieceInterface, Cloneable {
 
     private String name;
     private String faction;
-    private String type;
     private String code;
     private int cp;
     private int initHp;
@@ -22,10 +21,9 @@ public abstract class Piece implements PieceInterface, Cloneable {
     private boolean isOffensive;
     private boolean isDefensive;
 
-    public Piece(String name, String faction, String type, String code, int cp, int hp, int defence, int attackPower, int moveSpeed, int attackRange, boolean moveable, boolean attackable) {
+    public Piece(String name, String faction, String code, int cp, int hp, int defence, int attackPower, int moveSpeed, int attackRange, boolean moveable, boolean attackable) {
         this.name = name;
         this.faction = faction;
-        this.type = type;
         this.code = code;
         this.cp = cp;
         this.initHp = hp;
@@ -50,10 +48,6 @@ public abstract class Piece implements PieceInterface, Cloneable {
 
     public String getFaction() {
         return faction;
-    }
-
-    public String getType() {
-        return type;
     }
 
     public String getCode() {
