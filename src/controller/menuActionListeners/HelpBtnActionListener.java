@@ -17,7 +17,7 @@ public class HelpBtnActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         new HelpView();
-        // Close Main Menu View
+        // close Main Menu View
         frame.dispose();
     }
 }

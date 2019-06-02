@@ -159,13 +159,11 @@ public class GameController {
             else if (g.isMoving() && !g.getPerformed()) {
                 MoveCommand mc = new MoveCommand(g, row, col, gfv.getImage());
                 cm.executeTurn(mc);
-                //cm.executeTurn(MOVEMENT, gfv.getImage(), row, col, g.getSummonedPiece());
             }
             // attempt to place a piece during attack
             else if (g.isAttacking() && !g.getPerformed()) {
                 AttackCommand ac = new AttackCommand(g, row, col);
                 cm.executeTurn(ac);
-                //cm.executeTurn(ATTACK, gfv.getImage(), row, col, g.getSummonedPiece());
             }
             // attempt to pick a piece for action && also show piece info
             else if (g.isPieceTile(row, col)) {
@@ -188,12 +186,12 @@ public class GameController {
     }
 
     public void attack() {
-        // Cancel attack, i.e. click attack button twice
+        // cancel attack, i.e. click attack button twice
         if (g.isAttacking() && !g.getPerformed()) {
             g.resetAttacking();
             gfv.colourAttack();
         }
-        // Trigger attack for a piece
+        // trigger attack for a piece
         else if (g.hasCoordinates() && g.checkOnBoardPieceAttackable(g.getCoordinates()[g.getRowIndex()], g.getCoordinates()[g.getColIndex()]) && !g.getPerformed()) {
             g.resetMoving();
             g.setAttacking();
