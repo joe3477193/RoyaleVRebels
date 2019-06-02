@@ -432,12 +432,13 @@ public class GameEngineFacade implements GameEngine {
     }
 
     // Check if piece hasAttacked target piece
-    private boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
+    private int attack(int inRow, int inTile, int tgRow, int tgTile) {
         if ((isPieceTile(tgRow, tgTile) || isCastleTile(tgRow, tgTile)) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) && isMovRangeValid(inRow, inTile, tgRow, tgTile, ATTACK_TYPE)) {
-            getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttackPower());
-            return true;
+            int initHp = getPiece(tgRow, tgTile).getHp();
+        	getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttackPower());
+            return initHp;
         }
-        return false;
+        return 0;
     }
 
     public void setOffensive() {
@@ -707,12 +708,15 @@ public class GameEngineFacade implements GameEngine {
     }
 
     public TurnType placeAttackPiece(int row, int col) {
-        if (attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col)) {
+    	int initHp = attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col);
+    	
+        if (initHp > 0) {
             boolean death;
             PieceInterface p = getTile(row, col).getPiece();
             PieceInterface piece = getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
             String statusMsg;
             int prevHp = getPiece(row, col).getHp();
+            System.out.print(prevHp);
             String pName = gfv.getTile(row, col).getName();
             int trueDamage = piece.getAttackPower() - getPiece(row, col).getDefence();
             if (trueDamage < NO_DAMAGE_DEALT) {
@@ -731,6 +735,7 @@ public class GameEngineFacade implements GameEngine {
                     statusMsg += SQUARE_BRACKET_LEFT + p.getName() + IS_DEAD;
                     setTile(row, col, GRASS_TILE);
                     gfv.setTileIcon(row, col, gfv.getGrass());
+                    prevHp = initHp;
                 }
             }
             gfv.decolour();
@@ -739,7 +744,7 @@ public class GameEngineFacade implements GameEngine {
             gfv.getAttackBtn().setVisible(false);
             gfv.resetCursor();
             gfv.updateStatus(statusMsg);
-            return new TurnType(pName, getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col, trueDamage, death, prevHp, p);
+            return new TurnType(pName, getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col, trueDamage, death, prevHp, p); //tt
         }
         else {
             gfv.updateStatus(INVALID_TILE + CANCEL_ATTACK);
