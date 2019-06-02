@@ -427,13 +427,14 @@ public class GameEngineFacade implements GameEngine {
     }
 
     // check if piece hasAttacked target piece
-    @Requires({"inRow >= 0", "inCol >= 0", "tgRow >= 0", "tgCol >= 0"})
-    private boolean attack(int inRow, int inCol, int tgRow, int tgCol) {
-        if ((isPieceTile(tgRow, tgCol) || isCastleTile(tgRow, tgCol)) && checkAttackTarget(getPiece(inRow, inCol), tgRow, tgCol) && isMovRangeValid(inRow, inCol, tgRow, tgCol, ATTACK_TYPE)) {
-            getPiece(tgRow, tgCol).attackedBy(getPiece(inRow, inCol).getAttackPower());
-            return true;
+    @Requires({"inRow >= 0", "inCol >= 0", "tgRow >= 0", "tgTile >= 0"})
+    private int attack(int inRow, int inTile, int tgRow, int tgTile) {
+        if ((isPieceTile(tgRow, tgTile) || isCastleTile(tgRow, tgTile)) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) && isMovRangeValid(inRow, inTile, tgRow, tgTile, ATTACK_TYPE)) {
+            int initHp = getPiece(tgRow, tgTile).getHp();
+        	getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttackPower());
+            return initHp;
         }
-        return false;
+        return 0;
     }
 
     public void setOffensive() {
@@ -709,12 +710,15 @@ public class GameEngineFacade implements GameEngine {
 
     @Requires({"row >= 0", "col >= 0"})
     public TurnType placeAttackPiece(int row, int col) {
-        if (attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col)) {
+    	int initHp = attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col);
+
+        if (initHp > 0) {
             boolean death;
             PieceInterface p = getTile(row, col).getPiece();
             PieceInterface piece = getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
             String statusMsg;
             int prevHp = getPiece(row, col).getHp();
+            System.out.print(prevHp);
             String pName = gfv.getTile(row, col).getName();
             int trueDamage = piece.getAttackPower() - getPiece(row, col).getDefence();
             if (trueDamage < NO_DAMAGE_DEALT) {
@@ -733,6 +737,7 @@ public class GameEngineFacade implements GameEngine {
                     statusMsg += SQUARE_BRACKET_LEFT + p.getName() + IS_DEAD;
                     setTile(row, col, GRASS_TILE);
                     gfv.setTileIcon(row, col, gfv.getGrass());
+                    prevHp = initHp;
                 }
             }
             gfv.decolour();
