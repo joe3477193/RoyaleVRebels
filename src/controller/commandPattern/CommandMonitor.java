@@ -1,9 +1,11 @@
 package controller.commandPattern;
 
+import com.google.java.contract.Invariant;
 import model.gameEngine.GameEngine;
 
 import java.util.Stack;
 
+@Invariant("moves.size() >= 0")
 public class CommandMonitor extends AbstractTurn {
 
     private static final int NUM_OF_PLAYERS = 2;

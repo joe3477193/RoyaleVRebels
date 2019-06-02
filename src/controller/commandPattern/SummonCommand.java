@@ -1,7 +1,10 @@
 package controller.commandPattern;
 
+import com.google.java.contract.Invariant;
+import com.google.java.contract.Requires;
 import model.gameEngine.GameEngine;
 
+@Invariant({"g != null", "row >= 0", "col >= 0", "image != null"})
 public class SummonCommand implements CommandInterface {
 
     private GameEngine g;
@@ -28,6 +31,7 @@ public class SummonCommand implements CommandInterface {
     }
 
     @Override
+    @Requires("tt != null")
     public TurnType returnTurnDetails() {
         return tt;
     }

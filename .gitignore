@@ -2,7 +2,9 @@ bin/
 *.class
 out/
 .idea/workspace.xml
-*.xml
+.idea/codeStyleConfig.xml
+.idea/Huirong_Huang.xml
+.idea/Project_Default.xml
 src/images/backup/
 *.save
 

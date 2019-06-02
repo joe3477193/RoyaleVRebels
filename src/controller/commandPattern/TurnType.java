@@ -1,7 +1,9 @@
 package controller.commandPattern;
 
+import com.google.java.contract.Invariant;
 import model.piece.AbtractPiece.PieceInterface;
 
+@Invariant({"image != null", "fromRow >=0", "fromCol >=0", "tooRow>=0", "tooCol>= 0", "damageDealt >= 0", "prevHp >= 0", "p != null"})
 public class TurnType {
 
     private String image;

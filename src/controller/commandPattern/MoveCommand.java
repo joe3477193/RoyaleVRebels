@@ -1,7 +1,10 @@
 package controller.commandPattern;
 
+import com.google.java.contract.Invariant;
+import com.google.java.contract.Requires;
 import model.gameEngine.GameEngine;
 
+@Invariant({"g != null", "image != null", "destinationRow >= 0", "destinationCol >= 0"})
 public class MoveCommand implements CommandInterface {
 
     private GameEngine g;
@@ -29,6 +32,7 @@ public class MoveCommand implements CommandInterface {
     }
 
     @Override
+    @Requires("tt != null")
     public TurnType returnTurnDetails() {
         return tt;
     }

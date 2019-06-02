@@ -1,5 +1,7 @@
 package app;
 
+import com.google.java.contract.Invariant;
+import com.google.java.contract.Requires;
 import controller.gameController.GameController;
 import model.gameEngine.GameEngine;
 import model.gameEngine.GameEngineFacade;
@@ -11,6 +13,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+@Invariant({"royale != null", "rebel != null", "gfv != null", "g != null", "rows > 0", "cols > 0"})
 public class GameImpl implements Game {
     private RoyalePlayer royale;
     private RebelPlayer rebel;
@@ -48,6 +51,7 @@ public class GameImpl implements Game {
         });
     }
 
+    @Requires("undoMoves >= 0")
     public void initGame(int undoMoves) {
         SwingUtilities.invokeLater(new Runnable() {
 
