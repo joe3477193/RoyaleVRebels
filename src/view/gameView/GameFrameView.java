@@ -14,10 +14,27 @@ public class GameFrameView extends JFrame {
 
     public static final int ROW_PROPERTY_INDEX = 0;
     public static final int COL_PROPERTY_INDEX = 1;
-    private static final String STATUS = "Game status:  ";
+
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
     private static final int BUTTON_LENGTH = 7;
+    private static final int DECK_MAX_WIDTH = 100;
+    private static final int DECK_MAX_HEIGHT = 100;
+    private static final int FRAME_DEFAULT_WIDTH = 1000;
+    private static final int FRAME_DEFAULT_HEIGHT = 750;
+    private static final int PLAYER_ROW = 1;
+    private static final int PLAYER_COL = 6;
+    private static final int DECK_ROW = 1;
+    private static final int DECK_COL = 5;
+    private static final int ACTION_ROW = 1;
+    private static final int ACTION_COL = 2;
+    private static final int GRID_HGAP = 0;
+    private static final int GRID_VGAP = 1;
+    private static final int CASTLE_ROW = 0;
+    private static final int CASTLE_COL_FACTOR = 2;
+    private static final int WALL_COL_FACTOR = 4;
+
+    private static final String STATUS = "Game status:  ";
     private static final String INDEX = "index";
     private static final String IMAGE_PATH = "../../images/";
     private static final String GRASS_IMAGE = IMAGE_PATH + "grass.png";
@@ -44,6 +61,43 @@ public class GameFrameView extends JFrame {
     private static final String CRWALL_IMAGE = IMAGE_PATH + "crwall.jpg";
     private static final String TARGET_RED = IMAGE_PATH + "target.png";
     private static final String TARGET_GREEN = IMAGE_PATH + "target_green.png";
+    private static final String TITLE = "Royals vs Rebels";
+    private static final String NAME = "name";
+    private static final String PLAYER_NAME = "Player Name: ";
+    private static final String PLAYER_TYPE = "Player Type: ";
+    private static final String PLAYER_CP = "Player CP: ";
+    private static final String SAVE = "Save Game";
+    private static final String QUIT = "Quit Game";
+    private static final String CASTLE_HP = "Castle HP: ";
+    private static final String ATTACK = "Attack";
+    private static final String UNDO = "Undo";
+    private static final String OFFENSIVE = "OFFENSIVE";
+    private static final String DEFENSIVE = "DEFENSIVE";
+    private static final String END_TURN = "End Turn";
+    private static final String ROW = "row";
+    private static final String COLUMN = "column";
+    private static final String MOVE_TYPE = "move";
+    private static final String ATTACK_TYPE = "attack";
+    private static final String SUMMON_TYPE = "summon";
+    private static final String FILE_TYPE = ".png";
+    private static final String PLAYER = "Player ";
+    private static final String VICTORY_TITLE = "GAME OVER!";
+    private static final String VICTORY_MSG = " won!\n Press OK to go back to the main menu.";
+    private static final String REBEL_PIECE_ONE = "Leader";
+    private static final String REBEL_PIECE_TWO = "Scoundrel";
+    private static final String REBEL_PIECE_THREE = "Mobster";
+    private static final String REBEL_PIECE_FOUR = "Angryman";
+    private static final String REBEL_PIECE_FIVE = "Rascal";
+    private static final String REBEL_PIECE_SIX = "Archer";
+    private static final String REBEL_PIECE_SEVEN = "Boulder";
+    private static final String ROYALE_PIECE_ONE = "General";
+    private static final String ROYALE_PIECE_TWO = "Liutenant";
+    private static final String ROYALE_PIECE_THREE = "Infantry";
+    private static final String ROYALE_PIECE_FOUR = "Balista";
+    private static final String ROYALE_PIECE_FIVE = "Cannon";
+    private static final String ROYALE_PIECE_SIX = "Catapult";
+    private static final String ROYALE_PIECE_SEVEN = "Pitfall";
+
     private static JButton[][] tileBtns;
 
     private JButton offensiveBtn;
@@ -53,7 +107,6 @@ public class GameFrameView extends JFrame {
     private JPanel gridPanel;
     private JPanel playerPanel;
     private JPanel deckPanel;
-    private JPanel menuPanel;
     private JLabel playerName, playerType, playerCP, time;
     private JButton saveButton;
     private JButton quitButton;
@@ -75,15 +128,15 @@ public class GameFrameView extends JFrame {
     private GameEngine g;
 
     public GameFrameView() {
-        frame = new JFrame("Royals vs Rebels");
+        frame = new JFrame(TITLE);
         frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         rebelButton = new JButton[BUTTON_LENGTH];
         rebelImage = new String[]{RE_ONE_IMAGE, RE_TWO_IMAGE, RE_THREE_IMAGE, RE_FOUR_IMAGE, RE_FIVE_IMAGE, RE_SIX_IMAGE, RE_SEVEN_IMAGE};
-        rebelName = new String[]{"Leader", "Scoundrel", "Mobster", "Angryman", "Rascal", "Archer", "Boulder"};
+        rebelName = new String[]{REBEL_PIECE_ONE, REBEL_PIECE_TWO, REBEL_PIECE_THREE, REBEL_PIECE_FOUR, REBEL_PIECE_FIVE, REBEL_PIECE_SIX, REBEL_PIECE_SEVEN};
         royaleButton = new JButton[BUTTON_LENGTH];
-        royaleName = new String[]{"General", "Liutenant", "Infantry", "Balista", "Cannon", "Catapult", "Pitfall"};
+        royaleName = new String[]{ROYALE_PIECE_ONE, ROYALE_PIECE_TWO, ROYALE_PIECE_THREE, ROYALE_PIECE_FOUR, ROYALE_PIECE_FIVE, ROYALE_PIECE_SIX, ROYALE_PIECE_SEVEN};
         royaleImage = new String[]{RO_ONE_IMAGE, RO_TWO_IMAGE, RO_THREE_IMAGE, RO_FOUR_IMAGE, RO_FIVE_IMAGE, RO_SIX_IMAGE, RO_SEVEN_IMAGE};
         summonBtns = new ArrayList<>();
         statusLabel = new JLabel(STATUS);
@@ -107,7 +160,7 @@ public class GameFrameView extends JFrame {
 
     public void setCursor(String name) {
         Image icon = new ImageIcon(this.getClass().getResource(name)).getImage();
-        frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), "name"));
+        frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(icon, new Point(ORIGINAL_ROW, ORIGINAL_COL), NAME));
     }
 
     public void setCursor(Image icon, String cursorName) {
@@ -134,10 +187,6 @@ public class GameFrameView extends JFrame {
         return undoTurnBtn;
     }
 
-    public JLabel getStatusLabel() {
-        return statusLabel;
-    }
-
     private void loadSpawn(JButton[] button) {
         for (JButton icon : button) {
             deckPanel.add(icon);
@@ -157,25 +206,25 @@ public class GameFrameView extends JFrame {
         nameOne = playerOne.getName();
         nameTwo = playerTwo.getName();
         time = new JLabel("");
-        playerPanel = new JPanel(new GridLayout(1, 6, 0, 0));
-        deckPanel = new JPanel(new GridLayout(1, 5, 0, 0));
-        gridPanel = new JPanel(new GridLayout(g.getMaxRows(), g.getMaxCols(), 0, 1));
-        actionPanel = new JPanel(new GridLayout(1, 2));
+        playerPanel = new JPanel(new GridLayout(PLAYER_ROW, PLAYER_COL));
+        deckPanel = new JPanel(new GridLayout(DECK_ROW, DECK_COL));
+        gridPanel = new JPanel(new GridLayout(g.getMaxRows(), g.getMaxCols(), GRID_HGAP, GRID_VGAP));
+        actionPanel = new JPanel(new GridLayout(ACTION_ROW, ACTION_COL));
         JPanel statusPanel = new JPanel(new BorderLayout());
         statusPanel.add(statusLabel, BorderLayout.WEST);
         statusPanel.add(time, BorderLayout.EAST);
         playerName = new JLabel(playerOne.getName());
-        playerPanel.add(new JLabel("Player Name: "));
+        playerPanel.add(new JLabel(PLAYER_NAME));
         playerPanel.add(playerName);
         playerType = new JLabel(playerOne.getFaction());
-        playerPanel.add(new JLabel("Player Type: "));
+        playerPanel.add(new JLabel(PLAYER_TYPE));
         playerPanel.add(playerType);
         playerCP = new JLabel(String.valueOf(playerOne.getCP()));
-        playerPanel.add(new JLabel("Player CP: "));
+        playerPanel.add(new JLabel(PLAYER_CP));
         playerPanel.add(playerCP);
         tileBtns = new JButton[GameEngineFacade.BOARD_ROW_LENGTH][GameEngineFacade.BOARD_COL_LENGTH];
-        deckPanel.setMaximumSize(new Dimension(100, 100));
-        frame.setSize(1000, 750);
+        deckPanel.setMaximumSize(new Dimension(DECK_MAX_WIDTH, DECK_MAX_HEIGHT));
+        frame.setSize(FRAME_DEFAULT_WIDTH, FRAME_DEFAULT_HEIGHT);
         frame.setLocationRelativeTo(null); // show gui in the middle of screen
         rebelButton = createSpawn(rebelName, rebelImage);
         royaleButton = createSpawn(royaleName, royaleImage);
@@ -185,10 +234,10 @@ public class GameFrameView extends JFrame {
         drawActionBtns();
         JPanel topPanel = new JPanel(new BorderLayout());
         JPanel botPanel = new JPanel(new BorderLayout());
-        menuPanel = new JPanel(new BorderLayout());
-        saveButton = new JButton("Save Game");
-        quitButton = new JButton("Quit Game");
-        castleHP = new JLabel("Castle HP: " + g.getCastleHp(), SwingConstants.CENTER);
+        JPanel menuPanel = new JPanel(new BorderLayout());
+        saveButton = new JButton(SAVE);
+        quitButton = new JButton(QUIT);
+        castleHP = new JLabel(CASTLE_HP + g.getCastleHp(), SwingConstants.CENTER);
         menuPanel.add(saveButton, BorderLayout.EAST);
         menuPanel.add(castleHP, BorderLayout.CENTER);
         menuPanel.add(quitButton, BorderLayout.WEST);
@@ -215,7 +264,8 @@ public class GameFrameView extends JFrame {
         if (player instanceof RoyalePlayer) {
             removeSpawn(rebelButton);
             loadSpawn(royaleButton);
-        } else {
+        }
+        else {
             removeSpawn(royaleButton);
             loadSpawn(rebelButton);
         }
@@ -227,36 +277,39 @@ public class GameFrameView extends JFrame {
     }
 
     private void drawActionBtns() {
-        attackBtn = new JButton("Attack");
+        attackBtn = new JButton(ATTACK);
         actionPanel.add(attackBtn);
-        undoTurnBtn = new JButton("Undo");
-        undoTurnBtn.setVisible(false);
+        undoTurnBtn = new JButton(UNDO);
         actionPanel.add(undoTurnBtn);
-        offensiveBtn = new JButton("OFFENSIVE");
+        undoTurnBtn.setVisible(false);
+        offensiveBtn = new JButton(OFFENSIVE);
         actionPanel.add(offensiveBtn);
-        defensiveBtn = new JButton("DEFENSIVE");
+        defensiveBtn = new JButton(DEFENSIVE);
         actionPanel.add(defensiveBtn);
-        endTurnBtn = new JButton("End Turn");
+        endTurnBtn = new JButton(END_TURN);
         actionPanel.add(endTurnBtn);
     }
 
-    // TODO: MAGIC NUMS
     private void genGrid() {
-        for (int i = 0; i < GameEngineFacade.BOARD_ROW_LENGTH; i++) {
-            for (int j = 0; j < GameEngineFacade.BOARD_COL_LENGTH; j++) {
-                tileBtns[i][j] = new JButton();
-                if (g.isWallTile(i, j)) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
-                } else if (i == 0 && j % 2 != 0) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
-                } else if (i == 0 && j % 4 == 0) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
-                } else if (i == 0 && j % 4 == 2) {
-                    tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(CRWALL_IMAGE)));
-                } else tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
-                tileBtns[i][j].putClientProperty("row", i);
-                tileBtns[i][j].putClientProperty("column", j);
-                gridPanel.add(tileBtns[i][j]);
+        for (int row = 0; row < GameEngineFacade.BOARD_ROW_LENGTH; row++) {
+            for (int col = 0; col < GameEngineFacade.BOARD_COL_LENGTH; col++) {
+                tileBtns[row][col] = new JButton();
+                if (g.isWallTile(row, col)) {
+                    tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(WALL_IMAGE)));
+                }
+                else if (row == CASTLE_ROW && col % CASTLE_COL_FACTOR != 0) {
+                    tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(CASTLE_IMAGE)));
+                }
+                else if (row == CASTLE_ROW && col % WALL_COL_FACTOR == 0) {
+                    tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(CLWALL_IMAGE)));
+                }
+                else if (row == CASTLE_ROW) {
+                    tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(CRWALL_IMAGE)));
+                }
+                else tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(GRASS_IMAGE)));
+                tileBtns[row][col].putClientProperty(ROW, row);
+                tileBtns[row][col].putClientProperty(COLUMN, col);
+                gridPanel.add(tileBtns[row][col]);
             }
         }
     }
@@ -274,17 +327,19 @@ public class GameFrameView extends JFrame {
         lastTile = tile;
     }
 
-    public void colourTile(int i, int j, String actionType) {
+    public void colourTile(int row, int col, String actionType) {
         try {
             String name = GRASS_IMAGE;
-            if (actionType.equals("move")) {
+            if (actionType.equals(MOVE_TYPE)) {
                 name = BLUE_GRASS_IMAGE;
-            } else if (actionType.equals("attack")) {
+            }
+            else if (actionType.equals(ATTACK_TYPE)) {
                 name = RED_GRASS_IMAGE;
-            } else if (actionType.equals("summon")) {
+            }
+            else if (actionType.equals(SUMMON_TYPE)) {
                 name = PINK_GRASS_IMAGE;
             }
-            tileBtns[i][j].setIcon(new ImageIcon(this.getClass().getResource(name)));
+            tileBtns[row][col].setIcon(new ImageIcon(this.getClass().getResource(name)));
         } catch (RuntimeException ignored) {
         }
     }
@@ -402,11 +457,11 @@ public class GameFrameView extends JFrame {
     }
 
     public int[] findButtonCoordinates(EventObject e) {
-        return new int[]{(int) getSource(e).getClientProperty("row"), (int) getSource(e).getClientProperty("column")};
+        return new int[]{(int) getSource(e).getClientProperty(ROW), (int) getSource(e).getClientProperty(COLUMN)};
     }
 
     public int findButtonIndex(EventObject e) {
-        return (int) getSource(e).getClientProperty("index");
+        return (int) getSource(e).getClientProperty(INDEX);
     }
 
     public void showPieceInfo(EventObject e, String pieceInfo) {
@@ -426,25 +481,25 @@ public class GameFrameView extends JFrame {
         return TARGET_GREEN;
     }
 
-    public JButton getTile(int i, int j) {
-        return tileBtns[i][j];
+    public JButton getTile(int row, int col) {
+        return tileBtns[row][col];
     }
 
-    public void setTileName(int i, int j, String name) {
-        tileBtns[i][j].setName(name);
+    public void setTileName(int row, int col, String name) {
+        tileBtns[row][col].setName(name);
     }
 
     public String getImagePath(String name) {
-        return IMAGE_PATH + name.toLowerCase() + ".png";
+        return IMAGE_PATH + name.toLowerCase() + FILE_TYPE;
     }
 
     public void updateCastleHp() {
-        castleHP.setText("Castle HP: " + g.getCastleHp());
+        castleHP.setText(CASTLE_HP + g.getCastleHp());
         revalidate();
     }
 
     public void gameOver(String name) {
-        JOptionPane.showMessageDialog(frame, "Player " + name + " won!\n Press OK to go back to the main menu.", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(frame, PLAYER + name + VICTORY_MSG, VICTORY_TITLE, JOptionPane.INFORMATION_MESSAGE);
     }
 }
 

@@ -346,7 +346,6 @@ public class GameEngineFacade implements GameEngine {
     // TODO: If not enough CP, wrong status msg
     public boolean placeSummonedPiece(int row, int col) {
         if (checkSummonValid(getSummonedPiece(), row, col)) {
-            System.out.println(gfv.getImage());
             gfv.setTileIcon(row, col, gfv.getImage());
             gfv.setTileName(row, col, gfv.getImage());
             if (getTurn() == REBEL_TURN) {
@@ -354,7 +353,7 @@ public class GameEngineFacade implements GameEngine {
                     gfv.updatePlayerInfo(rebel);
                 }
                 else {
-                    System.out.print(NOT_ENOUGH_CP);
+                    gfv.updateStatus(NOT_ENOUGH_CP);
                     return false;
                 }
             }
@@ -363,7 +362,7 @@ public class GameEngineFacade implements GameEngine {
                     gfv.updatePlayerInfo(royale);
                 }
                 else {
-                    System.out.print(NOT_ENOUGH_CP);
+                    gfv.updateStatus(NOT_ENOUGH_CP);
                     return false;
                 }
             }
@@ -711,7 +710,6 @@ public class GameEngineFacade implements GameEngine {
         if (attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col)) {
             boolean death;
             PieceInterface p = getTile(row, col).getPiece();
-            System.out.print(gfv.getImage());
             PieceInterface piece = getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
             String statusMsg;
             int prevHp = getPiece(row, col).getHp();

@@ -29,7 +29,8 @@ public class GameImpl implements Game {
         if (turn == GameEngineFacade.REBEL_TURN) {
             royale = new RoyalePlayer(playerNames.get(turn));
             rebel = new RebelPlayer(playerNames.get(turn + 1));
-        } else {
+        }
+        else {
             royale = new RoyalePlayer(playerNames.get(turn));
             rebel = new RebelPlayer(playerNames.get(turn - 1));
         }

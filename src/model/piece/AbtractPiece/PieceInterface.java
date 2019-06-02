@@ -42,19 +42,11 @@ public interface PieceInterface {
 
     void setMoveSpeed(int moveSpeed);
 
-    void buffMoveSpeed();
-
-    void nerfMoveSpeed();
-
     int getInitAttackRange();
 
     int getAttackRange();
 
     void setAttackRange(int attackRange);
-
-    void buffAttackRange();
-
-    void nerfAttackRange();
 
     int getActionRange(String actionType);
 
@@ -67,10 +59,6 @@ public interface PieceInterface {
     boolean isDefensive();
 
     void resetMode();
-
-    void setOffensive();
-
-    void setDefensive();
 
     boolean isActionValid(int rowDiff, int colDiff, String actionType);
 

@@ -16,7 +16,8 @@ public class ResetModeDecoratorFactory extends AbstractDecoratorFactory {
     public PieceInterface getFactory() {
         if (piece instanceof Troop) {
             return new ResetModeTroopDecorator(piece);
-        } else if (piece instanceof Artillery) {
+        }
+        else if (piece instanceof Artillery) {
             return new ResetModeArtilleryDecorator(piece);
         }
         return null;

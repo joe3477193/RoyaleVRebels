@@ -145,12 +145,6 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         }
     }
 
-    public void buffMoveSpeed() {
-    }
-
-    public void nerfMoveSpeed() {
-    }
-
     public int getInitAttackRange() {
         return initAttackRange;
     }
@@ -166,12 +160,6 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         else {
             this.attackRange = attackRange;
         }
-    }
-
-    public void buffAttackRange() {
-    }
-
-    public void nerfAttackRange() {
     }
 
     public int getActionRange(String actionType) {
@@ -209,12 +197,6 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
     }
 
     public void resetMode() {
-    }
-
-    public void setOffensive() {
-    }
-
-    public void setDefensive() {
     }
 
     // check if action of movement or attack is allowed

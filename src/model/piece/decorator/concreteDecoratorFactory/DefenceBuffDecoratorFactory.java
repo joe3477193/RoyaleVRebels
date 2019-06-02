@@ -16,7 +16,8 @@ public class DefenceBuffDecoratorFactory extends AbstractDecoratorFactory {
     public PieceInterface getFactory() {
         if (piece instanceof Troop) {
             return new DefenceBuffTroopDecorator(piece);
-        } else if (piece instanceof Artillery) {
+        }
+        else if (piece instanceof Artillery) {
             return new DefenceBuffArtilleryDecorator(piece);
         }
         return null;

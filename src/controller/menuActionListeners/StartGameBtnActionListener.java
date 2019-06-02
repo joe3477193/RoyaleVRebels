@@ -45,7 +45,8 @@ public class StartGameBtnActionListener implements ActionListener {
             }
             // Close Enter Name View
             frame.dispose();
-        } else {
+        }
+        else {
             JOptionPane.showMessageDialog(frame, EMPTY_PLAYER_NAME_ERROR, ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
         }
     }

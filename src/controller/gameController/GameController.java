@@ -106,7 +106,8 @@ public class GameController {
             button = gfv.getRebelButton();
             name = gfv.getRebelName();
             image = gfv.getRebelImage();
-        } else {
+        }
+        else {
             button = gfv.getRoyaleButton();
             name = gfv.getRoyaleName();
             image = gfv.getRoyaleImage();
@@ -115,8 +116,6 @@ public class GameController {
             if (gfv.getSource(e) == button[i]) {
                 Image icon = new ImageIcon(this.getClass().getResource(image[i])).getImage();
                 // click on the same piece on the deck, i.e. cancel summon
-                System.out.println(gfv.getCursor().getName());
-                System.out.println(name[i]);
                 if (cursorName.equals(name[i])) {
                     gfv.resetCursor();
                     g.removeSummonedPiece();
@@ -128,7 +127,8 @@ public class GameController {
                     g.createSummonedPiece(name[i]);
                     gfv.setImage(image[i]);
                     g.paintSummonRange(name[i]);
-                } else {
+                }
+                else {
                     gfv.updateStatus(HAS_PERFORMED);
                 }
             }
@@ -152,19 +152,19 @@ public class GameController {
         else {
             // attempt to place a summoned piece
             if (g.getSummonedPiece() != null && !g.getPerformed()) {
-            	SummonCommand sc = new SummonCommand(g, row, col,gfv.getImage());
+                SummonCommand sc = new SummonCommand(g, row, col, gfv.getImage());
                 cm.executeTurn(sc);
             }
             // attempt to place a piece during movement
             else if (g.isMoving() && !g.getPerformed()) {
-            	MoveCommand mc = new MoveCommand(g,row,col, gfv.getImage());
-            	cm.executeTurn(mc);
+                MoveCommand mc = new MoveCommand(g, row, col, gfv.getImage());
+                cm.executeTurn(mc);
                 //cm.executeTurn(MOVEMENT, gfv.getImage(), row, col, g.getSummonedPiece());
             }
             // attempt to place a piece during attack
             else if (g.isAttacking() && !g.getPerformed()) {
-            	AttackCommand ac = new AttackCommand(g, row, col);
-            	cm.executeTurn(ac);
+                AttackCommand ac = new AttackCommand(g, row, col);
+                cm.executeTurn(ac);
                 //cm.executeTurn(ATTACK, gfv.getImage(), row, col, g.getSummonedPiece());
             }
             // attempt to pick a piece for action && also show piece info
@@ -251,7 +251,8 @@ public class GameController {
         String[] pieceNames;
         if (g.getTurn() == g.getRebelTurn()) {
             pieceNames = gfv.getRebelName();
-        } else {
+        }
+        else {
             pieceNames = gfv.getRoyaleName();
         }
         // for Rebel, i varies from 0 to 6, while i varies from 7 - 13 for Royale

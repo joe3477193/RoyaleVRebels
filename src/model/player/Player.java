@@ -21,10 +21,6 @@ public abstract class Player {
         return name;
     }
 
-    public int getStartCP() {
-        return start_cp;
-    }
-
     public int getCP() {
         return cp;
     }

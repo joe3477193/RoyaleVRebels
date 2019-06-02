@@ -249,8 +249,4 @@ public abstract class Piece implements PieceInterface, Cloneable {
         }
         return clone;
     }
-
-    public void addHP(int hp) {
-        this.hp += hp;
-    }
 }
