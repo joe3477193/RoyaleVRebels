@@ -107,6 +107,7 @@ public interface GameEngine {
     boolean checkWin();
     
     void notifyUndoRule();
+    
 
     void gameOver(String name);
 }

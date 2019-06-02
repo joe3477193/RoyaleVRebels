@@ -69,7 +69,9 @@ public class GameEngineFacade implements GameEngine {
     private static final String CANNOT_STRENGTHEN_CASTLE = "You cannot strengthen CASTLES!";
     // TODO: Undolevel of 0 need to show diff status msg
     private static final String UNDO_USED = "You have already used your Undo for this game!";
-    private static final String UNDO_RULE = "You must wait until both players have moved before using Undo";
+    private static final String UNDO_RULE = "You must wait until both players have moved before using Undo!";
+    private static final String UNDO_NONE = "You have no undo's for this game!";
+
     private static final String OUTPUT_FORMAT = "%d|%d|%s|%d|%n";
 
     private static final int CASTLE_TILE_ROW = 0;
@@ -92,7 +94,7 @@ public class GameEngineFacade implements GameEngine {
     private int turn;
     private int[] coordinate;
     private int[] initTileCoord;
-
+    private int initUndo;
     private boolean isMoving;
     private boolean isAttacking;
     private boolean hasPerformed;
@@ -108,6 +110,7 @@ public class GameEngineFacade implements GameEngine {
         this.rebel = rebel;
         rebelUndoRemain = undoMoves;
         royaleUndoRemain = undoMoves;
+        initUndo = undoMoves;
     }
 
     private void gameInit(GameFrameView gfv) {
@@ -766,9 +769,14 @@ public class GameEngineFacade implements GameEngine {
     }
     
     public void notifyUndoRule() {
-    	gfv.updateStatus(UNDO_RULE);
+    	if(initUndo >0) {
+    		gfv.updateStatus(UNDO_RULE);
+    	}
+    	else {
+    		gfv.updateStatus(UNDO_NONE);
+    	}
     }
-
+    
     public void undoTurn(CommandInterface cI) {
     	
     	TurnType turndetails = cI.returnTurnDetails();
