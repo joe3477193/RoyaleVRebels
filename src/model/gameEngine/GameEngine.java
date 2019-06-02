@@ -1,5 +1,6 @@
 package model.gameEngine;
 
+import controller.commandPattern.CommandInterface;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.PieceInterface;
 import model.player.Player;
@@ -97,13 +98,15 @@ public interface GameEngine {
 
     boolean checkUndoRemain();
 
-    void undoTurn(TurnType tt);
+    void undoTurn(CommandInterface cI);
 
     int getCastleHp();
 
     void changeAttackIconColor(TileInterface tile, int i, int j);
 
     boolean checkWin();
+    
+    void notifyUndoRule();
 
     void gameOver(String name);
 }

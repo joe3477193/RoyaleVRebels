@@ -1,5 +1,9 @@
 package model.gameEngine;
 
+import controller.commandPattern.AttackCommand;
+import controller.commandPattern.CommandInterface;
+import controller.commandPattern.MoveCommand;
+import controller.commandPattern.SummonCommand;
 import controller.commandPattern.TurnType;
 import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
@@ -65,6 +69,7 @@ public class GameEngineFacade implements GameEngine {
     private static final String CANNOT_STRENGTHEN_CASTLE = "You cannot strengthen CASTLES!";
     // TODO: Undolevel of 0 need to show diff status msg
     private static final String UNDO_USED = "You have already used your Undo for this game!";
+    private static final String UNDO_RULE = "You must wait until both players have moved before using Undo";
     private static final String OUTPUT_FORMAT = "%d|%d|%s|%d|%n";
 
     private static final int CASTLE_TILE_ROW = 0;
@@ -710,7 +715,7 @@ public class GameEngineFacade implements GameEngine {
             gfv.getAttackBtn().setVisible(false);
             gfv.resetCursor();
             gfv.updateStatus(statusMsg);
-            return new TurnType("Attack", pName, getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], i, j, trueDamage, death, prevHp, p);
+            return new TurnType(pName, getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], i, j, trueDamage, death, prevHp, p);
         } else {
             gfv.updateStatus(INVALID_TILE + CANCEL_ATTACK);
             return null;
@@ -759,36 +764,37 @@ public class GameEngineFacade implements GameEngine {
         } else gfv.updateStatus(UNDO_USED);
         return false;
     }
+    
+    public void notifyUndoRule() {
+    	gfv.updateStatus(UNDO_RULE);
+    }
 
-    public void undoTurn(TurnType tt) {
-        switch (tt.MoveType) {
-            case "Move":
-                // ((PieceTile)getTile(tt.fromRow, tt.fromCol)).setPiece(getPiece(tt.tooRow, tt.tooCol));
-                setTile(tt.fromRow, tt.fromCol, "PieceTile");
-                ((PieceTile) getTile(tt.fromRow, tt.fromCol)).setPiece(getPiece(tt.tooRow, tt.tooCol));
-                //getTile(tt.tooRow, tt.tooCol).removePiece();
-                setTile(tt.tooRow, tt.tooCol, "GrassTile");
-                gfv.setTileIcon(tt.tooRow, tt.tooCol, gfv.getGrass());
-                gfv.setTileIcon(tt.fromRow, tt.fromCol, tt.image);
-                gfv.setTileName(tt.fromRow, tt.fromCol, tt.image);
-                break;
-            case "Summon":
-                //getTile(tt.tooRow, tt.tooCol).removePiece();
-                setTile(tt.tooRow, tt.tooCol, "GrassTile");
-                gfv.setTileIcon(tt.tooRow, tt.tooCol, gfv.getGrass());
-                break;
-            case "Attack":
-                if (tt.death) {
-                    gfv.setTileIcon(tt.tooRow, tt.tooCol, tt.image);
-                    gfv.setTileName(tt.tooRow, tt.tooCol, tt.image);
-                    setTile(tt.tooRow, tt.tooCol, "PieceTile");
-                    ((PieceTile) getTile(tt.tooRow, tt.tooCol)).setPiece(tt.p);
-                    getPiece(tt.tooRow, tt.tooCol).setHP(tt.prevHp);
-                } else {
-                    getPiece(tt.tooRow, tt.tooCol).setHP(getPiece(tt.tooRow, tt.tooCol).getHp() + tt.damageDealt);
-                }
-                break;
-        }
+    public void undoTurn(CommandInterface cI) {
+    	
+    	TurnType turndetails = cI.returnTurnDetails();
+    	if(cI instanceof MoveCommand) {	
+          setTile(turndetails.fromRow(), turndetails.fromCol(), "PieceTile");
+          ((PieceTile) getTile(turndetails.fromRow(), turndetails.fromCol())).setPiece(getPiece(turndetails.tooRow(), turndetails.tooCol()));
+          setTile(turndetails.tooRow(), turndetails.tooCol(), "GrassTile");
+          gfv.setTileIcon(turndetails.tooRow(), turndetails.tooCol(), gfv.getGrass());
+          gfv.setTileIcon(turndetails.fromRow(), turndetails.fromCol(), turndetails.returnImage());
+          gfv.setTileName(turndetails.fromRow(), turndetails.fromCol(), turndetails.returnImage());
+    	}
+    	else if(cI instanceof SummonCommand) {
+          setTile(turndetails.tooRow(), turndetails.tooCol(), "GrassTile");
+          gfv.setTileIcon(turndetails.tooRow(), turndetails.tooCol(), gfv.getGrass());
+    	}
+    	else if(cI instanceof AttackCommand) {
+          if (turndetails.death()) {
+        	  gfv.setTileIcon(turndetails.tooRow(), turndetails.tooCol(), turndetails.returnImage());
+        	  gfv.setTileName(turndetails.tooRow(), turndetails.tooCol(), turndetails.returnImage());
+        	  setTile(turndetails.tooRow(), turndetails.tooCol(), "PieceTile");
+        	  ((PieceTile) getTile(turndetails.tooRow(), turndetails.tooCol())).setPiece(turndetails.returnPiece());
+        	  getPiece(turndetails.tooRow(), turndetails.tooCol()).setHP(turndetails.prevHp());
+          } else {
+        	  getPiece(turndetails.tooRow(), turndetails.tooCol()).setHP(getPiece(turndetails.tooRow(), turndetails.tooCol()).getHp() + turndetails.damageDealt());
+          }
+    	}
         gfv.decolour();
         hasPerformed = false;
         gfv.getAttackBtn().setVisible(true);

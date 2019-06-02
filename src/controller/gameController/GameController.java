@@ -1,6 +1,9 @@
 package controller.gameController;
 
+import controller.commandPattern.AttackCommand;
 import controller.commandPattern.CommandMonitor;
+import controller.commandPattern.MoveCommand;
+import controller.commandPattern.SummonCommand;
 import controller.gameActionListeners.*;
 import controller.gameMouseAdapters.HoverDeckMouseAdapter;
 import controller.gameMouseAdapters.HoverTileMouseAdapter;
@@ -153,15 +156,20 @@ public class GameController {
         else {
             // attempt to place a summoned piece
             if (g.getSummonedPiece() != null && !g.getPerformed()) {
-                cm.executeTurn(SUMMON, gfv.getImage(), row, col, g.getSummonedPiece());
+            	SummonCommand sc = new SummonCommand(g, row, col,gfv.getImage());
+                cm.executeTurn(sc);
             }
             // attempt to place a piece during movement
             else if (g.isMoving() && !g.getPerformed()) {
-                cm.executeTurn(MOVEMENT, gfv.getImage(), row, col, g.getSummonedPiece());
+            	MoveCommand mc = new MoveCommand(g,row,col, gfv.getImage());
+            	cm.executeTurn(mc);
+                //cm.executeTurn(MOVEMENT, gfv.getImage(), row, col, g.getSummonedPiece());
             }
             // attempt to place a piece during attack
             else if (g.isAttacking() && !g.getPerformed()) {
-                cm.executeTurn(ATTACK, gfv.getImage(), row, col, g.getSummonedPiece());
+            	AttackCommand ac = new AttackCommand(g, row, col);
+            	cm.executeTurn(ac);
+                //cm.executeTurn(ATTACK, gfv.getImage(), row, col, g.getSummonedPiece());
             }
             // attempt to pick a piece for action && also show piece info
             else if (g.isPieceTile(row, col)) {
