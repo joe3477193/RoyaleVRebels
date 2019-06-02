@@ -11,6 +11,7 @@ public class ResetModeArtilleryDecorator extends PieceInterfaceDecorator impleme
         resetMode();
     }
 
+    // reset the artillery's mode
     public void resetMode() {
         setAttackPower(piece.getInitAttackPower());
         setDefence(piece.getInitDefence());

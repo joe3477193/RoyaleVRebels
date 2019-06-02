@@ -29,6 +29,7 @@ public class PieceCache {
         }
     }
 
+    // create a piece using piece's name
     private static Piece createPiece(String name) {
         Piece piece = null;
         try {

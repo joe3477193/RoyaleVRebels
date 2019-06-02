@@ -172,6 +172,7 @@ public abstract class Piece implements PieceInterface, Cloneable {
         return attackable;
     }
 
+    // check if the piece is offensive or not
     public boolean isOffensive() {
         if (attackPower > initAttackPower) {
             isOffensive = true;
@@ -179,6 +180,7 @@ public abstract class Piece implements PieceInterface, Cloneable {
         return isOffensive;
     }
 
+    // check if the piece is defensive or not
     public boolean isDefensive() {
         if (defence > initDefence) {
             isDefensive = true;
@@ -216,6 +218,7 @@ public abstract class Piece implements PieceInterface, Cloneable {
         return false;
     }
 
+    // create a copy of the piece
     public Object clone() {
         Object clone = null;
         try {

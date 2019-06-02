@@ -176,6 +176,7 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         return attackable;
     }
 
+    // check if the piece is offensive or not
     public boolean isOffensive() {
         if (attackPower > initAttackPower) {
             isOffensive = true;
@@ -183,14 +184,12 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         return isOffensive;
     }
 
+    // check if the piece is defensive or not
     public boolean isDefensive() {
         if (defence > initDefence) {
             isDefensive = true;
         }
         return isDefensive;
-    }
-
-    public void resetMode() {
     }
 
     // check if action of movement or attack is allowed

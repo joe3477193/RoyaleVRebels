@@ -58,9 +58,9 @@ public class GameImpl implements Game {
             public void run() {
                 GameEngineFacade.BOARD_ROW_LENGTH = rows;
                 GameEngineFacade.BOARD_COL_LENGTH = cols;
-                // Instantiate the GUI view for game
+                // instantiate the GUI view for game
                 gfv = new GameFrameView();
-                // Instantiate the GameEngineFacade
+                // instantiate the GameEngineFacade
                 g = new GameEngineFacade(gfv, undoMoves, royale, rebel);
                 gfv.assembleBoard(g);
                 new GameController(g, gfv);

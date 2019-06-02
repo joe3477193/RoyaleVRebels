@@ -27,6 +27,7 @@ public abstract class Player {
         cp -= value;
     }
 
+    // check if player's CP is enough to summon a piece
     public boolean isEnoughCP(int value) {
         return cp - value >= 0;
     }

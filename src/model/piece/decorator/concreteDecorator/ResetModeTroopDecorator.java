@@ -11,6 +11,7 @@ public class ResetModeTroopDecorator extends PieceInterfaceDecorator implements 
         resetMode();
     }
 
+    // reset the troop's mode
     public void resetMode() {
         setAttackPower(piece.getInitAttackPower());
         setDefence(piece.getInitDefence());

@@ -33,7 +33,6 @@ public class HelpView {
         frame.setSize(new Dimension(ABOUT_VIEW_WIDTH, ABOUT_VIEW_HEIGHT));
         frame.setLocationRelativeTo(null);
         JPanel infoPanel = new JPanel(new GridLayout(INFO_PANEL_ROWS, INFO_PANEL_COLS));
-        // TODO: put key game rules here later, e.g. (HOW REBEL WINS??? TIME LIMIT OR MOVES LIMIT OR CP LIMIT???)
         JLabel title = new JLabel(GAME_RULES, SwingConstants.CENTER);
         JLabel gameRule1 = new JLabel(GAME_RULE_ONE);
         JLabel gameRule2 = new JLabel(GAME_RULE_TWO);

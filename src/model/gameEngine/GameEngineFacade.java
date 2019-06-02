@@ -347,6 +347,7 @@ public class GameEngineFacade implements GameEngine {
         summonedPiece = PieceCache.clonePiece(pieceName);
     }
 
+    // check if player can place a summoned piece
     @Requires({"row >= 0", "col >= 0"})
     public boolean placeSummonedPiece(int row, int col) {
         if (checkSummonValid(getSummonedPiece(), row, col)) {
@@ -369,6 +370,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    // check if player can place a moved piece
     @Requires({"row >= 0", "col >= 0"})
     public boolean placeMovedPiece(int row, int col) {
         // target tile
@@ -437,6 +439,7 @@ public class GameEngineFacade implements GameEngine {
         return 0;
     }
 
+    // set a piece to be offensive
     public void setOffensive() {
         if (coordinate != null) {
             setInit(coordinate[ROW_INDEX], coordinate[COL_INDEX]);
@@ -488,6 +491,7 @@ public class GameEngineFacade implements GameEngine {
         return turn == REBEL_TURN && getPiece(row, col).getFaction().equals(REBEL) || turn == ROYALE_TURN && getPiece(row, col).getFaction().equals(ROYALE);
     }
 
+    // set a piece to be defensive
     public void setDefensive() {
         if (coordinate != null) {
             setInit(coordinate[ROW_INDEX], coordinate[COL_INDEX]);
@@ -601,6 +605,7 @@ public class GameEngineFacade implements GameEngine {
         return getTile(row, col) instanceof GrassTile && !isCastleTile(row, col);
     }
 
+    // save the game
     public boolean saveGame() {
         try {
             PrintWriter output = new PrintWriter(new FileWriter(FULL_SAVE_FILE_NAME));
@@ -630,6 +635,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    // load athe game with given data
     public void loadGame(String castleHp, String[] undoLimit, String turn, String hasPerformed, ArrayList<String[]> tileList) {
         tiles[CASTLE_TILE_ROW][CASTLE_TILE_COL].getPiece().setHP(Integer.parseInt(castleHp));
         this.hasPerformed = Boolean.parseBoolean(hasPerformed);
@@ -664,6 +670,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    // depaint the tiles within the action range
     private void depaintAction() {
         for (int row = 0; row < BOARD_ROW_LENGTH; row++) {
             for (int col = 0; col < BOARD_COL_LENGTH; col++) {
@@ -688,6 +695,7 @@ public class GameEngineFacade implements GameEngine {
         return tiles[CASTLE_TILE_ROW][CASTLE_TILE_COL].getPiece().getHp();
     }
 
+    // while attacking, The attack icon color will become green when the mouse hovering on a reachable opponent target
     @Requires({"tile != null", "row >= 0", "col >= 0"})
     public void changeAttackIconColor(TileInterface tile, int row, int col) {
         if (isPieceTile(row, col) || isCastleTile(row, col)) {
@@ -708,6 +716,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    // return an attack turn after attacking a piece
     @Requires({"row >= 0", "col >= 0"})
     public TurnType placeAttackPiece(int row, int col) {
         int initHp = attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col);
@@ -753,6 +762,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    // highlight the range that player can summon
     @Requires("pieceName != null")
     public void paintSummonRange(String pieceName) {
         int start;
@@ -789,6 +799,7 @@ public class GameEngineFacade implements GameEngine {
         return getTile(row, col).getPiece();
     }
 
+    // check if player can undo
     public boolean checkUndoRemain() {
         if (getTurn() == REBEL_TURN && rebelUndoRemain != 0) {
             rebelUndoRemain--;
@@ -813,6 +824,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    // undo a move
     @Requires("cI != null")
     public void undoTurn(CommandInterface cI) {
         TurnType turndetails = cI.returnTurnDetails();
@@ -855,6 +867,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    // check if there's victory for a player
     @Override
     public boolean checkWin() {
         if (turn == REBEL_TURN) {
@@ -891,7 +904,7 @@ public class GameEngineFacade implements GameEngine {
         gfv.getUndoBtn().setVisible(true);
     }
 
-    // want to change colour for showing movement and attack range on tiles
+    // highlight tiles for showing movement and attack range
     @Requires({"pieceRow >= 0", "pieceCol >= 0", "actionType != null"})
     private void paintActionRange(int pieceRow, int pieceCol, String actionType) {
         PieceInterface piece = getPiece(coordinate[ROW_INDEX], coordinate[COL_INDEX]);
@@ -907,6 +920,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    // piece won't be able to move across opponent piece
     @Requires({"inRow >= 0", "inCol >= 0", "tgRow >= 0", "tgCol >= 0"})
     private boolean checkAcross(int inRow, int inCol, int tgRow, int tgCol) {
         TileInterface currTile = null;
