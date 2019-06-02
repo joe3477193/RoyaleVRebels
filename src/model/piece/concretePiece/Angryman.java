@@ -6,7 +6,7 @@ import model.piece.faction.Rebel;
 public class Angryman extends Rebel implements Troop {
 
     private static final String NAME = "Angryman";
-    
+
     private static final int CP = 3;
     private static final int HP = 150;
     private static final int DEFENCE = 10;

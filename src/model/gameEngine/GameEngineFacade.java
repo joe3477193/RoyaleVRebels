@@ -352,7 +352,7 @@ public class GameEngineFacade implements GameEngine {
         if (checkSummonValid(getSummonedPiece(), row, col)) {
             gfv.setTileIcon(row, col, gfv.getImage());
             gfv.setTileName(row, col, gfv.getImage());
-            Player player= getCurrentPlayer();
+            Player player = getCurrentPlayer();
             player.reduceCP(getSummonedPiece().getCp());
             gfv.updatePlayerInfo(player);
             gfv.updateStatus(SUMMON_SUCCESS);
@@ -710,8 +710,7 @@ public class GameEngineFacade implements GameEngine {
 
     @Requires({"row >= 0", "col >= 0"})
     public TurnType placeAttackPiece(int row, int col) {
-    	int initHp = attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col);
-
+        int initHp = attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col);
         if (initHp > 0) {
             boolean death;
             PieceInterface p = getTile(row, col).getPiece();
@@ -799,7 +798,7 @@ public class GameEngineFacade implements GameEngine {
             royaleUndoRemain--;
             return true;
         }
-        else if(initUndo > 0) {
+        else if (initUndo > 0) {
             gfv.updateStatus(UNDO_USED);
         }
         else {
@@ -980,11 +979,11 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
-    public Player getCurrentPlayer(){
-        if (turn==REBEL_TURN){
+    public Player getCurrentPlayer() {
+        if (turn == REBEL_TURN) {
             return rebel;
         }
-        else{
+        else {
             return royale;
         }
     }

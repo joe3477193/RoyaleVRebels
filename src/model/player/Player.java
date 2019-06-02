@@ -24,10 +24,10 @@ public abstract class Player {
     }
 
     public void reduceCP(int value) {
-         cp -= value;
+        cp -= value;
     }
 
-    public boolean isEnoughCP(int value){
+    public boolean isEnoughCP(int value) {
         return cp - value >= 0;
     }
 
