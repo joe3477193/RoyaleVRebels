@@ -1,4 +1,4 @@
-package controller.commandPattern;
+package controller.command_mementoPattern;
 
 import model.gameEngine.GameEngine;
 
@@ -7,7 +7,7 @@ public class AttackCommand implements CommandInterface  {
 	private GameEngine g;
 	private int targetRow;
 	private int targetCol;
-	private TurnType tt;
+	private TurnType turnType;
 	
 	public AttackCommand(GameEngine g, int targetRow, int targetCol) {
 		this.g = g;
@@ -18,9 +18,8 @@ public class AttackCommand implements CommandInterface  {
 	
 	@Override
 	public CommandInterface execute() {
-		
-		tt = g.placeAttackPiece(targetRow, targetCol);
-		if(tt != null) {
+		turnType = g.placeAttackPiece(targetRow, targetCol);
+		if (turnType != null) {
 			return this;
 		}
 		else 
@@ -30,7 +29,7 @@ public class AttackCommand implements CommandInterface  {
 
 	@Override
 	public TurnType returnTurnDetails() {
-		return tt;
+		return turnType;
 	}
 
 

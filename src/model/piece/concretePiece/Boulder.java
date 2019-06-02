@@ -5,6 +5,6 @@ import model.piece.faction.Rebel;
 
 public class Boulder extends Rebel implements Obstacle {
     public Boulder() {
-        super("Boulder", type, "BD", 3, 150, 10, 0, 0, 0, moveable, attackable);
+        super("Boulder", "BD", 3, 150, 10, 0, 0, 0, moveable, attackable);
     }
 }

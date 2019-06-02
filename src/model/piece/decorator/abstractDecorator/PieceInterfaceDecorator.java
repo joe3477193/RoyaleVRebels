@@ -29,7 +29,6 @@ public abstract class PieceInterfaceDecorator implements PieceInterface {
         this.piece = piece;
         name = piece.getName();
         faction = piece.getFaction();
-        type = piece.getType();
         code = piece.getCode();
         cp = piece.getCp();
         initHp = piece.getInitHp();

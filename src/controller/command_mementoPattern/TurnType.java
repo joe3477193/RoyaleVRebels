@@ -1,4 +1,4 @@
-package controller.commandPattern;
+package controller.command_mementoPattern;
 
 import model.piece.AbtractPiece.PieceInterface;
 
@@ -7,23 +7,23 @@ public class TurnType {
     private String image;
     private int fromRow;
     private int fromCol;
-    private int tooRow;
-    private int tooCol;
+    private int toRow;
+    private int toCol;
     private int damageDealt;
     private boolean death;
     private int prevHp;
-    private PieceInterface p;
+    private PieceInterface pieceInterface;
 
-    public TurnType(String image, int fr, int fc, int tr, int tc, int dmg, boolean killed, int prevHp, PieceInterface p) {
+    public TurnType(String image, int fromRow, int fromCol, int toRow, int toCol, int dmg, boolean killed, int prevHp, PieceInterface pieceInterface) {
         this.image = image;
-        this.fromRow = fr;
-        this.fromCol = fc;
-        this.tooRow = tr;
-        this.tooCol = tc;
+        this.fromRow = fromRow;
+        this.fromCol = fromCol;
+        this.toRow = toRow;
+        this.toCol = toCol;
         this.damageDealt = dmg;
         this.death = killed;
         this.prevHp = prevHp;
-        this.p = p;
+        this.pieceInterface = pieceInterface;
     }
     
     public String returnImage() {
@@ -39,11 +39,11 @@ public class TurnType {
     }
     
     public int tooRow() {
-    	return tooRow;
+        return toRow;
     }
     
     public int tooCol() {
-    	return tooCol;
+        return toCol;
     }
     
     public int damageDealt() {
@@ -59,6 +59,6 @@ public class TurnType {
     }
     
     public PieceInterface returnPiece() {
-    	return p;
+        return pieceInterface;
     }
 }

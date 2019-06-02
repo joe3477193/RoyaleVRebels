@@ -1,9 +1,9 @@
 package controller.gameController;
 
-import controller.commandPattern.AttackCommand;
-import controller.commandPattern.CommandMonitor;
-import controller.commandPattern.MoveCommand;
-import controller.commandPattern.SummonCommand;
+import controller.command_mementoPattern.AttackCommand;
+import controller.command_mementoPattern.CommandMonitor;
+import controller.command_mementoPattern.MoveCommand;
+import controller.command_mementoPattern.SummonCommand;
 import controller.gameActionListeners.*;
 import controller.gameMouseAdapters.HoverDeckMouseAdapter;
 import controller.gameMouseAdapters.HoverTileMouseAdapter;

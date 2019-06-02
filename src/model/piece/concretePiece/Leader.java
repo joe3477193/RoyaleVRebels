@@ -5,6 +5,6 @@ import model.piece.faction.Rebel;
 
 public class Leader extends Rebel implements Troop {
     public Leader() {
-        super("Leader", type, "LD", 5, 60, 10, 30, 2, 2, moveable, attackable);
+        super("Leader", "LD", 5, 60, 10, 30, 2, 2, moveable, attackable);
     }
 }

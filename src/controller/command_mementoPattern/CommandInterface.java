@@ -1,4 +1,4 @@
-package controller.commandPattern;
+package controller.command_mementoPattern;
 
 public interface CommandInterface {
 

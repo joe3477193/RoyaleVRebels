@@ -1,7 +1,7 @@
 package model.gameEngine;
 
-import controller.commandPattern.CommandInterface;
-import controller.commandPattern.TurnType;
+import controller.command_mementoPattern.CommandInterface;
+import controller.command_mementoPattern.TurnType;
 import model.piece.AbtractPiece.PieceInterface;
 import model.player.Player;
 import model.tile.TileInterface;
