@@ -4,7 +4,7 @@ import com.google.java.contract.Invariant;
 import com.google.java.contract.Requires;
 import model.gameEngine.GameEngine;
 
-@Invariant({"g != null", "targetRow >= 0", "targetCol >=0"})
+@Invariant({"g != null", "targetRow >= 0", "targetCol >= 0"})
 public class AttackCommand implements CommandInterface {
 
     private GameEngine g;

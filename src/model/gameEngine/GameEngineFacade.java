@@ -1,5 +1,7 @@
 package model.gameEngine;
 
+import com.google.java.contract.Invariant;
+import com.google.java.contract.Requires;
 import controller.commandPattern.*;
 import model.piece.AbtractPiece.Piece;
 import model.piece.AbtractPiece.PieceInterface;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 
 import static java.lang.Math.abs;
 
+@Invariant({"gfv != null", "royale != null", "rebel != null", "initUndo >= 0"})
 public class GameEngineFacade implements GameEngine {
 
     public static final String FULL_SAVE_FILE_NAME = "gamedata.save";
@@ -142,9 +145,10 @@ public class GameEngineFacade implements GameEngine {
         boardColLength = BOARD_COL_LENGTH;
     }
 
+    @Requires({"piece != null", "tgRow >= 0", "tgCol >= 0"})
     // check if piece can attack target from current tile
-    private boolean checkAttackTarget(PieceInterface piece, int tgRow, int tgTile) {
-        TileInterface space = getTile(tgRow, tgTile);
+    private boolean checkAttackTarget(PieceInterface piece, int tgRow, int tgCol) {
+        TileInterface space = getTile(tgRow, tgCol);
         String inFaction = piece.getFaction();
         String outFaction = space.getPiece().getFaction();
         return (space instanceof PieceTile || space instanceof CastleTile) && !(inFaction.equals(outFaction));
@@ -240,6 +244,7 @@ public class GameEngineFacade implements GameEngine {
         return coordinate;
     }
 
+    @Requires({"row >= 0", "col >= 0"})
     public void clickTile(int row, int col) {
         coordinate[ROW_INDEX] = row;
         coordinate[COL_INDEX] = col;
@@ -326,13 +331,15 @@ public class GameEngineFacade implements GameEngine {
     }
 
     // check if piece in current tile can move
-    public boolean checkOnBoardPieceMoveable(int row, int tile) {
-        return isPieceTile(row, tile) && getTile(row, tile).getPiece().isMoveable();
+    @Requires({"row >= 0", "col >= 0"})
+    public boolean checkOnBoardPieceMoveable(int row, int col) {
+        return isPieceTile(row, col) && getTile(row, col).getPiece().isMoveable();
     }
 
     // check if piece in current tile can attack
-    public boolean checkOnBoardPieceAttackable(int row, int tile) {
-        return isPieceTile(row, tile) && getTile(row, tile).getPiece().isAttackable();
+    @Requires({"row >= 0", "col >= 0"})
+    public boolean checkOnBoardPieceAttackable(int row, int col) {
+        return isPieceTile(row, col) && getTile(row, col).getPiece().isAttackable();
     }
 
     @Override
@@ -340,6 +347,7 @@ public class GameEngineFacade implements GameEngine {
         summonedPiece = PieceCache.clonePiece(pieceName);
     }
 
+    @Requires({"row >= 0", "col >= 0"})
     public boolean placeSummonedPiece(int row, int col) {
         if (checkSummonValid(getSummonedPiece(), row, col)) {
             gfv.setTileIcon(row, col, gfv.getImage());
@@ -361,6 +369,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    @Requires({"row >= 0", "col >= 0"})
     public boolean placeMovedPiece(int row, int col) {
         // target tile
         if (move(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col)) {
@@ -382,41 +391,46 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    @Requires({"row >= 0", "col >= 0"})
     public boolean isCastleTile(int row, int col) {
         return getTile(row, col) instanceof CastleTile;
     }
 
     // check if the target tile is valid to be attacked/moved into by the selected peice
-    private boolean isMovRangeValid(int inRow, int inTile, int tgRow, int tgTile, String type) {
+    @Requires({"inRow >= 0", "inCol >= 0", "tgRow >= 0", "tgCol >= 0", "type != null"})
+    private boolean isMovRangeValid(int inRow, int inCol, int tgRow, int tgCol, String type) {
         int rowDiff = abs(inRow - tgRow);
-        int tileDiff = abs(inTile - tgTile);
-        PieceInterface piece = getPiece(inRow, inTile);
+        int tileDiff = abs(inCol - tgCol);
+        PieceInterface piece = getPiece(inRow, inCol);
         return piece.isActionValid(rowDiff, tileDiff, type);
     }
 
+    @Requires({"row >= 0", "col >= 0"})
     public boolean isPieceTile(int row, int col) {
         return getTile(row, col) instanceof PieceTile;
     }
 
     // check if piece hasPerformed from current tile to target tile
-    private boolean move(int inRow, int inTile, int tgRow, int tgTile) {
-        if (checkMoveTarget(tgRow, tgTile) && isMovRangeValid(inRow, inTile, tgRow, tgTile, MOVEMENT_TYPE)) {
+    @Requires({"inRow >= 0", "inCol >= 0", "tgRow >= 0", "tgCol >= 0"})
+    private boolean move(int inRow, int inCol, int tgRow, int tgCol) {
+        if (checkMoveTarget(tgRow, tgCol) && isMovRangeValid(inRow, inCol, tgRow, tgCol, MOVEMENT_TYPE)) {
             // check if a piece will go across opposite piece no matter what directions, which is forbidden
-            if (checkAcross(inRow, inTile, tgRow, tgTile)) {
+            if (checkAcross(inRow, inCol, tgRow, tgCol)) {
                 return false;
             }
-            setTile(tgRow, tgTile, PIECE_TILE);
-            ((PieceTile) getTile(tgRow, tgTile)).setPiece(getPiece(inRow, inTile));
-            setTile(inRow, inTile, GRASS_TILE);
+            setTile(tgRow, tgCol, PIECE_TILE);
+            ((PieceTile) getTile(tgRow, tgCol)).setPiece(getPiece(inRow, inCol));
+            setTile(inRow, inCol, GRASS_TILE);
             return true;
         }
         return false;
     }
 
     // check if piece hasAttacked target piece
-    private boolean attack(int inRow, int inTile, int tgRow, int tgTile) {
-        if ((isPieceTile(tgRow, tgTile) || isCastleTile(tgRow, tgTile)) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) && isMovRangeValid(inRow, inTile, tgRow, tgTile, ATTACK_TYPE)) {
-            getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttackPower());
+    @Requires({"inRow >= 0", "inCol >= 0", "tgRow >= 0", "tgCol >= 0"})
+    private boolean attack(int inRow, int inCol, int tgRow, int tgCol) {
+        if ((isPieceTile(tgRow, tgCol) || isCastleTile(tgRow, tgCol)) && checkAttackTarget(getPiece(inRow, inCol), tgRow, tgCol) && isMovRangeValid(inRow, inCol, tgRow, tgCol, ATTACK_TYPE)) {
+            getPiece(tgRow, tgCol).attackedBy(getPiece(inRow, inCol).getAttackPower());
             return true;
         }
         return false;
@@ -461,12 +475,14 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    @Requires({"row >= 0", "col >= 0"})
     private void setInit(int row, int col) {
         initTileCoord[ROW_INDEX] = row;
         initTileCoord[COL_INDEX] = col;
     }
 
     // check if the player and the piece on action is in the same team
+    @Requires({"row >= 0", "col >= 0"})
     private boolean isFactionMatched(int row, int col) {
         return turn == REBEL_TURN && getPiece(row, col).getFaction().equals(REBEL) || turn == ROYALE_TURN && getPiece(row, col).getFaction().equals(ROYALE);
     }
@@ -514,6 +530,7 @@ public class GameEngineFacade implements GameEngine {
         return tiles;
     }
 
+    @Requires("tileList != null")
     public void setTileIcon(ArrayList<String[]> tileList) {
         for (String[] tile : tileList) {
             int row = Integer.valueOf(tile[ROW_INDEX_LOADED]);
@@ -527,7 +544,8 @@ public class GameEngineFacade implements GameEngine {
         return initTileCoord;
     }
 
-    private boolean checkSummonValid(Piece piece, int row, int tile) {
+    @Requires({"piece != null", "row >= 0", "col >= 0"})
+    private boolean checkSummonValid(Piece piece, int row, int col) {
         boolean isRowValid;
         int extraMove = DEFAULT_EXTRA_MOVE;
         int summonRange;
@@ -541,9 +559,9 @@ public class GameEngineFacade implements GameEngine {
         else {
             isRowValid = row >= REBEL_SUMMON_NORTH_LIMIT - extraMove;
         }
-        if (checkMoveTarget(row, tile) && isRowValid) {
-            setTile(row, tile, PIECE_TILE);
-            ((PieceTile) tiles[row][tile]).setPiece(piece);
+        if (checkMoveTarget(row, col) && isRowValid) {
+            setTile(row, col, PIECE_TILE);
+            ((PieceTile) tiles[row][col]).setPiece(piece);
             return true;
         }
         else {
@@ -552,6 +570,7 @@ public class GameEngineFacade implements GameEngine {
     }
 
     // check if a certain tile should be repainted with the paintMovAttack
+    @Requires({"row >= 0", "col >= 0"})
     private boolean checkMoveRepaint(int row, int col) {
         try {
             return !isWallTile(row, col) && isGrassTile(row, col) && !isCastleTile(row, col);
@@ -576,8 +595,9 @@ public class GameEngineFacade implements GameEngine {
     }
 
     // check if piece can move from current tile to target tile
-    private boolean checkMoveTarget(int row, int tile) {
-        return getTile(row, tile) instanceof GrassTile && !isCastleTile(row, tile);
+    @Requires({"row >= 0", "col >= 0"})
+    private boolean checkMoveTarget(int row, int col) {
+        return getTile(row, col) instanceof GrassTile && !isCastleTile(row, col);
     }
 
     public boolean saveGame() {
@@ -653,10 +673,12 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    @Requires({"row >= 0", "col >= 0"})
     public boolean isWallTile(int row, int col) {
         return getTile(row, col) instanceof WallTile;
     }
 
+    @Requires({"row >= 0", "col >= 0"})
     public boolean isGrassTile(int row, int col) {
         return getTile(row, col) instanceof GrassTile;
     }
@@ -665,6 +687,7 @@ public class GameEngineFacade implements GameEngine {
         return tiles[CASTLE_TILE_ROW][CASTLE_TILE_COL].getPiece().getHp();
     }
 
+    @Requires({"tile != null", "row >= 0", "col >= 0"})
     public void changeAttackIconColor(TileInterface tile, int row, int col) {
         if (isPieceTile(row, col) || isCastleTile(row, col)) {
             if (!isFactionMatched(row, col)) {
@@ -684,6 +707,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    @Requires({"row >= 0", "col >= 0"})
     public TurnType placeAttackPiece(int row, int col) {
         if (attack(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX], row, col)) {
             boolean death;
@@ -725,6 +749,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    @Requires("pieceName != null")
     public void paintSummonRange(String pieceName) {
         int start;
         int finish;
@@ -749,13 +774,15 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    @Requires({"row >= 0", "col >= 0"})
     public TileInterface getTile(int row, int col) {
         return tiles[row][col];
     }
 
     // get a piece from a tile
-    public PieceInterface getPiece(int row, int tile) {
-        return getTile(row, tile).getPiece();
+    @Requires({"row >= 0", "col >= 0"})
+    public PieceInterface getPiece(int row, int col) {
+        return getTile(row, col).getPiece();
     }
 
     public boolean checkUndoRemain() {
@@ -768,10 +795,10 @@ public class GameEngineFacade implements GameEngine {
             return true;
         }
         else if(initUndo > 0) {
-        	gfv.updateStatus(UNDO_USED);
+            gfv.updateStatus(UNDO_USED);
         }
         else {
-        	gfv.updateStatus(UNDO_NONE);
+            gfv.updateStatus(UNDO_NONE);
         }
         return false;
     }
@@ -782,6 +809,7 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
+    @Requires("cI != null")
     public void undoTurn(CommandInterface cI) {
         TurnType turndetails = cI.returnTurnDetails();
         if (cI instanceof MoveCommand) {
@@ -813,6 +841,7 @@ public class GameEngineFacade implements GameEngine {
         gfv.getAttackBtn().setVisible(true);
     }
 
+    @Requires({"row >= 0", "col >= 0", "type != null"})
     private void setTile(int row, int col, String type) {
         if (type.equals(PIECE_TILE)) {
             tiles[row][col] = new PieceTile(row, col);
@@ -841,6 +870,7 @@ public class GameEngineFacade implements GameEngine {
         return false;
     }
 
+    @Requires("name != null")
     public void gameOver(String name) {
         gfv.gameOver(name);
         gfv.disposeFrame();
@@ -858,6 +888,7 @@ public class GameEngineFacade implements GameEngine {
     }
 
     // want to change colour for showing movement and attack range on tiles
+    @Requires({"pieceRow >= 0", "pieceCol >= 0", "actionType != null"})
     private void paintActionRange(int pieceRow, int pieceCol, String actionType) {
         PieceInterface piece = getPiece(coordinate[ROW_INDEX], coordinate[COL_INDEX]);
         int radius = piece.getActionRange(actionType);
@@ -872,16 +903,17 @@ public class GameEngineFacade implements GameEngine {
         }
     }
 
-    private boolean checkAcross(int inRow, int inTile, int tgRow, int tgTile) {
+    @Requires({"inRow >= 0", "inCol >= 0", "tgRow >= 0", "tgCol >= 0"})
+    private boolean checkAcross(int inRow, int inCol, int tgRow, int tgCol) {
         TileInterface currTile = null;
-        if (inTile == tgTile) {
-            TileInterface initTile = getTile(inRow, inTile);
+        if (inCol == tgCol) {
+            TileInterface initTile = getTile(inRow, inCol);
             for (int row = 1; row < Math.abs(inRow - tgRow) + 1; row++) {
                 if (tgRow < inRow && inRow - row >= 0) {
-                    currTile = getTile(inRow - row, inTile);
+                    currTile = getTile(inRow - row, inCol);
                 }
                 else if (inRow + row < boardRowLength) {
-                    currTile = getTile(inRow + row, inTile);
+                    currTile = getTile(inRow + row, inCol);
                 }
                 if (currTile != null) {
                     if (currTile instanceof PieceTile) {
@@ -896,13 +928,13 @@ public class GameEngineFacade implements GameEngine {
             }
         }
         else if (inRow == tgRow) {
-            TileInterface initTile = getTile(inRow, inTile);
-            for (int col = 1; col < Math.abs(inTile - tgTile) + 1; col++) {
-                if (tgTile < inTile && inTile - col >= 0) {
-                    currTile = getTile(inRow, inTile - col);
+            TileInterface initTile = getTile(inRow, inCol);
+            for (int col = 1; col < Math.abs(inCol - tgCol) + 1; col++) {
+                if (tgCol < inCol && inCol - col >= 0) {
+                    currTile = getTile(inRow, inCol - col);
                 }
-                else if (inTile + col < boardColLength) {
-                    currTile = getTile(inRow, inTile + col);
+                else if (inCol + col < boardColLength) {
+                    currTile = getTile(inRow, inCol + col);
                 }
                 if (currTile != null) {
                     if (currTile instanceof PieceTile) {

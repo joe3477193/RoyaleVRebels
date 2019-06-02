@@ -1,5 +1,7 @@
 package controller.gameController;
 
+import com.google.java.contract.Ensures;
+import com.google.java.contract.Invariant;
 import controller.commandPattern.AttackCommand;
 import controller.commandPattern.CommandMonitor;
 import controller.commandPattern.MoveCommand;
@@ -23,6 +25,7 @@ import java.time.Duration;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@Invariant({"g != null", "gfv != null"})
 public class GameController {
 
     private static final int TIME_LIMIT = 60;
@@ -285,6 +288,7 @@ public class GameController {
         }
     }
 
+    @Ensures("g.saveGame() == true")
     public void saveGame() {
         if (g.saveGame()) {
             gfv.updateStatus(GAME_SAVED);
