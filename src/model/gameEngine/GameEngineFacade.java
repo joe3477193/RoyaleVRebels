@@ -789,16 +789,18 @@ public class GameEngineFacade implements GameEngine {
             royaleUndoRemain--;
             return true;
         }
-        else gfv.updateStatus(UNDO_USED);
+        else if(initUndo > 0) {
+        	gfv.updateStatus(UNDO_USED);
+        }
+        else {
+        	gfv.updateStatus(UNDO_NONE);
+        }
         return false;
     }
 
     public void notifyUndoRule() {
         if (initUndo > 0) {
             gfv.updateStatus(UNDO_RULE);
-        }
-        else {
-            gfv.updateStatus(UNDO_NONE);
         }
     }
 
