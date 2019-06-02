@@ -726,7 +726,6 @@ public class GameEngineFacade implements GameEngine {
             PieceInterface piece = getPiece(getInitTileCoord()[ROW_INDEX], getInitTileCoord()[COL_INDEX]);
             String statusMsg;
             int prevHp = getPiece(row, col).getHp();
-            System.out.print(prevHp);
             String pName = gfv.getTile(row, col).getName();
             int trueDamage = piece.getAttackPower() - getPiece(row, col).getDefence();
             if (trueDamage < NO_DAMAGE_DEALT) {
