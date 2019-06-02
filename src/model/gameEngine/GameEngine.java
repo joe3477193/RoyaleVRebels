@@ -30,7 +30,7 @@ public interface GameEngine {
 
     int[] getCoordinates();
 
-    void clickTile(int i, int j);
+    void clickTile(int row, int col);
 
     void resetCoordinates();
 
@@ -50,25 +50,25 @@ public interface GameEngine {
 
     void removeSummonedPiece();
 
-    boolean checkOnBoardPieceMoveable(int row, int tile);
+    boolean checkOnBoardPieceMoveable(int row, int col);
 
-    boolean checkOnBoardPieceAttackable(int row, int tile);
+    boolean checkOnBoardPieceAttackable(int row, int col);
 
     void createSummonedPiece(String name);
 
-    boolean placeSummonedPiece(int i, int j);
+    boolean placeSummonedPiece(int row, int col);
 
-    boolean placeMovedPiece(int i, int j);
+    boolean placeMovedPiece(int row, int col);
 
-    boolean isCastleTile(int i, int j);
+    boolean isCastleTile(int row, int col);
 
-    boolean isWallTile(int i, int j);
+    boolean isWallTile(int row, int col);
 
-    boolean isPieceTile(int i, int j);
+    boolean isPieceTile(int row, int col);
 
-    boolean isGrassTile(int i, int j);
+    boolean isGrassTile(int row, int col);
 
-    TurnType placeAttackPiece(int i, int j);
+    TurnType placeAttackPiece(int row, int col);
 
     void setOffensive();
 
@@ -94,7 +94,7 @@ public interface GameEngine {
 
     void loadGame(String castleHp, String[] undoLimit, String turn, String hasPerformed, ArrayList<String[]> tileList);
 
-    PieceInterface getPiece(int row, int tile);
+    PieceInterface getPiece(int row, int col);
 
     boolean checkUndoRemain();
 
@@ -102,7 +102,7 @@ public interface GameEngine {
 
     int getCastleHp();
 
-    void changeAttackIconColor(TileInterface tile, int i, int j);
+    void changeAttackIconColor(TileInterface tile, int row, int col);
 
     boolean checkWin();
 
