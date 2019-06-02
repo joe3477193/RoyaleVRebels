@@ -7,6 +7,6 @@ import model.piece.faction.Rebel;
 public class Angryman extends Rebel implements Troop {
 
     public Angryman() {
-        super("Angryman", type, "AG", 3, 150, 10, 20, 2, 1, moveable, attackable);
+        super("Angryman", "AG", 3, 150, 10, 20, 2, 1, moveable, attackable);
     }
 }
