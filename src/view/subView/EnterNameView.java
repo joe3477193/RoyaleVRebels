@@ -29,6 +29,10 @@ public class EnterNameView {
     private static final String DEFAULT_BOARD_ROWS = "13";
     private static final String DEFAULT_BOARD_COLS = "15";
     private static final String UNDO_LEVEL_CONFIG = "Undo is allowed for: ";
+    private static final String UNDO_LEVEL_ZERO = "0";
+    private static final String UNDO_LEVEL_ONE = "1";
+    private static final String UNDO_LEVEL_TWO = "2";
+    private static final String UNDO_LEVEL_THREE = "3";
 
     private JComboBox<String> undoMoves;
     private JFrame frame;
@@ -38,7 +42,6 @@ public class EnterNameView {
     private JTextField board_cols;
     private JButton startBtn = new JButton(START_GAME);
     private JButton returnBtn = new JButton(RETURN);
-    private String[] undoLevels = new String[]{"0", "1", "2", "3"};
 
     public EnterNameView() {
         frame = new JFrame(FRAME_TITLE);
@@ -58,6 +61,7 @@ public class EnterNameView {
         board_cols = new JTextField(DIMENSIONS_MAX_LENGTH);
         board_cols.setText(DEFAULT_BOARD_COLS);
         JLabel undoLabel = new JLabel(UNDO_LEVEL_CONFIG);
+        String[] undoLevels = new String[]{UNDO_LEVEL_ZERO, UNDO_LEVEL_ONE, UNDO_LEVEL_TWO, UNDO_LEVEL_THREE};
         undoMoves = new JComboBox<>(undoLevels);
         infoPanel.add(playerOneNameLabel);
         infoPanel.add(player_one_name);

@@ -7,6 +7,11 @@ import java.util.Stack;
 
 public class CommandMonitor extends AbstractTurn {
 
+    private static final String SUMMON_TYPE = "Summon";
+    private static final String MOVEMENT_TYPE = "Move";
+    private static final String ATTACK_TYPE = "Attack";
+    private static final int NUMBER_OF_PLAYERS = 2;
+
     private GameEngine g;
 
     public CommandMonitor(GameEngine g) {
@@ -15,25 +20,25 @@ public class CommandMonitor extends AbstractTurn {
     }
 
     @Override
-    public void executeTurn(String type, String image, int i, int j, PieceInterface p) {
+    public void executeTurn(String type, String image, int row, int col, PieceInterface pieceInterface) {
         switch (type) {
-            case "Summon":
-                boolean sumBool = g.placeSummonedPiece(i, j);
+            case SUMMON_TYPE:
+                boolean sumBool = g.placeSummonedPiece(row, col);
                 if (sumBool) {
-                    moves.add(new TurnType("Summon", image, 0, 0, i, j, 0, false, 0, p));
+                    moves.add(new TurnType(SUMMON_TYPE, image, 0, 0, row, col, 0, false, 0, pieceInterface));
                 }
                 break;
-            case "Move":
-                boolean movBool = g.placeMovedPiece(i, j);
+            case MOVEMENT_TYPE:
+                boolean movBool = g.placeMovedPiece(row, col);
                 if (movBool) {
                     // last move reference for Abstract class as per command pattern
-                    moves.add(new TurnType("Move", image, g.getInitTileCoord()[0], g.getInitTileCoord()[1], i, j, 0, false, 0, p));
+                    moves.add(new TurnType(MOVEMENT_TYPE, image, g.getInitTileCoord()[g.getRowIndex()], g.getInitTileCoord()[g.getColIndex()], row, col, 0, false, 0, pieceInterface));
                 }
                 break;
-            case "Attack":
-                TurnType tt = g.placeAttackPiece(i, j);
-                if (tt != null) {
-                    moves.add(tt);
+            case ATTACK_TYPE:
+                TurnType turnType = g.placeAttackPiece(row, col);
+                if (turnType != null) {
+                    moves.add(turnType);
                 }
         }
     }
@@ -41,7 +46,7 @@ public class CommandMonitor extends AbstractTurn {
     @Override
     public void undoTurn() {
         if (moves.size() > 1 && g.checkUndoRemain()) {
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
                 g.undoTurn(returnLastMove());
             }
         }

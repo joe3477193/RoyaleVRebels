@@ -778,11 +778,11 @@ public class GameEngineFacade implements GameEngine {
                 gfv.setTileIcon(tt.tooRow, tt.tooCol, gfv.getGrass());
                 break;
             case "Attack":
-                if (tt.death) {
+                if (tt.isKilled) {
                     gfv.setTileIcon(tt.tooRow, tt.tooCol, tt.image);
                     gfv.setTileName(tt.tooRow, tt.tooCol, tt.image);
                     setTile(tt.tooRow, tt.tooCol, "PieceTile");
-                    ((PieceTile) getTile(tt.tooRow, tt.tooCol)).setPiece(tt.p);
+                    ((PieceTile) getTile(tt.tooRow, tt.tooCol)).setPiece(tt.pieceInterface);
                     getPiece(tt.tooRow, tt.tooCol).setHP(tt.prevHp);
                 } else {
                     getPiece(tt.tooRow, tt.tooCol).setHP(getPiece(tt.tooRow, tt.tooCol).getHp() + tt.damageDealt);

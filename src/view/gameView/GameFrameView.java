@@ -18,6 +18,7 @@ public class GameFrameView extends JFrame {
     private static final int ORIGINAL_ROW = 0;
     private static final int ORIGINAL_COL = 0;
     private static final int BUTTON_LENGTH = 7;
+    private static final String INDEX = "index";
     private static final String IMAGE_PATH = "../../images/";
     private static final String GRASS_IMAGE = IMAGE_PATH + "grass.png";
     private static final String WALL_IMAGE = IMAGE_PATH + "wall.jpg";
@@ -92,7 +93,7 @@ public class GameFrameView extends JFrame {
         JButton[] button = new JButton[BUTTON_LENGTH];
         for (int i = 0; i < BUTTON_LENGTH; i++) {
             button[i] = new JButton(new ImageIcon(this.getClass().getResource(image[i])));
-            button[i].putClientProperty("index", i);
+            button[i].putClientProperty(INDEX, i);
             button[i].setName(name[i]);
             summonBtns.add(button[i]);
         }
