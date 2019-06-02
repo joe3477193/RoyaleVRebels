@@ -427,11 +427,11 @@ public class GameEngineFacade implements GameEngine {
     }
 
     // check if piece hasAttacked target piece
-    @Requires({"inRow >= 0", "inCol >= 0", "tgRow >= 0", "tgTile >= 0"})
-    private int attack(int inRow, int inTile, int tgRow, int tgTile) {
-        if ((isPieceTile(tgRow, tgTile) || isCastleTile(tgRow, tgTile)) && checkAttackTarget(getPiece(inRow, inTile), tgRow, tgTile) && isMovRangeValid(inRow, inTile, tgRow, tgTile, ATTACK_TYPE)) {
-            int initHp = getPiece(tgRow, tgTile).getHp();
-        	getPiece(tgRow, tgTile).attackedBy(getPiece(inRow, inTile).getAttackPower());
+    @Requires({"inRow >= 0", "inCol >= 0", "tgRow >= 0", "tgCol >= 0"})
+    private int attack(int inRow, int inCol, int tgRow, int tgCol) {
+        if ((isPieceTile(tgRow, tgCol) || isCastleTile(tgRow, tgCol)) && checkAttackTarget(getPiece(inRow, inCol), tgRow, tgCol) && isMovRangeValid(inRow, inCol, tgRow, tgCol, ATTACK_TYPE)) {
+            int initHp = getPiece(tgRow, tgCol).getHp();
+            getPiece(tgRow, tgCol).attackedBy(getPiece(inRow, inCol).getAttackPower());
             return initHp;
         }
         return 0;
